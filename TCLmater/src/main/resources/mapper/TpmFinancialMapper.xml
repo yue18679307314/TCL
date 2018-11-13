@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmFinancialMapper">
+
+	<!-- 通用查询列 -->
+	<sql id="Base_Column_List">
+		id,
+		org_code,
+		person_code,
+		create_time,
+		modify_time,
+		modify_user
+	</sql>
+	
+	<!--   根据财务人员所在的公司id查询所负责的所有子公司 
+	<select id="queryChildDept" parameterType="map" statementType="CALLABLE" resultType="map">
+		call dept_childCode('${org_code_parent}')
+	</select> -->
+	
+	<!-- 根据财务人员工号查询财务人员信息 
+	<select id="queryFinancial" parameterType="String" resultType="com.kuyu.model.TpmFinancialModel">
+		SELECT <include refid="Base_Column_List"/>
+		FROM tpm_financial
+		WHERE person_code = #{person_code}
+	</select> -->
+	
+	<!-- 财务人员审核结算单 -->
+	<update id="financialAudit" parameterType="map">
+		UPDATE tpm_user_statement
+		<set>
+			financial_check_time = SYSDATE(),
+			<if test="request_state != null">
+				request_state = #{request_state},
+			</if>
+			<if test="reason != null and reason != ''">
+				reason = #{reason},
+			</if>
+			<if test="request_state == 5">
+				<if test="incentive_amount != null">
+					incentive_amount = null,
+				</if>
+				<if test="incentive_reason != null and incentive_reason != ''">
+					incentive_reason = null,
+				</if>
+				<if test="reduce_money != null">
+					reduce_money = null,
+				</if>
+				<if test="reduce_money_reason != null and reduce_money_reason != ''">
+					reduce_money_reason = null,
+				</if>
+				<if test="real_salary != null">
+					real_salary = #{real_salary},
+				</if>
+				<if test="adjust_money_note != null and adjust_money_note != ''">
+					adjust_money_note = null
+				</if>
+			</if>
+		</set>
+		WHERE uuid = #{uuid}
+	</update>
+</mapper>

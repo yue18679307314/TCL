@@ -1,0 +1,1215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmActivityMapper">
+	<resultMap id="result_TpmActivityModel_Map" type="com.kuyu.model.TpmActivityModel">
+		<id column="ta_activity_uuid" jdbcType="VARCHAR" property="activityUuid" />
+		<result column="ta_request_id" jdbcType="VARCHAR" property="requestId" />
+		<result column="ta_project_id" jdbcType="VARCHAR" property="projectId" />
+		<result column="ta_request_create_time" jdbcType="VARCHAR"
+			property="requestCreateTime" />
+		<result column="ta_dept" jdbcType="VARCHAR" property="dept" />
+		<result column="ta_cost_center" jdbcType="VARCHAR" property="costCenter" />
+		<result column="ta_wbs" jdbcType="VARCHAR" property="wbs" />
+		<result column="ta_city" jdbcType="VARCHAR" property="city" />
+		<result column="ta_district" jdbcType="VARCHAR" property="district" />
+		<result column="ta_manager" jdbcType="VARCHAR" property="manager" />
+		<result column="ta_start_time" jdbcType="VARCHAR" property="startTime" />
+		<result column="ta_end_time" jdbcType="VARCHAR" property="endTime" />
+		<result column="ta_total_day" jdbcType="INTEGER" property="totalDay" />
+		<result column="ta_user_no" jdbcType="INTEGER" property="userNo" />
+		<result column="ta_work_hours" jdbcType="INTEGER" property="workHours" />
+		<result column="ta_unit_price" jdbcType="DOUBLE" property="unitPrice" />
+		<result column="ta_incentive_amount" jdbcType="DOUBLE"
+			property="incentiveAmount" />
+		<result column="ta_settlement_method" jdbcType="VARCHAR"
+			property="settlementMethod" />
+		<result column="ta_settlement_cycle" jdbcType="VARCHAR"
+			property="settlementCycle" />
+		<result column="ta_total_fee" jdbcType="DOUBLE" property="totalFee" />
+		<result column="ta_create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="request_activity_day" jdbcType="VARCHAR"
+			property="requestActivityDay" />
+	</resultMap>
+
+	<resultMap id="result_ActivityVO_Map" type="com.kuyu.vo.ActivityVo">
+		<result column="activity_uuid" jdbcType="VARCHAR" property="activityUuid" />
+		<result column="openid" jdbcType="VARCHAR" property="openid" />
+		<result column="activity_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="start_time" jdbcType="VARCHAR" property="startTime" />
+		<result column="end_time" jdbcType="VARCHAR" property="endTime" />
+		<result column="total_day" jdbcType="VARCHAR" property="totalDay" />
+		<result column="user_no" jdbcType="VARCHAR" property="userNo" />
+		<result column="work_hours" jdbcType="VARCHAR" property="workHours" />
+		<result column="unit_price" jdbcType="VARCHAR" property="unitPrice" />
+		<result column="request_state" jdbcType="VARCHAR" property="requestState" />
+		<result column="reject_flag" jdbcType="VARCHAR" property="rejectFlag" />
+		<result column="person_name" jdbcType="VARCHAR" property="managerName" />
+		<result column="mobile" jdbcType="VARCHAR" property="managerMobile" />
+	</resultMap>
+
+	<resultMap id="TpmUserActivityModel_Map" type="com.kuyu.model.TpmUserActivityModel">
+		<result column="activity_uuid" jdbcType="VARCHAR" property="activityUuid" />
+		<result column="openid" jdbcType="VARCHAR" property="openid" />
+		<result column="uuid" jdbcType="VARCHAR" property="uuid" />
+		<result column="request_time" jdbcType="VARCHAR" property="requestTime" />
+		<result column="request_activity_day" jdbcType="VARCHAR"
+			property="requestActivityDay" />
+		<result column="reject_flag" jdbcType="VARCHAR" property="rejectFlag" />
+		<result column="request_state" jdbcType="VARCHAR" property="requestState" />
+		<result column="audit_time" jdbcType="VARCHAR" property="auditTime" />
+		<result column="reason" jdbcType="VARCHAR" property="reason" />
+	</resultMap>
+
+	<resultMap id="TpmActivityModel_Map" type="com.kuyu.model.TpmActivityModel">
+		<id column="activity_uuid" jdbcType="VARCHAR" property="activityUuid" />
+		<result column="request_id" jdbcType="VARCHAR" property="requestId" />
+		<result column="project_id" jdbcType="VARCHAR" property="projectId" />
+		<result column="request_create_time" jdbcType="VARCHAR"
+			property="requestCreateTime" />
+		<result column="dept" jdbcType="VARCHAR" property="dept" />
+		<result column="cost_center" jdbcType="VARCHAR" property="costCenter" />
+		<result column="wbs" jdbcType="VARCHAR" property="wbs" />
+		<result column="city" jdbcType="VARCHAR" property="city" />
+		<result column="district" jdbcType="VARCHAR" property="district" />
+		<result column="manager" jdbcType="VARCHAR" property="manager" />
+		<result column="start_time" jdbcType="VARCHAR" property="startTime" />
+		<result column="end_time" jdbcType="VARCHAR" property="endTime" />
+		<result column="total_day" jdbcType="INTEGER" property="totalDay" />
+		<result column="user_no" jdbcType="INTEGER" property="userNo" />
+		<result column="work_hours" jdbcType="INTEGER" property="workHours" />
+		<result column="unit_price" jdbcType="DOUBLE" property="unitPrice" />
+		<result column="incentive_amount" jdbcType="DOUBLE" property="incentiveAmount" />
+		<result column="settlement_method" jdbcType="VARCHAR" property="settlementMethod" />
+		<result column="settlement_cycle" jdbcType="VARCHAR" property="settlementCycle" />
+		<result column="total_fee" jdbcType="DOUBLE" property="totalFee" />
+		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
+		<result column="request_activity_day" jdbcType="VARCHAR"
+			property="requestActivityDay" />
+	</resultMap>
+
+	<sql id="tpm_activity_Column">
+		tpm_activity.activity_uuid as ta_activity_uuid
+		,tpm_activity.request_id as ta_request_id
+		,tpm_activity.project_id as
+		ta_project_id
+		,tpm_activity.request_create_time as
+		ta_request_create_time
+		,tpm_activity.dept as ta_dept
+		,tpm_activity.cost_center as
+		ta_cost_center
+		,tpm_activity.wbs as ta_wbs
+		,tpm_activity.city as ta_city
+		,tpm_activity.district as ta_district
+		,tpm_activity.manager as
+		ta_manager
+		,tpm_activity.start_time as
+		ta_start_time
+		,tpm_activity.end_time as ta_end_time
+		,tpm_activity.total_day as
+		ta_total_day
+		,tpm_activity.user_no as
+		ta_user_no
+		,tpm_activity.work_hours as ta_work_hours
+		,tpm_activity.unit_price as
+		ta_unit_price
+		,tpm_activity.incentive_amount as ta_incentive_amount
+		,tpm_activity.settlement_method as ta_settlement_method
+		,tpm_activity.settlement_cycle as ta_settlement_cycle
+		,tpm_activity.total_fee as ta_total_fee
+		,tpm_activity.create_time as
+		ta_create_time
+	</sql>
+
+	<sql id="Base_Column_List">
+		activity_uuid,
+		request_id,
+		project_id,
+		request_create_time,
+		dept,
+		cost_center,
+		wbs,
+		city,
+		district,
+		manager,
+		start_time,
+		end_time,
+		total_day,
+		user_no,
+		work_hours,
+		unit_price,
+		incentive_amount,
+		settlement_method,
+		settlement_cycle,
+		total_fee,
+		create_time
+	</sql>
+
+	<select id="findActivityListByUser" resultMap="result_ActivityVO_Map">
+		SELECT DISTINCT
+		tac.activity_uuid,
+		tac.city,
+		tac.activity_name,
+		tac.start_time,
+		tac.end_time,
+		tac.total_day,
+		tac.unit_price,
+		tac.user_no
+		FROM
+		tpm_activity tac
+		INNER JOIN tpm_user_activity tua ON (
+		tac.activity_uuid = tua.activity_uuid
+		)
+		INNER JOIN tpm_activity_original
+		tao ON (
+		tao.project_id = tac.project_id
+		)
+		<where>
+			tua.openid = #{openid,jdbcType=VARCHAR}
+			<choose>
+				<when test="requestState == 0">
+					AND tua.request_state = 2
+					AND tua.request_activity_day<![CDATA[ = ]]>
+					CURDATE()
+					AND tua.reject_flag !=1
+				</when>
+				<when test="requestState == 1">
+					AND tac.end_time <![CDATA[ >= ]]>
+					CURDATE()
+				</when>
+				<otherwise>
+					AND tac.end_time <![CDATA[ < ]]>
+					CURDATE()
+				</otherwise>
+			</choose>
+			AND (tac.stop_flag is NULL OR tac.stop_flag='0' OR tac.stop_flag='')
+		</where>
+		ORDER BY tac.start_time DESC,tac.end_time ASC
+	</select>
+	<select id="findActivityListByUserHomePage" resultMap="result_ActivityVO_Map">
+		SELECT
+		tac.activity_uuid,
+		tac.city,
+		tac.activity_name,
+		tac.start_time,
+		tac.end_time,
+		tac.total_day,
+		tac.unit_price,
+		tac.user_no
+		FROM
+		tpm_activity
+		tac
+		INNER JOIN tpm_user_activity tua ON (
+		tac.activity_uuid =
+		tua.activity_uuid
+		)
+		INNER JOIN tpm_activity_original tao ON (
+		tao.project_id = tac.project_id
+		)
+		WHERE
+		tua.openid = #{openid}
+		AND tua.request_state = 2
+		AND tua.request_activity_day=#{requestActivityDay}
+		AND tua.reject_flag !=1
+		AND (tac.stop_flag is NULL OR tac.stop_flag='0' OR tac.stop_flag='')
+		ORDER BY tac.start_time DESC,tac.end_time ASC
+	</select>
+
+
+	<select id="findActivityListByCity" resultMap="result_ActivityVO_Map">
+		SELECT
+		tac.activity_uuid,
+		tac.city,
+		tac.activity_name,
+		tac.start_time,
+		tac.end_time,
+		tac.total_day,
+		(
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = tac.activity_uuid
+		AND tua.request_state = 2
+		) count,
+		tac.user_no,
+		tac.work_hours,
+		tac.unit_price
+		FROM
+		tpm_activity tac
+		INNER JOIN tpm_activity_original tao ON (
+		tac.project_id = tao.project_id
+		)
+		<where>
+			tac.city LIKE #{city,jdbcType=VARCHAR} ESCAPE '/'
+			AND
+			tac.end_time > DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+			AND (tac.stop_flag is NULL or tac.stop_flag = '0' or tac.stop_flag = '')
+		</where>
+		ORDER BY tac.start_time DESC ,tac.end_time ASC
+	</select>
+
+	<select id="findActivityVoById" resultMap="result_ActivityVO_Map">
+		SELECT
+		tac.activity_uuid,
+		tac.activity_name,
+		tac.start_time,
+		tac.end_time,
+		tac.total_day,
+		(
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = tac.activity_uuid
+		AND tua.request_state = 2
+		) count,
+		tac.user_no,
+		tac.work_hours,
+		tac.unit_price,
+		tem.person_name,
+		tem.mobile
+		FROM
+		tpm_activity_original tao
+		INNER JOIN tpm_activity tac ON (
+		tao.project_id = tac.project_id
+		)
+		INNER  JOIN tpm_employee tem ON (
+		tac.manager = tem.person_code
+		)
+		<where>
+			tac.activity_uuid = #{uuid,jdbcType=VARCHAR}
+		</where>
+	</select>
+
+
+	<select id="findActivityNameByUuid" resultType="java.lang.String">
+		SELECT
+		tac.activity_name
+		FROM
+		tpm_activity tac
+		WHERE
+		tac.activity_uuid =
+		#{uuid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="queryTpmActivityModel" resultMap="result_TpmActivityModel_Map"
+		parameterType="String">
+		SELECT
+		<include refid="tpm_activity_Column" />
+		FROM tpm_activity
+		WHERE activity_uuid =
+		#{activity_uuid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="findManagerActivityList" resultMap="result_ActivityVO_Map">
+		SELECT DISTINCT
+		tac.activity_uuid,
+		tac.activity_name,
+		tac.manager,
+		tac.start_time,
+		tac.end_time,
+		tac.total_day,
+		(
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = tac.activity_uuid
+		AND tua.request_state = 2
+		) count,
+		tac.user_no
+		FROM
+		tpm_activity tac
+		<where>
+			tac.manager = #{managerNo,jdbcType=VARCHAR}
+			AND (tac.stop_flag is NULL OR tac.stop_flag='0' OR tac.stop_flag='')
+		</where>
+		ORDER BY tac.start_time DESC,tac.end_time ASC
+	</select>
+
+	<select id="findManagerActivityDeatil" resultType="com.kuyu.vo.ActivityDetailVo">
+		SELECT
+		tac.total_fee totalFee,
+		tao.projected_sales_no projectedSalesNo,
+		tao.projected_sales_money projectedSalesMoney,
+		tao.estimated_cost_rate estimatedCostRate,
+		tac.request_create_time requestCreateTime,
+		tpr.request_company_code companyCode,
+		td1.org_name requestDeptName,
+		tao.fee_detail_type feeDetailType,
+		tpr.request_info requestReasons,
+		tpr.request_telphone requestTelphone,
+		tac.activity_name projectName,
+		tac.start_time startTime,
+		tac.end_time endTime,
+		tac.total_day totalDay,
+		tac.dept,
+		td2.org_name deptName,
+		tee1.person_name requestUserName,
+		tao.note,
+		tee2.person_name managerName,
+		tao.cost_center costCenter,
+		tao.order_no orderNo,
+		tac.city,
+		tac.district,
+		tac.user_no userNo,
+		tac.work_hours workHours,
+		tac.unit_price unitPrice,
+		tac.incentive_amount incentiveAmount,
+		tac.settlement_method settlementMethod,
+		tac.settlement_cycle settlementCycle
+		FROM
+		tpm_activity tac
+		LEFT JOIN tpm_activity_original tao ON (
+		tac.project_id = tao.project_id
+		)
+		LEFT JOIN tpm_project tpr ON (
+		tac.request_id = tpr.request_id
+		)
+		INNER JOIN tpm_dept td1 ON (
+		tpr.request_dept = td1.org_code
+		)
+		INNER JOIN tpm_dept td2 ON (
+		tac.dept = td2.org_code
+		)
+		INNER JOIN tpm_employee tee1 ON (
+		tpr.request_user = tee1.person_code
+		)
+		INNER JOIN tpm_employee tee2 ON (
+		tac.manager = tee2.person_code
+		)
+		<where>
+			tac.activity_uuid = #{acitvityUuid,jdbcType=VARCHAR}
+			AND
+			tac.manager = #{managerNo,jdbcType=VARCHAR}
+		</where>
+
+	</select>
+
+	<select id="activityUserList" resultType="com.kuyu.vo.AcvitityUserVo">
+		SELECT
+		tub.openid,
+		tub.`name` userName,
+		tub.sex,
+		tux.sex wxSex,
+		tua.request_state requestState
+		FROM
+		tpm_user_activity tua,
+		tpm_activity
+		tac,
+		tpm_user_base_info tub,
+		tpm_user_wx_info tux
+		WHERE
+		tua.activity_uuid
+		= tac.activity_uuid
+		AND tua.openid = tub.openid
+		AND tub.openid =
+		tux.openId
+		AND tac.activity_uuid = #{acitvityUuid,jdbcType=VARCHAR}
+		AND
+		tac.manager = #{managerNo,jdbcType=VARCHAR}
+		AND
+		tua.request_activity_day=#{requestActivityDay,jdbcType=VARCHAR}
+		AND
+		tua.reject_flag !=1
+		<if test="userNo >= user_no">
+			AND tua.request_state = 2
+		</if>
+		ORDER BY tub.`name`
+	</select>
+
+
+	<select id="findUserInfoByOpenid" resultType="com.kuyu.vo.AcvitityUserVo">
+		SELECT
+		tub.openid,
+		tuw.headImgUrl,
+		tub.`name` userName,
+		tub.sex ,
+		tuw.sex wxSex,
+		tub.mobile,
+		tub.id_card,
+		tub.address,
+		tub.idimgurl_front,
+		tub.idimgurl_back,
+		tub.account_name,
+		tub.open_province,
+		tub.open_city,
+		tub.account_bank_name,
+		tub.open_branch,
+		tub.account_value
+		FROM
+		tpm_user_base_info tub,
+		tpm_user_wx_info tuw
+		WHERE
+		tub.openid =
+		tuw.openid
+		AND tub.openid = #{openid,jdbcType=VARCHAR}
+	</select>
+
+
+	<select id="queryActivityDetail" resultType="com.kuyu.vo.ActivityDetailVo"
+		parameterType="map">
+		SELECT
+		DISTINCT
+		ta.activity_uuid activityUuid,
+		ta.project_id projectId,
+		ta.dept,
+		ta.city,
+		ta.manager,
+		ta.start_time startTime,
+		ta.end_time
+		endTime,
+		ta.total_day totalDay,
+		ta.activity_name activityName,
+		tao.project_name projectName
+		FROM
+		tpm_activity_original tao,
+		tpm_activity ta,
+		tpm_user_statement tus
+		WHERE
+		tao.project_id =
+		ta.project_id
+		AND ta.activity_uuid = tus.activity_uuid
+		AND ta.dept IN
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		<if test="state == 2">
+			AND ta.activity_uuid NOT IN(
+			SELECT DISTINCT
+			activity_uuid
+			FROM
+			tpm_user_statement
+			WHERE
+			request_state = 2
+			)
+		</if>
+		<if test="state == 3">
+			AND tus.request_state = 2
+		</if>
+		AND tus.request_state <![CDATA[ >= ]]>
+		2
+		ORDER BY ta.start_time DESC,ta.end_time DESC
+	</select>
+
+	<select id="getManagerInfo" resultType="com.kuyu.model.TpmUserStatementModel"
+		parameterType="map">
+		SELECT te.person_name,te.mobile,ta.settlement_method
+		FROM tpm_activity ta,tpm_employee te
+		WHERE ta.activity_uuid =
+		#{activity_uuid}
+		AND ta.manager = te.person_code
+	</select>
+
+	<select id="getCountOpenNumber" resultType="INTEGER"
+		parameterType="String">
+		SELECT COUNT(openid) FROM tpm_user_activity
+		WHERE
+		activity_uuid = #{activity_uuid}
+		AND request_state = 2
+		AND
+		request_activity_day=#{requestActivityDay}
+		AND reject_flag !=1
+	</select>
+
+	<select id="findUserListByAcitvityUuid" resultType="com.kuyu.vo.AcvitityUserVo">
+		SELECT
+		tub.openid,
+		tub.`name` userName,
+		tux.sex,
+		tub.id_card,
+		tua.request_state requestState
+		FROM
+		tpm_user_activity tua,
+		tpm_user_base_info tub,
+		tpm_user_wx_info tux
+		WHERE
+		tua.openid = tub.openid
+		AND tub.openid = tux.openId
+		AND tua.activity_uuid = #{uuid,jdbcType=VARCHAR}
+		ORDER BY tub.`name`
+	</select>
+	<select id="findAllApprovingUserListByAcitvityUuid" resultType="com.kuyu.vo.AcvitityUserVo">
+			SELECT
+			tub.openid,
+			tub.`name` userName,
+			tub.sex,
+			tux.sex wxSex,
+			tua.request_state requestState,
+			tua.request_activity_day requestActivityDay
+			FROM
+			tpm_user_activity tua,
+			tpm_activity tac,
+			tpm_user_base_info tub,
+			tpm_user_wx_info tux
+			WHERE
+			tua.activity_uuid= tac.activity_uuid
+			AND tua.openid = tub.openid
+			AND tub.openid =tux.openId
+			AND tua.activity_uuid  = #{activityUuid}
+			AND tua.request_state = 1
+			AND tua.reject_flag !=1
+			AND tua.request_activity_day <![CDATA[ >= ]]>
+					CURDATE()
+			ORDER BY tua.request_activity_day ASC
+
+	</select>
+
+	<select id="findActivityDetailPage" resultType="com.kuyu.vo.ActivityDetailVo">
+		SELECT DISTINCT
+		tpr.request_id requestId,
+		tpr.request_title requestTitle,
+		td.org_name requestDeptName,
+		tpr.request_company_code companyCode,
+		tpr.request_create_time requestCreateTime,
+		tpr.request_end_time requestEndTime,
+		tee.person_name requestUserName
+		FROM
+		tpm_project tpr
+		LEFT JOIN tpm_activity tac ON (
+		tac.request_id = tpr.request_id
+		)
+		LEFT JOIN tpm_activity_original tao ON
+		(
+		tac.project_id = tao.project_id
+		)
+		LEFT JOIN tpm_dept td ON (
+		tpr.request_dept = td.org_code
+		)
+		LEFT JOIN tpm_employee tee ON (
+		tpr.request_user = tee.person_code
+		)
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="deptList" item="item" open="tac.dept in ("
+						close=")" separator=",">
+						#{item,jdbcType=VARCHAR}
+					</foreach>
+				</when>
+				<when test="personType == 3">
+					AND tac.manager = #{personCode,jdbcType=VARCHAR}
+				</when>
+				<when test="personType == 4">
+					AND ( tac.manager = #{personCode,jdbcType=VARCHAR}
+					OR tpr.request_user = #{personCode,jdbcType=VARCHAR} )
+				</when>
+			</choose>
+
+			<if test="params.companyCode !=null and params.companyCode !=''">
+				AND tpr.request_company_code LIKE
+				#{params.companyCode,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.requestDeptName !=null and params.requestDeptName !=''">
+				AND td.org_name LIKE
+				#{params.requestDeptName,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.requestUserName !=null and params.requestUserName !=''">
+				AND tee.person_name LIKE
+				#{params.requestUserName,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.requestId !=null and params.requestId !=''">
+				AND tpr.request_Id LIKE
+				#{params.requestId,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.requestTitle !=null and params.requestTitle !=''">
+				AND tpr.request_title LIKE
+				#{params.requestTitle,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.projectName !=null and params.projectName !=''">
+				AND tac.activity_name LIKE
+				#{params.projectName,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.startTime1 !=null and params.startTime1 !=''">
+				AND tpr.request_create_time <![CDATA[ >= ]]>
+				#{params.startTime1,jdbcType=VARCHAR}
+			</if>
+			<if test="params.endTime1 !=null and params.endTime1 !=''">
+				AND tpr.request_create_time <![CDATA[ <= ]]>
+				#{params.endTime1,jdbcType=VARCHAR}
+			</if>
+			<if test="params.startTime2 !=null and params.startTime2 !=''">
+				AND tpr.request_end_time <![CDATA[ >= ]]>
+				#{params.startTime2,jdbcType=VARCHAR}
+			</if>
+			<if test="params.endTime2 !=null and params.endTime2 !=''">
+				AND tpr.request_end_time <![CDATA[ <= ]]>
+				#{params.endTime2,jdbcType=VARCHAR}
+			</if>
+			<if test="params.city !=null and params.city !=''">
+				AND tao.city LIKE #{params.city,jdbcType=VARCHAR} ESCAPE
+				'/'
+			</if>
+		</where>
+		ORDER BY tpr.request_create_time DESC
+	</select>
+
+	<select id="selectCountByManager" resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua,
+		tpm_activity tac,
+		tpm_project tpr
+		WHERE
+		tua.activity_uuid = tac.activity_uuid
+		AND tpr.request_id = tac.request_id
+		AND
+		tac.activity_uuid = #{uuid,jdbcType=VARCHAR}
+		AND tua.openid =
+		#{openid,jdbcType=VARCHAR}
+		AND
+		tua.request_activity_day=#{requestActivityDay}
+		AND tua.reject_flag!=1
+		<choose>
+			<when test="personType == 3">
+				AND tac.manager = #{personCode,jdbcType=VARCHAR}
+			</when>
+			<when test="personType == 4">
+				AND ( tac.manager = #{personCode,jdbcType=VARCHAR} OR
+				tpr.request_user = #{personCode,jdbcType=VARCHAR} )
+			</when>
+		</choose>
+	</select>
+
+	<select id="selectActivityListMyPage" resultType="com.kuyu.vo.ActivityDetailVo">
+		SELECT
+		tpr.request_id requestId,
+		tpr.request_user requestUser,
+		tac.activity_uuid activityUuid,
+		tac.activity_name projectName,
+		tpr.request_company_code companyCode,
+		td.org_name deptName,
+		tac.city,
+		tac.manager,
+		tee.person_name managerName,
+		tee1.person_name requestUserName,
+		tac.start_time startTime,
+		tac.end_time endTime,
+		tac.stop_flag stopFlag,
+		CASE
+		WHEN tac.start_time > CURDATE() THEN
+		0
+		WHEN (
+		tac.start_time <![CDATA[ <= ]]>
+		CURDATE()
+		AND tac.end_time <![CDATA[ >= ]]>
+		CURDATE()
+		) THEN
+		1
+		ELSE
+		2
+		END activityState,
+		tac.user_no userNo,
+		tac.total_day totalDay,
+		tac.unit_price unitPrice,
+		tac.district
+		FROM
+		tpm_activity tac
+		LEFT JOIN tpm_project tpr ON (
+		tac.request_id =
+		tpr.request_id
+		)
+		LEFT JOIN tpm_activity_original tao ON (
+		tac.project_id
+		= tao.project_id
+		)
+		INNER JOIN tpm_dept td ON (tao.dept = td.org_code)
+		INNER JOIN tpm_employee tee ON (
+		tac.manager = tee.person_code
+		)
+		INNER JOIN  tpm_employee tee1 ON (
+		tpr.request_user = tee1.person_code
+		)
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="deptList" item="item" open="tac.dept in ("
+						close=")" separator=",">
+						#{item,jdbcType=VARCHAR}
+					</foreach>
+				</when>
+				<when test="personType == 3">
+					AND tac.manager = #{personCode,jdbcType=VARCHAR}
+				</when>
+				<when test="personType == 4">
+					AND ( tac.manager = #{personCode,jdbcType=VARCHAR}
+					OR tpr.request_user = #{personCode,jdbcType=VARCHAR} )
+				</when>
+			</choose>
+
+			<if test="params.requestId !=null and params.requestId !=''">
+				AND tpr.request_id LIKE
+				#{params.requestId,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.activityUuid !=null and params.activityUuid !=''">
+				AND tac.activity_uuid LIKE
+				#{params.activityUuid,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.projectName !=null and params.projectName !=''">
+				AND tac.activity_name LIKE
+				#{params.projectName,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.dept !=null and params.dept !=''">
+				AND tac.dept = #{params.dept,jdbcType=VARCHAR}
+			</if>
+			<if test="params.requestUserName !=null and params.requestUserName !=''">
+				AND tee1.person_name LIKE #{params.requestUserName,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.managerName !=null and params.managerName !=''">
+				AND tee.person_name LIKE #{params.managerName,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.deptName !=null and params.deptName !=''">
+				AND td.org_name LIKE #{params.deptName,jdbcType=VARCHAR}
+				ESCAPE '/'
+			</if>
+			<if test="params.startTime !=null and params.startTime !=''">
+				AND tac.start_time <![CDATA[ >= ]]>
+				#{params.startTime,jdbcType=VARCHAR}
+			</if>
+			<if test="params.endTime !=null and params.endTime !=''">
+				AND tac.end_time <![CDATA[ <= ]]>
+				#{params.endTime,jdbcType=VARCHAR}
+			</if>
+			<choose>
+				<when test="params.activityState==0">
+					AND tac.start_time <![CDATA[ > ]]>
+					CURDATE()
+				</when>
+				<when test="params.activityState==1">
+					AND tac.start_time <![CDATA[ <= ]]>
+					CURDATE() AND tac.end_time <![CDATA[ >= ]]>
+					CURDATE()
+				</when>
+				<when test="params.activityState==2">
+					AND tac.end_time <![CDATA[ < ]]>
+					CURDATE()
+				</when>
+			</choose>
+			<if test="params.city !=null and params.city !=''">
+				AND tac.city LIKE #{params.city,jdbcType=VARCHAR} ESCAPE
+				'/'
+			</if>
+		</where>
+		ORDER BY tac.start_time DESC
+	</select>
+
+	<select id="findActivityDetail" resultType="com.kuyu.vo.ActivityDetailVo">
+		SELECT
+		tpr.request_id requestId,
+		tac.activity_uuid activityUuid,
+		tac.activity_name projectName,
+		tpr.request_company_code companyCode,
+		tpr.request_create_time requestCreateTime,
+		td2.org_name
+		requestDeptName,
+		td.org_name deptName,
+		tac.city,
+		tee.person_name
+		managerName,
+		tac.start_time startTime,
+		tac.end_time endTime,
+		CASE
+		WHEN
+		tac.start_time <![CDATA[ > ]]>
+		CURDATE() THEN
+		0
+		WHEN (
+		tac.start_time <![CDATA[ <= ]]>
+		CURDATE()
+		AND tac.end_time <![CDATA[ >= ]]>
+		CURDATE()
+		) THEN
+		1
+		ELSE
+		2
+		END activityState,
+		tac.user_no userNo,
+		tac.total_day totalDay,
+		tac.work_hours workHours,
+		tac.settlement_cycle
+		settlementCycle,
+		tac.settlement_method settlementMethod,
+		tao.fee_detail_type feeDetailType,
+		tao.cost_center costCenter,
+		tac.incentive_amount incentiveAmount,
+		tac.unit_price unitPrice,
+		tac.district,
+		tao.order_no orderNo,
+		tee2.person_name requestUserName,
+		tee2.mobile requestTelphone,
+		tpr.request_info requestReasons,
+		tao.note
+		FROM
+		tpm_activity tac
+		LEFT JOIN tpm_project tpr ON (
+		tac.request_id =
+		tpr.request_id
+		)
+		LEFT JOIN tpm_activity_original tao ON (
+		tac.project_id
+		= tao.project_id
+		)
+		INNER JOIN tpm_dept td ON (tao.dept = td.org_code)
+		INNER JOIN tpm_dept td2 ON (
+		tpr.request_dept = td2.org_code
+		)
+		INNER JOIN
+		tpm_employee tee ON (
+		tac.manager = tee.person_code
+		)
+		INNER JOIN
+		tpm_employee tee2 ON (
+		tpr.request_user = tee2.person_code
+		)
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="deptList" item="item" open="tac.dept in ("
+						close=")" separator=",">
+						#{item,jdbcType=VARCHAR}
+					</foreach>
+				</when>
+				<when test="personType == 3">
+					AND tac.manager = #{personCode,jdbcType=VARCHAR}
+				</when>
+				<when test="personType == 4">
+					AND ( tac.manager = #{personCode,jdbcType=VARCHAR}
+					OR tpr.request_user = #{personCode,jdbcType=VARCHAR} )
+				</when>
+			</choose>
+			AND tac.activity_uuid = #{uuid,jdbcType=VARCHAR}
+		</where>
+	</select>
+
+	<select id="findActivityJoinListMyPage" resultType="com.kuyu.vo.ActivityJoinDetailVo">
+		SELECT DISTINCT
+		tac.activity_uuid activityUuid,
+		td.org_name deptName,
+		tee.person_name managerName,
+		tac.activity_name projectName,
+		tuw.openid,
+		tub.`name` userName,
+		tub.sex,
+		tuw.sex wxSex,
+		tub.mobile telPhone,
+		tuw.nikeName weixinName,
+		tub.id_card idCard,
+		tua.request_time requestTime,
+		tua.audit_time auditTime,
+		tua.request_state requestState,
+		tua.request_activity_day activityDay,
+		tac.manager
+		FROM
+		tpm_user_base_info tub
+		INNER JOIN tpm_user_activity tua ON (tua.openid = tub.openid)
+		INNER JOIN tpm_activity tac ON (
+		tua.activity_uuid = tac.activity_uuid
+		)
+		INNER JOIN tpm_project tpr ON (
+		tpr.request_id =
+		tac.request_id
+		)
+		INNER JOIN tpm_activity_original tao ON (
+		tac.project_id = tao.project_id
+		)
+		INNER JOIN tpm_user_wx_info tuw ON
+		(tuw.openid = tub.openid)
+		INNER JOIN tpm_dept td ON (td.org_code =
+		tac.dept)
+		INNER JOIN tpm_employee tee ON (
+		tac.manager = tee.person_code
+		)
+
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="deptList" item="item" open="tac.dept in ("
+						close=")" separator=",">
+						#{item,jdbcType=VARCHAR}
+					</foreach>
+				</when>
+				<when test="personType == 3">
+					AND tac.manager = #{personCode,jdbcType=VARCHAR}
+				</when>
+				<when test="personType == 4">
+					<if test="params.toDoState != 1">
+						AND (tpr.request_user = #{personCode} OR tac.manager =
+						#{personCode})
+					</if>
+					<if test="params.toDoState == 1">
+						AND tac.manager = #{personCode}
+						AND CURDATE() <![CDATA[ <= ]]>
+						tac.end_time
+						AND tua.request_activity_day <![CDATA[ >= ]]> CURDATE()
+					</if>
+				</when>
+			</choose>
+
+			<if test="params.userName !=null and params.userName !=''">
+				AND tub.`name` LIKE #{params.userName,jdbcType=VARCHAR}
+				ESCAPE '/'
+			</if>
+			<if test="params.telPhone !=null and params.telPhone !=''">
+				AND tub.mobile LIKE #{params.telPhone,jdbcType=VARCHAR}
+				ESCAPE '/'
+			</if>
+			<if test="params.idCard !=null and params.idCard !=''">
+				AND tub.id_card LIKE #{params.idCard,jdbcType=VARCHAR}
+				ESCAPE '/'
+			</if>
+			<if test="params.deptName !=null and params.deptName !=''">
+				AND td.org_name LIKE #{params.deptName,jdbcType=VARCHAR}
+				ESCAPE '/'
+			</if>
+			<if test="params.requestState !=null">
+				AND tua.request_state =
+				#{params.requestState,jdbcType=VARCHAR}
+			</if>
+			<if test="params.requestTime !=null and params.requestTime !=''">
+				AND SUBSTR(tua.request_time,1,10) =
+				#{params.requestTime,jdbcType=VARCHAR}
+			</if>
+			<if test="params.projectName !=null and params.projectName !=''">
+				AND tac.activity_name LIKE
+				#{params.projectName,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			<if test="params.managerName !=null and params.managerName !=''">
+				AND tee.person_name LIKE
+				#{params.managerName,jdbcType=VARCHAR} ESCAPE '/'
+			</if>
+			AND  (tac.stop_flag is NULL OR tac.stop_flag='0' OR tac.stop_flag='')
+			AND tua.reject_flag =0
+-- 			AND (tua.request_activity_day >= CURDATE()  AND tua.reject_flag =0 )
+		</where>
+		ORDER BY tua.request_time DESC
+	</select>
+
+
+	<select id="findFinancialPersoncodeByActivityUuid" resultType="java.lang.String">
+		SELECT
+		person_code
+		FROM
+		tpm_user_role tur
+		INNER JOIN tpm_activity tac ON (tac.dept = tur.org_code)
+		<where>
+			tur.roleType = 2
+			AND tac.activity_uuid = #{uuid,jdbcType=VARCHAR};
+		</where>
+
+	</select>
+
+	<select id="selectUserNoAndCount" resultType="com.kuyu.vo.ActivityVo"
+		parameterType="List">
+		SELECT DISTINCT
+		taa.activity_uuid activityUuid,
+		taa.user_no userNo,
+		(
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = taa.activity_uuid
+		AND tua.request_state = 2
+		) count
+		FROM
+		tpm_activity taa,
+		tpm_user_activity tua
+		WHERE
+		taa.activity_uuid = tua.activity_uuid
+		AND taa.activity_uuid IN
+		<foreach collection="list" index="index" item="item" open="("
+			close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+	<select id="selectTotalUserNo" resultType="Integer">
+		SELECT
+		user_no
+		FROM
+		tpm_activity
+		WHERE
+		activity_uuid = #{uuid}
+	</select>
+
+	<select id="selectCountByDay" resultType="Integer">
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = #{activityUuid}
+		AND tua.request_state = 2
+		AND tua.request_activity_day=#{activityDay}
+		AND tua.reject_flag !=1
+	</select>
+	<select id="selectCountByOpenidAndDay" resultType="Integer">
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = #{activityUuid}
+		AND tua.request_state!=0
+		AND tua.request_activity_day=#{activityDay}
+		And tua.openid = #{openid}
+	</select>
+	<select id="isRefusedOrNot" parameterType="com.kuyu.model.TpmUserActivityModel"
+		resultType="Integer">
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = #{activityUuid}
+		AND tua.request_state=0
+		AND tua.request_activity_day=#{requestActivityDay}
+		AND tua.openid = #{openid}
+	</select>
+
+	<select id="isRejectOrNot" parameterType="com.kuyu.model.TpmUserActivityModel"
+		resultType="Integer">
+		SELECT
+		count(1)
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = #{activityUuid}
+		AND tua.reject_flag=1
+		AND
+		tua.request_activity_day=#{requestActivityDay}
+		AND tua.openid =
+		#{openid}
+	</select>
+	<update id="updateRefusedRequest" parameterType="com.kuyu.model.TpmUserActivityModel">
+		UPDATE
+		tpm_user_activity
+		SET request_state = 1,
+		reject_flag=0,
+		request_time=#{requestTime},
+		reason=''
+		WHERE
+		activity_uuid = #{activityUuid}
+		AND request_state=0
+		AND request_activity_day=#{requestActivityDay}
+		AND openid = #{openid}
+	</update>
+	<!--结束活动-->
+	<update id="stopActivityById" parameterType="String">
+		UPDATE
+		tpm_activity tac
+		SET tac.stop_flag = 1
+		WHERE
+		activity_uuid = #{activityUuid}
+	</update>
+
+	<update id="updateRejectUser" parameterType="com.kuyu.model.TpmUserActivityModel">
+		UPDATE
+		tpm_user_activity
+		SET request_state = 1,
+		reject_flag=0,
+		request_time=#{requestTime},
+		reason=''
+		WHERE
+		activity_uuid =
+		#{activityUuid}
+		AND reject_flag=1
+		AND
+		request_activity_day=#{requestActivityDay}
+		AND openid = #{openid}
+	</update>
+	<select id="selectRequestState" resultType="Integer">
+		SELECT
+		request_state
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.activity_uuid = #{activityUuid}
+		AND tua.request_activity_day=#{requestActivityDay}
+		AND tua.openid = #{openid}
+	</select>
+	<select id="getApprovalReason" resultType="String">
+		SELECT
+		reason
+		FROM
+		tpm_user_activity tua
+		WHERE
+		tua.request_activity_day =
+		#{activityDay}
+		AND tua.activity_uuid = #{activityUuid}
+		AND tua.openid =
+		#{openid}
+	</select>
+	<update id="updateRejectFlag" parameterType="com.kuyu.model.TpmUserActivityModel">
+		UPDATE
+		tpm_user_activity
+		SET
+		reject_flag=1,
+		reason=''
+		WHERE
+		activity_uuid=#{activityUuid}
+		AND openid=#{openid}
+		AND request_state= 2
+		AND reject_flag!=1
+		AND request_activity_day=#{requestActivityDay}
+	</update>
+	<select id="selectActivityList" resultMap="TpmUserActivityModel_Map">
+		SELECT *
+		FROM tpm_user_activity
+		WHERE
+		tpm_user_activity.request_activity_day IS NULL
+		OR tpm_user_activity.reject_flag IS NULL
+
+	</select>
+	<select id="selectTime" resultMap="TpmActivityModel_Map">
+		SELECT *
+		FROM tpm_activity
+		WHERE activity_uuid=#{activityUuid}
+	</select>
+	<update id="updateFirstActivityData" parameterType="com.kuyu.model.TpmUserActivityModel">
+		UPDATE
+		tpm_user_activity
+		SET
+		request_activity_day = #{requestActivityDay},
+		reject_flag = 0
+		WHERE
+		activity_uuid = #{activityUuid}
+		AND openid =
+		#{openid}
+	</update>
+
+	<insert id="insertActivityData" parameterType="com.kuyu.model.TpmUserActivityModel">
+
+	</insert>
+
+	<select id="selectPromotionFeeOriginalByProjectId" resultType="com.kuyu.model.TpmPromotionFeeOriginalModel"
+		parameterType="String">
+		SELECT * FROM tpm_promotion_fee_original WHERE
+		project_id = #{projectId}
+	</select>
+	
+	<select id="selectManager" resultType="String" parameterType="map">
+		SELECT DISTINCT
+		manager
+		FROM
+			tpm_activity
+		WHERE
+			project_id = #{projectId}
+		AND activity_name = #{activityName}
+	</select>
+
+	<!--查询绑定的情况-->
+	<select id="selectCountBinding" parameterType="String" resultType="Integer">
+		SELECT COUNT(1) FROM  tpm_weixin_employee_binding_log
+		WHERE openid = #{openid}
+	</select>
+	<select id="getBindingJoinFlag" resultType="String">
+		SELECT pvalue FROM  tpm_properties_config
+		WHERE pkey = 'bindingJoinFlag'
+	</select>
+</mapper>

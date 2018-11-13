@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"xmlns:th="http://www.thymeleaf.org"
+
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+   <head>
+
+       <title>Hello World!</title>
+
+   </head>
+
+   <body>
+
+      选择文件:<input type="file" id="file1" /><br />
+        <input type="button" id="upload" value="上传" />
+		<script src="/static/js/jquery-1.11.1.min.js"></script>
+		<script src="/static/js/ajaxfileupload.js"></script>
+		<script src="/static/js/jquery.validate.min.js"></script>
+<!-- 		<script src="./jquery-1.7.2.min.js"></script> -->
+		<script type="text/javascript">
+        $(function () {
+            $("#upload").click(function () {
+                $("#imgWait").show();
+                var formData = new FormData();
+                formData.append("file", document.getElementById("file1").files[0]);   
+                $.ajax({
+                    url: "http://localhost:9090/tpm/fileupload/batch/upload",
+                    type: "POST",
+                    data: formData,
+                    /**
+                    *必须false才会自动加上正确的Content-Type
+                    */
+                    contentType: false,
+                    /**
+                    * 必须false才会避开jQuery对 formdata 的默认处理
+                    * XMLHttpRequest会对 formdata 进行正确的处理
+                    */
+                    processData: false,
+                    success: function (data) {
+                        if (data.code == "0") {
+                            alert(data.data);
+                        }else
+                        if (data.status == "-1") {
+                            alert(data.msg);
+                        }
+                    },
+                    error: function () {
+                        alert("上传失败！");
+                    }
+                });
+            });
+        });
+    </script>
+
+   </body>
+
+</html>

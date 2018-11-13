@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmRepaymentMapper">
+
+	<!--<resultMap id="result_OptLogsModel_Map" type="com.kuyu.model.TpmOptLogsModel">
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="type" jdbcType="INTEGER" property="type"/>
+		<result column="create_time" jdbcType="VARCHAR" property="createTime"/>
+		<result column="opt_user" jdbcType="VARCHAR" property="optUser"/>
+		<result column="content" jdbcType="VARCHAR" property="content"/>
+	</resultMap>-->
+
+	<sql id="repayment_main_Column">
+		request_id,
+		request_title,
+		request_user,
+		request_create_time,
+		currency,
+		note
+	</sql>
+	<sql id="repayment_pay_info_Column">
+		request_id,
+		repayment_no,
+		loan_bill_no,
+		loan_amount,
+		supplier,
+		available_amount,
+		original_currency_amount,
+		repayment_amount,
+		detail_id
+	</sql>
+	<sql id="repayment_pay_detail_Column">
+		request_id,
+		request_no,
+		summary,
+		project_request_no,
+		cost_category,
+		accounting_subject,
+		cost_dept,
+		cost_center,
+		wbs,
+		channel,
+		Invoice_type,
+		Invoice_no,
+		amount,
+		detail_id
+	</sql>
+	<!-- 插入报销单主信息-->
+	<insert id="insertRepaymentData" parameterType="com.kuyu.model.TpmRepaymentModel">
+		INSERT  INTO tpm_repayment_main
+		(<include refid="repayment_main_Column" />)
+		VALUES
+		(#{requestId},#{requestTitle},#{requestUser},#{requestCreateTime},#{currency},#{note})
+	</insert>
+
+	<!-- 插入报销单支付相关信息-->
+	<insert id="insertRepaymentPayInfoData" parameterType="com.kuyu.model.TpmRepaymentPayInfoModel">
+		INSERT  INTO tpm_repayment_pay_info
+		(<include refid="repayment_pay_info_Column"/>)
+		VALUES
+		(#{requestId},#{repaymentNo},#{loanBillNo},#{loanAmount},#{supplier},#{availableAmount},#{originalCurrencyAmount},#{repaymentAmount},#{detailId})
+	</insert>
+
+	<!-- 插入报销单付款细节信息-->
+	<insert id="insertRepaymentFeeDetailData" parameterType="com.kuyu.model.TpmRepaymentFeeDetailModel">
+		INSERT  INTO tpm_repayment_fee_detail
+		(<include refid="repayment_pay_detail_Column"/>)
+		VALUES
+		(#{requestId},#{requestNo},#{summary},#{projectRequestNo},#{costCategory},#{accountingSubject},#{costDept},#{costCenter},#{wbs},#{channel},#{invoiceType},#{invoiceNo},#{amount},#{detailId})
+	</insert>
+
+	<resultMap id="result_RepaymentModel_Map" type="com.kuyu.model.TpmRepaymentModel">
+		<id column="request_id" jdbcType="VARCHAR" property="requestId"/>
+		<result column="request_title" jdbcType="VARCHAR" property="requestTitle"/>
+		<result column="request_user" jdbcType="VARCHAR" property="requestUser"/>
+		<result column="request_create_time" jdbcType="VARCHAR" property="requestCreateTime"/>
+		<result column="currency" jdbcType="VARCHAR" property="currency"/>
+		<result column="note" jdbcType="VARCHAR" property="note"/>
+	</resultMap>
+	
+	<resultMap id="result_RepaymentFeeDetailModel_Map" type="com.kuyu.model.TpmRepaymentFeeDetailModel">
+		<id column="request_id" jdbcType="VARCHAR" property="requestId"/>
+		<result column="request_no" jdbcType="VARCHAR" property="requestNo"/>
+		<result column="project_request_no" jdbcType="VARCHAR" property="projectRequestNo"/>
+		<result column="cost_category" jdbcType="VARCHAR" property="costCategory"/>
+		<result column="accounting_subject" jdbcType="VARCHAR" property="accountingSubject"/>
+		<result column="summary" jdbcType="VARCHAR" property="summary"/>
+		<result column="cost_dept" jdbcType="VARCHAR" property="costDept"/>
+		<result column="cost_center" jdbcType="VARCHAR" property="costCenter"/>
+		<result column="Invoice_no" jdbcType="VARCHAR" property="invoiceNo"/>
+		<result column="Invoice_type" jdbcType="VARCHAR" property="invoiceType"/>
+		<result column="amount" jdbcType="DOUBLE" property="amount"/>
+		<result column="detail_id" jdbcType="VARCHAR" property="detailId"/>
+	</resultMap>
+	<resultMap id="result_RepaymentPayInfoModel_Map" type="com.kuyu.model.TpmRepaymentPayInfoModel">
+		<id column="request_id" jdbcType="VARCHAR" property="requestId"/>
+		<result column="repayment_no" jdbcType="VARCHAR" property="repaymentNo"/>
+		<result column="loan_bill_no" jdbcType="VARCHAR" property="loanBillNo"/>
+		<result column="loan_amount" jdbcType="DOUBLE" property="loanAmount"/>
+		<result column="supplier" jdbcType="VARCHAR" property="supplier"/>
+		<result column="available_amount" jdbcType="DOUBLE" property="availableAmount"/>
+		<result column="original_currency_amount" jdbcType="DOUBLE" property="originalCurrencyAmount"/>
+		<result column="repayment_amount" jdbcType="DOUBLE" property="repaymentAmount"/>
+		<result column="detail_id" jdbcType="VARCHAR" property="detailId"/>
+	</resultMap>
+
+	<select id="selectRepaymentList" parameterType="com.kuyu.vo.RepaymentVo" resultMap="result_RepaymentModel_Map">
+		SELECT * FROM tpm_repayment_main
+		<where>
+			<if test="requestId != null and requestId != ''">
+				AND request_id= #{requestId}
+			</if>
+			<if test="requestTitle !=null and requestTitle != ''">
+				AND request_title LIKE '%${requestTitle}%' ESCAPE '/'
+			</if>
+			<if test="requestCreateTime!=null and requestCreateTime != ''">
+				AND request_create_time=#{requestCreateTime}
+			</if>
+			<if test="requestUser !=null and requestUser != ''">
+				AND request_user=#{requestUser}
+			</if>
+		</where>
+	</select>
+	<select id="selectRepaymentFeeDetailList" resultMap="result_RepaymentFeeDetailModel_Map" parameterType="String">
+		 SELECT * FROM tpm_repayment_fee_detail
+		 WHERE  request_id=#{requestId}
+	</select>
+	<select id="selectRepaymentPayInfoList" resultMap="result_RepaymentPayInfoModel_Map" parameterType="String">
+		SELECT * FROM tpm_repayment_pay_info
+		 WHERE  request_id=#{requestId}
+	</select>
+
+<select id="selectRequestUserName" parameterType="String" resultType="String">
+	SELECT  person_name FROM  tpm_employee
+	WHERE person_code=#{requestUser}
+</select>
+
+
+	<select id="financeSelectRepaymentList" parameterType="com.kuyu.vo.RepaymentVo" resultMap="result_RepaymentModel_Map">
+		SELECT DISTINCT
+		repayment.request_id,
+		repayment.request_title,
+		repayment.request_user,
+		repayment.request_create_time,
+		repayment.currency,
+		repayment.note
+		FROM tpm_user_role AS role
+		INNER JOIN tpm_activity AS activity
+		ON role.org_code = activity.dept
+		INNER JOIN tpm_repayment_main AS repayment
+		ON  repayment.request_id = activity.request_id
+		<where>
+			(role.person_code=#{personCode})
+			<if test="requestId != null and requestId != ''">
+				AND repayment.request_id= #{requestId}
+			</if>
+			<if test="requestTitle !=null and requestTitle != ''">
+				AND repayment.request_title LIKE '%${requestTitle}%' ESCAPE '/'
+			</if>
+			<if test="requestCreateTime!=null and requestCreateTime != ''">
+				AND repayment.request_create_time=#{requestCreateTime}
+			</if>
+			<if test="requestUser !=null and requestUser != ''">
+				AND repayment.request_user=#{requestUser}
+			</if>
+		</where>
+	</select>
+
+	<select id="activityOrProjectSelectRepaymentList" parameterType="com.kuyu.vo.RepaymentVo" resultMap="result_RepaymentModel_Map">
+		SELECT DISTINCT
+		repayment.request_id,
+		repayment.request_title,
+		repayment.request_user,
+		repayment.request_create_time,
+		repayment.currency,
+		repayment.note
+		FROM
+		tpm_project AS project
+		INNER JOIN tpm_activity AS activity ON (
+		project.request_id = activity.request_id
+		)
+		INNER JOIN tpm_repayment_main AS repayment ON (
+		repayment.request_id = project.request_id
+		)
+		<where>
+			 (project.request_user=#{personCode} OR activity.manager=#{personCode})
+			<if test="requestId != null and requestId != ''">
+				AND repayment.request_id= #{requestId}
+			</if>
+			<if test="requestTitle !=null and requestTitle != ''">
+				AND repayment.request_title LIKE '%${requestTitle}%' ESCAPE '/'
+			</if>
+			<if test="requestCreateTime!=null and requestCreateTime != ''">
+				AND repayment.request_create_time=#{requestCreateTime}
+			</if>
+			<if test="requestUser !=null and requestUser != ''">
+				AND repayment.request_user=#{requestUser}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="queryRepaymentManagementList" resultType="com.kuyu.vo.RepaymentManagementReturnVo"  parameterType="com.kuyu.vo.RepaymentManagementVo">
+		SELECT 
+		DISTINCT
+			tus.uuid tusUuid,
+			taa.activity_name activityName,
+			tubi.name openName,
+			tubi.mobile,
+			tus.activity_time activityTime,
+			tus.real_salary realSalary,
+			taa.manager,
+			te.person_name managerName
+		FROM 
+			tpm_activity taa,
+			tpm_user_statement tus,
+			tpm_user_base_info tubi,
+			tpm_project tp,
+			tpm_employee te
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="list" item="item" index="index" open="taa.dept in (" close=")" separator=",">
+						#{item}
+					</foreach>
+				</when>
+				<when test="personType == 4">
+					tp.request_user = #{personCode}
+				</when>
+			</choose>
+			<if test="settlementMethod != null and settlementMethod != ''">
+				AND taa.settlement_method = #{settlementMethod}
+				<if test="settlementMethod == '公司直付'">
+					AND tus.pay_state = 2
+				</if>
+				<if test="settlementMethod != '公司直付'">
+					AND tus.request_state = 4
+				</if>
+			</if>
+			<if test="isAttendance != null and isAttendance != ''">
+				<if test="isAttendance == 2">
+					AND tus.is_attendence = '1'
+				</if>
+				<if test="isAttendance == 3">
+					AND tus.is_attendence is null
+				</if>
+			</if>
+			<if test="activityTime != null and activityTime != ''">
+				AND tus.activity_time = #{activityTime}
+			</if>
+			<if test="requestId != null and requestId != ''">
+				AND tp.request_id = #{requestId}
+			</if>
+			<if test="managerName != null and managerName != ''">
+				AND te.person_name LIKE CONCAT('%',#{managerName},'%')
+			</if>
+			<if test="activityName != null and activityName != ''">
+				AND taa.activity_name LIKE CONCAT('%',#{activityName},'%')
+			</if>
+			<if test="openName != null and openName != ''">
+				AND tubi.name LIKE CONCAT('%',#{openName},'%')
+			</if>
+			AND tp.request_id = taa.request_id
+			AND taa.activity_uuid = tus.activity_uuid
+			AND te.person_code = taa.manager
+			AND tus.openid = tubi.openid
+			AND ((taa.settlement_method = '公司直付' AND tus.pay_state = 2) 
+			OR (taa.settlement_method != '公司直付' AND tus.request_state = 4) )
+			ORDER BY tus.activity_time DESC
+		</where>
+	</select>
+	
+	<select id="queryRepaymentManagementDetails" resultType="com.kuyu.vo.RepaymentManagementReturnVo" parameterType="String">
+		SELECT
+			tus.uuid tusUuid,
+			tus.load_bill_uuid loadBillUuid,
+			tus.activity_time activityTime,
+			tp.request_id requestId,
+			te1.person_name requestUser,
+			taa.settlement_method settlementMethod,
+			taa.activity_name activityName,
+			tubi.name openName,
+			tubi.account_name accountName,
+			tubi.mobile,
+			taa.work_hours workHours,
+			tus.valid_work_hours validWorkHours,
+			tus.valid_work_minute validWorkMinute,
+			taa.unit_price unitPrice,
+			tus.real_salary realSalary,
+			tus.incentive_amount incentiveAmount,
+			tus.reduce_money reduceMoney,
+			te2.person_name managerName
+		FROM
+			tpm_user_statement tus,
+			tpm_activity taa,
+			tpm_project tp,
+			tpm_employee te1,
+			tpm_employee te2,
+			tpm_user_base_info tubi
+		WHERE
+			tus.activity_uuid = taa.activity_uuid
+		AND taa.request_id = tp.request_id
+		AND tus.openid = tubi.openid
+		AND tp.request_user = te1.person_code
+		AND taa.manager = te2.person_code
+		AND tus.uuid = #{uuid}
+	</select>
+	
+	<select id="queryDownloadAttendences" resultType="com.kuyu.vo.RepaymentManagementReturnVo" parameterType="String">
+		SELECT DISTINCT
+			tus.uuid tusUuid,
+			tus.load_bill_uuid loadBillUuid,
+			tus.activity_time activityTime,
+			tp.request_id requestId,
+			te1.person_name requestUser,
+			taa.settlement_method settlementMethod,
+			taa.activity_name activityName,
+			tubi.name openName,
+			tubi.mobile,
+			taa.work_hours workHours,
+			tus.valid_work_hours validWorkHours,
+			tus.valid_work_minute validWorkMinute,
+			taa.unit_price unitPrice,
+			tus.real_salary realSalary,
+			tus.incentive_amount incentiveAmount,
+			tus.reduce_money reduceMoney,
+			tat.person_name operPersonName,
+			tat.create_time createTime,
+			tat.attendence_uuid attendenceUuid,
+			te2.person_name managerName
+		FROM
+			tpm_user_statement tus,
+			tpm_activity taa,
+			tpm_project tp,
+			tpm_user_base_info tubi,
+			tpm_employee te1,
+			tpm_employee te2,
+			tpm_attendence tat
+		WHERE
+			tus.activity_uuid = taa.activity_uuid
+		AND taa.request_id = tp.request_id
+		AND tus.openid = tubi.openid
+		AND tp.request_user = te1.person_code
+		AND taa.manager = te2.person_code
+		AND tus.uuid = tat.tus_uuid
+		AND tat.attendence_uuid = #{uuid}
+		ORDER BY
+			tus.activity_time DESC
+	</select>
+	
+	<select id="queryRequestUsers" resultType="String">
+		SELECT DISTINCT
+			tp.request_user
+		FROM
+			tpm_activity taa,
+			tpm_project tp
+		<where>
+			<foreach collection="list" index="index" item="item" open="taa.dept IN (" close=")" separator=",">
+				#{item}
+			</foreach>
+			AND taa.request_id = tp.request_id
+		</where>
+	</select>
+	
+	<select id="queryAttendences" resultType="com.kuyu.model.TpmAttendenceModel" parameterType="com.kuyu.vo.RepaymentManagementVo">
+		SELECT
+			DISTINCT
+			tat.person_code,
+			tat.person_name,
+			tat.create_time,
+			tat.attendence_uuid,
+			tat.url
+		FROM 
+			tpm_attendence tat,
+			tpm_user_statement tus,
+			tpm_user_base_info tubi
+		<where>
+			<if test="personType == 2 or personType == 0 or personType == 6">
+				(tat.person_code in
+				<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+				OR tat.person_code = #{personCode})
+			</if>
+			<if test="personType == 4">
+				AND tat.person_code = #{personCode}
+			</if>
+			<if test="attendanceUuid != null and attendanceUuid != ''">
+				AND tat.attendence_uuid LIKE CONCAT('%',#{attendanceUuid},'%')
+			</if>
+			<if test="personName != null and personName != ''">
+				AND tat.person_name LIKE CONCAT('%',#{personName},'%')
+			</if>
+			<if test="startTime != null and startTime != ''">
+				AND tat.create_time <![CDATA[ >= ]]> #{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				AND tat.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+			<if test="openName != null and openName != ''">
+				AND tubi.name LIKE CONCAT('%',#{openName},'%')
+			</if>
+			AND tat.tus_uuid = tus.uuid
+			AND tus.openid = tubi.openid
+		</where>
+		ORDER BY
+			tat.create_time DESC
+	</select>
+	
+	
+</mapper>

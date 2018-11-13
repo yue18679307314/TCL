@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmActivityOriginalMapper">
+
+	<sql id="Base_Column_List">
+		project_id,
+		request_id,
+		project_name,
+		fee_detail_type,
+		dept,
+		city,
+		cost_center,
+		wbs,
+		order_no,
+		total_fee,
+		projected_sales_no,
+		projected_sales_money,
+		estimated_cost_rate,
+		note
+	</sql>
+	<select id="selectProjectIdByRequestId" resultType="String" parameterType="String">
+		SELECT project_id FROM tpm_activity_original WHERE request_id = #{request_id}
+	</select>
+	
+</mapper>

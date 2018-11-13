@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.PropertiesConfigMapper">
+    <resultMap id="result_Map" type="com.kuyu.model.PropertiesConfig">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="pkey" jdbcType="VARCHAR" property="pkey" />
+        <result column="pvalue" jdbcType="VARCHAR" property="pvalue" />
+        <result column="note" jdbcType="VARCHAR" property="note" />
+    </resultMap>
+
+   <select id="selectBykey" resultType="com.kuyu.model.PropertiesConfig">
+   		select id,pkey,pvalue,note from tpm_properties_config where pkey = #{key}
+   </select>
+
+	 <update id="updateBykey" parameterType="String">
+	 	update tpm_properties_config set pvalue=#{value} where pkey = #{key}
+	 </update>
+
+</mapper>

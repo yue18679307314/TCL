@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmAttendenceMapper">
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		uuid,
+		person_code,
+		person_name,
+		create_time,
+		attendence_uuid,
+		tus_uuid,
+		url
+	</sql>
+
+	<select id="selectByAttendenceUuid" resultType="String"	parameterType="String">
+		SELECT DISTINCT
+		person_code
+		FROM
+		tpm_attendence
+		WHERE
+		attendence_uuid = #{uuid}
+	</select>
+	<select id="selectUrlByAttendenceUuid" resultType="String"	parameterType="String">
+		SELECT DISTINCT
+		url
+		FROM
+		tpm_attendence
+		WHERE
+		attendence_uuid = #{uuid}
+	</select>
+	
+	<select id="selectByTusUuid" resultType="com.kuyu.model.TpmAttendenceModel"	parameterType="String">
+		SELECT <include refid="Base_Column_List"/>
+		FROM
+		tpm_attendence
+		WHERE
+		tus_uuid = #{uuid}
+	</select>
+	
+	<select id="selectByTusUuidList" resultType="com.kuyu.model.TpmAttendenceModel">
+		SELECT <include refid="Base_Column_List"/>
+		FROM
+		tpm_attendence
+		WHERE
+		tus_uuid IN
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+</mapper>

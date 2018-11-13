@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmDeptMapper">
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		uuid,
+		org_code,
+		org_name,
+		org_code_parent,
+		org_name_parent,
+		org_type,
+		update_flag,
+		update_time
+	</sql>
+
+	<!-- 根据部门编码查询部门信息 -->
+	<select id="getTpmDept" resultType="com.kuyu.model.TpmDeptModel"
+		parameterType="com.kuyu.model.TpmDeptModel">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tpm_dept
+		<where>
+			<if test="org_code != null and org_code != ''">
+				org_code = #{org_code}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询部门信息列表 -->
+	<select id="getDeptList" resultType="com.kuyu.model.TpmDeptModel"
+		parameterType="com.kuyu.vo.TpmDeptVo">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tpm_dept
+		<where>
+			<if test="org_code != null and org_code != ''">
+				AND org_code = #{org_code}
+			</if>
+			<if test="org_name != null and org_name != ''">
+				AND org_name LIKE CONCAT('%',#{org_name},'%')
+			</if>
+			<if test="org_code_parent != null and org_code_parent != ''">
+				AND org_code_parent = #{org_code_parent}
+			</if>
+			<if test="org_name_parent != null and org_name_parent != ''">
+				AND org_name_parent LIKE CONCAT('%',#{org_name_parent},'%')
+			</if>
+			<if test="org_type != null and org_type != ''">
+				AND org_type = #{org_type}
+			</if>
+			<if test="update_flag != null and update_flag != ''">
+				AND update_flag = #{update_flag}
+			</if>
+		</where>
+	</select>
+
+	<!-- 新增部门信息 -->
+	<insert id="insertTpmDept" parameterType="com.kuyu.model.TpmDeptModel">
+		INSERT INTO
+		tpm_dept(uuid,org_code,org_name,org_code_parent,org_name_parent,org_type,update_flag,update_time)
+		VALUES
+		(#{uuid},#{org_code},#{org_name},#{org_code_parent},#{org_name_parent},#{org_type},#{update_flag},SYSDATE())
+	</insert>
+
+	<!-- 更新部门信息 -->
+	<update id="updateTpmDept" parameterType="com.kuyu.model.TpmDeptModel">
+		UPDATE tpm_dept
+		<set>
+			<if test="org_name != null and org_name != ''">
+				org_name = #{org_name},
+			</if>
+			<if test="org_code_parent != null and org_code_parent != ''">
+				org_code_parent = #{org_code_parent},
+			</if>
+			<if test="org_name_parent != null and org_name_parent != ''">
+				org_name_parent = #{org_name_parent},
+			</if>
+			<if test="org_type != null and org_type != ''">
+				org_type = #{org_type},
+			</if>
+			<if test="update_flag != null and update_flag != ''">
+				update_flag = #{update_flag},
+			</if>
+			update_time = SYSDATE()
+		</set>
+		WHERE org_code = #{org_code}
+	</update>
+
+    <select id="queryAllChilsDept" resultType="String" parameterType="String" statementType="CALLABLE">
+			<![CDATA[ CALL sp_showChildLst(#{parentCode,mode = IN,jdbcType = VARCHAR})]]>
+    </select>
+    
+	<select id="queryChildsDept" resultType="com.kuyu.model.TpmDeptModel" parameterType="String">
+		SELECT <include refid="Base_Column_List"/>
+		FROM tpm_dept 
+    	WHERE org_code_parent = #{org_code_parent}
+	</select>
+
+</mapper>

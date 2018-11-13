@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmOptLogsMapper">
+
+	<resultMap id="result_OptLogsModel_Map" type="com.kuyu.model.TpmOptLogsModel">
+		<id column="id" jdbcType="INTEGER" property="id"/>
+		<result column="type" jdbcType="INTEGER" property="type"/>
+		<result column="create_time" jdbcType="VARCHAR" property="createTime"/>
+		<result column="opt_user" jdbcType="VARCHAR" property="optUser"/>
+		<result column="content" jdbcType="VARCHAR" property="content"/>
+		<result column="opt_user_dept" jdbcType="VARCHAR" property="optUserDept"/>
+	</resultMap>
+
+	<!-- 插入日志操作的相关记录-->
+	<insert id="insertOptLogsData" parameterType="com.kuyu.model.TpmOptLogsModel">
+		INSERT  INTO tpm_logs
+		(type,create_time,opt_user,content,opt_user_dept)
+		VALUES
+		(#{type},#{createTime},#{optUser},#{content},#{optUserDept})
+	</insert>
+
+	<!-- 从数据库中按类型或者时间查询数据-->
+	<select id="selectLogsByTypeOrTime" parameterType="com.kuyu.vo.OperateLogsVo" resultMap="result_OptLogsModel_Map">
+		SELECT * FROM tpm_logs
+		<where>
+			<if test="startTime != null and startTime != ''">
+				AND create_time&gt;= #{startTime}
+			</if>
+			<if test="endTime!=null and endTime != ''">
+				AND create_time&lt;=#{endTime}
+			</if>
+			<if test="type != null and type !=''">
+				AND type=#{type}
+			</if>
+			<if test="content != null and content !=''">
+				AND content LIKE #{content} ESCAPE '/'
+			</if>
+		</where>
+		ORDER  BY  create_time DESC
+	</select>
+	<select id="branchAdminSelectLogsByTypeOrTime" parameterType="com.kuyu.vo.OperateLogsVo" resultMap="result_OptLogsModel_Map">
+		SELECT
+		tlg.opt_user ,
+		tlg.content ,
+		tlg.create_time ,
+		tlg.id ,
+		tlg.type,
+		tlg.opt_user_dept
+		FROM
+		tpm_logs tlg
+		INNER JOIN tpm_branch_admin tba ON tba.org_code=tlg.opt_user_dept
+		<where>
+		 	tba.person_code=#{personCode}
+			<if test="operateLogsVo.startTime != null and operateLogsVo.startTime != ''">
+				AND create_time&gt;= #{operateLogsVo.startTime}
+			</if>
+			<if test="operateLogsVo.endTime!=null and operateLogsVo.endTime != ''">
+				AND create_time&lt;=#{operateLogsVo.endTime}
+			</if>
+			<if test="operateLogsVo.type != null and operateLogsVo.type !=''">
+				AND type=#{operateLogsVo.type}
+			</if>
+			<if test="operateLogsVo.content != null and operateLogsVo.content !=''">
+				AND content LIKE #{operateLogsVo.content} ESCAPE '/'
+			</if>
+		</where>
+		ORDER  BY  create_time DESC
+	</select>
+
+	<select id="selectLogs" parameterType="com.kuyu.vo.OperateLogsVo" resultMap="result_OptLogsModel_Map">
+		SELECT * FROM tpm_logs
+		<where>
+			<if test="startTime != null and startTime != ''">
+				AND create_time&gt;= #{startTime}
+			</if>
+			<if test="endTime!=null and endTime != ''">
+				AND create_time&lt;=#{endTime}
+			</if>
+			<if test="type != null and type !=''">
+				AND type=#{type}
+			</if>
+			<if test="content != null and content !=''">
+				AND content LIKE #{content} ESCAPE '/'
+			</if>
+		</where>
+		ORDER  BY  create_time DESC
+	</select>
+	<select id="selectLogsPages" parameterType="com.kuyu.vo.OperateLogsVo" resultMap="result_OptLogsModel_Map">
+		SELECT * FROM tpm_logs
+		<where>
+			<if test="startTime != null and startTime != ''">
+				AND create_time&gt;= #{startTime}
+			</if>
+			<if test="endTime!=null and endTime != ''">
+				AND create_time&lt;=#{endTime}
+			</if>
+			<if test="type != null and type !=''">
+				AND type=#{type}
+			</if>
+			<if test="content != null and content !=''">
+				AND content LIKE #{content} ESCAPE '/'
+			</if>
+		</where>
+		ORDER  BY  create_time DESC
+	</select>
+</mapper>

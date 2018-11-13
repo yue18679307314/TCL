@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kuyu.mapper.TpmUserAccountInfoMapper">
+
+	<!-- -->
+	<select id="selectAccountInfo" parameterType="String"
+		resultType="String">
+		SELECT account_value FROM tpm_user_base_info WHERE openid=#{openid}
+	</select>
+	<select id="selectAllAccountInfo" parameterType="String"
+		resultType="com.kuyu.model.TpmUserBaseInfoModel">
+		SELECT
+		account_value,account_bank_name,account_name,open_branch,open_city,open_province,name
+		FROM tpm_user_base_info WHERE openid=#{openid}
+	</select>
+	<select id="selectCreateTime" parameterType="String" resultType="String">
+		SELECT create_time FROM tpm_user_base_info WHERE openid=#{openid}
+	</select>
+	<update id="updateAccountInfo" parameterType="com.kuyu.model.TpmUserBaseInfoModel">
+		UPDATE tpm_user_base_info
+		SET
+		req_fssc_bill=#{req_fssc_bill},
+		account_name= #{account_name},
+		account_bank_name= #{account_bank_name},
+		account_value=#{account_value},
+		open_province = #{open_province},
+		open_city = #{open_city},
+		open_branch = #{open_branch},
+		modify_time=#{modify_time},
+		name=#{account_name},
+		bank_account_verify=#{bank_account_verify}
+		where openID = #{openid}
+	</update>
+	<select id="getUserCode" resultType="String">
+		SELECT pvalue FROM tpm_properties_config
+		WHERE pkey='request_user'
+	</select>
+	<select id="getTitle" resultType="String">
+		SELECT pvalue FROM tpm_properties_config
+		WHERE pkey='title'
+	</select>
+	<select id="getDepartCode" resultType="String">
+		SELECT pvalue FROM tpm_properties_config
+		WHERE pkey='request_depart'
+	</select>
+
+	<resultMap id="bankResult" type="String">
+		<id column="dp_id" property="dp_id" />
+	</resultMap>
+	<select id="getBankList" resultType="String">
+		SELECT bankname FROM bank
+	</select>
+	<update id="updateBankAccountVerify" parameterType="com.kuyu.vo.VerifyBankAccountVo">
+		UPDATE tpm_user_base_info
+		SET bank_account_verify=#{bank_account_verify}
+		WHERE req_fssc_bill=#{req_fssc_bill}
+	</update>
+	<select id="getBankAccountVerifyInfo" parameterType="String"
+		resultType="String">
+		SELECT bank_account_verify FROM tpm_user_base_info
+		WHERE openid=#{openid}
+	</select>
+	<!-- 更新结算单的支付状态 -->
+	<update id="updateUserStatementPaystate" parameterType="String">
+		UPDATE tpm_user_statement SET pay_state= -1
+		WHERE (openid=#{openid} AND pay_state =0)
+	</update>
+
+	<select id="getUserBaseInfoByReqfsscbill" parameterType="com.kuyu.vo.VerifyBankAccountVo"
+		resultType="com.kuyu.model.TpmUserBaseInfoModel">
+		SELECT name ,mobile,account_value,openid ,account_bank_name FROM
+		tpm_user_base_info
+		WHERE req_fssc_bill=#{req_fssc_bill}
+	</select>
+
+	<select id="getNameByOpenid" resultType="String">
+		SELECT name FROM tpm_user_base_info
+		WHERE openid = #{openid}
+	</select>
+
+	<select id="outputBankInfo" resultType="com.kuyu.model.TpmUserBaseInfoModel"
+		parameterType="com.kuyu.vo.BankInfoVo">
+		SELECT
+		DISTINCT
+		tubi.openid,
+		tubi.name,
+		tubi.id_card,
+		tubi.mobile,
+		tubi.account_name,
+		tubi.account_bank_name,
+		tubi.account_value,
+		tubi.open_province,
+		tubi.open_city,
+		tubi.open_branch
+		FROM
+		tpm_activity taa,
+		tpm_user_statement tus,
+		tpm_user_base_info tubi,
+		tpm_employee te,
+		tpm_project tp
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="list" item="item" index="index" open="taa.dept in (" close=")" separator=",">
+						#{item}
+					</foreach>
+				</when>
+				<when test="personType == 4">
+					AND tp.request_user = #{personCode}
+				</when>
+			</choose>
+			<if test="requestId != null and requestId != ''">
+				AND taa.request_id = #{requestId}
+			</if>
+			<if test="activityName != null and activityName != ''">
+				AND taa.activity_name LIKE CONCAT('%',#{activityName},'%')
+			</if>
+			<if test="activityTime != null and activityTime != ''">
+				AND tus.activity_time = #{activityTime}
+			</if>
+			<if test="managerName != null and managerName != ''">
+				AND te.person_name LIKE CONCAT('%',#{managerName},'%')
+			</if>
+			<if test="openName != null and openName != ''">
+				AND tubi.name LIKE CONCAT('%',#{openName},'%')
+			</if>
+			AND taa.activity_uuid = tus.activity_uuid
+			AND tus.openid = tubi.openid
+			AND taa.request_id = tp.request_id
+			AND te.person_code = taa.manager
+			AND tus.request_state = 4
+		</where>
+	</select>
+	
+	<select id="queryBankInfoByOpenids" resultType="com.kuyu.model.TpmUserBaseInfoModel">
+		SELECT
+		DISTINCT
+		tubi.name,
+		tubi.openid,
+		tubi.id_card,
+		tubi.mobile,
+		tubi.account_name,
+		tubi.account_bank_name,
+		tubi.account_value,
+		tubi.open_province,
+		tubi.open_city,
+		tubi.open_branch
+		FROM
+		tpm_activity taa,
+		tpm_user_statement tus,
+		tpm_user_base_info tubi
+		<where>
+			<foreach collection="list" index="index" item="item" open="tubi.openid IN(" close=")" separator=",">
+				#{item}
+			</foreach>
+		AND taa.activity_uuid = tus.activity_uuid
+		AND tus.openid = tubi.openid
+		AND tus.request_state = 4
+		</where>
+	</select>
+</mapper>
+

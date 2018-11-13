@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.UserRoleInfoMapper">
+	<resultMap id="result_Map" type="com.kuyu.model.UserRoleInfoModel">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="person_code" jdbcType="VARCHAR" property="person_code" />
+		<result column="roleType" jdbcType="VARCHAR" property="type" />
+		<result column="org_code" jdbcType="VARCHAR" property="org_code" />
+		<result column="create_time" jdbcType="VARCHAR" property="create_time" />
+	</resultMap>
+
+	<select id="selectByPersonCode" resultType="com.kuyu.model.UserRoleInfoModel">
+		select
+		id,person_code,roleType,org_code,create_time from tpm_user_role where
+		person_code = #{person_code}
+	</select>
+	<update id="updateByPersonCode" parameterType="String">
+		update
+		tpm_user_role set org_code=#{org_code},create_time=#{create_time}
+		where person_code = #{person_code}
+	</update>
+
+	<select id="findFinanceOrgCodeList" resultType="java.lang.String">
+		SELECT
+		org_code
+		FROM
+		tpm_user_role
+		WHERE
+		person_code = #{personCode,jdbcType=VARCHAR} AND
+		roleType =2
+	</select>
+
+	<delete id="deleteByPersonCode" parameterType="String">
+		delete from
+		tpm_user_role where person_code = #{person_code}
+	</delete>
+
+	<insert id="insertUserRole" parameterType="List">
+		INSERT INTO tpm_user_role (person_code,roleType,create_time,org_code)
+		VALUES
+		<foreach collection="list" index="index" item="item" separator=",">
+			(#{item.person_code},#{item.type},#{item.create_time},#{item.org_code})
+		</foreach>
+	</insert>
+	
+	<delete id="deleteByOrgCode" parameterType="String">
+		DELETE FROM tpm_user_role WHERE org_code  = #{orgCode}
+	</delete>
+	
+	<select id="selectRoleByPersonCode" resultType="String" parameterType="String">
+		SELECT DISTINCT roleType FROM tpm_user_role WHERE person_code = #{personCode}
+	</select>
+	
+	<select id="getPersonName" resultType="String" parameterType="String">
+		SELECT DISTINCT
+			te.person_name
+		FROM
+			tpm_employee te,
+			tpm_user_role tur
+		WHERE
+			tur.org_code = #{org_code}
+		AND tur.person_code = te.person_code
+	</select>
+	
+	<select id="getPersonCodeByOrgCode" parameterType="String" resultType="String">
+		SELECT 
+			person_code 
+		FROM 
+			tpm_user_role 
+		WHERE 
+			org_code = #{orgCode}
+		AND roleType = 2
+	</select>
+	
+	<select id="getUserInfo" resultType="com.kuyu.vo.TpmDeptEmplyeeVo" parameterType="String">
+		SELECT
+			te.person_code,
+			te.person_name,
+			td.org_code,
+			td.org_name
+		FROM
+			tpm_user_role tur,
+			tpm_dept td,
+			tpm_employee te
+		WHERE
+			tur.person_code = te.person_code
+		AND tur.org_code = td.org_code
+		AND tur.org_code = #{orgCode}
+		AND tur.roleType = 2
+	</select>
+</mapper>

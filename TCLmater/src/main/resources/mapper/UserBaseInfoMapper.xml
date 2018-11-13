@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kuyu.mapper.TpmUserBaseInfoMapper">
+
+    <sql id="Base_Column_List">
+        openid,
+        mobile,
+        name,
+        sex,
+        id_card,
+        province,
+        city,
+        district,
+        address,
+        idimgurl_front,
+        idimgurl_back,
+        status,
+        create_time,
+        modify_time,
+        modify_user,
+        account_name,
+        account_bank_name,
+        account_value,
+        open_province,
+        open_city,
+        open_branch,
+        binding_verify
+    </sql>
+    <sql id="Base_info_List">
+        openid,
+        mobile,
+        name,
+        id_card,
+        province,
+        city,
+        district,
+        address,
+        create_time,
+        modify_time
+    </sql>
+
+
+    <select id="selectCountByOpenid" parameterType="String" resultType="int">
+         SELECT COUNT(*) FROM tpm_user_base_info WHERE openid=#{openid}
+    </select>
+
+    <insert id="insertUserBaseInfo" parameterType="com.kuyu.model.TpmUserBaseInfoModel">
+        INSERT INTO tpm_user_base_info(
+        openid,
+        mobile,
+        name,
+        sex,
+        id_card,
+        province,
+        city,
+        district,
+        address,
+        idimgurl_front,
+        idimgurl_back,
+        status,
+        create_time,
+        modify_time,
+        modify_user,
+        account_name,
+        account_bank_name,
+        account_value,
+        open_province,
+        open_city,
+        open_branch,
+        binding_verify
+        ) VALUES(
+        #{openid},
+        #{mobile},
+        #{name},
+        #{sex},
+        #{id_card},
+        #{province},
+        #{city},
+        #{district},
+        #{address},
+        #{idimgurl_front},
+        #{idimgurl_back},
+        #{status},
+        #{create_time},
+        #{modify_time},
+        #{modify_user},
+        #{name},
+       "暂未填写",
+       "暂未填写",
+       "暂未填写",
+       "暂未填写",
+       "暂未填写",
+        #{binding_verify}
+        )
+    </insert>
+    <update id="insertBankAccountVerify" parameterType="com.kuyu.vo.VerifyBankAccountVo">
+      UPDATE tpm_user_base_info SET
+        bank_account_verify = #{bankAccountFlag}
+        WHERE account_value = #{bankAccountValue}
+    </update>
+
+    <update id="updateUserBaseInfo" parameterType="com.kuyu.model.TpmUserBaseInfoModel">
+        UPDATE  tpm_user_base_info
+        SET
+        openid=#{openid,jdbcType=VARCHAR},
+        mobile=#{mobile,jdbcType=VARCHAR},
+        sex = #{sex,jdbcType=VARCHAR},
+        id_card=#{id_card,jdbcType=VARCHAR},
+        province=#{province,jdbcType=VARCHAR},
+        city=#{city,jdbcType=VARCHAR},
+        district=#{district,jdbcType=VARCHAR},
+        address=#{address,jdbcType=VARCHAR},
+        <if test="idimgurl_front != null and idimgurl_front != ''">
+            idimgurl_front=#{idimgurl_front},
+        </if>
+        <if test="idimgurl_back != null and idimgurl_back != ''">
+            idimgurl_back=#{idimgurl_back},
+        </if>
+        status=#{status,jdbcType=VARCHAR},
+        modify_time=#{modify_time,jdbcType=VARCHAR},
+        modify_user=#{modify_user,jdbcType=VARCHAR},
+        binding_verify =#{binding_verify,jdbcType=VARCHAR}
+        WHERE openid = #{openid,jdbcType=VARCHAR}
+    </update>
+
+	<!-- 根据openid查询姓名 -->
+	<select id="getOpenName" resultType="String" parameterType="String">
+		SELECT name FROM tpm_user_base_info
+		WHERE openid = #{openid}
+	</select>
+	<!-- 根据openid查询-->
+	<select id="getUserBaseInfo" resultType="com.kuyu.model.TpmUserBaseInfoModel" parameterType="String">
+		SELECT <include refid="Base_Column_List"/> FROM tpm_user_base_info
+		WHERE openid = #{openid}
+	</select>
+
+    <select id="getHeadImage" resultType="String" parameterType="String">
+        SELECT headImgUrl FROM tpm_user_wx_info
+        WHERE openid = #{openid}
+    </select>
+
+    <select id="getNickName" resultType="String" parameterType="String">
+        SELECT nikeName FROM tpm_user_wx_info
+        WHERE openid = #{openid}
+    </select>
+
+    <select id="getProvinceList" resultType="com.kuyu.vo.ProvinceVo">
+        SELECT DISTINCT
+        province_name provinceName,
+        province_id provinceId
+        FROM province_and_city
+        ORDER BY  provinceId DESC
+    </select>
+
+    <select id="getCityList" parameterType="String" resultType="String">
+        SELECT city_name FROM province_and_city
+        WHERE province_and_city.province_id=#{provinceId}
+    </select>
+
+    <select id="getWxSex" parameterType="String" resultType="String">
+        SELECT  sex FROM  tpm_user_wx_info WHERE  openid = #{openid}
+    </select>
+
+    <select id="getUserBaseInfoList" parameterType="com.kuyu.model.TpmUserBaseInfoModel" resultType="com.kuyu.model.TpmUserBaseInfoModel" >
+        SELECT DISTINCT  a.sex  sex,
+        a.openid,
+        a.mobile,
+        a.name,
+        a.id_card,
+        a.province,
+        a.city,
+        a.district,
+        a.address,
+        a.create_time,
+        a.modify_time,
+        a.bank_account_verify,
+        b.nikeName,
+        b.sex wxSex
+        FROM
+        tpm_user_base_info AS a
+        INNER  JOIN
+        tpm_user_wx_info AS  b
+        ON
+        a.openid=b.openid
+        <where>
+            <if test="province != null and province != ''">
+                 a.province LIKE #{province} ESCAPE '/'
+            </if>
+            <if test="name!=null and name != ''">
+                AND a.name LIKE #{name} ESCAPE '/'
+            </if>
+            <if test="wxName!=null and wxName != ''">
+                AND b.nikeName LIKE CONCAT('%',#{wxName},'%')
+            </if>
+            <if test="mobile!=null and mobile != ''">
+                AND a.mobile LIKE CONCAT('%',#{mobile},'%')
+            </if>
+            <if test="city != null and city !=''">
+                AND a.city like #{city} ESCAPE '/'
+            </if>
+            <if test="bank_account_verify!= null and bank_account_verify !=''and  bank_account_verify !=3">
+                AND a.bank_account_verify = #{bank_account_verify}
+            </if>
+            <if test=" bank_account_verify!= null and bank_account_verify !=''and bank_account_verify==3">
+            AND a.bank_account_verify IS NULL
+            </if>
+        </where>
+    </select>
+
+    <select id="financeGetUserBaseInfoList" parameterType="com.kuyu.model.TpmUserBaseInfoModel" resultType="com.kuyu.model.TpmUserBaseInfoModel" >
+        SELECT DISTINCT
+        a.sex sex,
+        a.openid,
+        a.mobile,
+        a.name,
+        a.id_card,
+        a.province,
+        a.city,
+        a.district,
+        a.address,
+        a.create_time,
+        a.bank_account_verify,
+        a.modify_time,
+        b.nikeName,
+        b.sex wxSex
+        FROM
+        tpm_user_role AS role
+        INNER JOIN tpm_activity AS activity ON role.org_code = activity.dept
+
+        INNER JOIN tpm_user_activity AS uac ON activity.activity_uuid = uac.activity_uuid
+
+        INNER JOIN tpm_user_base_info AS a ON uac.openid = a.openid
+
+        INNER JOIN tpm_user_wx_info AS b ON a.openid = b.openid
+        <where>
+            <if test="province != null and province != ''">
+                a.province LIKE #{province} ESCAPE '/'
+            </if>
+            <if test="name!=null and name != ''">
+                AND a.name LIKE #{name} ESCAPE '/'
+            </if>
+            <if test="wxName!=null and wxName != ''">
+                AND b.nikeName LIKE CONCAT('%',#{wxName},'%')
+            </if>
+            <if test="mobile!=null and mobile != ''">
+                AND a.mobile LIKE CONCAT('%',#{mobile},'%')
+            </if>
+            <if test="city != null and city !=''">
+                AND a.city LIKE #{city} ESCAPE '/'
+            </if>
+            <if test="personCode != null">
+               AND role.person_code = #{personCode}
+            </if>
+            <if test="bank_account_verify!= null and bank_account_verify !=''and  bank_account_verify !=3">
+                AND a.bank_account_verify = #{bank_account_verify}
+            </if>
+            <if test=" bank_account_verify!= null and bank_account_verify !=''and bank_account_verify==3">
+                AND a.bank_account_verify IS NULL
+            </if>
+        </where>
+
+    </select>
+    <select id="companyAdminGetUserBaseInfoList" parameterType="com.kuyu.model.TpmUserBaseInfoModel" resultType="com.kuyu.model.TpmUserBaseInfoModel" >
+        SELECT DISTINCT  a.sex sex,
+        a.openid,
+        a.mobile,
+        a.name,
+        a.id_card,
+        a.province,
+        a.city,
+        a.district,
+        a.address,
+        a.create_time,
+        a.modify_time,
+        a.bank_account_verify,
+        b.nikeName,
+        b.sex wxSex
+        FROM
+        tpm_branch_admin AS tba
+        INNER JOIN tpm_activity AS activity ON tba.org_code = activity.dept
+
+        INNER JOIN tpm_user_activity AS uac ON activity.activity_uuid = uac.activity_uuid
+
+        INNER JOIN tpm_user_base_info AS a ON uac.openid = a.openid
+
+        INNER JOIN tpm_user_wx_info AS b ON a.openid = b.openid
+        <where>
+            <if test="province != null and province != ''">
+                a.province LIKE #{province} ESCAPE '/'
+            </if>
+            <if test="name!=null and name != ''">
+                AND a.name LIKE #{name} ESCAPE '/'
+            </if>
+            <if test="wxName!=null and wxName != ''">
+                AND b.nikeName LIKE CONCAT('%',#{wxName},'%')
+            </if>
+            <if test="mobile!=null and mobile != ''">
+                AND a.mobile LIKE CONCAT('%',#{mobile},'%')
+            </if>
+            <if test="city != null and city !=''">
+                AND a.city LIKE #{city} ESCAPE '/'
+            </if>
+            <if test="personCode != null">
+                AND tba.person_code = #{personCode}
+            </if>
+            <if test="bank_account_verify!= null and bank_account_verify !=''and  bank_account_verify !=3">
+                AND a.bank_account_verify = #{bank_account_verify}
+            </if>
+            <if test=" bank_account_verify!= null and bank_account_verify !=''and bank_account_verify==3">
+                AND a.bank_account_verify IS NULL
+            </if>
+        </where>
+    </select>
+
+    <select id="activityOrProjectGetUserBaseInfoList" parameterType="com.kuyu.model.TpmUserBaseInfoModel" resultType="com.kuyu.model.TpmUserBaseInfoModel" >
+        SELECT DISTINCT
+        a.sex sex,
+        a.openid,
+        a.mobile,
+        a.name,
+        a.id_card,
+        a.province,
+        a.city,
+        a.district,
+        a.address,
+        a.create_time,
+        a.modify_time,
+        a.bank_account_verify,
+        b.nikeName,
+        b.sex wxSex
+        FROM
+        tpm_project AS tpr
+        INNER JOIN tpm_activity AS activity ON tpr.request_id = activity.request_id
+        INNER JOIN tpm_user_activity AS uac ON uac.activity_uuid = activity.activity_uuid
+        INNER JOIN tpm_user_base_info AS a ON uac.openid = a.openid
+        INNER JOIN tpm_user_wx_info AS b ON a.openid = b.openid
+        <where>
+            (activity.manager = #{personCode,jdbcType=VARCHAR} OR tpr.request_user = #{personCode,jdbcType=VARCHAR})
+            <if test="province != null and province != ''">
+               AND a.province LIKE #{province} ESCAPE '/'
+            </if>
+            <if test="name!=null and name != ''">
+                AND a.name LIKE #{name} ESCAPE '/'
+            </if>
+            <if test="wxName!=null and wxName != ''">
+                AND b.nikeName LIKE CONCAT('%',#{wxName},'%')
+            </if>
+            <if test="mobile!=null and mobile != ''">
+                AND a.mobile LIKE CONCAT('%',#{mobile},'%')
+            </if>
+            <if test="city != null and city !=''">
+                AND a.city LIKE #{city} ESCAPE '/'
+            </if>
+            <if test="  bank_account_verify!= null and bank_account_verify !=''and  bank_account_verify !=3">
+                AND a.bank_account_verify = #{bank_account_verify}
+            </if>
+            <if test=" bank_account_verify!= null and bank_account_verify !=''and bank_account_verify==3">
+                AND a.bank_account_verify IS NULL
+            </if>
+        </where>
+
+    </select>
+<select id="getUserDept" parameterType="String" resultType="String">
+    SELECT
+    tac.dept
+    FROM
+    tpm_user_activity AS tua
+    INNER JOIN tpm_activity tac ON tua.activity_uuid=tac.activity_uuid
+    WHERE
+    tua.openid=#{openid}
+</select>
+</mapper>

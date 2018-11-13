@@ -1,0 +1,1226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmUserStatementMapper">
+
+	<resultMap id="result_TpmUserStatementModel_Map" type="com.kuyu.model.TpmUserStatementModel">
+		<id column="us_uuid" jdbcType="VARCHAR" property="uuid" />
+		<result column="us_activity_uuid" jdbcType="VARCHAR" property="activity_uuid" />
+		<result column="us_activity_time" jdbcType="VARCHAR" property="activity_time" />
+		<result column="us_openid" jdbcType="VARCHAR" property="openid" />
+		<result column="us_request_state" jdbcType="INTEGER" property="request_state" />
+		<result column="us_pay_state" jdbcType="INTEGER" property="pay_state" />
+		<result column="us_load_bill_uuid" jdbcType="VARCHAR" property="load_bill_uuid" />
+		<result column="us_work_start_time" jdbcType="VARCHAR" property="work_start_time" />
+		<result column="us_work_start_imgurl" jdbcType="VARCHAR" property="work_start_imgurl" />
+		<result column="us_work_end_time" jdbcType="VARCHAR" property="work_end_time" />
+		<result column="us_work_end_imgurl" jdbcType="VARCHAR" property="work_end_imgurl" />
+		<result column="us_work_hours" jdbcType="INTEGER" property="work_hours" />
+		<result column="us_valid_work_hours" jdbcType="INTEGER" property="valid_work_hours" />
+		<result column="us_reduce_money" jdbcType="DOUBLE" property="reduce_money" />
+		<result column="us_reduce_money_reason" jdbcType="VARCHAR" property="reduce_money_reason" />
+		<result column="us_incentive_amount" jdbcType="DOUBLE" property="incentive_amount" />
+		<result column="us_incentive_reason" jdbcType="VARCHAR" property="incentive_reason" />
+		<result column="us_real_salary" jdbcType="DOUBLE" property="real_salary" />
+	</resultMap>
+
+	<sql id="tpm_user_statement_Column">
+		tpm_user_statement.uuid as us_uuid
+		,tpm_user_statement.activity_uuid as us_activity_uuid
+		,tpm_user_statement.activity_time as us_activity_time
+		,tpm_user_statement.openid as us_openid
+		,tpm_user_statement.request_state as us_request_state
+		,tpm_user_statement.pay_state as us_pay_state
+		,tpm_user_statement.load_bill_uuid as us_load_bill_uuid
+		,tpm_user_statement.work_start_time as us_work_start_time
+		,tpm_user_statement.work_start_imgurl as us_work_start_imgurl
+		,tpm_user_statement.work_end_time as us_work_end_time
+		,tpm_user_statement.work_end_imgurl as us_work_end_imgurl
+		,tpm_user_statement.work_hours as us_work_hours
+		,tpm_user_statement.valid_work_hours as us_valid_work_hours
+		,tpm_user_statement.reduce_money as us_reduce_money
+		,tpm_user_statement.reduce_money_reason as us_reduce_money_reason
+		,tpm_user_statement.incentive_amount as us_incentive_amount
+		,tpm_user_statement.incentive_reason as us_incentive_reason
+		,tpm_user_statement.real_salary as us_real_salary
+	</sql>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		uuid,
+		activity_uuid,
+		activity_time,
+		openid,
+		request_state,
+		reason,
+		pay_state,
+		load_bill_uuid,
+		work_start_time,
+		work_start_imgurl,
+		work_end_time,
+		work_end_imgurl,
+		work_hours,
+		work_minute,
+		valid_work_hours,
+		valid_work_minute,
+		reduce_hours_reason,
+		adjust_hours_note,
+		check_time,
+		hours_state,
+		reduce_money,
+		reduce_money_reason,
+		incentive_amount,
+		adjust_money_note,
+		incentive_reason,
+		real_salary,
+		financial_check_time,
+		statement_check_time,
+		is_attendence
+	</sql>
+
+	<!--查询单条记录-->
+	<select id="queryUserStatement" resultType="com.kuyu.model.TpmUserStatementModel" parameterType="com.kuyu.model.TpmUserStatementModel">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tpm_user_statement
+		WHERE activity_uuid = #{activity_uuid}
+		AND openid = #{openid}
+		AND activity_time = #{activity_time}
+	</select>
+
+	<!-- 考勤记录查询 -->
+	<select id="queryRecords" resultType="com.kuyu.model.TpmUserStatementModel" parameterType="map">
+		SELECT 
+			tus.uuid,
+			tus.activity_uuid,
+			tus.activity_time,
+			tus.openid,
+			tus.work_start_time,
+			tus.work_start_imgurl,
+			tus.work_end_time,
+			tus.work_end_imgurl,
+			tus.work_hours,
+			tus.work_minute,
+			taa.unit_price,
+			taa.work_hours planWorkHours,
+			twad.clock_city,
+			twad.clock_address
+		FROM
+			 tpm_user_statement tus,
+			 tpm_activity taa,
+			 tpm_work_attendence_detail twad
+		WHERE tus.openid = #{openid}
+		<if test="activity_uuid != null and activity_uuid != ''">
+			AND tus.activity_uuid = #{activity_uuid} 
+		</if>
+		AND tus.activity_time BETWEEN #{startTime} AND #{endTime}
+		AND tus.activity_uuid = taa.activity_uuid
+		AND tus.openid = twad.openid
+		AND tus.activity_uuid = twad.activity_uuid
+		AND (tus.work_start_time = twad.clock_time OR tus.work_end_time = twad.clock_time)
+		ORDER BY tus.activity_time DESC,tus.work_start_time DESC,twad.clock_time ASC
+	</select>
+
+	<!-- 新增考勤记录 -->
+	<insert id="insertRecords" parameterType="com.kuyu.model.TpmUserStatementModel">
+		INSERT INTO
+		tpm_user_statement(uuid,activity_uuid,activity_time,openid,pay_state,work_start_time,work_start_imgurl,work_end_time,work_hours,valid_work_hours,hours_state,request_state,work_minute,valid_work_minute,real_salary)
+		VALUES(#{uuid},#{activity_uuid},#{activity_time},#{openid},#{pay_state},#{work_start_time},#{work_start_imgurl},' ',0,0,0,1,0,0,0)
+	</insert>
+
+	<!-- 更新考勤记录 -->
+	<update id="updateRecords" parameterType="com.kuyu.model.TpmUserStatementModel">
+		UPDATE tpm_user_statement
+		<set>
+			<if test="work_end_time != null and work_end_time != ''">
+				work_end_time = #{work_end_time},
+			</if>
+			<if test="work_end_imgurl != null and work_end_imgurl != ''">
+				work_end_imgurl = #{work_end_imgurl},
+			</if>
+			<if test="work_hours != null">
+				work_hours = #{work_hours},
+			</if>
+			<if test="work_minute != null">
+				work_minute = #{work_minute},
+			</if>
+			<if test="valid_work_hours != null">
+				valid_work_hours = #{valid_work_hours},
+			</if>
+			<if test="valid_work_minute != null">
+				valid_work_minute = #{valid_work_minute},
+			</if>
+			<if test="real_salary != null">
+				real_salary = #{real_salary},
+			</if>
+			<!-- <if test="request_state != null">
+				request_state = #{request_state}
+			</if> -->
+		</set>
+		WHERE activity_uuid = #{activity_uuid }
+		AND openid = #{openid}
+		AND activity_time = #{activity_time}
+	</update>
+	
+	<select id="findUserStatementActivityListByOpenid" resultType="com.kuyu.vo.ActivityVo">
+		SELECT DISTINCT
+		tac.activity_uuid activityUuid,
+		tac.start_time startTime,
+		tac.end_time endTime,
+		tac.total_day totalDay,
+		tac.settlement_method settlementMethod,
+		tac.activity_name projectName,
+		(
+		SELECT
+		IFNULL(SUM(tus1.real_salary), 0)
+		FROM
+		tpm_user_statement tus1
+		WHERE
+		tac.activity_uuid = tus1.activity_uuid
+		AND tus1.openid = #{openid,jdbcType=VARCHAR}
+		AND tus1.request_state = 4
+		AND tus1.pay_state != 2
+		) realSalary,
+		(
+		SELECT
+		IFNULL(SUM(tus2.real_salary), 0)
+		FROM
+		tpm_user_statement tus2
+		WHERE
+		tac.activity_uuid = tus2.activity_uuid
+		AND tus2.openid = #{openid,jdbcType=VARCHAR}
+		AND tus2.request_state = 4
+		AND tus2.pay_state = 2
+		) totalRealSalary
+		FROM
+		tpm_user_statement tus
+		LEFT JOIN tpm_activity tac ON (
+		tus.activity_uuid = tac.activity_uuid
+		)
+		INNER JOIN tpm_activity_original tao ON (
+		tac.project_id = tao.project_id
+		)
+		WHERE
+		tus.openid = #{openid,jdbcType=VARCHAR}
+		AND tus.request_state = 4
+		ORDER BY
+		tac.start_time DESC
+	</select>
+
+	<select id="findSumRealSalaryByActivityUuid" resultType="Double">
+			SELECT
+				IFNULL(SUM(us.real_salary),0)
+			FROM
+				tpm_user_statement us
+			WHERE
+				us.activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+
+			AND us.openid = #{openid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="findStatementActivityDetailList" resultType="com.kuyu.vo.StatementDetailVo">
+			SELECT
+				tus.uuid,
+				tus.pay_state payState,
+				tus.activity_time activityTime,
+				tus.reduce_money reduceMoney,
+				tus.incentive_reason incentiveReason,
+				tus.incentive_amount incentiveAmount,
+				tac.unit_price unitPrice,
+				tac.work_hours workHours,
+				tac.settlement_method settlementMethod,
+				tus.valid_work_hours validWorkHours,
+				tus.reduce_hours_reason reduceHoursReason,
+				tus.adjust_hours_note adjustHoursNote,
+				tus.real_salary realSalary,
+				tus.valid_work_minute validWorkMinute,
+				tus.reduce_money_reason reduceMoneyReason,
+				tus.adjust_money_note adjustMoneyNote
+			FROM
+				tpm_user_statement tus
+			INNER JOIN tpm_activity tac ON (
+				tac.activity_uuid = tus.activity_uuid
+			)
+			WHERE
+				tus.activity_uuid = #{activityUuid,jdbcType=VARCHAR}
+			AND tus.openid = #{openid,jdbcType=VARCHAR}
+			AND tus.request_state = 4
+			ORDER BY tus.activity_time DESC
+	</select>
+
+	<!-- 查询 -->
+	<select id="attendanceManagement" resultType="com.kuyu.model.TpmUserStatementModel" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tpm_user_statement
+		WHERE activity_uuid = #{activity_uuid}
+		<if test="activity_time != null and activity_time != ''">
+			AND activity_time = #{activity_time}
+		</if>
+		<if test="activity_time == null or activity_time == ''">
+			AND request_state <![CDATA[ > ]]> 1
+		</if>
+		ORDER BY work_start_time DESC
+	</select>
+	
+	<!-- 查询 -->
+	<select id="attendanceManagementBypage" resultType="com.kuyu.model.TpmUserStatementModel" parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tpm_user_statement
+		WHERE activity_uuid = #{activity_uuid}
+		<if test="activity_time != null and activity_time != ''">
+			<if test="state != null and state != ''">
+				<if test="state == 1">
+					AND hours_state = 0 
+				</if>
+				<if test="state == 2">
+					AND (request_state = 1 OR request_state = 5)
+				</if>
+				<if test="state == 0">
+					AND activity_time = #{activity_time}
+				</if>
+			</if>
+		</if>
+		<if test="activity_time == null or activity_time == ''">
+			AND request_state <![CDATA[ > ]]> 1
+		</if>
+		<if test="statement != null and statement != ''">
+			AND hours_state = 1
+		</if>
+		ORDER BY work_start_time DESC
+	</select>
+	
+	<!-- 修改工时 -->
+	<update id="adjustWorkingHours" parameterType="com.kuyu.model.TpmUserStatementModel">
+		UPDATE tpm_user_statement
+		<set>
+			<if test="hours_state != null">
+				hours_state = #{hours_state},
+			</if>
+			<if test="hours_state == 1">
+				<if test="valid_work_hours != null">
+					valid_work_hours = #{valid_work_hours},
+				</if>
+				<if test="valid_work_minute != null">
+					valid_work_minute = #{valid_work_minute},
+				</if>
+				<if test="real_salary != null">
+					real_salary = #{real_salary},
+				</if>
+				<if test="reduce_hours_reason != null and reduce_hours_reason != ''">
+					reduce_hours_reason = #{reduce_hours_reason},
+				</if>
+			</if>
+			<if test="reason != null and reason != ''">
+				adjust_hours_note = #{reason},
+			</if>
+			<if test="check_time != null and check_time != ''">
+				check_time = #{check_time}
+			</if>
+		</set>
+		WHERE activity_uuid = #{activity_uuid}
+		AND openid = #{openid}
+		AND activity_time = #{activity_time}
+	</update>
+	
+	<!-- 更新工资，扣除或者奖励 -->
+	<update id="adjustMoney" parameterType="com.kuyu.model.TpmUserStatementModel">
+		UPDATE tpm_user_statement
+		<set>
+			<if test="reduce_money != null">
+				reduce_money = #{reduce_money},
+			</if>
+			<if test="reduce_money_reason != null and reduce_money_reason != ''">
+				reduce_money_reason = #{reduce_money_reason},
+			</if>
+			<if test="incentive_amount != null">
+				incentive_amount = #{incentive_amount},
+			</if>
+			<if test="incentive_reason != null and incentive_reason != ''">
+				incentive_reason = #{incentive_reason},
+			</if>
+			<if test="request_state != null">
+				request_state = #{request_state},
+			</if>
+			<if test="reason != null and reason != ''">
+				adjust_money_note = #{reason},
+			</if>
+			<if test="real_salary != null">
+			 	real_salary = #{real_salary},
+			</if>
+			<if test="statement_check_time != null and statement_check_time != ''">
+			 	statement_check_time = #{statement_check_time}
+			</if>
+		</set>
+		WHERE activity_uuid = #{activity_uuid}
+		AND openid = #{openid}
+		AND activity_time = #{activity_time}
+	</update>
+	
+	<!-- PC考勤管理查询 -->
+	<select id="queryAttendanceManagement" resultType="com.kuyu.vo.AttendanceManagementVo" parameterType="com.kuyu.vo.query.AttendanceManagementQuery">
+		SELECT DISTINCT
+			tus.uuid,
+			tus.activity_uuid,
+			tus.activity_time,
+			tus.work_hours,
+			tus.work_minute,
+			tus.valid_work_minute,
+			tus.valid_work_hours,
+			tus.work_start_time,
+			tus.work_start_imgurl,
+			tus.work_end_imgurl,
+			tus.work_end_time,
+			tus.hours_state,
+			tus.check_time,
+			tubi.name,
+			ta.activity_name,
+			td.org_name dept,
+			ta.work_hours planWorkHours,
+			te.person_name person_name,
+			ta.manager,
+			tp.request_user,
+			tus.openid,
+			ta.request_id requestId
+		FROM
+			tpm_user_base_info tubi,
+			tpm_activity_original tao,
+		    tpm_activity ta,
+			tpm_user_statement tus,
+			tpm_project tp,
+			tpm_employee te,
+			tpm_dept td
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="list" item="item" index="index" open="ta.dept in (" close=")" separator=",">
+						#{item}
+					</foreach>
+				</when>
+				<when test="personType == 4">
+					<if test="toDoState != 1">
+						(tp.request_user = #{personCode} OR ta.manager = #{personCode})
+					</if>
+					<if test="toDoState == 1">
+						ta.manager = #{personCode}
+					</if>
+				</when>
+			</choose>
+			<if test="name != null and name != ''">
+				AND tubi.name LIKE CONCAT('%',#{name},'%')
+			</if>
+			<if test="activityName != null and activityName != ''">
+				AND ta.activity_name LIKE CONCAT('%',#{activityName},'%') 
+			</if>
+			<if test="attendanceTime != null and attendanceTime != ''">
+				AND tus.activity_time = #{attendanceTime}
+			</if>
+			<if test="dept != null and dept != ''">
+				AND td.org_name LIKE CONCAT('%',#{dept},'%')
+			</if>
+			<if test="requestId != null and requestId != ''">
+				AND ta.request_id = #{requestId}
+			</if>
+			<if test="attendanceStatus != null and attendanceStatus != ''">
+				<choose>
+					<when test="attendanceStatus == 1">
+						AND tus.work_hours <![CDATA[ >= ]]> ta.work_hours
+					</when>
+					<when test="attendanceStatus == 2">
+						AND tus.work_hours <![CDATA[ < ]]> ta.work_hours
+					</when>
+			</choose>
+			</if>
+			<if test="activityManager != null and activityManager != ''">
+				AND te.person_name LIKE CONCAT('%',#{activityManager},'%')
+			</if>
+			<if test="checkStatus != null and checkStatus != ''">
+				AND tus.hours_state = #{checkStatus}
+			</if>
+			AND tubi.openid = tus.openid
+			AND ta.activity_uuid = tus.activity_uuid
+			AND ta.project_id = tao.project_id
+			AND tp.request_id = ta.request_id
+			AND te.person_code = ta.manager
+			AND td.org_code = ta.dept
+			ORDER BY tus.activity_time DESC
+		</where>
+	</select>
+	
+	<select id="queryAttendanceDetails" resultType="com.kuyu.model.TpmUserStatementModel" parameterType = "String">
+		SELECT DISTINCT 
+			tus.activity_uuid,
+			tus.openid,
+			tus.activity_time,
+			tus.work_hours,
+			tus.valid_work_minute,
+			tus.work_minute,
+			tus.valid_work_hours,
+			tus.hours_state,
+			tus.check_time,
+			tus.adjust_hours_note,
+			tus.work_start_time,
+			tus.work_end_imgurl,
+			tus.work_start_imgurl,
+			tus.work_end_time,
+			tubi.name,
+			ta.activity_name,
+			td.org_name dept,
+			ta.work_hours planWorkHours,
+			te.person_name person_name,
+			tus.reduce_hours_reason,
+			ta.request_id requestId
+		FROM
+			tpm_user_base_info tubi,
+			tpm_activity_original tao,
+		    tpm_activity ta,
+			tpm_user_statement tus,
+			tpm_employee te,
+			tpm_dept td
+		WHERE tus.uuid = #{uuid}
+		AND tubi.openid = tus.openid
+		AND ta.activity_uuid = tus.activity_uuid
+		AND ta.project_id = tao.project_id
+		AND te.person_code = ta.manager
+		AND td.org_code = ta.dept
+	</select>
+	
+	<update id="checkAttendanceManagement" parameterType="com.kuyu.vo.query.AttendanceManagementCheckQuery">
+		UPDATE tpm_user_statement
+		<trim prefix="set" suffixOverrides=",">
+			<if test="checkStatus != null and checkStatus != ''">
+				hours_state = #{checkStatus},
+			</if>
+			<if test="adjust_hours_note != null and adjust_hours_note != ''">
+				adjust_hours_note = #{adjust_hours_note},
+			</if>
+			<if test="checkTime != null and checkTime != ''">
+				check_time = #{checkTime},
+			</if>
+			<if test="checkStatus == 1">
+				<if test="valid_work_hours != null">
+					valid_work_hours = #{valid_work_hours},
+				</if>
+				<if test="work_minute != null">
+					valid_work_minute = #{work_minute},
+				</if>
+				<if test="reduce_hours_reason != null and reduce_hours_reason != ''">
+					reduce_hours_reason = #{reduce_hours_reason},
+				</if>
+				<if test="real_salary != null">
+					real_salary = #{real_salary}
+				</if>
+			</if>
+		</trim>
+		WHERE uuid IN
+			<foreach collection="uuidList" index="index" item="item" separator="," open="(" close=")">
+				#{item}
+			</foreach>
+	</update>
+	
+	<select id="querySettlementManagement" resultType="com.kuyu.vo.SettlementManagementVo" parameterType="com.kuyu.vo.query.SettlementManagementQuery">
+		SELECT DISTINCT 
+			tus.uuid,
+			tus.activity_uuid,
+			tus.activity_time,
+			tus.valid_work_hours,
+			tus.valid_work_minute,
+			tus.work_minute,
+			tus.real_salary,
+			tus.incentive_amount,
+			tus.incentive_reason,
+			tus.request_state,
+			tus.pay_state,
+			tubi.name,
+			ta.activity_name,
+			td.org_name dept,
+			ta.manager,
+			te.person_name managerName,
+			ta.settlement_cycle,
+			ta.unit_price,
+			tus.reduce_money_reason,
+			tus.reduce_money,
+			tus.adjust_money_note,
+			ta.settlement_method settlementMethod,
+			ta.dept orgCode,
+			ta.work_hours planWorkHour,
+			tus.financial_check_time financialCheckTime,
+			tus.check_time checkTime,
+			tus.statement_check_time statementCheckTime,
+			tus.load_bill_uuid loadBillUuid
+		FROM
+			tpm_user_base_info tubi,
+			tpm_activity_original tao,
+		    tpm_activity ta,
+			tpm_user_statement tus,
+			tpm_project tp,
+			tpm_employee te,
+			tpm_dept td
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="list" item="item" index="index" open="ta.dept in (" close=")" separator=",">
+						#{item}
+					</foreach>
+					<if test="toDoState == 1">
+						AND ta.dept in (SELECT org_code FROM tpm_user_role WHERE person_code = #{personCode} AND roleType = 2) 
+					</if>
+				</when>
+				<when test="personType == 4">
+					<if test="toDoState != 1">
+						(tp.request_user = #{personCode} OR ta.manager = #{personCode})
+					</if>
+					<if test="toDoState == 1">
+						ta.manager = #{personCode}
+						AND (tus.request_state = 1 OR tus.request_state = 5)
+					</if>
+				</when>
+			</choose>
+			<if test="name != null and name != ''">
+				AND tubi.name LIKE CONCAT('%',#{name},'%')
+			</if>
+			<if test="activityName != null and activityName != ''">
+				AND ta.activity_name LIKE CONCAT('%',#{activityName},'%') 
+			</if>
+			<if test="attendanceTime != null and attendanceTime != ''">
+				AND tus.activity_time = #{attendanceTime}
+			</if>
+			<if test="dept != null and dept != ''">
+				AND td.org_name  LIKE CONCAT('%',#{dept},'%')
+			</if>
+			<if test="activityManager != null and activityManager != ''">
+				AND te.person_name LIKE CONCAT('%',#{activityManager},'%')
+			</if>
+			<if test="requestId != null and requestId != ''">
+				AND ta.request_id = #{requestId}
+			</if>
+			<choose>
+				<when test="managerCheckStatus != null and managerCheckStatus != ''">
+				
+					<if test="managerCheckStatus == 2">
+						AND (tus.request_state = 2 OR tus.request_state = 4)
+					</if>
+					<if test="managerCheckStatus == 1">
+						AND (tus.request_state = 1 OR tus.request_state = 5)
+					</if>
+					<if test="managerCheckStatus == 0">
+						AND tus.request_state = 0
+					</if>
+				</when>
+				<when test="financialCheckStatus != null and financialCheckStatus != ''">
+					AND request_state = #{financialCheckStatus}
+				</when>
+			</choose>
+			<if test="payStatus != null and payStatus != ''">
+				<if test="payStatus == 3">
+					AND ta.settlement_method != '公司直付'
+				</if>
+				<if test="payStatus != 3">
+					AND tus.pay_state = #{payStatus} AND ta.settlement_method = '公司直付'
+				</if>
+			</if>
+			<if test = "fsscLoanBillNo != null and fsscLoanBillNo != ''">
+				AND tus.load_bill_uuid IN 
+				<foreach collection="lbuList" index="index" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			AND tus.hours_state = 1
+			AND tubi.openid = tus.openid
+			AND ta.activity_uuid = tus.activity_uuid
+			AND ta.project_id = tao.project_id
+			AND tp.request_id = ta.request_id
+			AND te.person_code = ta.manager
+			AND td.org_code = ta.dept
+			ORDER BY tus.activity_time DESC
+		</where>
+	</select>
+	
+	<update id="checkSettlementManagement" parameterType="com.kuyu.vo.query.SettlementManagementCheckQuery">
+		UPDATE tpm_user_statement
+			<trim prefix="set" suffixOverrides=",">
+				<if test="checkStatus != null and checkStatus != ''">
+					request_state = #{checkStatus},
+				</if>
+				<if test="adjust_money_note != null and adjust_money_note != ''">
+					adjust_money_note = #{adjust_money_note},
+				</if>
+				<if test="reason != null and reason != ''">
+					reason = #{reason},
+				</if>
+				<if test="checkTime != null and checkTime != ''">
+					financial_check_time = #{checkTime},
+				</if>
+				<if test="statement_check_time != null and statement_check_time != ''">
+					statement_check_time = #{statement_check_time},
+				</if>
+				<if test="checkStatus == 2">
+					<if test="isIncentiveOrReduce == 1">
+						<if test="adjust_money != null">
+							incentive_amount = #{adjust_money},
+						</if>
+						<if test="adjust_money_reason != null and adjust_money_reason != ''">
+							incentive_reason = #{adjust_money_reason},
+						</if>
+					</if>
+					<if test="isIncentiveOrReduce == 0">
+						<if test="adjust_money != null">
+							reduce_money = #{adjust_money},
+						</if>
+						<if test="adjust_money_reason != null and adjust_money_reason != ''">
+							reduce_money_reason = #{adjust_money_reason},
+						</if>
+					</if>
+					<if test="real_salary != null">
+						real_salary = #{real_salary},
+					</if>
+				</if>
+				<if test="checkStatus == 5">
+					incentive_amount = null,
+					incentive_reason = null,
+					reduce_money = null,
+					reduce_money_reason = null,
+					adjust_money_note = null,
+					real_salary = #{real_salary}
+				</if>
+			</trim>
+			WHERE uuid IN
+			<foreach collection="uuidList" index="index" item="item" separator="," open="(" close=")">
+					#{item}
+			</foreach>
+	</update>
+	
+	
+	<select id="querySettlementDetails" resultType="com.kuyu.vo.SettlementManagementVo" parameterType = "String">
+		SELECT DISTINCT 
+			tus.uuid,
+			tus.activity_time,
+			tus.valid_work_hours,
+			tus.valid_work_minute,
+			tus.work_minute,
+			tus.real_salary,
+			tus.incentive_amount,
+			tus.incentive_reason,
+			tus.request_state,
+			tus.pay_state,
+			tus.adjust_money_note,
+			tus.reason,
+			tubi.name,
+			ta.activity_name,
+			td.org_name dept,
+			ta.work_hours planWorkHour,
+			te.person_name manager,
+			ta.settlement_cycle,
+			ta.unit_price,
+			tus.reduce_hours_reason,
+			tus.work_hours,
+			tus.reduce_money,
+			tus.reduce_money_reason,
+			tus.adjust_hours_note,
+			ta.settlement_method settlementMethod,
+			tus.financial_check_time financialCheckTime,
+			tus.check_time checkTime,
+			tus.statement_check_time statementCheckTime,
+			ta.request_id requestId
+		FROM
+			tpm_user_base_info tubi,
+			tpm_activity_original tao,
+		    tpm_activity ta,
+			tpm_user_statement tus,
+			tpm_employee te,
+			tpm_dept td
+		WHERE tus.uuid = #{uuid}
+		AND tubi.openid = tus.openid
+		AND ta.activity_uuid = tus.activity_uuid
+		AND ta.project_id = tao.project_id
+		AND te.person_code = ta.manager
+		AND td.org_code = ta.dept
+	</select>
+
+	<!-- 微信发送信息结算单通过 -->
+	<select id="selectWechatStatementPassMessage" resultType="com.kuyu.vo.WechatSendMessageVo" parameterType="String">
+		SELECT
+			tao.city,
+			CONCAT(tao.city, tao.project_name) activity_name,
+			ta.district,
+			te.person_name,
+			tus.openid,
+			tus.activity_time
+		FROM
+			tpm_user_statement tus,
+			tpm_activity ta,
+			tpm_activity_original tao,
+			tpm_employee te
+		WHERE
+		tus.uuid = #{uuid}
+		AND tus.activity_uuid = ta.activity_uuid
+		AND ta.project_id = tao.project_id
+		AND ta.manager = te.person_code
+	</select>
+	<!-- 微信发送信息结算单驳回 -->
+	<select id="selectWechatNotPassStatementMessage" resultType="com.kuyu.vo.WechatSendMessageVo" parameterType="List">
+		SELECT DISTINCT
+			tao.city,
+			ta.activity_name,
+			ta.district,
+			te.person_name,
+			tweb.openid,
+			tus.activity_time,
+			tus.real_salary
+		FROM
+			tpm_user_statement tus,
+			tpm_activity ta,
+			tpm_activity_original tao,
+			tpm_employee te,
+		    tpm_weixin_employee_binding tweb
+		WHERE tus.uuid IN
+			<foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+				#{item}
+			</foreach>
+		AND ta.project_id = tao.project_id
+		AND ta.manager = te.person_code
+		AND te.person_code = tweb.person_code
+		AND tus.activity_uuid = ta.activity_uuid
+	</select>
+	
+	<select id="attendanceManagementTask" resultType="com.kuyu.vo.WechatSendMessageVo">
+		SELECT DISTINCT
+			tao.city,
+			ta.activity_name,
+			ta.district,
+			te.person_name,
+			tweb.openid,
+			tus.activity_time
+		FROM
+			tpm_user_statement tus,
+			tpm_activity ta,
+			tpm_activity_original tao,
+			tpm_employee te,
+			tpm_weixin_employee_binding tweb
+		WHERE
+		tus.activity_time = CURDATE()
+		AND ta.project_id = tao.project_id
+		AND ta.manager = te.person_code
+		AND tweb.person_code = te.person_code
+		AND tus.activity_uuid = ta.activity_uuid
+	</select>
+	
+	
+	<select id="attendanceRemindTask" resultType="com.kuyu.vo.WechatSendMessageVo">
+		SELECT DISTINCT
+			tao.city,
+			ta.activity_name,
+			ta.district,
+			te.person_name,
+			tua.openid,
+			CURDATE() activity_time
+		FROM
+			tpm_activity ta,
+			tpm_activity_original tao,
+			tpm_employee te,
+			tpm_user_activity tua 
+		WHERE
+		CURDATE() BETWEEN ta.start_time AND ta.end_time
+		AND tua.request_state = 2
+		AND ta.project_id = tao.project_id
+		AND ta.manager = te.person_code
+		AND tua.activity_uuid = ta.activity_uuid
+	</select>
+	
+	
+	<select id="settlementManagementTask" resultType="com.kuyu.vo.WechatSendMessageVo">
+		SELECT DISTINCT
+			tao.city,
+			ta.activity_name,
+			ta.district,
+			te.person_name,
+			tweb.openid,
+			tus.activity_time
+		FROM
+			tpm_user_statement tus,
+			tpm_activity ta,
+			tpm_activity_original tao,
+			tpm_employee te,
+		  tpm_weixin_employee_binding tweb
+		WHERE
+		tus.activity_time =  date_sub(CURDATE(),interval 1 day)
+		AND tus.request_state = (1 OR 5)
+		AND ta.project_id = tao.project_id
+		AND ta.manager = te.person_code
+		AND te.person_code = tweb.person_code
+		AND tus.activity_uuid = ta.activity_uuid
+	</select>
+
+	<select id="financialManagementTask" resultType="com.kuyu.vo.WechatSendMessageVo">
+		SELECT 
+			DISTINCT
+			tus.uuid,
+			tus.activity_uuid,
+			tao.city,
+			ta.activity_name,
+			ta.district,
+			te.person_name,
+			tweb.openid,
+			tus.activity_time
+		FROM
+			tpm_user_statement tus,
+			tpm_activity ta,
+			tpm_activity_original tao,
+			tpm_employee te,
+			tpm_weixin_employee_binding tweb,
+			tpm_user_role tur
+		WHERE
+		 	ta.manager = te.person_code
+			AND ta.project_id = tao.project_id
+			AND tus.activity_uuid = ta.activity_uuid
+			AND tur.org_code = te.org_code
+			AND tur.person_code = tweb.person_code
+			AND tus.request_state = 2
+			AND tur.roleType = 2
+			AND tus.activity_time = CURDATE()
+		
+	</select>
+
+    <select id="findUserStatementPaymentError" resultType="com.kuyu.vo.PaymentErrorVo">
+		SELECT
+			tus.activity_uuid,
+			count(1) errorCount
+		FROM
+			tpm_activity tac
+		INNER JOIN tpm_user_statement tus ON (
+			tac.activity_uuid = tus.activity_uuid
+		)
+		<where>
+			tus.request_state = 4
+			AND tus.pay_state = 0
+			AND tus.load_bill_uuid IS NOT NULL
+		</where>
+		GROUP BY tus.activity_uuid
+    </select>
+
+
+	<select id="findRealSalaryByProjectId" resultType="double">
+			SELECT
+				IFNULL(SUM(tus.real_salary), 0)
+			FROM
+				tpm_user_statement tus
+			WHERE
+				tus.request_state = 4
+			AND tus.pay_state = -1
+			AND tus.activity_uuid IN (
+				SELECT
+					activity_uuid
+				FROM
+					tpm_activity tac
+				WHERE
+					tac.project_id = #{projectid,jdbcType=VARCHAR}
+			)
+	</select>
+
+	<select id="findActivityUuidByProjectId" resultType="com.kuyu.model.TpmUserStatementModel">
+		SELECT DISTINCT
+			tus.uuid,tus.openid,tus.real_salary
+		FROM
+			tpm_user_statement tus
+		WHERE
+			tus.request_state = 4
+		AND tus.pay_state = -1
+		AND tus.activity_uuid IN (
+			SELECT
+				activity_uuid
+			FROM
+				tpm_activity tac
+			WHERE
+				tac.project_id = #{projectid,jdbcType=VARCHAR}
+		)
+	</select>
+	
+	<select id="selectTusmByUuids" resultType="com.kuyu.model.TpmUserStatementModel">
+		SELECT 
+		uuid,
+		activity_uuid,
+		hours_state,
+		request_state,
+		valid_work_hours,
+		valid_work_minute,
+		real_salary
+		FROM tpm_user_statement
+		WHERE uuid IN
+		<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="importBorrowMoneyList" resultType="com.kuyu.vo.borrow.BorrowOrderVo">
+		SELECT
+			tpr.request_id,
+			tpr.request_user,
+			tpr.request_dept,
+			tac.project_id,
+			tus.uuid user_statement_uuid,
+			tus.activity_uuid,
+			tus.openid,
+			IFNULL(tus.real_salary, 0) real_salary,
+			tac.manager,
+			tac.dept,
+			tac.settlement_cycle,
+			tac.end_time,
+			tubi.bank_account_verify,
+			tubi.account_bank_name,
+			tubi.account_name,
+			tubi.account_value
+		FROM
+			tpm_user_statement tus
+		INNER JOIN tpm_activity tac ON (
+			tus.activity_uuid = tac.activity_uuid
+		)
+		INNER JOIN tpm_project tpr ON (
+			tac.request_id = tpr.request_id
+		)
+		INNER JOIN tpm_user_base_info tubi ON (tus.openid = tubi.openid)
+		INNER JOIN tpm_employee tee ON(tee.person_code=tpr.request_user)
+		WHERE
+			tus.request_state = 4
+		AND tus.pay_state = - 1
+		AND tac.settlement_method = '公司直付'
+		AND (tac.settlement_cycle = '即时付款'
+			OR ((tac.settlement_cycle = '活动接受后1天付款' OR tac.settlement_cycle = '活动结束后1天付款')
+			AND tac.end_time  <![CDATA[ <= ]]>  CURDATE())
+		)
+	</select>
+
+	<select id="findTotalSalaryByProjectId" resultType="double">
+		SELECT
+			IFNULL(SUM(tus.real_salary), 0)
+		FROM
+			tpm_user_statement tus
+		INNER JOIN tpm_activity tac ON (
+			tus.activity_uuid = tac.activity_uuid
+		)
+		INNER JOIN tpm_project tpr ON (
+			tac.request_id = tpr.request_id
+		)
+		INNER JOIN tpm_user_base_info tubi ON (tus.openid = tubi.openid)
+		WHERE
+			tus.request_state = 4
+		AND tus.pay_state = - 1
+		AND tubi.bank_account_verify = 1
+		AND tac.project_id = #{projectId,jdbcType=VARCHAR}
+		AND tac.settlement_method = '公司直付'
+		AND (tac.settlement_cycle = '即时付款'
+			OR ((tac.settlement_cycle = '活动接受后1天付款' OR tac.settlement_cycle = '活动结束后1天付款')
+			AND tac.end_time <![CDATA[ <= ]]> CURDATE())
+		)
+		
+	</select>
+	
+	<select id="getIncentiveCount" resultType="Double"  parameterType="String">
+		SELECT
+			SUM(incentive_amount)
+		FROM
+			tpm_user_statement
+		WHERE
+			activity_uuid = #{activity_uuid}
+	</select>
+	
+	<select id="selectFinancialToDoNo" parameterType="String" resultType="Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			tpm_user_statement tus,
+			tpm_activity taa,
+			tpm_user_role tur
+		WHERE
+			tus.request_state = 2
+		AND tus.hours_state = 1
+		AND tus.activity_uuid = taa.activity_uuid
+		AND tur.org_code = taa.dept
+		AND tur.person_code = #{personCode}
+		AND tur.roleType = 2
+	</select>
+	
+	<select id="selectSettleMentToDoNo" parameterType="String" resultType="Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			tpm_user_statement tus,
+			tpm_activity taa
+		WHERE
+			tus.activity_uuid = taa.activity_uuid
+		AND taa.manager = #{personCode}
+		<choose>
+			<when test="isAttendence == 1">
+				AND tus.hours_state = 0
+			</when>
+			<when test="isAttendence == 0">
+				AND tus.hours_state = 1
+				AND (tus.request_state = 1 OR tus.request_state = 5)
+			</when>
+		</choose>
+	</select>
+	
+	<select id="selectActivityToDoNo" parameterType="String" resultType="Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			tpm_activity taa,
+			tpm_user_activity tua
+		WHERE
+			taa.manager = #{personCode}
+		AND tua.request_state = 1
+		AND CURDATE() <![CDATA[ <= ]]> taa.end_time
+		AND CURDATE() <![CDATA[ <= ]]> tua.request_activity_day
+		AND tua.activity_uuid = taa.activity_uuid
+		AND (taa.stop_flag is NULL OR taa.stop_flag='0' OR taa.stop_flag='')
+	</select>
+
+	<select id="getPaymentList" resultType = "com.kuyu.vo.PaymentDataVo">
+		SELECT
+			DISTINCT
+			tlb.payment_id payment_id,tlb.fssc_loan_bill_no fssc_bill
+		FROM
+			tpm_user_statement tus,
+			tpm_loan_bill tlb
+		WHERE
+			tus.payment_id = tlb.payment_id
+		AND tus.pay_state = 1
+		AND SUBSTR(tlb.create_time,1,10) <![CDATA[ <= ]]> date_sub(CURDATE(),interval 2 day)
+	</select>
+	
+	<!-- PC考勤管理查询 -->
+	<select id="outputAttendance" resultType="com.kuyu.vo.AttendanceManagementVo" parameterType="com.kuyu.vo.query.AttendanceManagementQuery">
+		SELECT DISTINCT
+			tus.uuid,
+			tus.activity_uuid,
+			tus.activity_time,
+			tus.work_hours,
+			tus.work_minute,
+			tus.valid_work_minute,
+			tus.valid_work_hours,
+			tus.work_start_time,
+			tus.work_start_imgurl,
+			tus.work_end_imgurl,
+			tus.work_end_time,
+			tus.hours_state,
+			tus.check_time,
+			tubi.name,
+			ta.activity_name,
+			td.org_name dept,
+			ta.work_hours planWorkHours,
+			te.person_name person_name,
+			ta.manager,
+			tp.request_user,
+			tus.openid,
+			ta.request_id requestId
+		FROM
+			tpm_user_base_info tubi,
+			tpm_activity_original tao,
+		    tpm_activity ta,
+			tpm_user_statement tus,
+			tpm_project tp,
+			tpm_employee te,
+			tpm_dept td
+		<where>
+			<choose>
+				<when test="personType == 2 or personType == 0 or personType == 6">
+					<foreach collection="list" item="item" index="index" open="ta.dept in (" close=")" separator=",">
+						#{item}
+					</foreach>
+				</when>
+				<when test="personType == 4">
+					<if test="toDoState != 1">
+						(tp.request_user = #{personCode} OR ta.manager = #{personCode})
+					</if>
+					<if test="toDoState == 1">
+						ta.manager = #{personCode}
+					</if>
+				</when>
+			</choose>
+			AND tubi.openid = tus.openid
+			AND ta.activity_uuid = tus.activity_uuid
+			AND ta.project_id = tao.project_id
+			AND tp.request_id = ta.request_id
+			AND te.person_code = ta.manager
+			AND td.org_code = ta.dept
+		</where>
+	</select>
+	
+	<select id="outputSettlement" resultType="com.kuyu.vo.SettlementManagementVo" parameterType="com.kuyu.vo.query.SettlementManagementQuery">
+		SELECT DISTINCT 
+			tus.uuid,
+			tus.activity_uuid,
+			tus.activity_time,
+			tus.valid_work_hours,
+			tus.valid_work_minute,
+			tus.work_minute,
+			tus.real_salary,
+			tus.incentive_amount,
+			tus.incentive_reason,
+			tus.request_state,
+			tus.pay_state,
+			tubi.name,
+			ta.activity_name,
+			td.org_name dept,
+			ta.manager,
+			te.person_name managerName,
+			ta.settlement_cycle,
+			ta.unit_price,
+			tus.reduce_money_reason,
+			tus.reduce_money,
+			tus.adjust_money_note,
+			ta.settlement_method settlementMethod,
+			ta.dept orgCode,
+			ta.work_hours planWorkHour,
+			tus.financial_check_time financialCheckTime,
+			tus.check_time checkTime,
+			tus.statement_check_time statementCheckTime,
+			tus.load_bill_uuid loadBillUuid
+		FROM
+			tpm_user_base_info tubi,
+			tpm_activity_original tao,
+		    tpm_activity ta,
+			tpm_user_statement tus,
+			tpm_project tp,
+			tpm_employee te,
+			tpm_dept td
+		<where>
+			tus.uuid IN
+			<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+			AND tus.hours_state = 1
+			AND tubi.openid = tus.openid
+			AND ta.activity_uuid = tus.activity_uuid
+			AND ta.project_id = tao.project_id
+			AND tp.request_id = ta.request_id
+			AND te.person_code = ta.manager
+			AND td.org_code = ta.dept
+		</where>
+	</select>
+	<select id="getMail" parameterType="String" resultType="com.kuyu.vo.MailVo">
+		SELECT
+		tee.email mailOfManager,
+		tee1.email mailOfFinance,
+		tub.name  userName,
+		tub.mobile userMobile,
+		tac.request_id requestId
+		FROM
+		tpm_user_statement tus
+		INNER  JOIN  tpm_user_base_info tub ON (
+		tus.openid = tub.openid
+		)
+		INNER  JOIN tpm_activity  tac ON (
+		tac.activity_uuid = tus.activity_uuid
+		)
+		INNER  JOIN  tpm_user_role tur ON (
+	  	tac.dept = tur.org_code
+		)
+		INNER JOIN  tpm_employee tee ON (
+		tee.person_code = tur.person_code
+		)
+		INNER JOIN tpm_employee tee1 on(
+		tee1.person_code = tac.manager
+		)
+		WHERE payment_id = #{paymentId}
+	</select>
+</mapper>

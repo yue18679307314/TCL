@@ -1,0 +1,46 @@
+server:
+    port: 9090
+    context-path: #/
+
+logging:
+    level:
+        tk.mybatis: TRACE
+
+druid:
+    url: jdbc:mysql://127.0.0.5:3306/qrcode
+    username:root
+    password:root
+    initial-size: 1
+    min-idle: 1
+    max-active: 20
+    test-on-borrow: true
+
+spring:
+    mvc:
+        view:
+            prefix: /templates/
+            suffix: .ftl
+    freemarker:
+        cache: false
+        request-context-attribute: request  
+  	cache:   
+	    #缓存名称  
+	    cache-names: guava  
+	    #缓存最大数量500条, 缓存失效时间 30分钟 
+	    guava.spec: maximumSize=500000,expireAfterWrite=180m
+
+mybatis:
+    type-aliases-package: com.kuyu.model
+    mapper-locations: classpath:mapper/*.xml
+
+mapper:
+    mappers:
+        - com.kuyu.util.MyMapper
+    not-empty: false
+    identity: MYSQL
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql

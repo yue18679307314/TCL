@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.WeixinUserInfoMapper">
+    <resultMap id="result_Map" type="com.kuyu.model.WeixinUserInfo">
+        <result column="openId" jdbcType="VARCHAR" property="openId" />
+        <result column="sex" jdbcType="VARCHAR" property="sex" />
+        <result column="nikeName" jdbcType="VARCHAR" property="nikeName" />
+        <result column="headImgUrl" jdbcType="VARCHAR" property="headImgUrl" />
+        <result column="province" jdbcType="VARCHAR" property="province" />
+        <result column="country" jdbcType="VARCHAR" property="country" />
+        <result column="subscribeTime" jdbcType="VARCHAR" property="subscribeTime" />
+        <result column="unionid" jdbcType="VARCHAR" property="unionid" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="groupid" jdbcType="VARCHAR" property="groupid" />
+        <result column="tagidList" jdbcType="VARCHAR" property="tagidList" />
+        <result column="createTime" jdbcType="VARCHAR" property="createTime" />
+    </resultMap>
+
+   <select id="selectByOpenId" resultType="com.kuyu.model.WeixinUserInfo">
+   		select * from tpm_user_wx_info where openid = #{openid}
+   </select>
+
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmSingleUserMapper">
+
+	<sql id="Base_Column_List">
+		uuid,
+		fssc_bill,
+		person_code,
+		op_time,
+		request_user_original
+	</sql>
+	
+	<insert id="insertSingleUser" parameterType="com.kuyu.model.TpmSingleUserModel">
+		Insert INTO tpm_single_user(uuid,fssc_bill,person_code,op_time,request_user_original) VALUES (#{uuid},#{fssc_bill},#{person_code},#{op_time},#{request_user_original})
+	</insert>
+	
+	<select id="queryTpmSingleUserModel" parameterType="com.kuyu.model.TpmSingleUserModel" resultType="com.kuyu.model.TpmSingleUserModel">
+		SELECT <include refid="Base_Column_List"/> FROM tpm_single_user
+		WHERE fssc_bill = #{fssc_bill} AND person_code = #{person_code}
+	</select>
+</mapper>

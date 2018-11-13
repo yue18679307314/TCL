@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.TpmWorkAttendenceDetailMapper">
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id,
+		openid,
+		activity_uuid,
+		clock_city,
+		clock_address,
+		clock_time,
+		url
+	</sql>
+
+	<insert id="signIn" parameterType="com.kuyu.model.TpmWorkAttendenceDetailModel">
+		INSERT INTO
+		tpm_work_attendence_detail(openid,activity_uuid,clock_city,clock_address,clock_time,url)
+		VALUES
+		(#{openid},#{activity_uuid},#{clock_city},#{clock_address},#{clock_time},#{url})
+	</insert>
+
+	<select id="queryList" resultType="com.kuyu.model.TpmWorkAttendenceDetailModel"	parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tpm_work_attendence_detail
+		WHERE openid = #{openid}
+		<if test="activity_uuid != null and activity_uuid != ''">
+			AND activity_uuid = #{activity_uuid}
+		</if>
+		AND clock_time
+		BETWEEN #{startTime} AND #{endTime}
+		ORDER BY clock_time 
+	</select>
+	
+	<select id="queryTpmWorkAttendenceDetailModel" resultType="com.kuyu.model.TpmWorkAttendenceDetailModel" parameterType="com.kuyu.model.TpmWorkAttendenceDetailModel">
+		SELECT <include refid="Base_Column_List"/>
+		FROM tpm_work_attendence_detail
+		WHERE openid = #{openid}
+		AND activity_uuid = #{activity_uuid}
+		AND clock_time = #{clock_time}
+	</select>
+</mapper>
