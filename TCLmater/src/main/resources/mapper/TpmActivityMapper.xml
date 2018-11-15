@@ -27,8 +27,8 @@
 			property="settlementCycle" />
 		<result column="ta_total_fee" jdbcType="DOUBLE" property="totalFee" />
 		<result column="ta_create_time" jdbcType="VARCHAR" property="createTime" />
-		<result column="request_activity_day" jdbcType="VARCHAR"
-			property="requestActivityDay" />
+		<!--  <result column="request_activity_day" jdbcType="VARCHAR"
+			property="requestActivityDay" />-->
 	</resultMap>
 
 	<resultMap id="result_ActivityVO_Map" type="com.kuyu.vo.ActivityVo">
@@ -83,8 +83,8 @@
 		<result column="settlement_cycle" jdbcType="VARCHAR" property="settlementCycle" />
 		<result column="total_fee" jdbcType="DOUBLE" property="totalFee" />
 		<result column="create_time" jdbcType="VARCHAR" property="createTime" />
-		<result column="request_activity_day" jdbcType="VARCHAR"
-			property="requestActivityDay" />
+		<!--  <result column="request_activity_day" jdbcType="VARCHAR"
+			property="requestActivityDay" />-->
 	</resultMap>
 
 	<sql id="tpm_activity_Column">

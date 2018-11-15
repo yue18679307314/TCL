@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kuyu.mapper.pcms.PcmsMaterialMapper" >
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsMaterial" >
+    <id column="mrid" property="mrid" jdbcType="INTEGER" />
+    <result column="mrcode" property="mrcode" jdbcType="INTEGER" />
+    <result column="spid" property="spid" jdbcType="VARCHAR" />
+    <result column="mrname" property="mrname" jdbcType="VARCHAR" />
+    <result column="cost" property="cost" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="min_range" property="minRange" jdbcType="INTEGER" />
+    <result column="max_range" property="maxRange" jdbcType="INTEGER" />
+    <result column="range" property="range" jdbcType="VARCHAR" />
+    <result column="comparison_price" property="comparisonPrice" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    mrid, mrcode, spid, mrname, cost, specifications, unit, min_range, max_range, range, 
+    comparison_price, status, update_time, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsMaterialExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pcms_material
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcms_material
+    where mrid = #{mrid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pcms_material
+    where mrid = #{mrid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialExample" >
+    delete from pcms_material
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsMaterial" >
+    insert into pcms_material (mrid, mrcode, spid, 
+      mrname, cost, specifications, 
+      unit, min_range, max_range, 
+      range, comparison_price, status, 
+      update_time, create_time)
+    values (#{mrid,jdbcType=INTEGER}, #{mrcode,jdbcType=INTEGER}, #{spid,jdbcType=VARCHAR}, 
+      #{mrname,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{minRange,jdbcType=INTEGER}, #{maxRange,jdbcType=INTEGER}, 
+      #{range,jdbcType=VARCHAR}, #{comparisonPrice,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsMaterial" >
+    insert into pcms_material
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mrid != null" >
+        mrid,
+      </if>
+      <if test="mrcode != null" >
+        mrcode,
+      </if>
+      <if test="spid != null" >
+        spid,
+      </if>
+      <if test="mrname != null" >
+        mrname,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="specifications != null" >
+        specifications,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="minRange != null" >
+        min_range,
+      </if>
+      <if test="maxRange != null" >
+        max_range,
+      </if>
+      <if test="range != null" >
+        range,
+      </if>
+      <if test="comparisonPrice != null" >
+        comparison_price,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mrid != null" >
+        #{mrid,jdbcType=INTEGER},
+      </if>
+      <if test="mrcode != null" >
+        #{mrcode,jdbcType=INTEGER},
+      </if>
+      <if test="spid != null" >
+        #{spid,jdbcType=VARCHAR},
+      </if>
+      <if test="mrname != null" >
+        #{mrname,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="minRange != null" >
+        #{minRange,jdbcType=INTEGER},
+      </if>
+      <if test="maxRange != null" >
+        #{maxRange,jdbcType=INTEGER},
+      </if>
+      <if test="range != null" >
+        #{range,jdbcType=VARCHAR},
+      </if>
+      <if test="comparisonPrice != null" >
+        #{comparisonPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialExample" resultType="java.lang.Integer" >
+    select count(*) from pcms_material
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pcms_material
+    <set >
+      <if test="record.mrid != null" >
+        mrid = #{record.mrid,jdbcType=INTEGER},
+      </if>
+      <if test="record.mrcode != null" >
+        mrcode = #{record.mrcode,jdbcType=INTEGER},
+      </if>
+      <if test="record.spid != null" >
+        spid = #{record.spid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mrname != null" >
+        mrname = #{record.mrname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cost != null" >
+        cost = #{record.cost,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null" >
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null" >
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minRange != null" >
+        min_range = #{record.minRange,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxRange != null" >
+        max_range = #{record.maxRange,jdbcType=INTEGER},
+      </if>
+      <if test="record.range != null" >
+        range = #{record.range,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comparisonPrice != null" >
+        comparison_price = #{record.comparisonPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pcms_material
+    set mrid = #{record.mrid,jdbcType=INTEGER},
+      mrcode = #{record.mrcode,jdbcType=INTEGER},
+      spid = #{record.spid,jdbcType=VARCHAR},
+      mrname = #{record.mrname,jdbcType=VARCHAR},
+      cost = #{record.cost,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      min_range = #{record.minRange,jdbcType=INTEGER},
+      max_range = #{record.maxRange,jdbcType=INTEGER},
+      range = #{record.range,jdbcType=VARCHAR},
+      comparison_price = #{record.comparisonPrice,jdbcType=DOUBLE},
+      status = #{record.status,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsMaterial" >
+    update pcms_material
+    <set >
+      <if test="mrcode != null" >
+        mrcode = #{mrcode,jdbcType=INTEGER},
+      </if>
+      <if test="spid != null" >
+        spid = #{spid,jdbcType=VARCHAR},
+      </if>
+      <if test="mrname != null" >
+        mrname = #{mrname,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="minRange != null" >
+        min_range = #{minRange,jdbcType=INTEGER},
+      </if>
+      <if test="maxRange != null" >
+        max_range = #{maxRange,jdbcType=INTEGER},
+      </if>
+      <if test="range != null" >
+        range = #{range,jdbcType=VARCHAR},
+      </if>
+      <if test="comparisonPrice != null" >
+        comparison_price = #{comparisonPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mrid = #{mrid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsMaterial" >
+    update pcms_material
+    set mrcode = #{mrcode,jdbcType=INTEGER},
+      spid = #{spid,jdbcType=VARCHAR},
+      mrname = #{mrname,jdbcType=VARCHAR},
+      cost = #{cost,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      min_range = #{minRange,jdbcType=INTEGER},
+      max_range = #{maxRange,jdbcType=INTEGER},
+      range = #{range,jdbcType=VARCHAR},
+      comparison_price = #{comparisonPrice,jdbcType=DOUBLE},
+      status = #{status,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where mrid = #{mrid,jdbcType=INTEGER}
+  </update>
+</mapper>
