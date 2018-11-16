@@ -120,7 +120,7 @@
 		t.statement_date as statement_date,
 		tm.org_name_parent as request_company
 		FROM tpm_employee te
-		left join pcms_supplier t on t.company = te.company
+		right join pcms_supplier t on t.company = te.company
 		left join tpm_dept tm on te.org_code = tm.org_code
 		<where>
 			<if test="params.request_company !=null and params.request_company !=''">

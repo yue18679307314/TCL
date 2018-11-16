@@ -33,6 +33,12 @@ public class PcmsSupplierModel extends Model<PcmsSupplierModel> {
     @JsonProperty("vendor_name")
     private String vendor_name;
 
+    /**供应商名称*/
+    @ApiModelProperty("供应商名称")
+    @JsonProperty("statement_date")
+    private String statement_date;
+
+
     /**供应商类型*/
     @ApiModelProperty("供应商类型")
     @JsonProperty("sptype")
@@ -257,6 +263,14 @@ public class PcmsSupplierModel extends Model<PcmsSupplierModel> {
 
     public void setCreate_date(Date create_date) {
         this.create_date = create_date;
+    }
+
+    public String getStatement_date() {
+        return statement_date;
+    }
+
+    public void setStatement_date(String statement_date) {
+        this.statement_date = statement_date;
     }
 
     @Override
