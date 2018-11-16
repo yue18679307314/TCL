@@ -165,6 +165,136 @@ public class PcmsMaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andResuestIdIsNull() {
+            addCriterion("resuest_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdIsNotNull() {
+            addCriterion("resuest_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdEqualTo(String value) {
+            addCriterion("resuest_id =", value, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdNotEqualTo(String value) {
+            addCriterion("resuest_id <>", value, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdGreaterThan(String value) {
+            addCriterion("resuest_id >", value, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdGreaterThanOrEqualTo(String value) {
+            addCriterion("resuest_id >=", value, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdLessThan(String value) {
+            addCriterion("resuest_id <", value, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdLessThanOrEqualTo(String value) {
+            addCriterion("resuest_id <=", value, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdLike(String value) {
+            addCriterion("resuest_id like", value, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdNotLike(String value) {
+            addCriterion("resuest_id not like", value, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdIn(List<String> values) {
+            addCriterion("resuest_id in", values, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdNotIn(List<String> values) {
+            addCriterion("resuest_id not in", values, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdBetween(String value1, String value2) {
+            addCriterion("resuest_id between", value1, value2, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andResuestIdNotBetween(String value1, String value2) {
+            addCriterion("resuest_id not between", value1, value2, "resuestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeIsNull() {
+            addCriterion("mrtype is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeIsNotNull() {
+            addCriterion("mrtype is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeEqualTo(Integer value) {
+            addCriterion("mrtype =", value, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeNotEqualTo(Integer value) {
+            addCriterion("mrtype <>", value, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeGreaterThan(Integer value) {
+            addCriterion("mrtype >", value, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("mrtype >=", value, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeLessThan(Integer value) {
+            addCriterion("mrtype <", value, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeLessThanOrEqualTo(Integer value) {
+            addCriterion("mrtype <=", value, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeIn(List<Integer> values) {
+            addCriterion("mrtype in", values, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeNotIn(List<Integer> values) {
+            addCriterion("mrtype not in", values, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeBetween(Integer value1, Integer value2) {
+            addCriterion("mrtype between", value1, value2, "mrtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andMrtypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("mrtype not between", value1, value2, "mrtype");
+            return (Criteria) this;
+        }
+
         public Criteria andMrcodeIsNull() {
             addCriterion("mrcode is null");
             return (Criteria) this;
@@ -225,73 +355,73 @@ public class PcmsMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andSpidIsNull() {
-            addCriterion("spid is null");
+        public Criteria andVendorIdIsNull() {
+            addCriterion("vendor_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andSpidIsNotNull() {
-            addCriterion("spid is not null");
+        public Criteria andVendorIdIsNotNull() {
+            addCriterion("vendor_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSpidEqualTo(String value) {
-            addCriterion("spid =", value, "spid");
+        public Criteria andVendorIdEqualTo(String value) {
+            addCriterion("vendor_id =", value, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidNotEqualTo(String value) {
-            addCriterion("spid <>", value, "spid");
+        public Criteria andVendorIdNotEqualTo(String value) {
+            addCriterion("vendor_id <>", value, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidGreaterThan(String value) {
-            addCriterion("spid >", value, "spid");
+        public Criteria andVendorIdGreaterThan(String value) {
+            addCriterion("vendor_id >", value, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidGreaterThanOrEqualTo(String value) {
-            addCriterion("spid >=", value, "spid");
+        public Criteria andVendorIdGreaterThanOrEqualTo(String value) {
+            addCriterion("vendor_id >=", value, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidLessThan(String value) {
-            addCriterion("spid <", value, "spid");
+        public Criteria andVendorIdLessThan(String value) {
+            addCriterion("vendor_id <", value, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidLessThanOrEqualTo(String value) {
-            addCriterion("spid <=", value, "spid");
+        public Criteria andVendorIdLessThanOrEqualTo(String value) {
+            addCriterion("vendor_id <=", value, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidLike(String value) {
-            addCriterion("spid like", value, "spid");
+        public Criteria andVendorIdLike(String value) {
+            addCriterion("vendor_id like", value, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidNotLike(String value) {
-            addCriterion("spid not like", value, "spid");
+        public Criteria andVendorIdNotLike(String value) {
+            addCriterion("vendor_id not like", value, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidIn(List<String> values) {
-            addCriterion("spid in", values, "spid");
+        public Criteria andVendorIdIn(List<String> values) {
+            addCriterion("vendor_id in", values, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidNotIn(List<String> values) {
-            addCriterion("spid not in", values, "spid");
+        public Criteria andVendorIdNotIn(List<String> values) {
+            addCriterion("vendor_id not in", values, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidBetween(String value1, String value2) {
-            addCriterion("spid between", value1, value2, "spid");
+        public Criteria andVendorIdBetween(String value1, String value2) {
+            addCriterion("vendor_id between", value1, value2, "vendorId");
             return (Criteria) this;
         }
 
-        public Criteria andSpidNotBetween(String value1, String value2) {
-            addCriterion("spid not between", value1, value2, "spid");
+        public Criteria andVendorIdNotBetween(String value1, String value2) {
+            addCriterion("vendor_id not between", value1, value2, "vendorId");
             return (Criteria) this;
         }
 
@@ -572,6 +702,66 @@ public class PcmsMaterialExample {
 
         public Criteria andUnitNotBetween(String value1, String value2) {
             addCriterion("unit not between", value1, value2, "unit");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberIsNull() {
+            addCriterion("number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberIsNotNull() {
+            addCriterion("number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberEqualTo(Integer value) {
+            addCriterion("number =", value, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberNotEqualTo(Integer value) {
+            addCriterion("number <>", value, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberGreaterThan(Integer value) {
+            addCriterion("number >", value, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("number >=", value, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberLessThan(Integer value) {
+            addCriterion("number <", value, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("number <=", value, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberIn(List<Integer> values) {
+            addCriterion("number in", values, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberNotIn(List<Integer> values) {
+            addCriterion("number not in", values, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberBetween(Integer value1, Integer value2) {
+            addCriterion("number between", value1, value2, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("number not between", value1, value2, "number");
             return (Criteria) this;
         }
 
@@ -882,6 +1072,76 @@ public class PcmsMaterialExample {
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteIsNull() {
+            addCriterion("note is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteIsNotNull() {
+            addCriterion("note is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteEqualTo(String value) {
+            addCriterion("note =", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteNotEqualTo(String value) {
+            addCriterion("note <>", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteGreaterThan(String value) {
+            addCriterion("note >", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteGreaterThanOrEqualTo(String value) {
+            addCriterion("note >=", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteLessThan(String value) {
+            addCriterion("note <", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteLessThanOrEqualTo(String value) {
+            addCriterion("note <=", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteLike(String value) {
+            addCriterion("note like", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteNotLike(String value) {
+            addCriterion("note not like", value, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteIn(List<String> values) {
+            addCriterion("note in", values, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteNotIn(List<String> values) {
+            addCriterion("note not in", values, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteBetween(String value1, String value2) {
+            addCriterion("note between", value1, value2, "note");
+            return (Criteria) this;
+        }
+
+        public Criteria andNoteNotBetween(String value1, String value2) {
+            addCriterion("note not between", value1, value2, "note");
             return (Criteria) this;
         }
 

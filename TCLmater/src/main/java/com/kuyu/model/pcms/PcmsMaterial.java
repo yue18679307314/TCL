@@ -5,9 +5,13 @@ import java.util.Date;
 public class PcmsMaterial {
     private Integer mrid;
 
+    private String resuestId;
+
+    private Integer mrtype;
+
     private Integer mrcode;
 
-    private String spid;
+    private String vendorId;
 
     private String mrname;
 
@@ -16,6 +20,8 @@ public class PcmsMaterial {
     private String specifications;
 
     private String unit;
+
+    private Integer number;
 
     private Integer minRange;
 
@@ -26,6 +32,8 @@ public class PcmsMaterial {
     private Double comparisonPrice;
 
     private Integer status;
+
+    private String note;
 
     private Date updateTime;
 
@@ -39,6 +47,22 @@ public class PcmsMaterial {
         this.mrid = mrid;
     }
 
+    public String getResuestId() {
+        return resuestId;
+    }
+
+    public void setResuestId(String resuestId) {
+        this.resuestId = resuestId == null ? null : resuestId.trim();
+    }
+
+    public Integer getMrtype() {
+        return mrtype;
+    }
+
+    public void setMrtype(Integer mrtype) {
+        this.mrtype = mrtype;
+    }
+
     public Integer getMrcode() {
         return mrcode;
     }
@@ -47,12 +71,12 @@ public class PcmsMaterial {
         this.mrcode = mrcode;
     }
 
-    public String getSpid() {
-        return spid;
+    public String getVendorId() {
+        return vendorId;
     }
 
-    public void setSpid(String spid) {
-        this.spid = spid == null ? null : spid.trim();
+    public void setVendorId(String vendorId) {
+        this.vendorId = vendorId == null ? null : vendorId.trim();
     }
 
     public String getMrname() {
@@ -85,6 +109,14 @@ public class PcmsMaterial {
 
     public void setUnit(String unit) {
         this.unit = unit == null ? null : unit.trim();
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public Integer getMinRange() {
@@ -125,6 +157,14 @@ public class PcmsMaterial {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note == null ? null : note.trim();
     }
 
     public Date getUpdateTime() {

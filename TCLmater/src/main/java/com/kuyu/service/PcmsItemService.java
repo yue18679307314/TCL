@@ -1,10 +1,17 @@
 package com.kuyu.service;
 
-import com.kuyu.model.pcms.PcmsBill;
+import java.util.List;
+
+import com.kuyu.vo.pcms.ItemDetail;
+import com.kuyu.vo.pcms.ItemListRequestParam;
+import com.kuyu.vo.pcms.ItemResult;
 
 public interface PcmsItemService  {
 
-	PcmsBill selectBillByid(Integer id);
+
+	List<ItemResult> getItemListByParam(String searchKey);
+
+	ItemDetail getItemItemDetailById(Integer itid);
 
 	
 

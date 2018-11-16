@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kuyu.mapper.pcms.PcmsProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsProject" >
+    <id column="REQUEST_ID" property="requestId" jdbcType="VARCHAR" />
+    <result column="REQUEST_TITLE" property="requestTitle" jdbcType="VARCHAR" />
+    <result column="DETAIL_ACCOUNT" property="detailAccount" jdbcType="VARCHAR" />
+    <result column="REQUEST_COMPANY_CODE" property="requestCompanyCode" jdbcType="VARCHAR" />
+    <result column="DETAIL_SUBJECT" property="detailSubject" jdbcType="VARCHAR" />
+    <result column="REQUEST_DEPT" property="requestDept" jdbcType="VARCHAR" />
+    <result column="REQUEST_USER" property="requestUser" jdbcType="VARCHAR" />
+    <result column="REQUEST_TELPHONE" property="requestTelphone" jdbcType="VARCHAR" />
+    <result column="REQUEST_EMAIL" property="requestEmail" jdbcType="VARCHAR" />
+    <result column="REQUEST_INFO" property="requestInfo" jdbcType="VARCHAR" />
+    <result column="request_user_name" property="requestUserName" jdbcType="VARCHAR" />
+    <result column="finance_user" property="financeUser" jdbcType="VARCHAR" />
+    <result column="finance_user_name" property="financeUserName" jdbcType="VARCHAR" />
+    <result column="REQUEST_CREATE_TIME" property="requestCreateTime" jdbcType="VARCHAR" />
+    <result column="REQUEST_END_TIME" property="requestEndTime" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_STORE" property="activityStore" jdbcType="VARCHAR" />
+    <result column="SHOP_CRM_CODE" property="shopCrmCode" jdbcType="VARCHAR" />
+    <result column="ACTIVITY_CITY" property="activityCity" jdbcType="VARCHAR" />
+    <result column="SHOP_LEVEL" property="shopLevel" jdbcType="VARCHAR" />
+    <result column="SHOP_BRANCH" property="shopBranch" jdbcType="VARCHAR" />
+    <result column="SHOP_CHANNEL" property="shopChannel" jdbcType="VARCHAR" />
+    <result column="DETAIL_TASK" property="detailTask" jdbcType="VARCHAR" />
+    <result column="SHOP_SALES_AMOUNT" property="shopSalesAmount" jdbcType="VARCHAR" />
+    <result column="CREATE_USER" property="createUser" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CURRENCY" property="currency" jdbcType="VARCHAR" />
+    <result column="EXCHANGE" property="exchange" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.kuyu.model.pcms.PcmsProject" extends="BaseResultMap" >
+    <result column="request_json" property="requestJson" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    REQUEST_ID, REQUEST_TITLE, DETAIL_ACCOUNT, REQUEST_COMPANY_CODE, DETAIL_SUBJECT, 
+    REQUEST_DEPT, REQUEST_USER, REQUEST_TELPHONE, REQUEST_EMAIL, REQUEST_INFO, request_user_name, 
+    finance_user, finance_user_name, REQUEST_CREATE_TIME, REQUEST_END_TIME, TYPE, ACTIVITY_STORE, 
+    SHOP_CRM_CODE, ACTIVITY_CITY, SHOP_LEVEL, SHOP_BRANCH, SHOP_CHANNEL, DETAIL_TASK, 
+    SHOP_SALES_AMOUNT, CREATE_USER, CREATE_TIME, CURRENCY, EXCHANGE, balance, status, 
+    creat_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    request_json
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.kuyu.model.pcms.PcmsProjectExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pcms_project
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsProjectExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pcms_project
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pcms_project
+    where REQUEST_ID = #{requestId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from pcms_project
+    where REQUEST_ID = #{requestId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsProjectExample" >
+    delete from pcms_project
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsProject" >
+    insert into pcms_project (REQUEST_ID, REQUEST_TITLE, DETAIL_ACCOUNT, 
+      REQUEST_COMPANY_CODE, DETAIL_SUBJECT, REQUEST_DEPT, 
+      REQUEST_USER, REQUEST_TELPHONE, REQUEST_EMAIL, 
+      REQUEST_INFO, request_user_name, finance_user, 
+      finance_user_name, REQUEST_CREATE_TIME, REQUEST_END_TIME, 
+      TYPE, ACTIVITY_STORE, SHOP_CRM_CODE, 
+      ACTIVITY_CITY, SHOP_LEVEL, SHOP_BRANCH, 
+      SHOP_CHANNEL, DETAIL_TASK, SHOP_SALES_AMOUNT, 
+      CREATE_USER, CREATE_TIME, CURRENCY, 
+      EXCHANGE, balance, status, 
+      creat_time, request_json)
+    values (#{requestId,jdbcType=VARCHAR}, #{requestTitle,jdbcType=VARCHAR}, #{detailAccount,jdbcType=VARCHAR}, 
+      #{requestCompanyCode,jdbcType=VARCHAR}, #{detailSubject,jdbcType=VARCHAR}, #{requestDept,jdbcType=VARCHAR}, 
+      #{requestUser,jdbcType=VARCHAR}, #{requestTelphone,jdbcType=VARCHAR}, #{requestEmail,jdbcType=VARCHAR}, 
+      #{requestInfo,jdbcType=VARCHAR}, #{requestUserName,jdbcType=VARCHAR}, #{financeUser,jdbcType=VARCHAR}, 
+      #{financeUserName,jdbcType=VARCHAR}, #{requestCreateTime,jdbcType=VARCHAR}, #{requestEndTime,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{activityStore,jdbcType=VARCHAR}, #{shopCrmCode,jdbcType=VARCHAR}, 
+      #{activityCity,jdbcType=VARCHAR}, #{shopLevel,jdbcType=VARCHAR}, #{shopBranch,jdbcType=VARCHAR}, 
+      #{shopChannel,jdbcType=VARCHAR}, #{detailTask,jdbcType=VARCHAR}, #{shopSalesAmount,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{currency,jdbcType=VARCHAR}, 
+      #{exchange,jdbcType=VARCHAR}, #{balance,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{creatTime,jdbcType=TIMESTAMP}, #{requestJson,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsProject" >
+    insert into pcms_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        REQUEST_ID,
+      </if>
+      <if test="requestTitle != null" >
+        REQUEST_TITLE,
+      </if>
+      <if test="detailAccount != null" >
+        DETAIL_ACCOUNT,
+      </if>
+      <if test="requestCompanyCode != null" >
+        REQUEST_COMPANY_CODE,
+      </if>
+      <if test="detailSubject != null" >
+        DETAIL_SUBJECT,
+      </if>
+      <if test="requestDept != null" >
+        REQUEST_DEPT,
+      </if>
+      <if test="requestUser != null" >
+        REQUEST_USER,
+      </if>
+      <if test="requestTelphone != null" >
+        REQUEST_TELPHONE,
+      </if>
+      <if test="requestEmail != null" >
+        REQUEST_EMAIL,
+      </if>
+      <if test="requestInfo != null" >
+        REQUEST_INFO,
+      </if>
+      <if test="requestUserName != null" >
+        request_user_name,
+      </if>
+      <if test="financeUser != null" >
+        finance_user,
+      </if>
+      <if test="financeUserName != null" >
+        finance_user_name,
+      </if>
+      <if test="requestCreateTime != null" >
+        REQUEST_CREATE_TIME,
+      </if>
+      <if test="requestEndTime != null" >
+        REQUEST_END_TIME,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="activityStore != null" >
+        ACTIVITY_STORE,
+      </if>
+      <if test="shopCrmCode != null" >
+        SHOP_CRM_CODE,
+      </if>
+      <if test="activityCity != null" >
+        ACTIVITY_CITY,
+      </if>
+      <if test="shopLevel != null" >
+        SHOP_LEVEL,
+      </if>
+      <if test="shopBranch != null" >
+        SHOP_BRANCH,
+      </if>
+      <if test="shopChannel != null" >
+        SHOP_CHANNEL,
+      </if>
+      <if test="detailTask != null" >
+        DETAIL_TASK,
+      </if>
+      <if test="shopSalesAmount != null" >
+        SHOP_SALES_AMOUNT,
+      </if>
+      <if test="createUser != null" >
+        CREATE_USER,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="currency != null" >
+        CURRENCY,
+      </if>
+      <if test="exchange != null" >
+        EXCHANGE,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="creatTime != null" >
+        creat_time,
+      </if>
+      <if test="requestJson != null" >
+        request_json,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="requestId != null" >
+        #{requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestTitle != null" >
+        #{requestTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="detailAccount != null" >
+        #{detailAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="requestCompanyCode != null" >
+        #{requestCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="detailSubject != null" >
+        #{detailSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="requestDept != null" >
+        #{requestDept,jdbcType=VARCHAR},
+      </if>
+      <if test="requestUser != null" >
+        #{requestUser,jdbcType=VARCHAR},
+      </if>
+      <if test="requestTelphone != null" >
+        #{requestTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="requestEmail != null" >
+        #{requestEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="requestInfo != null" >
+        #{requestInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="requestUserName != null" >
+        #{requestUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="financeUser != null" >
+        #{financeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="financeUserName != null" >
+        #{financeUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="requestCreateTime != null" >
+        #{requestCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="requestEndTime != null" >
+        #{requestEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStore != null" >
+        #{activityStore,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCrmCode != null" >
+        #{shopCrmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCity != null" >
+        #{activityCity,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLevel != null" >
+        #{shopLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="shopBranch != null" >
+        #{shopBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="shopChannel != null" >
+        #{shopChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="detailTask != null" >
+        #{detailTask,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSalesAmount != null" >
+        #{shopSalesAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="exchange != null" >
+        #{exchange,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creatTime != null" >
+        #{creatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestJson != null" >
+        #{requestJson,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsProjectExample" resultType="java.lang.Integer" >
+    select count(*) from pcms_project
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pcms_project
+    <set >
+      <if test="record.requestId != null" >
+        REQUEST_ID = #{record.requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestTitle != null" >
+        REQUEST_TITLE = #{record.requestTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailAccount != null" >
+        DETAIL_ACCOUNT = #{record.detailAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestCompanyCode != null" >
+        REQUEST_COMPANY_CODE = #{record.requestCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailSubject != null" >
+        DETAIL_SUBJECT = #{record.detailSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestDept != null" >
+        REQUEST_DEPT = #{record.requestDept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestUser != null" >
+        REQUEST_USER = #{record.requestUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestTelphone != null" >
+        REQUEST_TELPHONE = #{record.requestTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestEmail != null" >
+        REQUEST_EMAIL = #{record.requestEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestInfo != null" >
+        REQUEST_INFO = #{record.requestInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestUserName != null" >
+        request_user_name = #{record.requestUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financeUser != null" >
+        finance_user = #{record.financeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financeUserName != null" >
+        finance_user_name = #{record.financeUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestCreateTime != null" >
+        REQUEST_CREATE_TIME = #{record.requestCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestEndTime != null" >
+        REQUEST_END_TIME = #{record.requestEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        TYPE = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityStore != null" >
+        ACTIVITY_STORE = #{record.activityStore,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopCrmCode != null" >
+        SHOP_CRM_CODE = #{record.shopCrmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityCity != null" >
+        ACTIVITY_CITY = #{record.activityCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopLevel != null" >
+        SHOP_LEVEL = #{record.shopLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopBranch != null" >
+        SHOP_BRANCH = #{record.shopBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopChannel != null" >
+        SHOP_CHANNEL = #{record.shopChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailTask != null" >
+        DETAIL_TASK = #{record.detailTask,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSalesAmount != null" >
+        SHOP_SALES_AMOUNT = #{record.shopSalesAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUser != null" >
+        CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.currency != null" >
+        CURRENCY = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.exchange != null" >
+        EXCHANGE = #{record.exchange,jdbcType=VARCHAR},
+      </if>
+      <if test="record.balance != null" >
+        balance = #{record.balance,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.creatTime != null" >
+        creat_time = #{record.creatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.requestJson != null" >
+        request_json = #{record.requestJson,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update pcms_project
+    set REQUEST_ID = #{record.requestId,jdbcType=VARCHAR},
+      REQUEST_TITLE = #{record.requestTitle,jdbcType=VARCHAR},
+      DETAIL_ACCOUNT = #{record.detailAccount,jdbcType=VARCHAR},
+      REQUEST_COMPANY_CODE = #{record.requestCompanyCode,jdbcType=VARCHAR},
+      DETAIL_SUBJECT = #{record.detailSubject,jdbcType=VARCHAR},
+      REQUEST_DEPT = #{record.requestDept,jdbcType=VARCHAR},
+      REQUEST_USER = #{record.requestUser,jdbcType=VARCHAR},
+      REQUEST_TELPHONE = #{record.requestTelphone,jdbcType=VARCHAR},
+      REQUEST_EMAIL = #{record.requestEmail,jdbcType=VARCHAR},
+      REQUEST_INFO = #{record.requestInfo,jdbcType=VARCHAR},
+      request_user_name = #{record.requestUserName,jdbcType=VARCHAR},
+      finance_user = #{record.financeUser,jdbcType=VARCHAR},
+      finance_user_name = #{record.financeUserName,jdbcType=VARCHAR},
+      REQUEST_CREATE_TIME = #{record.requestCreateTime,jdbcType=VARCHAR},
+      REQUEST_END_TIME = #{record.requestEndTime,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      ACTIVITY_STORE = #{record.activityStore,jdbcType=VARCHAR},
+      SHOP_CRM_CODE = #{record.shopCrmCode,jdbcType=VARCHAR},
+      ACTIVITY_CITY = #{record.activityCity,jdbcType=VARCHAR},
+      SHOP_LEVEL = #{record.shopLevel,jdbcType=VARCHAR},
+      SHOP_BRANCH = #{record.shopBranch,jdbcType=VARCHAR},
+      SHOP_CHANNEL = #{record.shopChannel,jdbcType=VARCHAR},
+      DETAIL_TASK = #{record.detailTask,jdbcType=VARCHAR},
+      SHOP_SALES_AMOUNT = #{record.shopSalesAmount,jdbcType=VARCHAR},
+      CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      CURRENCY = #{record.currency,jdbcType=VARCHAR},
+      EXCHANGE = #{record.exchange,jdbcType=VARCHAR},
+      balance = #{record.balance,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      creat_time = #{record.creatTime,jdbcType=TIMESTAMP},
+      request_json = #{record.requestJson,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pcms_project
+    set REQUEST_ID = #{record.requestId,jdbcType=VARCHAR},
+      REQUEST_TITLE = #{record.requestTitle,jdbcType=VARCHAR},
+      DETAIL_ACCOUNT = #{record.detailAccount,jdbcType=VARCHAR},
+      REQUEST_COMPANY_CODE = #{record.requestCompanyCode,jdbcType=VARCHAR},
+      DETAIL_SUBJECT = #{record.detailSubject,jdbcType=VARCHAR},
+      REQUEST_DEPT = #{record.requestDept,jdbcType=VARCHAR},
+      REQUEST_USER = #{record.requestUser,jdbcType=VARCHAR},
+      REQUEST_TELPHONE = #{record.requestTelphone,jdbcType=VARCHAR},
+      REQUEST_EMAIL = #{record.requestEmail,jdbcType=VARCHAR},
+      REQUEST_INFO = #{record.requestInfo,jdbcType=VARCHAR},
+      request_user_name = #{record.requestUserName,jdbcType=VARCHAR},
+      finance_user = #{record.financeUser,jdbcType=VARCHAR},
+      finance_user_name = #{record.financeUserName,jdbcType=VARCHAR},
+      REQUEST_CREATE_TIME = #{record.requestCreateTime,jdbcType=VARCHAR},
+      REQUEST_END_TIME = #{record.requestEndTime,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      ACTIVITY_STORE = #{record.activityStore,jdbcType=VARCHAR},
+      SHOP_CRM_CODE = #{record.shopCrmCode,jdbcType=VARCHAR},
+      ACTIVITY_CITY = #{record.activityCity,jdbcType=VARCHAR},
+      SHOP_LEVEL = #{record.shopLevel,jdbcType=VARCHAR},
+      SHOP_BRANCH = #{record.shopBranch,jdbcType=VARCHAR},
+      SHOP_CHANNEL = #{record.shopChannel,jdbcType=VARCHAR},
+      DETAIL_TASK = #{record.detailTask,jdbcType=VARCHAR},
+      SHOP_SALES_AMOUNT = #{record.shopSalesAmount,jdbcType=VARCHAR},
+      CREATE_USER = #{record.createUser,jdbcType=VARCHAR},
+      CREATE_TIME = #{record.createTime,jdbcType=TIMESTAMP},
+      CURRENCY = #{record.currency,jdbcType=VARCHAR},
+      EXCHANGE = #{record.exchange,jdbcType=VARCHAR},
+      balance = #{record.balance,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      creat_time = #{record.creatTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsProject" >
+    update pcms_project
+    <set >
+      <if test="requestTitle != null" >
+        REQUEST_TITLE = #{requestTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="detailAccount != null" >
+        DETAIL_ACCOUNT = #{detailAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="requestCompanyCode != null" >
+        REQUEST_COMPANY_CODE = #{requestCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="detailSubject != null" >
+        DETAIL_SUBJECT = #{detailSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="requestDept != null" >
+        REQUEST_DEPT = #{requestDept,jdbcType=VARCHAR},
+      </if>
+      <if test="requestUser != null" >
+        REQUEST_USER = #{requestUser,jdbcType=VARCHAR},
+      </if>
+      <if test="requestTelphone != null" >
+        REQUEST_TELPHONE = #{requestTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="requestEmail != null" >
+        REQUEST_EMAIL = #{requestEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="requestInfo != null" >
+        REQUEST_INFO = #{requestInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="requestUserName != null" >
+        request_user_name = #{requestUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="financeUser != null" >
+        finance_user = #{financeUser,jdbcType=VARCHAR},
+      </if>
+      <if test="financeUserName != null" >
+        finance_user_name = #{financeUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="requestCreateTime != null" >
+        REQUEST_CREATE_TIME = #{requestCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="requestEndTime != null" >
+        REQUEST_END_TIME = #{requestEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStore != null" >
+        ACTIVITY_STORE = #{activityStore,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCrmCode != null" >
+        SHOP_CRM_CODE = #{shopCrmCode,jdbcType=VARCHAR},
+      </if>
+      <if test="activityCity != null" >
+        ACTIVITY_CITY = #{activityCity,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLevel != null" >
+        SHOP_LEVEL = #{shopLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="shopBranch != null" >
+        SHOP_BRANCH = #{shopBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="shopChannel != null" >
+        SHOP_CHANNEL = #{shopChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="detailTask != null" >
+        DETAIL_TASK = #{detailTask,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSalesAmount != null" >
+        SHOP_SALES_AMOUNT = #{shopSalesAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currency != null" >
+        CURRENCY = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="exchange != null" >
+        EXCHANGE = #{exchange,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="creatTime != null" >
+        creat_time = #{creatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestJson != null" >
+        request_json = #{requestJson,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where REQUEST_ID = #{requestId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.kuyu.model.pcms.PcmsProject" >
+    update pcms_project
+    set REQUEST_TITLE = #{requestTitle,jdbcType=VARCHAR},
+      DETAIL_ACCOUNT = #{detailAccount,jdbcType=VARCHAR},
+      REQUEST_COMPANY_CODE = #{requestCompanyCode,jdbcType=VARCHAR},
+      DETAIL_SUBJECT = #{detailSubject,jdbcType=VARCHAR},
+      REQUEST_DEPT = #{requestDept,jdbcType=VARCHAR},
+      REQUEST_USER = #{requestUser,jdbcType=VARCHAR},
+      REQUEST_TELPHONE = #{requestTelphone,jdbcType=VARCHAR},
+      REQUEST_EMAIL = #{requestEmail,jdbcType=VARCHAR},
+      REQUEST_INFO = #{requestInfo,jdbcType=VARCHAR},
+      request_user_name = #{requestUserName,jdbcType=VARCHAR},
+      finance_user = #{financeUser,jdbcType=VARCHAR},
+      finance_user_name = #{financeUserName,jdbcType=VARCHAR},
+      REQUEST_CREATE_TIME = #{requestCreateTime,jdbcType=VARCHAR},
+      REQUEST_END_TIME = #{requestEndTime,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      ACTIVITY_STORE = #{activityStore,jdbcType=VARCHAR},
+      SHOP_CRM_CODE = #{shopCrmCode,jdbcType=VARCHAR},
+      ACTIVITY_CITY = #{activityCity,jdbcType=VARCHAR},
+      SHOP_LEVEL = #{shopLevel,jdbcType=VARCHAR},
+      SHOP_BRANCH = #{shopBranch,jdbcType=VARCHAR},
+      SHOP_CHANNEL = #{shopChannel,jdbcType=VARCHAR},
+      DETAIL_TASK = #{detailTask,jdbcType=VARCHAR},
+      SHOP_SALES_AMOUNT = #{shopSalesAmount,jdbcType=VARCHAR},
+      CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CURRENCY = #{currency,jdbcType=VARCHAR},
+      EXCHANGE = #{exchange,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      creat_time = #{creatTime,jdbcType=TIMESTAMP},
+      request_json = #{requestJson,jdbcType=LONGVARCHAR}
+    where REQUEST_ID = #{requestId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsProject" >
+    update pcms_project
+    set REQUEST_TITLE = #{requestTitle,jdbcType=VARCHAR},
+      DETAIL_ACCOUNT = #{detailAccount,jdbcType=VARCHAR},
+      REQUEST_COMPANY_CODE = #{requestCompanyCode,jdbcType=VARCHAR},
+      DETAIL_SUBJECT = #{detailSubject,jdbcType=VARCHAR},
+      REQUEST_DEPT = #{requestDept,jdbcType=VARCHAR},
+      REQUEST_USER = #{requestUser,jdbcType=VARCHAR},
+      REQUEST_TELPHONE = #{requestTelphone,jdbcType=VARCHAR},
+      REQUEST_EMAIL = #{requestEmail,jdbcType=VARCHAR},
+      REQUEST_INFO = #{requestInfo,jdbcType=VARCHAR},
+      request_user_name = #{requestUserName,jdbcType=VARCHAR},
+      finance_user = #{financeUser,jdbcType=VARCHAR},
+      finance_user_name = #{financeUserName,jdbcType=VARCHAR},
+      REQUEST_CREATE_TIME = #{requestCreateTime,jdbcType=VARCHAR},
+      REQUEST_END_TIME = #{requestEndTime,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR},
+      ACTIVITY_STORE = #{activityStore,jdbcType=VARCHAR},
+      SHOP_CRM_CODE = #{shopCrmCode,jdbcType=VARCHAR},
+      ACTIVITY_CITY = #{activityCity,jdbcType=VARCHAR},
+      SHOP_LEVEL = #{shopLevel,jdbcType=VARCHAR},
+      SHOP_BRANCH = #{shopBranch,jdbcType=VARCHAR},
+      SHOP_CHANNEL = #{shopChannel,jdbcType=VARCHAR},
+      DETAIL_TASK = #{detailTask,jdbcType=VARCHAR},
+      SHOP_SALES_AMOUNT = #{shopSalesAmount,jdbcType=VARCHAR},
+      CREATE_USER = #{createUser,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CURRENCY = #{currency,jdbcType=VARCHAR},
+      EXCHANGE = #{exchange,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      creat_time = #{creatTime,jdbcType=TIMESTAMP}
+    where REQUEST_ID = #{requestId,jdbcType=VARCHAR}
+  </update>
+</mapper>

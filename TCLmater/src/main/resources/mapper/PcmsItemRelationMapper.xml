@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.kuyu.mapper.pcms.PcmsMaterialBillMapper" >
-  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsMaterialBill" >
-    <id column="mbid" property="mbid" jdbcType="INTEGER" />
-    <result column="blid" property="blid" jdbcType="INTEGER" />
-    <result column="spid" property="spid" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+<mapper namespace="com.kuyu.mapper.pcms.PcmsItemRelationMapper" >
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsItemRelation" >
+    <id column="irid" property="irid" jdbcType="INTEGER" />
+    <result column="itid" property="itid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="relation_id" property="relationId" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -68,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    mbid, blid, spid, status, update_time, create_time
+    irid, itid, type, relation_id, create_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsMaterialBillExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsItemRelationExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from pcms_material_bill
+    from pcms_item_relation
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,93 +86,82 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from pcms_material_bill
-    where mbid = #{mbid,jdbcType=INTEGER}
+    from pcms_item_relation
+    where irid = #{irid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from pcms_material_bill
-    where mbid = #{mbid,jdbcType=INTEGER}
+    delete from pcms_item_relation
+    where irid = #{irid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialBillExample" >
-    delete from pcms_material_bill
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsItemRelationExample" >
+    delete from pcms_item_relation
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsMaterialBill" >
-    insert into pcms_material_bill (mbid, blid, spid, 
-      status, update_time, create_time
-      )
-    values (#{mbid,jdbcType=INTEGER}, #{blid,jdbcType=INTEGER}, #{spid,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsItemRelation" >
+    insert into pcms_item_relation (irid, itid, type, 
+      relation_id, create_time)
+    values (#{irid,jdbcType=INTEGER}, #{itid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
+      #{relationId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsMaterialBill" >
-    insert into pcms_material_bill
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsItemRelation" >
+    insert into pcms_item_relation
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="mbid != null" >
-        mbid,
+      <if test="irid != null" >
+        irid,
       </if>
-      <if test="blid != null" >
-        blid,
+      <if test="itid != null" >
+        itid,
       </if>
-      <if test="spid != null" >
-        spid,
+      <if test="type != null" >
+        type,
       </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="updateTime != null" >
-        update_time,
+      <if test="relationId != null" >
+        relation_id,
       </if>
       <if test="createTime != null" >
         create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="mbid != null" >
-        #{mbid,jdbcType=INTEGER},
+      <if test="irid != null" >
+        #{irid,jdbcType=INTEGER},
       </if>
-      <if test="blid != null" >
-        #{blid,jdbcType=INTEGER},
+      <if test="itid != null" >
+        #{itid,jdbcType=INTEGER},
       </if>
-      <if test="spid != null" >
-        #{spid,jdbcType=VARCHAR},
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
+      <if test="relationId != null" >
+        #{relationId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialBillExample" resultType="java.lang.Integer" >
-    select count(*) from pcms_material_bill
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsItemRelationExample" resultType="java.lang.Integer" >
+    select count(*) from pcms_item_relation
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update pcms_material_bill
+    update pcms_item_relation
     <set >
-      <if test="record.mbid != null" >
-        mbid = #{record.mbid,jdbcType=INTEGER},
+      <if test="record.irid != null" >
+        irid = #{record.irid,jdbcType=INTEGER},
       </if>
-      <if test="record.blid != null" >
-        blid = #{record.blid,jdbcType=INTEGER},
+      <if test="record.itid != null" >
+        itid = #{record.itid,jdbcType=INTEGER},
       </if>
-      <if test="record.spid != null" >
-        spid = #{record.spid,jdbcType=VARCHAR},
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=INTEGER},
-      </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      <if test="record.relationId != null" >
+        relation_id = #{record.relationId,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -184,45 +172,40 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update pcms_material_bill
-    set mbid = #{record.mbid,jdbcType=INTEGER},
-      blid = #{record.blid,jdbcType=INTEGER},
-      spid = #{record.spid,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=INTEGER},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+    update pcms_item_relation
+    set irid = #{record.irid,jdbcType=INTEGER},
+      itid = #{record.itid,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=VARCHAR},
+      relation_id = #{record.relationId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsMaterialBill" >
-    update pcms_material_bill
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsItemRelation" >
+    update pcms_item_relation
     <set >
-      <if test="blid != null" >
-        blid = #{blid,jdbcType=INTEGER},
+      <if test="itid != null" >
+        itid = #{itid,jdbcType=INTEGER},
       </if>
-      <if test="spid != null" >
-        spid = #{spid,jdbcType=VARCHAR},
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="relationId != null" >
+        relation_id = #{relationId,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where mbid = #{mbid,jdbcType=INTEGER}
+    where irid = #{irid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsMaterialBill" >
-    update pcms_material_bill
-    set blid = #{blid,jdbcType=INTEGER},
-      spid = #{spid,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsItemRelation" >
+    update pcms_item_relation
+    set itid = #{itid,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      relation_id = #{relationId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
-    where mbid = #{mbid,jdbcType=INTEGER}
+    where irid = #{irid,jdbcType=INTEGER}
   </update>
 </mapper>

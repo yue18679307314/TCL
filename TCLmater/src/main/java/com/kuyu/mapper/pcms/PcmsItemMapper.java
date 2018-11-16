@@ -2,6 +2,9 @@ package com.kuyu.mapper.pcms;
 
 import com.kuyu.model.pcms.PcmsItem;
 import com.kuyu.model.pcms.PcmsItemExample;
+import com.kuyu.vo.pcms.ItemDetail;
+import com.kuyu.vo.pcms.ItemResult;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +30,8 @@ public interface PcmsItemMapper {
     int updateByPrimaryKeySelective(PcmsItem record);
 
     int updateByPrimaryKey(PcmsItem record);
+
+	List<ItemResult> getItemListByParam(String searchKey);
+
+	ItemDetail getItemItemDetailById(Integer itid);
 }

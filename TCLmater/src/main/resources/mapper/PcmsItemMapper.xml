@@ -1,36 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.kuyu.mapper.pcms.PcmsItemMapper" >
-  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsItem" >
-    <id column="itid" property="itid" jdbcType="INTEGER" />
-    <result column="spid" property="spid" jdbcType="VARCHAR" />
-    <result column="request_id" property="requestId" jdbcType="VARCHAR" />
-    <result column="it_uuid" property="itUuid" jdbcType="VARCHAR" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="it_type" property="itType" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsItemMapper">
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsItem">
+    <id column="itid" jdbcType="INTEGER" property="itid" />
+    <result column="item_number" jdbcType="VARCHAR" property="itemNumber" />
+    <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
+    <result column="request_id" jdbcType="VARCHAR" property="requestId" />
+    <result column="item_price" jdbcType="DOUBLE" property="itemPrice" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="it_type" jdbcType="INTEGER" property="itType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -41,25 +44,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -70,206 +73,301 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
-    itid, spid, request_id, it_uuid, title, it_type, status, update_time, create_time
+  <sql id="Base_Column_List">
+    itid, item_number, vendor_id, request_id, item_price, title, it_type, status, operator_id, 
+    operator_name, update_time, create_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsItemExample" >
+  <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsItemExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from pcms_item
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from pcms_item
     where itid = #{itid,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from pcms_item
     where itid = #{itid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsItemExample" >
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsItemExample">
     delete from pcms_item
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsItem" >
-    insert into pcms_item (itid, spid, request_id, 
-      it_uuid, title, it_type, 
-      status, update_time, create_time
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsItem">
+    insert into pcms_item (itid, item_number, vendor_id, 
+      request_id, item_price, title, 
+      it_type, status, operator_id, 
+      operator_name, update_time, create_time
       )
-    values (#{itid,jdbcType=INTEGER}, #{spid,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, 
-      #{itUuid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{itType,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+    values (#{itid,jdbcType=INTEGER}, #{itemNumber,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
+      #{requestId,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DOUBLE}, #{title,jdbcType=VARCHAR}, 
+      #{itType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{operatorId,jdbcType=VARCHAR}, 
+      #{operatorName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsItem" >
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsItem">
     insert into pcms_item
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="itid != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="itid != null">
         itid,
       </if>
-      <if test="spid != null" >
-        spid,
+      <if test="itemNumber != null">
+        item_number,
       </if>
-      <if test="requestId != null" >
+      <if test="vendorId != null">
+        vendor_id,
+      </if>
+      <if test="requestId != null">
         request_id,
       </if>
-      <if test="itUuid != null" >
-        it_uuid,
+      <if test="itemPrice != null">
+        item_price,
       </if>
-      <if test="title != null" >
+      <if test="title != null">
         title,
       </if>
-      <if test="itType != null" >
+      <if test="itType != null">
         it_type,
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status,
       </if>
-      <if test="updateTime != null" >
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="operatorName != null">
+        operator_name,
+      </if>
+      <if test="updateTime != null">
         update_time,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="itid != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="itid != null">
         #{itid,jdbcType=INTEGER},
       </if>
-      <if test="spid != null" >
-        #{spid,jdbcType=VARCHAR},
+      <if test="itemNumber != null">
+        #{itemNumber,jdbcType=VARCHAR},
       </if>
-      <if test="requestId != null" >
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestId != null">
         #{requestId,jdbcType=VARCHAR},
       </if>
-      <if test="itUuid != null" >
-        #{itUuid,jdbcType=VARCHAR},
+      <if test="itemPrice != null">
+        #{itemPrice,jdbcType=DOUBLE},
       </if>
-      <if test="title != null" >
+      <if test="title != null">
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="itType != null" >
+      <if test="itType != null">
         #{itType,jdbcType=INTEGER},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null" >
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorName != null">
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsItemExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsItemExample" resultType="java.lang.Integer">
     select count(*) from pcms_item
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update pcms_item
-    <set >
-      <if test="record.itid != null" >
+    <set>
+      <if test="record.itid != null">
         itid = #{record.itid,jdbcType=INTEGER},
       </if>
-      <if test="record.spid != null" >
-        spid = #{record.spid,jdbcType=VARCHAR},
+      <if test="record.itemNumber != null">
+        item_number = #{record.itemNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.requestId != null" >
+      <if test="record.vendorId != null">
+        vendor_id = #{record.vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestId != null">
         request_id = #{record.requestId,jdbcType=VARCHAR},
       </if>
-      <if test="record.itUuid != null" >
-        it_uuid = #{record.itUuid,jdbcType=VARCHAR},
+      <if test="record.itemPrice != null">
+        item_price = #{record.itemPrice,jdbcType=DOUBLE},
       </if>
-      <if test="record.title != null" >
+      <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.itType != null" >
+      <if test="record.itType != null">
         it_type = #{record.itType,jdbcType=INTEGER},
       </if>
-      <if test="record.status != null" >
+      <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.updateTime != null" >
+      <if test="record.operatorId != null">
+        operator_id = #{record.operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatorName != null">
+        operator_name = #{record.operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update pcms_item
     set itid = #{record.itid,jdbcType=INTEGER},
-      spid = #{record.spid,jdbcType=VARCHAR},
+      item_number = #{record.itemNumber,jdbcType=VARCHAR},
+      vendor_id = #{record.vendorId,jdbcType=VARCHAR},
       request_id = #{record.requestId,jdbcType=VARCHAR},
-      it_uuid = #{record.itUuid,jdbcType=VARCHAR},
+      item_price = #{record.itemPrice,jdbcType=DOUBLE},
       title = #{record.title,jdbcType=VARCHAR},
       it_type = #{record.itType,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
+      operator_id = #{record.operatorId,jdbcType=VARCHAR},
+      operator_name = #{record.operatorName,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsItem" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsItem">
     update pcms_item
-    <set >
-      <if test="spid != null" >
-        spid = #{spid,jdbcType=VARCHAR},
+    <set>
+      <if test="itemNumber != null">
+        item_number = #{itemNumber,jdbcType=VARCHAR},
       </if>
-      <if test="requestId != null" >
+      <if test="vendorId != null">
+        vendor_id = #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestId != null">
         request_id = #{requestId,jdbcType=VARCHAR},
       </if>
-      <if test="itUuid != null" >
-        it_uuid = #{itUuid,jdbcType=VARCHAR},
+      <if test="itemPrice != null">
+        item_price = #{itemPrice,jdbcType=DOUBLE},
       </if>
-      <if test="title != null" >
+      <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="itType != null" >
+      <if test="itType != null">
         it_type = #{itType,jdbcType=INTEGER},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="updateTime != null" >
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorName != null">
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where itid = #{itid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsItem" >
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsItem">
     update pcms_item
-    set spid = #{spid,jdbcType=VARCHAR},
+    set item_number = #{itemNumber,jdbcType=VARCHAR},
+      vendor_id = #{vendorId,jdbcType=VARCHAR},
       request_id = #{requestId,jdbcType=VARCHAR},
-      it_uuid = #{itUuid,jdbcType=VARCHAR},
+      item_price = #{itemPrice,jdbcType=DOUBLE},
       title = #{title,jdbcType=VARCHAR},
       it_type = #{itType,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
+      operator_id = #{operatorId,jdbcType=VARCHAR},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where itid = #{itid,jdbcType=INTEGER}
   </update>
+  
+  <!--==============================以上为生成的sql部分=====================================-->
+  
+  <select id="getItemListByParam" parameterType="string" resultType="com.kuyu.vo.pcms.ItemResult">
+		  	SELECT
+			a.itid,
+			b.vendor_name AS vendorName,
+			a.request_id AS requestId,
+			c.REQUEST_TITLE AS requestTitle,
+			a.item_number AS itemNumber,
+			c.DETAIL_ACCOUNT AS detailAccount,
+			a.item_price AS itemPrice,
+			c.request_user_name AS requestUserName,
+			c.REQUEST_DEPT AS deptName,
+			c.REQUEST_CREATE_TIME AS applyTime,
+			a.`status`
+		FROM
+			pcms_item a
+		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
+		WHERE 1=1
+  <if test="searchKey != null">
+        b.spname like #{searchKey} 
+  </if>
+  
+  
+  </select> 
+  
+  
+  <select id="getItemItemDetailById" parameterType="int" resultType="com.kuyu.vo.pcms.ItemDetail">
+  		SELECT
+			a.itid,
+			b.vendor_name AS vendorName,
+			a.request_id AS requestId,
+			c.REQUEST_TITLE AS requestTitle,
+			c.DETAIL_ACCOUNT AS detailAccount,
+			c.finance_user_name AS financeUserName,
+			c.REQUEST_COMPANY_CODE AS requestCompanyCode,
+			c.request_user_name AS requestUserName,
+			c.DETAIL_SUBJECT AS detailSubject,
+			c.REQUEST_DEPT AS requestDept,
+			c.REQUEST_CREATE_TIME AS requestCreateTime,
+			c.REQUEST_END_TIME AS requestEndTime,
+			a.`status`
+		FROM
+			pcms_item a
+		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
+		LEFT JOIN tpm_dept d ON c.REQUEST_USER=d.org_name
+  </select>
 </mapper>

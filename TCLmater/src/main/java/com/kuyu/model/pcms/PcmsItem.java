@@ -5,17 +5,23 @@ import java.util.Date;
 public class PcmsItem {
     private Integer itid;
 
-    private String spid;
+    private String itemNumber;
+
+    private String vendorId;
 
     private String requestId;
 
-    private String itUuid;
+    private Double itemPrice;
 
     private String title;
 
     private Integer itType;
 
     private Integer status;
+
+    private String operatorId;
+
+    private String operatorName;
 
     private Date updateTime;
 
@@ -29,12 +35,20 @@ public class PcmsItem {
         this.itid = itid;
     }
 
-    public String getSpid() {
-        return spid;
+    public String getItemNumber() {
+        return itemNumber;
     }
 
-    public void setSpid(String spid) {
-        this.spid = spid == null ? null : spid.trim();
+    public void setItemNumber(String itemNumber) {
+        this.itemNumber = itemNumber == null ? null : itemNumber.trim();
+    }
+
+    public String getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(String vendorId) {
+        this.vendorId = vendorId == null ? null : vendorId.trim();
     }
 
     public String getRequestId() {
@@ -45,12 +59,12 @@ public class PcmsItem {
         this.requestId = requestId == null ? null : requestId.trim();
     }
 
-    public String getItUuid() {
-        return itUuid;
+    public Double getItemPrice() {
+        return itemPrice;
     }
 
-    public void setItUuid(String itUuid) {
-        this.itUuid = itUuid == null ? null : itUuid.trim();
+    public void setItemPrice(Double itemPrice) {
+        this.itemPrice = itemPrice;
     }
 
     public String getTitle() {
@@ -75,6 +89,22 @@ public class PcmsItem {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId == null ? null : operatorId.trim();
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
     public Date getUpdateTime() {
