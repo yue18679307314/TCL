@@ -165,6 +165,9 @@ public class LoginFilter implements Filter {
     	needLoginUris.add("/tpm/tpmRepayment/downloadUrl");
     	needLoginUris.add("/tpm/tpmRepayment/downloadAttendences");
 
+
+		needLoginUris.add("/tpm/supplier/findPcmsSupplierListByPage");
+
     }
 
     private boolean stsrtsWith(List<String> list,String url){
