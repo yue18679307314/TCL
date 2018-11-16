@@ -1,13 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kuyu.mapper.PcmsSupplierMapper">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsSupplierMapper">
 
 
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		vendor_id,
+		vendor_name,
+		sptype,
+		company,
+		city,
+		legal_person,
+		mobile,
+		contacts,
+		del_flag,
+		del_comp,
+		person_id,
+		address,
+		duty_paragrap,
+		opening_bank,
+		opening_account,
+		create_date,
+		statement_date,
+		update_time,
+		create_time
+	</sql>
+	<!-- 新增供应商信息 -->
     <insert id="insertPcmsSupplier" parameterType="com.kuyu.vo.PcmsSupplierVo">
 		INSERT INTO
-		pcms_supplier(spid,spname,sptype,company,del_flag,del_comp,person_id,create_time)
+		pcms_supplier(vendor_id,vendor_name,sptype,company,del_flag,del_comp,person_id,create_date,create_time)
 		VALUES
-		(#{vendor_id},#{vendor_name},#{type},#{company},#{del_flag},#{del_comp},#{person_id},#{create_time})
+		(#{vendor_id},#{vendor_name},#{type},#{company},#{del_flag},#{del_comp},#{person_id},#{create_date},SYSDATE())
 	</insert>
+
+	<!-- 根据供应商编号查询供应商信息 -->
+	<select id="getPcmsSupplier" resultType="com.kuyu.model.pcms.PcmsSupplierModel"
+			parameterType="com.kuyu.vo.PcmsSupplierVo">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM pcms_supplier
+		<where>
+			<if test="vendor_id != null and vendor_id != ''">
+				vendor_id = #{vendor_id}
+			</if>
+		</where>
+	</select>
+
+	<!-- 更新供应商信息 -->
+	<update id="updatePcmsSupplier" parameterType="com.kuyu.vo.PcmsSupplierVo">
+		UPDATE pcms_supplier
+		<set>
+			<if test="vendor_name != null and vendor_name != ''">
+				vendor_name = #{vendor_name},
+			</if>
+			<if test="company != null and company != ''">
+				company = #{company},
+			</if>
+			<if test="del_flag != null and del_flag != ''">
+				del_flag = #{del_flag},
+			</if>
+			<if test="del_comp != null and del_comp != ''">
+				del_comp = #{del_comp},
+			</if>
+			<if test="person_id != null and person_id != ''">
+				person_id = #{person_id},
+			</if>
+			<if test="type != null and type != ''">
+				sptype = #{type},
+			</if>
+			update_time = SYSDATE()
+		</set>
+		WHERE vendor_id = #{vendor_id}
+	</update>
+
+	<!-- 更新供应商信息 -->
+	<update id="updatePcmsSupplierModel" parameterType="com.kuyu.model.pcms.PcmsSupplierModel">
+		UPDATE pcms_supplier
+		<set>
+			<if test="legal_person != null and legal_person != ''">
+				legal_person = #{legal_person},
+			</if>
+			<if test="city != null and city != ''">
+				city = #{city},
+			</if>
+			<if test="address != null and address != ''">
+				address = #{address},
+			</if>
+			<if test="mobile != null and mobile != ''">
+				mobile = #{mobile},
+			</if>
+			<if test="contacts != null and contacts != ''">
+				contacts = #{contacts},
+			</if>
+			<if test="duty_paragrap != null and duty_paragrap != ''">
+				duty_paragrap = #{duty_paragrap},
+			</if>
+			<if test="opening_bank != null and opening_bank != ''">
+				opening_bank = #{opening_bank},
+			</if>
+			<if test="opening_account != null and opening_account != ''">
+				opening_account = #{opening_account},
+			</if>
+			<if test="statement_date != null and statement_date != ''">
+				statement_date = #{statement_date},
+			</if>
+			update_time = SYSDATE()
+		</set>
+		WHERE vendor_id = #{vendor_id}
+	</update>
+
+	<!-- 供应商信息分页 -->
+	<select id="findPcmsSupplierListByPage" resultType="com.kuyu.vo.PcmsSupplierListVo">
+		SELECT
+		t.vendor_id as vendor_id,
+		t.vendor_name as vendor_name,
+		t.city as city,
+		t.legal_person as legal_person,
+		t.mobile as mobile,
+		t.statement_date as statement_date,
+		tm.org_name_parent as request_company
+		FROM tpm_employee te
+		left join pcms_supplier t on t.company = te.company
+		left join tpm_dept tm on te.org_code = tm.org_code
+		<where>
+			<if test="params.request_company !=null and params.request_company !=''">
+				AND tm.org_name_parent LIKE #{params.request_company,jdbcType=VARCHAR}
+				ESCAPE '/'
+			</if>
+			<if test="params.city !=null and params.city !=''">
+				AND t.city LIKE #{params.city,jdbcType=VARCHAR}
+				ESCAPE '/'
+			</if>
+			<if test="params.vendor_name !=null and params.vendor_name !=''">
+				AND t.vendor_name LIKE #{params.vendor_name,jdbcType=VARCHAR}
+				ESCAPE '/'
+			</if>
+			<if test="params.person_code !=null and params.person_code !=''">
+				AND te.person_code =
+				#{params.person_code,jdbcType=VARCHAR}
+			</if>
+		</where>
+		ORDER BY t.create_time DESC
+	</select>
+
 
 </mapper>

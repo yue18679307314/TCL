@@ -1,30 +1,29 @@
+
 package com.kuyu.mapper.pcms;
 
-import com.kuyu.model.pcms.PcmsSupplier;
-import com.kuyu.model.pcms.PcmsSupplierExample;
-import java.util.List;
+import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.kuyu.model.pcms.PcmsSupplierModel;
+import com.kuyu.vo.PcmsSupplierListVo;
+import com.kuyu.vo.PcmsSupplierQuert;
+import com.kuyu.vo.PcmsSupplierVo;
 import org.apache.ibatis.annotations.Param;
 
-public interface PcmsSupplierMapper {
-    int countByExample(PcmsSupplierExample example);
+import java.util.List;
 
-    int deleteByExample(PcmsSupplierExample example);
+/**
+ * Created by pc on 2018/11/14
+ */
+public interface PcmsSupplierMapper extends BaseMapper<PcmsSupplierModel> {
+    /**新增供应商*/
+    public Boolean insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo);
+    /**查询供应商*/
+    public PcmsSupplierModel getPcmsSupplier(PcmsSupplierVo pcmsSupplierVo);
+    /**更新供应商*/
+    public Boolean updatePcmsSupplier(PcmsSupplierVo pcmsSupplierVo);
 
-    int deleteByPrimaryKey(String vendorId);
+    /**更新供应商*/
+    public Boolean updatePcmsSupplierModel(PcmsSupplierModel pcmsSupplierModel);
 
-    int insert(PcmsSupplier record);
-
-    int insertSelective(PcmsSupplier record);
-
-    List<PcmsSupplier> selectByExample(PcmsSupplierExample example);
-
-    PcmsSupplier selectByPrimaryKey(String vendorId);
-
-    int updateByExampleSelective(@Param("record") PcmsSupplier record, @Param("example") PcmsSupplierExample example);
-
-    int updateByExample(@Param("record") PcmsSupplier record, @Param("example") PcmsSupplierExample example);
-
-    int updateByPrimaryKeySelective(PcmsSupplier record);
-
-    int updateByPrimaryKey(PcmsSupplier record);
+    List<PcmsSupplierListVo> findPcmsSupplierListByPage(@Param("params") PcmsSupplierQuert query, Page<PcmsSupplierListVo> page);
 }
