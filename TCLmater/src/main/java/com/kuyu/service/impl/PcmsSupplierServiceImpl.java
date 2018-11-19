@@ -3,14 +3,19 @@ package com.kuyu.service.impl;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.itextpdf.text.DocumentException;
+import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.PcmsSupplierMapper;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmOptLogsModel;
-import com.kuyu.model.TpmUserBaseInfoModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
+import com.kuyu.model.pcms.PcmsSupplierUserModel;
+import com.kuyu.model.pcms.PcmsUserModel;
 import com.kuyu.service.PcmsSupplierService;
+import com.kuyu.service.PcmsSupplierUserService;
+import com.kuyu.service.PcmsUserService;
 import com.kuyu.service.TpmOptLogsService;
 import com.kuyu.util.CheckParamUtils;
+import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.PcmsSupplierListVo;
 import com.kuyu.vo.PcmsSupplierQuert;
@@ -25,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +51,13 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
     @Autowired
     private TpmOptLogsService tpmOptLogsService;
+
+    @Autowired
+    private PcmsUserService pcmsUserService;
+
+    @Autowired
+    private PcmsSupplierUserService pcmsSupplierUserService;
+
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
         if (StringUtil.isNotNull(pcmsSupplierVo.getCompany())
@@ -62,6 +75,35 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     @Override
     public PcmsSupplierModel getPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) {
         return baseMapper.getPcmsSupplier(pcmsSupplierVo);
+    }
+
+    @Override
+    public ResultVo getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel, PcmsUserModel pcmsUserModel)throws Exception {
+        if (StringUtil.isEmpty(pcmsSupplierModel.getMobile())){
+            throw new ParamException("手机号不能为空");
+        }
+        if(StringUtil.isEmpty(pcmsSupplierModel.getLegal_person())){
+            throw new ParamException("法人不能为空");
+        }
+        if(StringUtil.isEmpty(pcmsSupplierModel.getVendor_name())){
+            throw new ParamException("公司名称不能为空");
+        }
+        PcmsSupplierModel pcmsSupplierModel1 =  baseMapper.getPcmsSupplierFor(pcmsSupplierModel);
+        if(null == pcmsSupplierModel1){
+            throw new ParamException("公司名称或法人或手机号码不正确");
+        }
+/*        PcmsUserModel pcmsUserModel1 = pcmsUserService.selectPcmsUserModel(pcmsUserModel);
+        if(null != pcmsUserModel1){
+            throw new ParamException("公司名称不能为空");
+        }*/
+        pcmsUserModel.setType(1);
+        pcmsUserModel.setCreate_time(DateUtils.getLongDateStr());
+        pcmsUserService.insertPcmsUserModel(pcmsUserModel);
+        PcmsSupplierUserModel pcmsSupplierUser = new PcmsSupplierUserModel();
+        pcmsSupplierUser.setOpenid(pcmsUserModel.getOpenid());
+        pcmsSupplierUser.setVendor_id(pcmsSupplierModel1.getVendor_id());
+        pcmsSupplierUserService.insertPcmsSupplierUserModel(pcmsSupplierUser);
+        return ResultVo.get(ResultVo.SUCCESS);
     }
 
     @Override
@@ -89,37 +131,37 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     }
 
     @Override
-    public String getPcmsSupplierUrl(List<String> list,String pdfOrxls) throws Exception {
+    public String getPcmsSupplierUrl(List<String> list,String pdfOrxls,LoginUserInfo userInfo) throws Exception {
         File tempfile = new File(pcmsSupplierPath);
         if(!tempfile.exists()){
             tempfile.mkdirs();
         }
         String path = StringUtil.getUUID();
         String file = pcmsSupplierPath + "/"+ path;
-        /*List<TpmUserBaseInfoModel> tubimList = baseMapper.queryBankInfoByOpenids(list);
-        if(tubimList != null && tubimList.size() > 0) {
+        List<PcmsSupplierModel> supplierList = baseMapper.getPcmsSupplierForIds(list);
+        if(supplierList != null && supplierList.size() > 0) {
             String personName = userInfo.getEmployeeModel().getPerson_name();
             String personCode = userInfo.getEmployeeModel().getPerson_code();
-            for (TpmUserBaseInfoModel tubim : tubimList) {
+            for (PcmsSupplierModel tubim : supplierList) {
                 TpmOptLogsModel tolm = new TpmOptLogsModel();
                 tolm.setType(12);
                 String opt_user = personName + "(" + personCode + ")";
                 tolm.setOptUser(opt_user);
                 tolm.setOptUserDept(userInfo.getEmployeeModel().getOrg_code());
-                String content = "临促" + tubim.getName() +"(" +tubim.getOpenid()+")的银行账户信息已下载";
+                String content = "供应商" + tubim.getVendor_name() +"的信息已下载";
                 tolm.setContent(content);
                 tpmOptLogsService.insertAllColumn(tolm);
             }
             if("xls".equals(pdfOrxls)) {
                 file += ".xls";
-                createBankInfoXls(tubimList,file);
+                createBankInfoXls(supplierList,file);
                 return  pcmsSupplierUrl+"/"+path+".xls";
             }
-        }*/
+        }
         return null;
     }
 
-    public void createBankInfoXls(List<TpmUserBaseInfoModel> tubimList, String url)
+    public void createBankInfoXls(List<PcmsSupplierModel> supplierList, String url)
             throws Exception, DocumentException {
         File file = new File(url);
         // 创建HSSFWorkbook对象(excel的文档对象)
@@ -161,7 +203,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
             cell.setCellStyle(style2);
         }
         int rowNo = 1;
-        for (TpmUserBaseInfoModel tubim : tubimList) {
+        for (PcmsSupplierModel tubim : supplierList) {
             rowNo++;
             row = sheet.createRow(rowNo);
             List<String> list = getTableContent(tubim);
@@ -182,10 +224,8 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         List<String> list = Arrays.asList(arr);
         return list;
     }
-    public List<String> getTableContent(TpmUserBaseInfoModel tubim) {
-        String[] arr = new String[] {tubim.getName(),tubim.getId_card(),tubim.getMobile(),tubim.getAccount_name(),
-                tubim.getAccount_bank_name(),tubim.getAccount_value(),tubim.getOpen_province(),tubim.getOpen_city(),
-                tubim.getOpen_branch()};
+    public List<String> getTableContent(PcmsSupplierModel tubim) {
+        String[] arr = new String[] {};
         List<String> list = Arrays.asList(arr);
         return list;
     }

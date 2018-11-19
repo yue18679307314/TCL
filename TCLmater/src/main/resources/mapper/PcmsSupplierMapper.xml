@@ -46,6 +46,26 @@
 		</where>
 	</select>
 
+	<!-- 根据供应商编号查询供应商信息 -->
+	<select id="getPcmsSupplierFor" resultType="com.kuyu.model.pcms.PcmsSupplierModel"
+			parameterType="com.kuyu.model.pcms.PcmsSupplierModel">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM pcms_supplier
+		<where>
+			<if test="vendor_name != null and vendor_name != ''">
+				AND vendor_name = #{vendor_name}
+			</if>
+			<if test="legal_person != null and legal_person != ''">
+				AND legal_person = #{legal_person}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND mobile = #{mobile}
+			</if>
+		</where>
+	</select>
+
+
 	<!-- 更新供应商信息 -->
 	<update id="updatePcmsSupplier" parameterType="com.kuyu.vo.PcmsSupplierVo">
 		UPDATE pcms_supplier
@@ -144,4 +164,24 @@
 	</select>
 
 
+	<select id="getPcmsSupplierForIds" resultType="com.kuyu.model.pcms.PcmsSupplierModel">
+		SELECT
+		t.vendor_id as vendor_id,
+		t.vendor_name as vendor_name,
+		t.city as city,
+		t.legal_person as legal_person,
+		t.mobile as mobile,
+		t.statement_date as statement_date,
+		tm.org_name_parent as request_company
+		FROM pcms_supplier t,
+		tpm_employee te,
+		tpm_dept tm
+		<where>
+			<foreach collection="list" index="index" item="item" open="t.vendor_id IN(" close=")" separator=",">
+				#{item}
+			</foreach>
+			AND t.company = te.company
+			AND te.org_code = tm.org_code
+		</where>
+	</select>
 </mapper>

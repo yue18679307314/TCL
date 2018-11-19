@@ -1,11 +1,14 @@
 package com.kuyu.mapper.pcms;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.kuyu.model.pcms.PcmsSupplierUser;
 import com.kuyu.model.pcms.PcmsSupplierUserExample;
 import java.util.List;
+
+import com.kuyu.model.pcms.PcmsSupplierUserModel;
 import org.apache.ibatis.annotations.Param;
 
-public interface PcmsSupplierUserMapper {
+public interface PcmsSupplierUserMapper extends BaseMapper<PcmsSupplierUserModel> {
     int countByExample(PcmsSupplierUserExample example);
 
     int deleteByExample(PcmsSupplierUserExample example);

@@ -31,6 +31,32 @@ public class PcmsSupplierController extends BaseController {
     private PcmsSupplierService pcmsSupplierService;
 
     /**
+     * 查询供应商详情
+     *
+     * @param vendor_id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "根据供应商编号查询供应商详情", notes = "根据供应商编号查询供应商信息详情", response = PcmsSupplierModel.class)
+    @RequestMapping(value = "/getPcmsSupplierCode", method = { RequestMethod.GET })
+    public ResultVo getEmployeeByPersonCode(
+            @ApiParam(value = "供应商编号", required = true) @RequestParam(required = true) String vendor_id)
+            throws Exception {
+        if (StringUtil.isEmpty(vendor_id)) {
+            log.info("vendor_id错误,为{}",vendor_id);
+            return ResultVo.getData(ResultVo.SUCCESS,null);
+        }
+        PcmsSupplierVo supplier = new PcmsSupplierVo();
+        supplier.setVendor_id(vendor_id);
+        PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
+        ResultVo resultVo = new ResultVo();
+        resultVo.setData(pcmsSupplierModel);
+        resultVo.setCode(ResultVo.SUCCESS);
+        return resultVo;
+    }
+
+
+    /**
      * 同步应商信息，如果查到则更新，否则新增
      *
      * @param
@@ -104,6 +130,7 @@ public class PcmsSupplierController extends BaseController {
         return pcmsSupplierService.findPcmsSupplierListByPage(getUserInfo(),query);
     }
 
+
     /**
      * 导出供应商excel
      * @param vendoridList
@@ -112,8 +139,8 @@ public class PcmsSupplierController extends BaseController {
      */
     @ApiOperation(value = "获取下载的url")
     @RequestMapping(value = "/getPcmsSupplierUrl", method = RequestMethod.GET)
-    public ResultVo getPcmsSupplierUrl(@ApiParam(required = true,value = "供应商的vendor_id列表") @RequestParam List<String> vendoridList/*,
-                                   @ApiParam(required = true,value = "pdf格式或者xls格式") @RequestParam String pdfOrxls*/) throws Exception {
+    public ResultVo getPcmsSupplierUrl(@ApiParam(required = true,value = "供应商的vendor_id列表") @RequestParam List<String> vendoridList,
+                                   @ApiParam(required = true,value = "xls格式") @RequestParam String pdfOrxls) throws Exception {
         String file = null;
         if (StringUtil.isNotNull(vendoridList)) {
             if (vendoridList.size() > 0) {
