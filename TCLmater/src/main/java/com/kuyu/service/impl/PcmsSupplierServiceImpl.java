@@ -123,6 +123,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     public ResultVo findPcmsSupplierListByPage(LoginUserInfo userInfo, PcmsSupplierQuert query) throws Exception {
         String person_code = userInfo.getEmployeeModel().getPerson_code();
         query.setPerson_code(person_code);
+        query.setRequest_company(query.getVendor_name());
         query = (PcmsSupplierQuert) CheckParamUtils.trimWithObjectField(query);
         Page<PcmsSupplierListVo> page = new Page<>(query.getCurrent(),query.getSize());
         List<PcmsSupplierListVo> PcmsSupplierListVoList = baseMapper.findPcmsSupplierListByPage(query,page);
@@ -167,13 +168,13 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         // 创建HSSFWorkbook对象(excel的文档对象)
         HSSFWorkbook wb = new HSSFWorkbook();
         // 建立新的sheet对象（excel的表单）
-        HSSFSheet sheet = wb.createSheet("银行信息表");
+        HSSFSheet sheet = wb.createSheet("供应商信息表");
         // 在sheet里创建第一行，参数为行索引(excel的行)，可以是0～65535之间的任何一个
         HSSFRow row = sheet.createRow(0);
         // 创建单元格（excel的单元格，参数为列索引，可以是0～255之间的任何一个
         HSSFCell cell = row.createCell(0);
         // 设置单元格内容
-        cell.setCellValue("临促人员银行信息");
+        cell.setCellValue("供应商信息");
         // 合并单元格CellRangeAddress构造参数依次表示起始行，截至行，起始列， 截至列
         sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
         HSSFCellStyle style = wb.createCellStyle();
@@ -219,8 +220,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     }
 
     public List<String> getTableHead() {
-        String[] arr = new String[] { "姓名", "身份证号码", "手机号", "户名", "开户银行名", "银行账号", "开户省",
-                "开户市", "开户支行" };
+        String[] arr = new String[] { "供应商编号","供应商名称", "往来业务公司", "法定代表人", "联系电话" };
         List<String> list = Arrays.asList(arr);
         return list;
     }

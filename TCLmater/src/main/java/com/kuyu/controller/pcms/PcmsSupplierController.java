@@ -2,8 +2,11 @@ package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
+import com.kuyu.model.pcms.PcmsSupplierCompanyModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
+import com.kuyu.service.PcmsSupplierCompanyService;
 import com.kuyu.service.PcmsSupplierService;
+import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.FinancialResultVo;
 import com.kuyu.vo.PcmsSupplierQuert;
@@ -16,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +33,9 @@ public class PcmsSupplierController extends BaseController {
 
     @Resource
     private PcmsSupplierService pcmsSupplierService;
+
+    @Resource
+    private PcmsSupplierCompanyService pcmsSupplierCompanyService;
 
     /**
      * 查询供应商详情
@@ -72,6 +79,11 @@ public class PcmsSupplierController extends BaseController {
             if(pcmsSupplierModel != null){
                 pcmsSupplierService.updatePcmsSupplier(supplier);
             }else{
+                PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+                pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
+                pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
+                pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
+                pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
                 pcmsSupplierService.insertPcmsSupplier(supplier);
             }
         }
@@ -89,12 +101,18 @@ public class PcmsSupplierController extends BaseController {
     @ApiOperation(value = "供应商信息操作", notes = "根据供应商编号查询供应商信息，如果查到则更新，否则新增", response = PcmsSupplierModel.class)
     @ApiParam(name = "PcmsSupplierVo", value = "供应商信息实体类参数")
     @RequestMapping(value = "/getPcmsSupplier", method = { RequestMethod.POST })
-    public FinancialResultVo getPcmsSupplier(@RequestBody List<PcmsSupplierVo> supplierList) throws Exception {
+    public FinancialResultVo getPcmsSupplier() throws Exception {
+        List<PcmsSupplierVo> supplierList = new ArrayList<>();
         for (PcmsSupplierVo supplier : supplierList) {
             PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
             if(pcmsSupplierModel != null){
                 pcmsSupplierService.updatePcmsSupplier(supplier);
             }else{
+                PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+                pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
+                pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
+                pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
+                pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
                 pcmsSupplierService.insertPcmsSupplier(supplier);
             }
         }

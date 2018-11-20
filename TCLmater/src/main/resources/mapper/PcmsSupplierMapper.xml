@@ -139,21 +139,16 @@
 		t.mobile as mobile,
 		t.statement_date as statement_date,
 		tm.org_name_parent as request_company
-		FROM tpm_employee te
-		right join pcms_supplier t on t.company = te.company
-		left join tpm_dept tm on te.org_code = tm.org_code
+		FROM pcms_supplier_company f
+		LEFT JOIN  tpm_employee te ON te.company= f.company
+		LEFT JOIN tpm_dept tm ON te.org_code = tm.org_code
+		LEFT JOIN pcms_supplier t ON t.vendor_id = f.vendor_id
 		<where>
 			<if test="params.request_company !=null and params.request_company !=''">
-				AND tm.org_name_parent LIKE #{params.request_company,jdbcType=VARCHAR}
-				ESCAPE '/'
-			</if>
-			<if test="params.city !=null and params.city !=''">
-				AND t.city LIKE #{params.city,jdbcType=VARCHAR}
-				ESCAPE '/'
+				AND tm.org_name_parent LIKE '%${params.request_company}%'
 			</if>
 			<if test="params.vendor_name !=null and params.vendor_name !=''">
-				AND t.vendor_name LIKE #{params.vendor_name,jdbcType=VARCHAR}
-				ESCAPE '/'
+				OR t.vendor_name LIKE '%${params.vendor_name}%'
 			</if>
 			<if test="params.person_code !=null and params.person_code !=''">
 				AND te.person_code =
