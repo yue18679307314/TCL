@@ -7,18 +7,16 @@ import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.PcmsSupplierMapper;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmOptLogsModel;
+import com.kuyu.model.pcms.PcmsSupplierLogModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.model.pcms.PcmsSupplierUserModel;
 import com.kuyu.model.pcms.PcmsUserModel;
-import com.kuyu.service.PcmsSupplierService;
-import com.kuyu.service.PcmsSupplierUserService;
-import com.kuyu.service.PcmsUserService;
-import com.kuyu.service.TpmOptLogsService;
+import com.kuyu.service.*;
 import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.PcmsSupplierListVo;
-import com.kuyu.vo.PcmsSupplierQuert;
+import com.kuyu.vo.PcmsSupplierQuery;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
 import org.apache.poi.hssf.usermodel.*;
@@ -30,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,6 +54,9 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
     @Autowired
     private PcmsSupplierUserService pcmsSupplierUserService;
+
+    @Autowired
+    private PcmsSupplierLogService pcmsSupplierLogService;
 
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
@@ -115,19 +115,41 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     }
 
     @Override
-    public void updatePcmsSupplierModel(PcmsSupplierModel pcmsSupplierModel) throws Exception {
+    public void updatePcmsSupplierModel(PcmsSupplierModel pcmsSupplierModel,LoginUserInfo userInfo) throws Exception {
+        /**记录更新日志*/
+        if(StringUtil.isEmpty(pcmsSupplierModel.getVendor_id())){
+            throw new ParamException("供应商编码为空");
+        }
+        PcmsSupplierLogModel pcmsSupplierLogModel = new PcmsSupplierLogModel();
+        StringBuffer content = new StringBuffer();
+        PcmsSupplierVo pcmsSupplierVo = new PcmsSupplierVo();
+        pcmsSupplierVo.setVendor_id(pcmsSupplierModel.getVendor_id());
+        PcmsSupplierModel pcmsSupplierModel1 = baseMapper.getPcmsSupplier(pcmsSupplierVo);
+        if(StringUtil.isNotNull(pcmsSupplierModel.getLegal_person())){
+            content.append("原法人为:"+pcmsSupplierModel1.getLegal_person()+",");
+            content.append("更改为:"+pcmsSupplierModel.getLegal_person()+";");
+        }
+        if(StringUtil.isNotNull(pcmsSupplierModel.getMobile())){
+            content.append("原电话为"+pcmsSupplierModel1.getMobile()+",");
+            content.append("更改为:"+pcmsSupplierModel.getLegal_person()+";");
+        }
+        pcmsSupplierLogModel.setContent(content.toString());
+        pcmsSupplierLogModel.setVendor_id(pcmsSupplierModel.getVendor_id());
+        pcmsSupplierLogModel.setCreate_time(DateUtils.getLongDateStr());
+        pcmsSupplierLogModel.setOperation(userInfo.getEmployeeModel().getPerson_name());
+        pcmsSupplierLogService.insert(pcmsSupplierLogModel);
         baseMapper.updatePcmsSupplierModel(pcmsSupplierModel);
     }
 
     @Override
-    public ResultVo findPcmsSupplierListByPage(LoginUserInfo userInfo, PcmsSupplierQuert query) throws Exception {
+    public ResultVo findPcmsSupplierListByPage(LoginUserInfo userInfo, PcmsSupplierQuery query) throws Exception {
         String person_code = userInfo.getEmployeeModel().getPerson_code();
         query.setPerson_code(person_code);
         query.setRequest_company(query.getVendor_name());
-        query = (PcmsSupplierQuert) CheckParamUtils.trimWithObjectField(query);
+        query = (PcmsSupplierQuery) CheckParamUtils.trimWithObjectField(query);
         Page<PcmsSupplierListVo> page = new Page<>(query.getCurrent(),query.getSize());
-        List<PcmsSupplierListVo> PcmsSupplierListVoList = baseMapper.findPcmsSupplierListByPage(query,page);
-        page.setRecords(PcmsSupplierListVoList);
+        List<PcmsSupplierListVo> pcmsSupplierList = baseMapper.findPcmsSupplierListByPage(query,page);
+        page.setRecords(pcmsSupplierList);
         return ResultVo.getDataWithSuccess(page);
     }
 

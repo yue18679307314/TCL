@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsSupplierLogMapper">
+
+
+    <!-- 供应商信息分页 -->
+    <select id="findSupplierLogList" resultType="com.kuyu.model.pcms.PcmsSupplierLogModel">
+        SELECT
+        t.id as id,
+        t.vendor_id as vendor_id,
+        t.content as content,
+        t.operation as operation,
+        t.create_time as create_time
+        FROM pcms_supplier_log t
+        <where>
+            <if test="params.vendor_id !=null and params.vendor_id !=''">
+                 t.vendor_id =
+                #{params.vendor_id,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY t.create_time DESC
+    </select>
+</mapper>

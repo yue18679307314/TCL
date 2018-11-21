@@ -9,7 +9,7 @@ import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.FinancialResultVo;
-import com.kuyu.vo.PcmsSupplierQuert;
+import com.kuyu.vo.PcmsSupplierQuery;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +36,8 @@ public class PcmsSupplierController extends BaseController {
 
     @Resource
     private PcmsSupplierCompanyService pcmsSupplierCompanyService;
+
+
 
     /**
      * 查询供应商详情
@@ -115,6 +117,14 @@ public class PcmsSupplierController extends BaseController {
             PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
             if(pcmsSupplierModel != null){
                 pcmsSupplierService.updatePcmsSupplier(supplier);
+                PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+                pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
+                pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
+                PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
+                if(pcmsSupplierCompany == null){
+                    pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
+                    pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
+                }
             }else{
                 PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
                 pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
@@ -140,7 +150,7 @@ public class PcmsSupplierController extends BaseController {
     @ApiParam(name = "PcmsSupplierModel", value = "供应商信息实体类参数")
     @RequestMapping(value = "/updatePcmsSupplier", method = { RequestMethod.POST })
     public FinancialResultVo updatePcmsSupplier(@RequestBody PcmsSupplierModel pcmsSupplierModel) throws Exception {
-        pcmsSupplierService.updatePcmsSupplierModel(pcmsSupplierModel);
+        pcmsSupplierService.updatePcmsSupplierModel(pcmsSupplierModel,getLoginUserInfo());
         return FinancialResultVo.get(FinancialResultVo.SUCCESS);
     }
 
@@ -150,9 +160,9 @@ public class PcmsSupplierController extends BaseController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "供应商表页分页",response = PcmsSupplierQuert.class)
+    @ApiOperation(value = "供应商表页分页",response = PcmsSupplierQuery.class)
     @PostMapping("/findPcmsSupplierListByPage")
-    public ResultVo findPcmsSupplierListByPage(@RequestBody PcmsSupplierQuert query) throws Exception {
+    public ResultVo findPcmsSupplierListByPage(@RequestBody PcmsSupplierQuery query) throws Exception {
         return pcmsSupplierService.findPcmsSupplierListByPage(getUserInfo(),query);
     }
 
