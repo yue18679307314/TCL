@@ -22,4 +22,13 @@ public class PcmsSupplierCompanyServiceImpl extends ServiceImpl<PcmsSupplierComp
             baseMapper.insert(pcmsSupplierCompanyModel);
         }
     }
+
+    @Override
+    public PcmsSupplierCompanyModel selectByVendorIdAndCompany(PcmsSupplierCompanyModel pcmsSupplierCompanyModel) {
+        if (StringUtil.isNotNull(pcmsSupplierCompanyModel.getCompany())
+                && StringUtil.isNotNull(pcmsSupplierCompanyModel.getVendor_id())){
+            return baseMapper.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
+        }
+        return null;
+    }
 }

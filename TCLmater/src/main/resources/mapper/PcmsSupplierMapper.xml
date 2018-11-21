@@ -28,9 +28,9 @@
 	<!-- 新增供应商信息 -->
     <insert id="insertPcmsSupplier" parameterType="com.kuyu.vo.PcmsSupplierVo">
 		INSERT INTO
-		pcms_supplier(vendor_id,vendor_name,sptype,company,del_flag,del_comp,person_id,create_date,create_time)
+		pcms_supplier(vendor_id,vendor_name,sptype,del_flag,del_comp,person_id,create_date,create_time)
 		VALUES
-		(#{vendor_id},#{vendor_name},#{type},#{company},#{del_flag},#{del_comp},#{person_id},#{create_date},SYSDATE())
+		(#{vendor_id},#{vendor_name},#{type},#{del_flag},#{del_comp},#{person_id},#{create_date},SYSDATE())
 	</insert>
 
 	<!-- 根据供应商编号查询供应商信息 -->

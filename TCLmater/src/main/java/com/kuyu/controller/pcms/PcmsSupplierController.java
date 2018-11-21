@@ -78,6 +78,14 @@ public class PcmsSupplierController extends BaseController {
             PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
             if(pcmsSupplierModel != null){
                 pcmsSupplierService.updatePcmsSupplier(supplier);
+                PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+                pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
+                pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
+                PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
+                if(pcmsSupplierCompany == null){
+                    pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
+                    pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
+                }
             }else{
                 PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
                 pcmsSupplierCompanyModel.setCompany(supplier.getCompany());

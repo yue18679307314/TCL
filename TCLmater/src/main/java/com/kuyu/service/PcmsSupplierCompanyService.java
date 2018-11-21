@@ -10,5 +10,7 @@ import com.kuyu.vo.PcmsSupplierVo;
 public interface PcmsSupplierCompanyService extends IService<PcmsSupplierCompanyModel> {
     /**新增*/
     public void insertPcmsSupplierCompany(PcmsSupplierCompanyModel pcmsSupplierCompanyModel) throws Exception;
+    /**根据供应商编码和公司编码查询*/
+    public PcmsSupplierCompanyModel selectByVendorIdAndCompany(PcmsSupplierCompanyModel pcmsSupplierCompanyModel);
 
 }
