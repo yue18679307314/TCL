@@ -60,8 +60,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
-        if (StringUtil.isNotNull(pcmsSupplierVo.getCompany())
-                && StringUtil.isNotNull(pcmsSupplierVo.getCreate_date())
+        if (StringUtil.isNotNull(pcmsSupplierVo.getCreate_date())
                 && StringUtil.isNotNull(pcmsSupplierVo.getDel_comp())
                 && StringUtil.isNotNull(pcmsSupplierVo.getDel_flag())
                 && StringUtil.isNotNull(pcmsSupplierVo.getType())

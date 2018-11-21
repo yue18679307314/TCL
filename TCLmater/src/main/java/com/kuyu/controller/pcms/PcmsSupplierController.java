@@ -8,10 +8,7 @@ import com.kuyu.service.PcmsSupplierCompanyService;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
-import com.kuyu.vo.FinancialResultVo;
-import com.kuyu.vo.PcmsSupplierQuery;
-import com.kuyu.vo.PcmsSupplierVo;
-import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.*;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -80,20 +77,26 @@ public class PcmsSupplierController extends BaseController {
             PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
             if(pcmsSupplierModel != null){
                 pcmsSupplierService.updatePcmsSupplier(supplier);
-                PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
-                pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
-                if(pcmsSupplierCompany == null){
+                List<PsmsCompanyVo> list = supplier.getList();
+                for(PsmsCompanyVo psmsCompanyVo : list){
+                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
+                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
+                    PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
+                    if(pcmsSupplierCompany == null){
+                        pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
+                        pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
+                    }
+                }
+            }else{
+                List<PsmsCompanyVo> list = supplier.getList();
+                for(PsmsCompanyVo psmsCompanyVo : list){
+                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
+                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
                     pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
                     pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
                 }
-            }else{
-                PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
-                pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
-                pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
                 pcmsSupplierService.insertPcmsSupplier(supplier);
             }
         }
@@ -117,20 +120,26 @@ public class PcmsSupplierController extends BaseController {
             PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
             if(pcmsSupplierModel != null){
                 pcmsSupplierService.updatePcmsSupplier(supplier);
-                PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
-                pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
-                if(pcmsSupplierCompany == null){
+                List<PsmsCompanyVo> list = supplier.getList();
+                for(PsmsCompanyVo psmsCompanyVo : list){
+                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
+                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
+                    PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
+                    if(pcmsSupplierCompany == null){
+                        pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
+                        pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
+                    }
+                }
+            }else{
+                List<PsmsCompanyVo> list = supplier.getList();
+                for(PsmsCompanyVo psmsCompanyVo : list){
+                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
+                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
                     pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
                     pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
                 }
-            }else{
-                PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
-                pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
-                pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
                 pcmsSupplierService.insertPcmsSupplier(supplier);
             }
         }

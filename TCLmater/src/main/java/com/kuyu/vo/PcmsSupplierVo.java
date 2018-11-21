@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by pc on 2018/11/14
@@ -21,6 +22,8 @@ public class PcmsSupplierVo implements Serializable {
     /**供应商名称*/
     @ApiModelProperty("供应商名称")
     private String vendor_name;
+
+    private List<PsmsCompanyVo> list;
 
     /**公司代码*/
     @ApiModelProperty("公司代码")
@@ -108,5 +111,13 @@ public class PcmsSupplierVo implements Serializable {
 
     public void setCreate_date(String create_date) {
         this.create_date = create_date;
+    }
+
+    public List<PsmsCompanyVo> getList() {
+        return list;
+    }
+
+    public void setList(List<PsmsCompanyVo> list) {
+        this.list = list;
     }
 }
