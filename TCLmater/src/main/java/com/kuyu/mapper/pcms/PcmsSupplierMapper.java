@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.vo.PcmsSupplierListVo;
-import com.kuyu.vo.PcmsSupplierQuery;
+import com.kuyu.vo.query.PcmsSupplierQuery;
 import com.kuyu.vo.PcmsSupplierVo;
 import org.apache.ibatis.annotations.Param;
 

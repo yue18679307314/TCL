@@ -9,6 +9,7 @@ import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.*;
+import com.kuyu.vo.query.PcmsSupplierQuery;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;

@@ -6,7 +6,7 @@ import com.kuyu.mapper.pcms.PcmsSupplierLogMapper;
 import com.kuyu.model.pcms.PcmsSupplierLogModel;
 import com.kuyu.service.PcmsSupplierLogService;
 import com.kuyu.util.CheckParamUtils;
-import com.kuyu.vo.PcmsSupplierLogQuery;
+import com.kuyu.vo.query.PcmsSupplierLogQuery;
 import com.kuyu.vo.ResultVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

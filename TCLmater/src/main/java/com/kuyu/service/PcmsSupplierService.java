@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.model.pcms.PcmsUserModel;
-import com.kuyu.vo.PcmsSupplierQuery;
+import com.kuyu.vo.query.PcmsSupplierQuery;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
 
@@ -19,7 +19,7 @@ public interface PcmsSupplierService extends IService<PcmsSupplierModel> {
     /**查询供应商*/
     public PcmsSupplierModel getPcmsSupplier(PcmsSupplierVo pcmsSupplierVo);
 
-    /**查询供应商*/
+    /**绑定供应商*/
     public ResultVo getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel, PcmsUserModel pcmsUserModel)throws Exception;
     /**同步推送更新供应商*/
     public void updatePcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception;

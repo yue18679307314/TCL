@@ -1,4 +1,4 @@
-package com.kuyu.vo;
+package com.kuyu.vo.query;
 
 import com.kuyu.common.BasePageQuery;
 import io.swagger.annotations.ApiModel;

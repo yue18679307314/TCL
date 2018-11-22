@@ -3,7 +3,7 @@ package com.kuyu.controller.pcms;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.service.PcmsSupplierLogService;
-import com.kuyu.vo.PcmsSupplierLogQuery;
+import com.kuyu.vo.query.PcmsSupplierLogQuery;
 import com.kuyu.vo.ResultVo;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

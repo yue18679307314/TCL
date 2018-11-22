@@ -16,7 +16,7 @@ import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.PcmsSupplierListVo;
-import com.kuyu.vo.PcmsSupplierQuery;
+import com.kuyu.vo.query.PcmsSupplierQuery;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
 import org.apache.poi.hssf.usermodel.*;

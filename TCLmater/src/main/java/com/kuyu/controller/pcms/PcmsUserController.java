@@ -34,24 +34,21 @@ public class PcmsUserController extends BaseController {
      * @param legal_person 法人
      * @param mobile 电话
      * @param openid
-     * @param openname
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/weixinbinding", method = RequestMethod.POST)
+    @RequestMapping(value = "/weixinbinding", method = RequestMethod.GET)
     @ResponseBody
     public ResultVo bindingweixin(@RequestParam(value = "vendor_name") String vendor_name,
                                   @RequestParam(value = "legal_person") String legal_person,
                                   @RequestParam(value = "mobile") String mobile,
-                                  @RequestParam(value = "openid") String openid,
-                                  @RequestParam(value = "openname") String openname) throws Exception{
+                                  @RequestParam(value = "openid") String openid) throws Exception{
         PcmsSupplierModel pcmsSupplierModel = new PcmsSupplierModel();
         pcmsSupplierModel.setMobile(mobile);
         pcmsSupplierModel.setLegal_person(legal_person);
         pcmsSupplierModel.setVendor_name(vendor_name);
         PcmsUserModel pcmsUserModel = new PcmsUserModel();
         pcmsUserModel.setOpenid(openid);
-        pcmsUserModel.setOpenname(openname);
         return pcmsSupplierService.getPcmsSupplierFor(pcmsSupplierModel,pcmsUserModel);
     }
 }
