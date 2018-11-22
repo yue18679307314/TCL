@@ -8,7 +8,6 @@
 		id,
 		openid,
 		create_time,
-		openname,
 		type
 	</sql>
 

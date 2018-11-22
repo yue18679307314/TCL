@@ -11,25 +11,24 @@ import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 
 /**
- * Created by pc on 2018/11/19
+ * Created by pc on 2018/11/21
  */
-@ApiModel("PcmsUserModel(供应商模型)")
-@TableName("pcms_user")
+@ApiModel("PcmsSupplierModel(供应商日志模型)")
+@TableName("pcms_supplier_log")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PcmsUserModel extends Model<PcmsUserModel> implements Serializable{
+public class PcmsSupplierLogModel extends Model<PcmsSupplierLogModel> implements Serializable{
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 7913074281876854565L;
+    private static final long serialVersionUID = 7913074201876854565L;
     @TableId(type= IdType.AUTO)
     private Integer id;
-    @TableField("openid")
-    private String openid;
+    @TableField("vendor_id")
+    private String vendor_id;
     @TableField("create_time")
     private String create_time;
-    @TableField("type")
-    private Integer type;
+    @TableField("content")
+    private String content;
+    @TableField("operation")
+    private String operation;
 
     public Integer getId() {
         return id;
@@ -39,12 +38,12 @@ public class PcmsUserModel extends Model<PcmsUserModel> implements Serializable{
         this.id = id;
     }
 
-    public String getOpenid() {
-        return openid;
+    public String getVendor_id() {
+        return vendor_id;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setVendor_id(String vendor_id) {
+        this.vendor_id = vendor_id;
     }
 
     public String getCreate_time() {
@@ -55,12 +54,20 @@ public class PcmsUserModel extends Model<PcmsUserModel> implements Serializable{
         this.create_time = create_time;
     }
 
-    public Integer getType() {
-        return type;
+    public String getContent() {
+        return content;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     @Override

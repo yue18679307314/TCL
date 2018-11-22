@@ -1,4 +1,4 @@
-package com.kuyu.vo;
+package com.kuyu.vo.query;
 
 import com.kuyu.common.BasePageQuery;
 import io.swagger.annotations.ApiModel;
@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  * Created by pc on 2018/11/15
  */
 @ApiModel("供应商查询vo")
-public class PcmsSupplierQuert extends BasePageQuery {
+public class PcmsSupplierQuery extends BasePageQuery {
     /**公司代码*/
     @ApiModelProperty("公司代码")
     private String person_code;
