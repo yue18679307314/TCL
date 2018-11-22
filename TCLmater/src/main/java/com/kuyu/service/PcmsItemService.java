@@ -1,15 +1,16 @@
 package com.kuyu.service;
 
-import java.util.List;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.vo.pcms.ItemDetail;
-import com.kuyu.vo.pcms.ItemListRequestParam;
 import com.kuyu.vo.pcms.ItemResult;
 
 public interface PcmsItemService  {
 
 
-	List<ItemResult> getItemListByParam(String searchKey);
+	Page<ItemResult> getItemListByParam(String searchKey,Integer current,Integer size, 
+			String companyCode,String userType,String deptCode,String approvalStatrTime,
+			String approvalEndTime,Integer status);
 
 	ItemDetail getItemItemDetailById(Integer itid);
 

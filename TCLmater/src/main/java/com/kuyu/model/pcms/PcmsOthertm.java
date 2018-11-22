@@ -2,6 +2,8 @@ package com.kuyu.model.pcms;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PcmsOthertm {
     private Integer otid;
 
@@ -9,6 +11,7 @@ public class PcmsOthertm {
 
     private String vendorId;
 
+    @JsonProperty("CHILDREN3_DETAIL")
     private String children3Detail;
 
     private String children3Vendor;

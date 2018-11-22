@@ -23,6 +23,8 @@ public class PcmsShop {
 
     private String shopCounty;
 
+    private String detailTask;
+
     private String shopSalesAmount;
 
     private Date createTime;
@@ -105,6 +107,14 @@ public class PcmsShop {
 
     public void setShopCounty(String shopCounty) {
         this.shopCounty = shopCounty == null ? null : shopCounty.trim();
+    }
+
+    public String getDetailTask() {
+        return detailTask;
+    }
+
+    public void setDetailTask(String detailTask) {
+        this.detailTask = detailTask == null ? null : detailTask.trim();
     }
 
     public String getShopSalesAmount() {

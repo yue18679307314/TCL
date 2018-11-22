@@ -81,7 +81,7 @@
   </sql>
   <sql id="Base_Column_List">
     mrid, resuest_id, mrtype, mrcode, vendor_id, mrname, cost, specifications, unit, 
-    number, min_range, max_range, range, comparison_price, status, note, update_time, 
+    number, min_range, max_range,`range`, comparison_price, `status`, note, update_time, 
     create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialExample" resultMap="BaseResultMap">

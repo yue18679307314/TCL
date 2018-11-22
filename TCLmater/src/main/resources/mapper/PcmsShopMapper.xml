@@ -1,39 +1,40 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.kuyu.mapper.pcms.PcmsShopMapper" >
-  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsShop" >
-    <id column="sid" property="sid" jdbcType="INTEGER" />
-    <result column="SHOP_CRM_CODE" property="shopCrmCode" jdbcType="VARCHAR" />
-    <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR" />
-    <result column="SHOP_LEVEL" property="shopLevel" jdbcType="VARCHAR" />
-    <result column="SHOP_BRANCH" property="shopBranch" jdbcType="VARCHAR" />
-    <result column="SHOP_CUSTOMER" property="shopCustomer" jdbcType="VARCHAR" />
-    <result column="SHOP_CHANNEL" property="shopChannel" jdbcType="VARCHAR" />
-    <result column="SHOP_PROVINCE" property="shopProvince" jdbcType="VARCHAR" />
-    <result column="SHOP_CITY" property="shopCity" jdbcType="VARCHAR" />
-    <result column="SHOP_COUNTY" property="shopCounty" jdbcType="VARCHAR" />
-    <result column="SHOP_SALES_AMOUNT" property="shopSalesAmount" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsShopMapper">
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsShop">
+    <id column="sid" jdbcType="INTEGER" property="sid" />
+    <result column="SHOP_CRM_CODE" jdbcType="VARCHAR" property="shopCrmCode" />
+    <result column="SHOP_NAME" jdbcType="VARCHAR" property="shopName" />
+    <result column="SHOP_LEVEL" jdbcType="VARCHAR" property="shopLevel" />
+    <result column="SHOP_BRANCH" jdbcType="VARCHAR" property="shopBranch" />
+    <result column="SHOP_CUSTOMER" jdbcType="VARCHAR" property="shopCustomer" />
+    <result column="SHOP_CHANNEL" jdbcType="VARCHAR" property="shopChannel" />
+    <result column="SHOP_PROVINCE" jdbcType="VARCHAR" property="shopProvince" />
+    <result column="SHOP_CITY" jdbcType="VARCHAR" property="shopCity" />
+    <result column="SHOP_COUNTY" jdbcType="VARCHAR" property="shopCounty" />
+    <result column="DETAIL_TASK" jdbcType="VARCHAR" property="detailTask" />
+    <result column="SHOP_SALES_AMOUNT" jdbcType="VARCHAR" property="shopSalesAmount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -44,25 +45,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -73,182 +74,191 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     sid, SHOP_CRM_CODE, SHOP_NAME, SHOP_LEVEL, SHOP_BRANCH, SHOP_CUSTOMER, SHOP_CHANNEL, 
-    SHOP_PROVINCE, SHOP_CITY, SHOP_COUNTY, SHOP_SALES_AMOUNT, create_time
+    SHOP_PROVINCE, SHOP_CITY, SHOP_COUNTY, DETAIL_TASK, SHOP_SALES_AMOUNT, create_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsShopExample" >
+  <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsShopExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from pcms_shop
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from pcms_shop
     where sid = #{sid,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from pcms_shop
     where sid = #{sid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsShopExample" >
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsShopExample">
     delete from pcms_shop
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsShop" >
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsShop">
     insert into pcms_shop (sid, SHOP_CRM_CODE, SHOP_NAME, 
       SHOP_LEVEL, SHOP_BRANCH, SHOP_CUSTOMER, 
       SHOP_CHANNEL, SHOP_PROVINCE, SHOP_CITY, 
-      SHOP_COUNTY, SHOP_SALES_AMOUNT, create_time
-      )
+      SHOP_COUNTY, DETAIL_TASK, SHOP_SALES_AMOUNT, 
+      create_time)
     values (#{sid,jdbcType=INTEGER}, #{shopCrmCode,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
       #{shopLevel,jdbcType=VARCHAR}, #{shopBranch,jdbcType=VARCHAR}, #{shopCustomer,jdbcType=VARCHAR}, 
       #{shopChannel,jdbcType=VARCHAR}, #{shopProvince,jdbcType=VARCHAR}, #{shopCity,jdbcType=VARCHAR}, 
-      #{shopCounty,jdbcType=VARCHAR}, #{shopSalesAmount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
-      )
+      #{shopCounty,jdbcType=VARCHAR}, #{detailTask,jdbcType=VARCHAR}, #{shopSalesAmount,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsShop" >
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsShop">
     insert into pcms_shop
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="sid != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
         sid,
       </if>
-      <if test="shopCrmCode != null" >
+      <if test="shopCrmCode != null">
         SHOP_CRM_CODE,
       </if>
-      <if test="shopName != null" >
+      <if test="shopName != null">
         SHOP_NAME,
       </if>
-      <if test="shopLevel != null" >
+      <if test="shopLevel != null">
         SHOP_LEVEL,
       </if>
-      <if test="shopBranch != null" >
+      <if test="shopBranch != null">
         SHOP_BRANCH,
       </if>
-      <if test="shopCustomer != null" >
+      <if test="shopCustomer != null">
         SHOP_CUSTOMER,
       </if>
-      <if test="shopChannel != null" >
+      <if test="shopChannel != null">
         SHOP_CHANNEL,
       </if>
-      <if test="shopProvince != null" >
+      <if test="shopProvince != null">
         SHOP_PROVINCE,
       </if>
-      <if test="shopCity != null" >
+      <if test="shopCity != null">
         SHOP_CITY,
       </if>
-      <if test="shopCounty != null" >
+      <if test="shopCounty != null">
         SHOP_COUNTY,
       </if>
-      <if test="shopSalesAmount != null" >
+      <if test="detailTask != null">
+        DETAIL_TASK,
+      </if>
+      <if test="shopSalesAmount != null">
         SHOP_SALES_AMOUNT,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="sid != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sid != null">
         #{sid,jdbcType=INTEGER},
       </if>
-      <if test="shopCrmCode != null" >
+      <if test="shopCrmCode != null">
         #{shopCrmCode,jdbcType=VARCHAR},
       </if>
-      <if test="shopName != null" >
+      <if test="shopName != null">
         #{shopName,jdbcType=VARCHAR},
       </if>
-      <if test="shopLevel != null" >
+      <if test="shopLevel != null">
         #{shopLevel,jdbcType=VARCHAR},
       </if>
-      <if test="shopBranch != null" >
+      <if test="shopBranch != null">
         #{shopBranch,jdbcType=VARCHAR},
       </if>
-      <if test="shopCustomer != null" >
+      <if test="shopCustomer != null">
         #{shopCustomer,jdbcType=VARCHAR},
       </if>
-      <if test="shopChannel != null" >
+      <if test="shopChannel != null">
         #{shopChannel,jdbcType=VARCHAR},
       </if>
-      <if test="shopProvince != null" >
+      <if test="shopProvince != null">
         #{shopProvince,jdbcType=VARCHAR},
       </if>
-      <if test="shopCity != null" >
+      <if test="shopCity != null">
         #{shopCity,jdbcType=VARCHAR},
       </if>
-      <if test="shopCounty != null" >
+      <if test="shopCounty != null">
         #{shopCounty,jdbcType=VARCHAR},
       </if>
-      <if test="shopSalesAmount != null" >
+      <if test="detailTask != null">
+        #{detailTask,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSalesAmount != null">
         #{shopSalesAmount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsShopExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsShopExample" resultType="java.lang.Integer">
     select count(*) from pcms_shop
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update pcms_shop
-    <set >
-      <if test="record.sid != null" >
+    <set>
+      <if test="record.sid != null">
         sid = #{record.sid,jdbcType=INTEGER},
       </if>
-      <if test="record.shopCrmCode != null" >
+      <if test="record.shopCrmCode != null">
         SHOP_CRM_CODE = #{record.shopCrmCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopName != null" >
+      <if test="record.shopName != null">
         SHOP_NAME = #{record.shopName,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopLevel != null" >
+      <if test="record.shopLevel != null">
         SHOP_LEVEL = #{record.shopLevel,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopBranch != null" >
+      <if test="record.shopBranch != null">
         SHOP_BRANCH = #{record.shopBranch,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopCustomer != null" >
+      <if test="record.shopCustomer != null">
         SHOP_CUSTOMER = #{record.shopCustomer,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopChannel != null" >
+      <if test="record.shopChannel != null">
         SHOP_CHANNEL = #{record.shopChannel,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopProvince != null" >
+      <if test="record.shopProvince != null">
         SHOP_PROVINCE = #{record.shopProvince,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopCity != null" >
+      <if test="record.shopCity != null">
         SHOP_CITY = #{record.shopCity,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopCounty != null" >
+      <if test="record.shopCounty != null">
         SHOP_COUNTY = #{record.shopCounty,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopSalesAmount != null" >
+      <if test="record.detailTask != null">
+        DETAIL_TASK = #{record.detailTask,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSalesAmount != null">
         SHOP_SALES_AMOUNT = #{record.shopSalesAmount,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update pcms_shop
     set sid = #{record.sid,jdbcType=INTEGER},
       SHOP_CRM_CODE = #{record.shopCrmCode,jdbcType=VARCHAR},
@@ -260,52 +270,56 @@
       SHOP_PROVINCE = #{record.shopProvince,jdbcType=VARCHAR},
       SHOP_CITY = #{record.shopCity,jdbcType=VARCHAR},
       SHOP_COUNTY = #{record.shopCounty,jdbcType=VARCHAR},
+      DETAIL_TASK = #{record.detailTask,jdbcType=VARCHAR},
       SHOP_SALES_AMOUNT = #{record.shopSalesAmount,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsShop" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsShop">
     update pcms_shop
-    <set >
-      <if test="shopCrmCode != null" >
+    <set>
+      <if test="shopCrmCode != null">
         SHOP_CRM_CODE = #{shopCrmCode,jdbcType=VARCHAR},
       </if>
-      <if test="shopName != null" >
+      <if test="shopName != null">
         SHOP_NAME = #{shopName,jdbcType=VARCHAR},
       </if>
-      <if test="shopLevel != null" >
+      <if test="shopLevel != null">
         SHOP_LEVEL = #{shopLevel,jdbcType=VARCHAR},
       </if>
-      <if test="shopBranch != null" >
+      <if test="shopBranch != null">
         SHOP_BRANCH = #{shopBranch,jdbcType=VARCHAR},
       </if>
-      <if test="shopCustomer != null" >
+      <if test="shopCustomer != null">
         SHOP_CUSTOMER = #{shopCustomer,jdbcType=VARCHAR},
       </if>
-      <if test="shopChannel != null" >
+      <if test="shopChannel != null">
         SHOP_CHANNEL = #{shopChannel,jdbcType=VARCHAR},
       </if>
-      <if test="shopProvince != null" >
+      <if test="shopProvince != null">
         SHOP_PROVINCE = #{shopProvince,jdbcType=VARCHAR},
       </if>
-      <if test="shopCity != null" >
+      <if test="shopCity != null">
         SHOP_CITY = #{shopCity,jdbcType=VARCHAR},
       </if>
-      <if test="shopCounty != null" >
+      <if test="shopCounty != null">
         SHOP_COUNTY = #{shopCounty,jdbcType=VARCHAR},
       </if>
-      <if test="shopSalesAmount != null" >
+      <if test="detailTask != null">
+        DETAIL_TASK = #{detailTask,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSalesAmount != null">
         SHOP_SALES_AMOUNT = #{shopSalesAmount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where sid = #{sid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsShop" >
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsShop">
     update pcms_shop
     set SHOP_CRM_CODE = #{shopCrmCode,jdbcType=VARCHAR},
       SHOP_NAME = #{shopName,jdbcType=VARCHAR},
@@ -316,8 +330,10 @@
       SHOP_PROVINCE = #{shopProvince,jdbcType=VARCHAR},
       SHOP_CITY = #{shopCity,jdbcType=VARCHAR},
       SHOP_COUNTY = #{shopCounty,jdbcType=VARCHAR},
+      DETAIL_TASK = #{detailTask,jdbcType=VARCHAR},
       SHOP_SALES_AMOUNT = #{shopSalesAmount,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where sid = #{sid,jdbcType=INTEGER}
   </update>
+  
 </mapper>

@@ -795,6 +795,76 @@ public class PcmsShopExample {
             return (Criteria) this;
         }
 
+        public Criteria andDetailTaskIsNull() {
+            addCriterion("DETAIL_TASK is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskIsNotNull() {
+            addCriterion("DETAIL_TASK is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskEqualTo(String value) {
+            addCriterion("DETAIL_TASK =", value, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskNotEqualTo(String value) {
+            addCriterion("DETAIL_TASK <>", value, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskGreaterThan(String value) {
+            addCriterion("DETAIL_TASK >", value, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskGreaterThanOrEqualTo(String value) {
+            addCriterion("DETAIL_TASK >=", value, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskLessThan(String value) {
+            addCriterion("DETAIL_TASK <", value, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskLessThanOrEqualTo(String value) {
+            addCriterion("DETAIL_TASK <=", value, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskLike(String value) {
+            addCriterion("DETAIL_TASK like", value, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskNotLike(String value) {
+            addCriterion("DETAIL_TASK not like", value, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskIn(List<String> values) {
+            addCriterion("DETAIL_TASK in", values, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskNotIn(List<String> values) {
+            addCriterion("DETAIL_TASK not in", values, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskBetween(String value1, String value2) {
+            addCriterion("DETAIL_TASK between", value1, value2, "detailTask");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailTaskNotBetween(String value1, String value2) {
+            addCriterion("DETAIL_TASK not between", value1, value2, "detailTask");
+            return (Criteria) this;
+        }
+
         public Criteria andShopSalesAmountIsNull() {
             addCriterion("SHOP_SALES_AMOUNT is null");
             return (Criteria) this;
