@@ -3,6 +3,8 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsItemMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsItem">
     <id column="itid" jdbcType="INTEGER" property="itid" />
+    <result column="request_company_code" jdbcType="VARCHAR" property="requestCompanyCode" />
+    <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
     <result column="item_number" jdbcType="VARCHAR" property="itemNumber" />
     <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
     <result column="request_id" jdbcType="VARCHAR" property="requestId" />
@@ -74,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    itid, item_number, vendor_id, request_id, item_price, title, it_type, status, operator_id, 
-    operator_name, update_time, create_time
+    itid, request_company_code, dept_code, item_number, vendor_id, request_id, item_price, 
+    title, it_type, status, operator_id, operator_name, update_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsItemExample" resultMap="BaseResultMap">
     select
@@ -108,22 +110,28 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsItem">
-    insert into pcms_item (itid, item_number, vendor_id, 
-      request_id, item_price, title, 
-      it_type, status, operator_id, 
-      operator_name, update_time, create_time
-      )
-    values (#{itid,jdbcType=INTEGER}, #{itemNumber,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
-      #{requestId,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DOUBLE}, #{title,jdbcType=VARCHAR}, 
-      #{itType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{operatorId,jdbcType=VARCHAR}, 
-      #{operatorName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
-      )
+    insert into pcms_item (itid, request_company_code, dept_code, 
+      item_number, vendor_id, request_id, 
+      item_price, title, it_type, 
+      status, operator_id, operator_name, 
+      update_time, create_time)
+    values (#{itid,jdbcType=INTEGER}, #{requestCompanyCode,jdbcType=VARCHAR}, #{deptCode,jdbcType=VARCHAR}, 
+      #{itemNumber,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, 
+      #{itemPrice,jdbcType=DOUBLE}, #{title,jdbcType=VARCHAR}, #{itType,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{operatorId,jdbcType=VARCHAR}, #{operatorName,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsItem">
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsItem" useGeneratedKeys="true" keyProperty="itid">
     insert into pcms_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="itid != null">
         itid,
+      </if>
+      <if test="requestCompanyCode != null">
+        request_company_code,
+      </if>
+      <if test="deptCode != null">
+        dept_code,
       </if>
       <if test="itemNumber != null">
         item_number,
@@ -162,6 +170,12 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="itid != null">
         #{itid,jdbcType=INTEGER},
+      </if>
+      <if test="requestCompanyCode != null">
+        #{requestCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deptCode != null">
+        #{deptCode,jdbcType=VARCHAR},
       </if>
       <if test="itemNumber != null">
         #{itemNumber,jdbcType=VARCHAR},
@@ -210,6 +224,12 @@
       <if test="record.itid != null">
         itid = #{record.itid,jdbcType=INTEGER},
       </if>
+      <if test="record.requestCompanyCode != null">
+        request_company_code = #{record.requestCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptCode != null">
+        dept_code = #{record.deptCode,jdbcType=VARCHAR},
+      </if>
       <if test="record.itemNumber != null">
         item_number = #{record.itemNumber,jdbcType=VARCHAR},
       </if>
@@ -251,6 +271,8 @@
   <update id="updateByExample" parameterType="map">
     update pcms_item
     set itid = #{record.itid,jdbcType=INTEGER},
+      request_company_code = #{record.requestCompanyCode,jdbcType=VARCHAR},
+      dept_code = #{record.deptCode,jdbcType=VARCHAR},
       item_number = #{record.itemNumber,jdbcType=VARCHAR},
       vendor_id = #{record.vendorId,jdbcType=VARCHAR},
       request_id = #{record.requestId,jdbcType=VARCHAR},
@@ -269,6 +291,12 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsItem">
     update pcms_item
     <set>
+      <if test="requestCompanyCode != null">
+        request_company_code = #{requestCompanyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deptCode != null">
+        dept_code = #{deptCode,jdbcType=VARCHAR},
+      </if>
       <if test="itemNumber != null">
         item_number = #{itemNumber,jdbcType=VARCHAR},
       </if>
@@ -307,7 +335,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsItem">
     update pcms_item
-    set item_number = #{itemNumber,jdbcType=VARCHAR},
+    set request_company_code = #{requestCompanyCode,jdbcType=VARCHAR},
+      dept_code = #{deptCode,jdbcType=VARCHAR},
+      item_number = #{itemNumber,jdbcType=VARCHAR},
       vendor_id = #{vendorId,jdbcType=VARCHAR},
       request_id = #{requestId,jdbcType=VARCHAR},
       item_price = #{itemPrice,jdbcType=DOUBLE},
@@ -321,9 +351,11 @@
     where itid = #{itid,jdbcType=INTEGER}
   </update>
   
+  
+  
   <!--==============================以上为生成的sql部分=====================================-->
   
-  <select id="getItemListByParam" parameterType="string" resultType="com.kuyu.vo.pcms.ItemResult">
+  <select id="getItemListByParam" parameterType="java.util.Map" resultType="com.kuyu.vo.pcms.ItemResult">
 		  	SELECT
 			a.itid,
 			b.vendor_name AS vendorName,
@@ -335,18 +367,50 @@
 			c.request_user_name AS requestUserName,
 			c.REQUEST_DEPT AS deptName,
 			c.REQUEST_CREATE_TIME AS applyTime,
-			a.`status`
+			a.`status`,
+			c.type AS projectType
 		FROM
 			pcms_item a
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
-		WHERE 1=1
+		WHERE 1=1 
+  <if test="companyCode != null">
+        AND a.request_company_code=#{companyCode}
+  </if>	
   <if test="searchKey != null">
-        b.spname like #{searchKey} 
+  	AND (
+		b.vendor_name LIKE #{searchKey}
+		OR a.request_id LIKE #{searchKey}
+		OR c.request_user_name LIKE #{searchKey}
+		OR c.REQUEST_DEPT LIKE #{searchKey}
+		)
   </if>
   
+  limit #{linimt}, #{size}
+  </select> 
+  
+  <select id="getItemListCountByParam" parameterType="map" resultType="int">
+		  	SELECT
+			count(1)
+		FROM
+			pcms_item a
+		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
+		WHERE 1=1 
+<if test="companyCode != null">
+        AND a.request_company_code=#{companyCode}
+  </if>		
+  <if test="searchKey != null">
+  	AND (
+		b.vendor_name LIKE #{searchKey}
+		OR a.request_id LIKE #{searchKey}
+		OR c.request_user_name LIKE #{searchKey}
+		OR c.REQUEST_DEPT LIKE #{searchKey}
+		)
+  </if>
   
   </select> 
+  
   
   
   <select id="getItemItemDetailById" parameterType="int" resultType="com.kuyu.vo.pcms.ItemDetail">
@@ -369,5 +433,6 @@
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 		LEFT JOIN tpm_dept d ON c.REQUEST_USER=d.org_name
+		where a.itid=#{itid}
   </select>
 </mapper>

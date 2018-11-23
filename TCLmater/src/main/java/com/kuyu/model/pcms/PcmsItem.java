@@ -5,6 +5,10 @@ import java.util.Date;
 public class PcmsItem {
     private Integer itid;
 
+    private String requestCompanyCode;
+
+    private String deptCode;
+
     private String itemNumber;
 
     private String vendorId;
@@ -33,6 +37,22 @@ public class PcmsItem {
 
     public void setItid(Integer itid) {
         this.itid = itid;
+    }
+
+    public String getRequestCompanyCode() {
+        return requestCompanyCode;
+    }
+
+    public void setRequestCompanyCode(String requestCompanyCode) {
+        this.requestCompanyCode = requestCompanyCode == null ? null : requestCompanyCode.trim();
+    }
+
+    public String getDeptCode() {
+        return deptCode;
+    }
+
+    public void setDeptCode(String deptCode) {
+        this.deptCode = deptCode == null ? null : deptCode.trim();
     }
 
     public String getItemNumber() {

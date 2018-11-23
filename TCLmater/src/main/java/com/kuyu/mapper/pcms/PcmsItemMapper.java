@@ -5,7 +5,10 @@ import com.kuyu.model.pcms.PcmsItemExample;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface PcmsItemMapper {
@@ -31,7 +34,9 @@ public interface PcmsItemMapper {
 
     int updateByPrimaryKey(PcmsItem record);
 
-	List<ItemResult> getItemListByParam(String searchKey);
+	List<ItemResult> getItemListByParam(Map<String, Object> param);
+
+	Integer getItemListCountByParam(Map<String, Object> param);
 
 	ItemDetail getItemItemDetailById(Integer itid);
 }

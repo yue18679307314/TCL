@@ -2,6 +2,8 @@ package com.kuyu.model.pcms;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PcmsShowcase {
     private Integer scid;
 
@@ -9,6 +11,7 @@ public class PcmsShowcase {
 
     private String vendorId;
 
+    @JsonProperty("CHILDREN1_TASK")
     private String children1Task;
 
     private String children1LastBuildtime;

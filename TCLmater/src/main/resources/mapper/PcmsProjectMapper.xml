@@ -730,4 +730,36 @@
       creat_time = #{creatTime,jdbcType=TIMESTAMP}
     where REQUEST_ID = #{requestId,jdbcType=VARCHAR}
   </update>
+  
+  
+  <!-- ====================================生成sql结束============================================= -->
+  <select id="getProjectDeatil" parameterType="string" resultType="com.kuyu.vo.pcms.PcmsProjectVo">
+  	SELECT
+	a.REQUEST_ID AS requestId,
+	a.REQUEST_TITLE AS requestTitle,
+	a.TYPE,
+	a.DETAIL_ACCOUNT,
+	a.request_user_name,
+	a.REQUEST_COMPANY_CODE,
+	a.REQUEST_DEPT,
+	a.finance_user_name,
+	a.DETAIL_SUBJECT,
+	a.REQUEST_CREATE_TIME,
+	a.REQUEST_END_TIME,
+	b.SHOP_NAME AS shopName,
+	b.SHOP_CRM_CODE AS shopCrmCode,
+	b.SHOP_PROVINCE,
+	b.SHOP_CITY,
+	b.SHOP_COUNTY,
+	b.SHOP_LEVEL,
+	b.SHOP_BRANCH,
+	b.SHOP_CHANNEL,
+	b.SHOP_SALES_AMOUNT
+FROM
+	pcms_project a
+LEFT JOIN pcms_shop b ON a.SHOP_CRM_CODE=b.SHOP_CRM_CODE
+WHERE
+	a.REQUEST_ID = #{requestId}
+  </select>
+  
 </mapper>
