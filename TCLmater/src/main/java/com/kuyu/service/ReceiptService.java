@@ -12,4 +12,7 @@ public interface ReceiptService extends IService<ReceiptModel> {
 
     /**分页查询*/
     ResultVo findReceiptList(ReceiptQuery query)throws Exception;
+
+    /**挂单详情*/
+    ResultVo getReceiptDetail(Integer itid)throws Exception;
 }

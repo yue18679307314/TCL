@@ -11,7 +11,7 @@
 		type
 	</sql>
 
-    <!-- 根据供应商编号查询供应商信息 -->
+    <!-- 根据openid查询是否绑定 -->
     <select id="selectPcmsUserModel" resultType="com.kuyu.model.pcms.PcmsUserModel"
             parameterType="com.kuyu.model.pcms.PcmsUserModel">
         SELECT

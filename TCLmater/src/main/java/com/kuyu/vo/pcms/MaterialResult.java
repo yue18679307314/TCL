@@ -1,21 +1,23 @@
 package com.kuyu.vo.pcms;
 
-public class MaterialResult {
+import io.swagger.annotations.ApiModelProperty;
 
+public class MaterialResult {
+	@ApiModelProperty("物料名称")
 	private String mrname;
-	
+	@ApiModelProperty("费用细类")
 	private String cost;
-	
+	@ApiModelProperty("物料规格")
 	private String specifications;
-	
+	@ApiModelProperty("数量")
 	private Integer number;
-	
+	@ApiModelProperty("单位")
 	private String unit;
-	
+	@ApiModelProperty("参考价")
 	private Double comparisonPrice;
-	
+	@ApiModelProperty("门店信息")
 	private Double price;
-	
+	@ApiModelProperty("备注")
 	private String note;
 
 	public String getMrname() {

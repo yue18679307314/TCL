@@ -1,20 +1,25 @@
 package com.kuyu.model.pcms;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.kuyu.vo.pcms.MaterialResult;
+import com.kuyu.vo.pcms.PcmsOthertmVo;
+import com.kuyu.vo.pcms.PcmsShopVo;
+import com.kuyu.vo.pcms.PcmsShowcaseVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Created by pc on 2018/11/21
+ * Created by pc on 2018/11/22
  */
-@ApiModel("ReceiptModel(挂单模型)")
+@ApiModel("ReceiptDetailModel(挂单详情模型)")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ReceiptModel implements Serializable {
+public class ReceiptDetailModel implements Serializable{
 
-    private static final long serialVersionUID = 7913074281676854565L;
+    private static final long serialVersionUID = 7913174281676854565L;
 
     @ApiModelProperty("立项单ID")
     private Integer itid;
@@ -31,9 +36,6 @@ public class ReceiptModel implements Serializable {
     @ApiModelProperty("申请标题")
     private String request_title;
 
-    @ApiModelProperty("费用细类")
-    private String cost;
-
     @ApiModelProperty("物料费用=项目费用")
     private Double item_price;
 
@@ -44,10 +46,30 @@ public class ReceiptModel implements Serializable {
     private Date create_time;
 
     @ApiModelProperty("类型")
-    private String type;
+    private Integer type;
 
     @ApiModelProperty("状态")
     private Integer status;
+
+    @ApiModelProperty("门店信息")
+    private PcmsShopVo pcmsShopVo;
+
+    @ApiModelProperty("广告物料信息")
+    private List<MaterialResult> materialResultList;
+
+    @ApiModelProperty("展台信息")
+    private PcmsShowcaseVo pcmsShowcaseVo;
+
+    @ApiModelProperty("其他终端信息")
+    private List<PcmsOthertmVo> pcmsOthertmVoList;
+
+    public Integer getItid() {
+        return itid;
+    }
+
+    public void setItid(Integer itid) {
+        this.itid = itid;
+    }
 
     public String getItem_number() {
         return item_number;
@@ -81,14 +103,6 @@ public class ReceiptModel implements Serializable {
         this.request_title = request_title;
     }
 
-    public String getCost() {
-        return cost;
-    }
-
-    public void setCost(String cost) {
-        this.cost = cost;
-    }
-
     public Double getItem_price() {
         return item_price;
     }
@@ -113,20 +127,12 @@ public class ReceiptModel implements Serializable {
         this.create_time = create_time;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
-    }
-
-    public Integer getItid() {
-        return itid;
-    }
-
-    public void setItid(Integer itid) {
-        this.itid = itid;
     }
 
     public Integer getStatus() {
@@ -135,5 +141,37 @@ public class ReceiptModel implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public PcmsShopVo getPcmsShopVo() {
+        return pcmsShopVo;
+    }
+
+    public void setPcmsShopVo(PcmsShopVo pcmsShopVo) {
+        this.pcmsShopVo = pcmsShopVo;
+    }
+
+    public PcmsShowcaseVo getPcmsShowcaseVo() {
+        return pcmsShowcaseVo;
+    }
+
+    public void setPcmsShowcaseVo(PcmsShowcaseVo pcmsShowcaseVo) {
+        this.pcmsShowcaseVo = pcmsShowcaseVo;
+    }
+
+    public List<MaterialResult> getMaterialResultList() {
+        return materialResultList;
+    }
+
+    public void setMaterialResultList(List<MaterialResult> materialResultList) {
+        this.materialResultList = materialResultList;
+    }
+
+    public List<PcmsOthertmVo> getPcmsOthertmVoList() {
+        return pcmsOthertmVoList;
+    }
+
+    public void setPcmsOthertmVoList(List<PcmsOthertmVo> pcmsOthertmVoList) {
+        this.pcmsOthertmVoList = pcmsOthertmVoList;
     }
 }

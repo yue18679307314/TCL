@@ -1,30 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kuyu.mapper.pcms.ReceiptMapper">
-    <!-- 供应商信息分页 -->
     <select id="findReceiptList" resultType="com.kuyu.model.pcms.ReceiptModel">
         SELECT p.item_number AS item_number,
         pt.REQUEST_DEPT AS request_dept,
         pt.request_user_name AS request_user_name,
         pt.REQUEST_TITLE AS request_title,
-        pm.cost AS cost,
+        p.itid AS itid,
         p.item_price AS item_price,
+        p.status AS status,
         pt.TYPE as type,
         pt.REQUEST_COMPANY_CODE AS request_company_code,
         p.create_time AS create_time
         FROM pcms_supplier_user t
         LEFT JOIN pcms_item p ON t.vendor_id = p.vendor_id
         LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
-        RIGHT JOIN pcms_material pm ON pm.resuest_id = pt.REQUEST_ID AND pm.vendor_id = t.vendor_id
         <where>
             <if test="params.openid !=null and params.openid !=''">
                 t.openid =
                 #{params.openid,jdbcType=VARCHAR}
             </if>
             <if test="params.openid !=null and params.openid !=''">
-                AND p.status = 0
+                AND p.status = #{params.status,jdbcType=INTEGER}
             </if>
         </where>
         ORDER BY p.create_time DESC
     </select>
+
+    <select id="getReceiptDetail" resultType="com.kuyu.model.pcms.ReceiptDetailModel">
+        SELECT p.item_number AS item_number,
+        pt.REQUEST_DEPT AS request_dept,
+        pt.request_user_name AS request_user_name,
+        pt.REQUEST_TITLE AS request_title,
+        p.itid AS itid,
+        p.item_price AS item_price,
+        p.status AS status,
+        p.it_type as type,
+        pt.REQUEST_COMPANY_CODE AS request_company_code,
+        p.create_time AS create_time
+        FROM pcms_item p
+        LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
+        <where>
+             p.itid = #{itid,jdbcType=INTEGER}
+        </where>
+    </select>
+
+
+    <select id="getPcmsShopInfo" resultType="com.kuyu.vo.pcms.PcmsShopVo">
+        SELECT
+        ps.SHOP_NAME AS shop_name,
+        ps.SHOP_PROVINCE AS shop_province,
+        ps.SHOP_CITY AS shop_city,
+        ps.SHOP_COUNTY AS shop_county
+        FROM pcms_item p
+        LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
+        LEFT JOIN pcms_shop ps ON pt.SHOP_CRM_CODE = ps.SHOP_CRM_CODE
+        <where>
+            p.itid = #{itid,jdbcType=INTEGER}
+        </where>
+    </select>
+
+
+    <select id="getPcmsShowcaseInfo" resultType="com.kuyu.vo.pcms.PcmsShowcaseVo">
+        SELECT
+        ps.CHILDREN1_TYPE AS children1_type,
+        ps.CHILDREN1_LAST_BUILDTIME AS children1_last_buildtime,
+        ps.CHILDREN1_AREA AS children1_area,
+        ps.CHILDREN1_LINEAR AS children1_linear,
+        ps.CHILDREN1_BUILDTIME AS children1_buildtime
+        FROM pcms_item p
+        right JOIN pcms_showcase ps ON p.request_id = ps.resuest_id AND p.vendor_id = ps.vendor_id
+        <where>
+            p.itid = #{itid,jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <select id="getPcmsOthertmInfo" resultType="com.kuyu.vo.pcms.PcmsOthertmVo">
+        SELECT
+        op.mrname3 AS mrname3,
+        op.specifications3 AS specifications3,
+        op.CHILDREN3_COUNT AS children3_count,
+        op.CHILDREN3_PRICE AS children3_price,
+        op.CHILDREN3_AMOUNT AS children3_amount
+        FROM pcms_item p
+        RIGHT JOIN pcms_othertm op ON op.request_id = p.request_id AND p.vendor_id = op.vendor_id
+        <where>
+            p.itid = #{itid,jdbcType=INTEGER}
+        </where>
+    </select>
+
+    <select id="getMaterialResultInfo" resultType="com.kuyu.vo.pcms.MaterialResult">
+        SELECT
+        pm.mrname AS mrname,
+        pm.cost AS cost,
+        pm.specifications AS specifications,
+        pm.number AS number,
+        pm.unit AS unit,
+        pm.comparison_price AS comparisonPrice
+        FROM pcms_item p
+        RIGHT JOIN `pcms_material` pm ON pm.`resuest_id` = p.`request_id` AND pm.`vendor_id`=p.`vendor_id`
+        <where>
+            p.itid = #{itid,jdbcType=INTEGER}
+        </where>
+    </select>
+
 </mapper>
