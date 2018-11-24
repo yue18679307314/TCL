@@ -142,8 +142,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
     @Override
     public ResultVo findPcmsSupplierListByPage(LoginUserInfo userInfo, PcmsSupplierQuery query) throws Exception {
-        String person_code = userInfo.getEmployeeModel().getPerson_code();
-        query.setPerson_code(person_code);
+        query.setPerson_code(userInfo.getEmployeeModel().getPerson_code());
         query.setRequest_company(query.getVendor_name());
         query = (PcmsSupplierQuery) CheckParamUtils.trimWithObjectField(query);
         Page<PcmsSupplierListVo> page = new Page<>(query.getCurrent(),query.getSize());

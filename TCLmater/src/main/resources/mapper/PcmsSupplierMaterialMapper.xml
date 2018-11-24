@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsSupplierMaterialMapper">
+
+    <!-- 供应商信息分页 -->
+    <select id="findSupplierMaterialByPage" resultType="com.kuyu.vo.query.SupplierMaterialQuery">
+        SELECT
+        t.id AS id,
+        t.category AS category,
+        t.comparison_price AS comparisonPrice,
+        t.note AS note,
+        t.ranges AS ranges,
+        t.specifications AS specifications,
+        t.unit AS unit
+        FROM pcms_supplier_material t
+        <where>
+            <if test="params.category !=null and params.category !=''">
+                t.category LIKE '%${params.category}%'
+            </if>
+            <if test="params.specifications !=null and params.specifications !=''">
+                OR t.specifications LIKE '%${params.specifications}%'
+            </if>
+            <if test="params.company !=null and params.company !=''">
+                AND t.company =
+                #{params.company,jdbcType=VARCHAR}
+            </if>
+            <if test="params.version !=null and params.version !=''">
+                AND t.version =
+                #{params.version,jdbcType=VARCHAR}
+            </if>
+            <if test="params.vendor_id !=null and params.vendor_id !=''">
+                AND t.vendor_id =
+                #{params.vendor_id,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY t.create_time DESC
+    </select>
+
+
+</mapper>
