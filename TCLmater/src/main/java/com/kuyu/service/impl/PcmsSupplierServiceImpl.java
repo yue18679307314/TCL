@@ -152,6 +152,11 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     }
 
     @Override
+    public ResultVo findBySupplier(String vendor_id) throws Exception {
+        return null;
+    }
+
+    @Override
     public String getPcmsSupplierUrl(List<String> list,String pdfOrxls,LoginUserInfo userInfo) throws Exception {
         File tempfile = new File(pcmsSupplierPath);
         if(!tempfile.exists()){

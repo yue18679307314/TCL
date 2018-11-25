@@ -51,6 +51,12 @@ public class PcmsSupplierMaterialController extends BaseController {
         return ResultVo.get(ResultVo.SUCCESS);
     }
 
+    /**
+     * 供应商物料分页
+     * @param query
+     * @return
+     * @throws Exception
+     */
     @ApiOperation(value = "分页",response = SupplierMaterialQuery.class)
     @PostMapping("/findSupplierMaterialList")
     public ResultVo findSupplierMaterialList(@RequestBody SupplierMaterialQuery query) throws Exception {

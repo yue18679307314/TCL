@@ -2,16 +2,15 @@ package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
+import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.model.pcms.PcmsUserModel;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.vo.ResultVo;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -50,5 +49,10 @@ public class PcmsUserController extends BaseController {
         PcmsUserModel pcmsUserModel = new PcmsUserModel();
         pcmsUserModel.setOpenid(openid);
         return pcmsSupplierService.getPcmsSupplierFor(pcmsSupplierModel,pcmsUserModel);
+    }
+    @RequestMapping(value = "/findBySupplier", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultVo findBySupplier(@RequestParam(value = "vendor_id") String vendor_id) throws Exception{
+        return ResultVo.get(ResultVo.SUCCESS);
     }
 }
