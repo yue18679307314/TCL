@@ -224,3 +224,20 @@ INSERT INTO `country` VALUES (183,'Zambia','ZM');
 -- 城市信息
 INSERT INTO `city` VALUES ('1', '石家庄', '河北');
 INSERT INTO `city` VALUES ('2', '邯郸', '河北');
+
+-- 供应商物料表
+CREATE TABLE `pcms_supplier_material` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category` varchar(50) DEFAULT NULL COMMENT '物料类别',
+  `specifications` varchar(50) DEFAULT NULL COMMENT '物料规格',
+  `unit` varchar(50) DEFAULT NULL COMMENT '单位',
+  `ranges` varchar(100) DEFAULT NULL COMMENT '单价数量范围',
+  `comparison_price` double DEFAULT NULL COMMENT '价格',
+  `note` varchar(100) DEFAULT NULL COMMENT '备注',
+  `vendor_id` varchar(30) DEFAULT NULL COMMENT '供应商ID',
+  `vendor_name` varchar(100) DEFAULT NULL COMMENT '供应商名称',
+  `company` varchar(30) DEFAULT NULL COMMENT '公司代码',
+  `version` varchar(30) DEFAULT NULL COMMENT '版本号',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
