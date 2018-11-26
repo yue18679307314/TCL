@@ -60,7 +60,7 @@ public class LoginFilter implements Filter {
         
         ServletRequest requestWrapper = null; 
         String param ="";
-        if(!uri.startsWith("/tpm/fileupload/upload")){	
+        if(!uri.startsWith("/tpm/fileupload/upload") && !uri.startsWith("/tpm/materialVersion/uploadExcel")){
         	if(req instanceof HttpServletRequest) {    
         		requestWrapper = new BodyReaderHttpServletRequestWrapper((HttpServletRequest) req);  //替换  
         	} 
