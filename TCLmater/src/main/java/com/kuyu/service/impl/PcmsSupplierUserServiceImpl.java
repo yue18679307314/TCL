@@ -24,6 +24,6 @@ public class PcmsSupplierUserServiceImpl extends ServiceImpl<PcmsSupplierUserMap
 
     @Override
     public List<PcmsSupplierUserVo> findBySupplier(String vendor_id) throws Exception {
-        return null;
+        return baseMapper.findBySupplier(vendor_id);
     }
 }

@@ -47,7 +47,7 @@ public class PcmsSupplierMaterialModel extends Model<PcmsSupplierMaterialModel> 
 
     @ApiModelProperty("版本号")
     @JsonProperty("version")
-    private String version;
+    private Integer version;
 
     /**供应商id*/
     @ApiModelProperty("供应商id")
@@ -117,11 +117,11 @@ public class PcmsSupplierMaterialModel extends Model<PcmsSupplierMaterialModel> 
         this.note = note;
     }
 
-    public String getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 

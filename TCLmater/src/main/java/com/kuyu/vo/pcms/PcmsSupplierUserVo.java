@@ -4,20 +4,12 @@ import com.baomidou.mybatisplus.annotations.TableField;
 
 public class PcmsSupplierUserVo {
 
-    @TableField("openid")
-    private String openid;
     @TableField("create_time")
     private String create_time;
-    @TableField("openName")
-    private String openName;
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
+    @TableField("open_name")
+    private String open_name;
+    @TableField("img")
+    private String img;
 
     public String getCreate_time() {
         return create_time;
@@ -27,11 +19,19 @@ public class PcmsSupplierUserVo {
         this.create_time = create_time;
     }
 
-    public String getOpenName() {
-        return openName;
+    public String getOpen_name() {
+        return open_name;
     }
 
-    public void setOpenName(String openName) {
-        this.openName = openName;
+    public void setOpen_name(String open_name) {
+        this.open_name = open_name;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }

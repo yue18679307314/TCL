@@ -6,6 +6,7 @@ import com.kuyu.model.pcms.PcmsSupplierUserExample;
 import java.util.List;
 
 import com.kuyu.model.pcms.PcmsSupplierUserModel;
+import com.kuyu.vo.pcms.PcmsSupplierUserVo;
 import org.apache.ibatis.annotations.Param;
 
 public interface PcmsSupplierUserMapper extends BaseMapper<PcmsSupplierUserModel> {
@@ -30,4 +31,6 @@ public interface PcmsSupplierUserMapper extends BaseMapper<PcmsSupplierUserModel
     int updateByPrimaryKeySelective(PcmsSupplierUser record);
 
     int updateByPrimaryKey(PcmsSupplierUser record);
+
+    public List<PcmsSupplierUserVo> findBySupplier(String vendor_id);
 }

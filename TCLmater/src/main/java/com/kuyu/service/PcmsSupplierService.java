@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.model.pcms.PcmsUserModel;
+import com.kuyu.vo.pcms.PcmsVendorIdVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
@@ -30,9 +31,6 @@ public interface PcmsSupplierService extends IService<PcmsSupplierModel> {
     /**分页查询*/
     ResultVo findPcmsSupplierListByPage(LoginUserInfo userInfo, PcmsSupplierQuery query)throws Exception;
 
-    /**查询供应商绑定的用户*/
-    public ResultVo findBySupplier(String vendor_id)throws Exception;
-
     /**导出供应商*/
-    String getPcmsSupplierUrl(List<String> list,String pdfOrxls,LoginUserInfo userInfo) throws Exception;
+    String getPcmsSupplierUrl(List<PcmsVendorIdVo> list, String pdfOrxls, LoginUserInfo userInfo) throws Exception;
 }

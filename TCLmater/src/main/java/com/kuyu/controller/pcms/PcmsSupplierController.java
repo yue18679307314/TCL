@@ -9,6 +9,7 @@ import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.*;
+import com.kuyu.vo.pcms.PcmsVendorIdVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -184,13 +185,13 @@ public class PcmsSupplierController extends BaseController {
      * @throws Exception
      */
     @ApiOperation(value = "获取下载的url")
-    @RequestMapping(value = "/getPcmsSupplierUrl", method = RequestMethod.GET)
-    public ResultVo getPcmsSupplierUrl(@ApiParam(required = true,value = "供应商的vendor_id列表") @RequestParam List<String> vendoridList,
-                                   @ApiParam(required = true,value = "xls格式") @RequestParam String pdfOrxls) throws Exception {
+    @PostMapping("/getPcmsSupplierUrl")
+    public ResultVo getPcmsSupplierUrl(@RequestBody List<PcmsVendorIdVo> vendoridList) throws Exception {
         String file = null;
+        String xls = "xls";
         if (StringUtil.isNotNull(vendoridList)) {
             if (vendoridList.size() > 0) {
-//                file = tpmUserAccountInfoService.getBankInfoUrl(openidList,pdfOrxls, this.getLoginUserInfo());
+                file = pcmsSupplierService.getPcmsSupplierUrl(vendoridList,xls,getUserInfo());
             }
         }
         return ResultVo.getData(ResultVo.SUCCESS, file);

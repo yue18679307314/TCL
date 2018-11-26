@@ -36,5 +36,23 @@
         ORDER BY t.create_time DESC
     </select>
 
+    <!-- 根据供应商和公司编码查询最新版本号 -->
+    <select id="findSupplierMaterialByVendorAndCompany" resultType="com.kuyu.model.pcms.PcmsSupplierMaterialModel">
+        SELECT
+        t.id AS id,
+        t.version AS version
+        FROM pcms_supplier_material t
+        <where>
+            <if test="company !=null and company !=''">
+                AND t.company =
+                #{company,jdbcType=VARCHAR}
+            </if>
+            <if test="vendor_id !=null and vendor_id !=''">
+                AND t.vendor_id =
+                #{vendor_id,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY t.id DESC limit 0,1;
+    </select>
 
 </mapper>

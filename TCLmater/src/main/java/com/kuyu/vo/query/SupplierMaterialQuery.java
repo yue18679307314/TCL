@@ -38,7 +38,7 @@ public class SupplierMaterialQuery extends BasePageQuery {
 
     @ApiModelProperty("版本号")
     @JsonProperty("version")
-    private String version;
+    private Integer version;
 
     private String ranges;
 
@@ -101,11 +101,11 @@ public class SupplierMaterialQuery extends BasePageQuery {
         this.company = company;
     }
 
-    public String getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 

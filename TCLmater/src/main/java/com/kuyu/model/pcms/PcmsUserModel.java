@@ -30,6 +30,11 @@ public class PcmsUserModel extends Model<PcmsUserModel> implements Serializable{
     private String create_time;
     @TableField("type")
     private Integer type;
+    @TableField("open_name")
+    private String open_name;
+    @TableField("img")
+    private String img;
+
 
     public Integer getId() {
         return id;
@@ -61,6 +66,22 @@ public class PcmsUserModel extends Model<PcmsUserModel> implements Serializable{
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getOpen_name() {
+        return open_name;
+    }
+
+    public void setOpen_name(String open_name) {
+        this.open_name = open_name;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     @Override

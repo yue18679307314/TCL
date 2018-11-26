@@ -16,9 +16,11 @@ import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.PcmsSupplierListVo;
-import com.kuyu.vo.query.PcmsSupplierQuery;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.PcmsSupplierModelVo;
+import com.kuyu.vo.pcms.PcmsVendorIdVo;
+import com.kuyu.vo.query.PcmsSupplierQuery;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +99,10 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         }*/
         pcmsUserModel.setType(1);
         pcmsUserModel.setCreate_time(DateUtils.getLongDateStr());
+        PcmsUserModel pcmsUserModel1 =  pcmsUserService.selectPcmsUserModel(pcmsUserModel);
+        if(pcmsUserModel1 != null){
+            throw new ParamException("该用户已绑定");
+        }
         pcmsUserService.insertPcmsUserModel(pcmsUserModel);
         PcmsSupplierUserModel pcmsSupplierUser = new PcmsSupplierUserModel();
         pcmsSupplierUser.setOpenid(pcmsUserModel.getOpenid());
@@ -151,24 +157,20 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         return ResultVo.getDataWithSuccess(page);
     }
 
-    @Override
-    public ResultVo findBySupplier(String vendor_id) throws Exception {
-        return null;
-    }
 
     @Override
-    public String getPcmsSupplierUrl(List<String> list,String pdfOrxls,LoginUserInfo userInfo) throws Exception {
+    public String getPcmsSupplierUrl(List<PcmsVendorIdVo> list, String pdfOrxls, LoginUserInfo userInfo) throws Exception {
         File tempfile = new File(pcmsSupplierPath);
         if(!tempfile.exists()){
             tempfile.mkdirs();
         }
         String path = StringUtil.getUUID();
         String file = pcmsSupplierPath + "/"+ path;
-        List<PcmsSupplierModel> supplierList = baseMapper.getPcmsSupplierForIds(list);
+        List<PcmsSupplierModelVo> supplierList = baseMapper.getPcmsSupplierForIds(list);
         if(supplierList != null && supplierList.size() > 0) {
             String personName = userInfo.getEmployeeModel().getPerson_name();
             String personCode = userInfo.getEmployeeModel().getPerson_code();
-            for (PcmsSupplierModel tubim : supplierList) {
+            for (PcmsSupplierModelVo tubim : supplierList) {
                 TpmOptLogsModel tolm = new TpmOptLogsModel();
                 tolm.setType(12);
                 String opt_user = personName + "(" + personCode + ")";
@@ -181,13 +183,13 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
             if("xls".equals(pdfOrxls)) {
                 file += ".xls";
                 createBankInfoXls(supplierList,file);
-                return  pcmsSupplierUrl+"/"+path+".xls";
+                return  pcmsSupplierPath+"/"+path+".xls";
             }
         }
         return null;
     }
 
-    public void createBankInfoXls(List<PcmsSupplierModel> supplierList, String url)
+    public void createBankInfoXls(List<PcmsSupplierModelVo> supplierList, String url)
             throws Exception, DocumentException {
         File file = new File(url);
         // 创建HSSFWorkbook对象(excel的文档对象)
@@ -229,7 +231,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
             cell.setCellStyle(style2);
         }
         int rowNo = 1;
-        for (PcmsSupplierModel tubim : supplierList) {
+        for (PcmsSupplierModelVo tubim : supplierList) {
             rowNo++;
             row = sheet.createRow(rowNo);
             List<String> list = getTableContent(tubim);
@@ -245,12 +247,12 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     }
 
     public List<String> getTableHead() {
-        String[] arr = new String[] { "供应商编号","供应商名称", "往来业务公司", "法定代表人", "联系电话" };
+        String[] arr = new String[] { "供应商名称", "往来业务公司", "法定代表人", "联系电话" };
         List<String> list = Arrays.asList(arr);
         return list;
     }
-    public List<String> getTableContent(PcmsSupplierModel tubim) {
-        String[] arr = new String[] {};
+    public List<String> getTableContent(PcmsSupplierModelVo tubim) {
+        String[] arr = new String[] {tubim.getVendor_name(),tubim.getCompany(),tubim.getLegal_person(),tubim.getMobile()};
         List<String> list = Arrays.asList(arr);
         return list;
     }

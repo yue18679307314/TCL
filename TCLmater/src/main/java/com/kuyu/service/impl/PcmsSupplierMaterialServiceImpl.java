@@ -35,9 +35,19 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
         if(null == pcmsSupplierModel){
             throw new ParamException("供应商不存在");
         }
-        pcmsSupplierMaterialModel.setCreate_time(new Date());
-        pcmsSupplierMaterialModel.setCompany(userInfo.getEmployeeModel().getCompany());
-        baseMapper.insert(pcmsSupplierMaterialModel);
+        PcmsSupplierMaterialModel psm = baseMapper.findSupplierMaterialByVendorAndCompany(pcmsSupplierMaterialModel.getVendor_id(),userInfo.getEmployeeModel().getCompany());
+        if(null == psm){
+            pcmsSupplierMaterialModel.setCreate_time(new Date());
+            pcmsSupplierMaterialModel.setVersion(10000);
+            pcmsSupplierMaterialModel.setCompany(userInfo.getEmployeeModel().getCompany());
+            baseMapper.insert(pcmsSupplierMaterialModel);
+        }else{
+            pcmsSupplierMaterialModel.setCreate_time(new Date());
+            pcmsSupplierMaterialModel.setVersion(psm.getVersion()+1);
+            pcmsSupplierMaterialModel.setCompany(userInfo.getEmployeeModel().getCompany());
+            baseMapper.insert(pcmsSupplierMaterialModel);
+        }
+
     }
 
     @Override
@@ -51,7 +61,7 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
 
     @Override
     public ResultVo findSupplierMaterialByPage(LoginUserInfo userInfo, SupplierMaterialQuery query) throws Exception {
-//        query.setCompany(userInfo.getEmployeeModel().getCompany());
+        query.setCompany(userInfo.getEmployeeModel().getCompany());
         query = (SupplierMaterialQuery) CheckParamUtils.trimWithObjectField(query);
         Page<SupplierMaterialQuery> page = new Page<>(query.getCurrent(),query.getSize());
         List<SupplierMaterialQuery> list = baseMapper.findSupplierMaterialByPage(query,page);

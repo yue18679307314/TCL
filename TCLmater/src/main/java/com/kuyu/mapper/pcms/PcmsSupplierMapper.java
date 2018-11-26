@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.vo.PcmsSupplierListVo;
+import com.kuyu.vo.pcms.PcmsSupplierModelVo;
+import com.kuyu.vo.pcms.PcmsVendorIdVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import com.kuyu.vo.PcmsSupplierVo;
 import org.apache.ibatis.annotations.Param;
@@ -28,7 +30,7 @@ public interface PcmsSupplierMapper extends BaseMapper<PcmsSupplierModel> {
     /**分页查询*/
     List<PcmsSupplierListVo> findPcmsSupplierListByPage(@Param("params") PcmsSupplierQuery query, Page<PcmsSupplierListVo> page);
     /**根据ID批量查询*/
-    List<PcmsSupplierModel> getPcmsSupplierForIds(List<String> list);
+    List<PcmsSupplierModelVo> getPcmsSupplierForIds(List<PcmsVendorIdVo> list);
     /**查询供应商*/
     public PcmsSupplierModel getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel);
 
