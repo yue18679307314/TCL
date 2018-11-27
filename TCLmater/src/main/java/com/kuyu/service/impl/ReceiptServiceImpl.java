@@ -3,10 +3,10 @@ package com.kuyu.service.impl;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.exception.ParamException;
+import com.kuyu.mapper.pcms.PcmsItemMapper;
+import com.kuyu.mapper.pcms.PcmsShowcaseMapper;
 import com.kuyu.mapper.pcms.ReceiptMapper;
-import com.kuyu.model.pcms.PcmsUserModel;
-import com.kuyu.model.pcms.ReceiptDetailModel;
-import com.kuyu.model.pcms.ReceiptModel;
+import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsUserService;
 import com.kuyu.service.ReceiptService;
 import com.kuyu.util.CheckParamUtils;
@@ -32,6 +32,12 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         implements ReceiptService {
     @Autowired
     private PcmsUserService pcmsUserService;
+
+    @Autowired
+    private PcmsShowcaseMapper pcmsShowcaseMapper;
+
+    @Autowired
+    private PcmsItemMapper pcmsItemMapper;
 
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
@@ -76,4 +82,25 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         }
         return ResultVo.getDataWithSuccess(receiptDetailModel);
     }
+
+    @Override
+    public ResultVo updateShowcase(PcmsShowcaseVo pcmsShowcaseVo) throws Exception {
+        PcmsShowcase pcmsShowcase = pcmsShowcaseMapper.selectByPrimaryKey(pcmsShowcaseVo.getScid());
+        if(null != pcmsShowcase){
+            pcmsShowcase.setChildren1Linear(pcmsShowcaseVo.getChildren1_linear());
+            pcmsShowcase.setChildren1Buildtime(pcmsShowcaseVo.getChildren1_buildtime());
+            pcmsShowcase.setChildren1Area(pcmsShowcaseVo.getChildren1_area());
+            pcmsShowcaseMapper.updateByPrimaryKey(pcmsShowcase);
+        }
+        return ResultVo.get(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo updateType(Integer itid) throws Exception {
+        PcmsItem pcmsItem  = pcmsItemMapper.selectByPrimaryKey(itid);
+        pcmsItem.setStatus(2);
+        pcmsItemMapper.updateByPrimaryKey(pcmsItem);
+        return ResultVo.get(ResultVo.SUCCESS);
+    }
+
 }

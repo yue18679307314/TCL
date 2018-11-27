@@ -5,6 +5,7 @@ import com.kuyu.model.pcms.PcmsUserItemModel;
 import com.kuyu.service.PcmsUserItemService;
 import com.kuyu.service.ReceiptService;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.PcmsShowcaseVo;
 import com.kuyu.vo.query.ReceiptQuery;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,30 @@ public class ReceiptController{
     @ApiOperation(value = "详情",response = PcmsUserItemModel.class)
     @GetMapping("/getReceiptDetail")
     public ResultVo getReceiptDetail(@RequestParam(value = "itid") Integer itid) throws Exception{
+        return receiptService.getReceiptDetail(itid);
+    }
+
+    /**
+     * 修改展台展柜信息
+     * @param pcmsShowcaseVo
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "修改展台展柜信息",response = PcmsShowcaseVo.class)
+    @PostMapping("/updateShowcase")
+    public ResultVo updateShowcase(@RequestBody PcmsShowcaseVo pcmsShowcaseVo) throws Exception {
+        return receiptService.updateShowcase(pcmsShowcaseVo);
+    }
+
+    /**
+     * 根据itid修改状态
+     * @param itid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "根据itid修改状态",response = PcmsUserItemModel.class)
+    @GetMapping("/updateType")
+    public ResultVo updateType(@RequestParam(value = "itid") Integer itid) throws Exception{
         return receiptService.getReceiptDetail(itid);
     }
 
