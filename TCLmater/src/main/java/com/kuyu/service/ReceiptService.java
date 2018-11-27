@@ -1,6 +1,7 @@
 package com.kuyu.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.kuyu.model.pcms.PcmsPendingMaterialModel;
 import com.kuyu.model.pcms.ReceiptModel;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsShowcaseVo;
@@ -22,5 +23,14 @@ public interface ReceiptService extends IService<ReceiptModel> {
 
     /**根据itid修改状态*/
     ResultVo updateType(Integer itid)throws Exception;
+
+    /**添加待验收物料*/
+    ResultVo addPendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel)throws Exception;
+
+    /**删除待验收物料*/
+    ResultVo deletePendingMaterial(Integer id)throws Exception;
+
+    /**查看物料被驳回物料信息*/
+    ResultVo selectRejectLog(Integer itid)throws Exception;
 
 }

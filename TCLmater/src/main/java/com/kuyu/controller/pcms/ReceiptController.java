@@ -1,6 +1,8 @@
 package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
+import com.kuyu.model.pcms.PcmsPendingMaterialModel;
+import com.kuyu.model.pcms.PcmsRejectLogModel;
 import com.kuyu.model.pcms.PcmsUserItemModel;
 import com.kuyu.service.PcmsUserItemService;
 import com.kuyu.service.ReceiptService;
@@ -80,7 +82,43 @@ public class ReceiptController{
     @ApiOperation(value = "根据itid修改状态",response = PcmsUserItemModel.class)
     @GetMapping("/updateType")
     public ResultVo updateType(@RequestParam(value = "itid") Integer itid) throws Exception{
-        return receiptService.getReceiptDetail(itid);
+        return receiptService.updateType(itid);
+    }
+
+    /**
+     * 添加待验收物料
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "添加待验收物料",response = PcmsPendingMaterialModel.class)
+    @PostMapping("/addPendingMaterial")
+    public ResultVo addPendingMaterial(@RequestBody PcmsPendingMaterialModel pcmsPendingMaterialModel) throws Exception {
+        return receiptService.addPendingMaterial(pcmsPendingMaterialModel);
+    }
+
+    /**
+     * 删除待验收物料
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "删除待验收物料",response = PcmsUserItemModel.class)
+    @GetMapping("/deletePendingMaterial")
+    public ResultVo deletePendingMaterial(@RequestParam(value = "id") Integer id) throws Exception{
+        return receiptService.deletePendingMaterial(id);
+    }
+
+    /**
+     * 查看物料被驳回物料信息
+     * @param itid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "查看物料被驳回物料信息",response = PcmsRejectLogModel.class)
+    @GetMapping("/selectRejectLog")
+    public ResultVo selectRejectLog(@RequestParam(value = "itid") Integer itid) throws Exception{
+        return receiptService.selectRejectLog(itid);
     }
 
 }

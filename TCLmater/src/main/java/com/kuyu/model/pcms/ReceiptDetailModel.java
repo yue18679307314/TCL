@@ -27,6 +27,24 @@ public class ReceiptDetailModel implements Serializable{
     @ApiModelProperty("立项单编号")
     private String item_number;
 
+    @ApiModelProperty("原始立项单ID")
+    private String request_id;
+
+    @ApiModelProperty("供应商名称")
+    private String vendor_name;
+
+    @ApiModelProperty("费用细类")
+    private String subclass;
+
+    @ApiModelProperty("派遣人")
+    private String dispatch;
+
+    @ApiModelProperty("派遣时间")
+    private String dispatch_time;
+
+    @ApiModelProperty("结束时间")
+    private String end_time;
+
     @ApiModelProperty("申请人部门")
     private String request_dept;
 
@@ -62,6 +80,9 @@ public class ReceiptDetailModel implements Serializable{
 
     @ApiModelProperty("其他终端信息")
     private List<PcmsOthertmVo> pcmsOthertmVoList;
+
+    @ApiModelProperty("待验收的物料信息")
+    private List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList;
 
     public Integer getItid() {
         return itid;
@@ -173,5 +194,61 @@ public class ReceiptDetailModel implements Serializable{
 
     public void setPcmsOthertmVoList(List<PcmsOthertmVo> pcmsOthertmVoList) {
         this.pcmsOthertmVoList = pcmsOthertmVoList;
+    }
+
+    public List<PcmsPendingMaterialModel> getPcmsPendingMaterialModelList() {
+        return pcmsPendingMaterialModelList;
+    }
+
+    public void setPcmsPendingMaterialModelList(List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList) {
+        this.pcmsPendingMaterialModelList = pcmsPendingMaterialModelList;
+    }
+
+    public String getRequest_id() {
+        return request_id;
+    }
+
+    public void setRequest_id(String request_id) {
+        this.request_id = request_id;
+    }
+
+    public String getVendor_name() {
+        return vendor_name;
+    }
+
+    public void setVendor_name(String vendor_name) {
+        this.vendor_name = vendor_name;
+    }
+
+    public String getDispatch() {
+        return dispatch;
+    }
+
+    public void setDispatch(String dispatch) {
+        this.dispatch = dispatch;
+    }
+
+    public String getDispatch_time() {
+        return dispatch_time;
+    }
+
+    public void setDispatch_time(String dispatch_time) {
+        this.dispatch_time = dispatch_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
+    }
+
+    public String getSubclass() {
+        return subclass;
+    }
+
+    public void setSubclass(String subclass) {
+        this.subclass = subclass;
     }
 }

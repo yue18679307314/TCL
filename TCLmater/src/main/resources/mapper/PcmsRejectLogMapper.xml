@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsRejectLogMapper">
+    <!-- 根据openid查询是否绑定 -->
+    <select id="selectRejectLog" resultType="com.kuyu.model.pcms.PcmsRejectLogModel">
+        SELECT t.context,t.id,t.itid,t.operator,t.create_time FROM pcms_reject_log t
+        <where>
+            <if test="itid != null and itid != ''">
+                t.itid = #{itid}
+            </if>
+        </where>
+        ORDER BY t.id DESC LIMIT 0,1;
+    </select>
+
+
+</mapper>
