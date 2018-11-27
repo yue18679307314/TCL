@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class PcmsShowcaseVo {
 
+    @ApiModelProperty("ID")
+    private Integer scid;
     @ApiModelProperty("店型")
     private String children1_type;
     @ApiModelProperty("最近一次展台投建时间")
@@ -18,6 +20,14 @@ public class PcmsShowcaseVo {
     private String children1_linear;
     @ApiModelProperty("展台投建时间")
     private String children1_buildtime;
+
+    public Integer getScid() {
+        return scid;
+    }
+
+    public void setScid(Integer scid) {
+        this.scid = scid;
+    }
 
     public String getChildren1_type() {
         return children1_type;

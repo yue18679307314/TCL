@@ -64,6 +64,11 @@ public class PcmsSupplierMaterialModel extends Model<PcmsSupplierMaterialModel> 
     @JsonProperty("company")
     private String company;
 
+    /**单价数量范围*/
+    @ApiModelProperty("单价数量范围")
+    @JsonProperty("ranges")
+    private String ranges;
+
     /**创建时间*/
     @ApiModelProperty("创建时间")
     @JsonProperty("create_time")
@@ -155,6 +160,14 @@ public class PcmsSupplierMaterialModel extends Model<PcmsSupplierMaterialModel> 
 
     public void setCreate_time(Date create_time) {
         this.create_time = create_time;
+    }
+
+    public String getRanges() {
+        return ranges;
+    }
+
+    public void setRanges(String ranges) {
+        this.ranges = ranges;
     }
 
     @Override

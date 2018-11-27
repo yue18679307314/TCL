@@ -63,6 +63,7 @@
 
     <select id="getPcmsShowcaseInfo" resultType="com.kuyu.vo.pcms.PcmsShowcaseVo">
         SELECT
+        ps.scid AS scid,
         ps.CHILDREN1_TYPE AS children1_type,
         ps.CHILDREN1_LAST_BUILDTIME AS children1_last_buildtime,
         ps.CHILDREN1_AREA AS children1_area,

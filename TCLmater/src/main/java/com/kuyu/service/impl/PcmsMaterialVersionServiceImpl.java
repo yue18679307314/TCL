@@ -2,12 +2,13 @@ package com.kuyu.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.mapper.pcms.PcmsMaterialVersionMapper;
-import com.kuyu.model.LoginUserInfo;
-import com.kuyu.model.TpmDeptModel;
+import com.kuyu.mapper.pcms.PcmsSupplierMaterialMapper;
 import com.kuyu.model.pcms.PcmsMaterialVersionModel;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
+import com.kuyu.service.PcmsSupplierMaterialService;
 import com.kuyu.util.StringUtil;
+import com.kuyu.vo.ResultVo;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,51 +36,103 @@ import java.util.*;
 @Transactional
 public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVersionMapper, PcmsMaterialVersionModel>
         implements PcmsMaterialVersionService {
+
+    @Resource
+    private PcmsSupplierMaterialService pcmsSupplierMaterialService;
+
+    @Resource
+    private PcmsSupplierMaterialMapper pcmsSupplierMaterialMapper;
+
     @Value("${excel.path}")
     private String filePath;
     @Value("${excel.url}")
     private String fileUrl;
     @Override
-    public void uploadAndInsert(MultipartFile file, String vendor_id, LoginUserInfo userInfo) throws Exception {
+    public ResultVo uploadAndInsert(MultipartFile file, String vendor_id/*, LoginUserInfo userInfo*/) throws Exception {
 
-        /*String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
-        if(".xls".equals(suffix)){
-
-        }else{
-
-        }*/
-        String suffix = file.getOriginalFilename();
-        Map<String, String> map  = readExcel(suffix);
-        if(StringUtil.isNotNull(map)) {
-            List<PcmsSupplierMaterialModel> list = new ArrayList<>();
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                String value = entry.getValue();
-                PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
-                String[] psm = value.split(",");
-                for (int i = 0; i < psm.length; i++) {
-                    if(psm[i].equals("NULL")) {
-                        psm[i] = null;
-                    }
-                }
-                tdm.setVendor_name(psm[0]);
-                tdm.setCategory(psm[1]);
-                tdm.setSpecifications(psm[2]);
-                tdm.setUnit(psm[3]);
-                tdm.setComparison_price(Double.parseDouble(psm[5]));
-                tdm.setNote(psm[6]);
-                tdm.setVendor_id(vendor_id);
-                tdm.setCreate_time(new Date());
-                tdm.setCompany("5555");
-                list.add(tdm);
-            }
-        }
+        String xls = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")).toLowerCase();
+        String paths = StringUtil.getUUID();
+        String nameXls = paths+xls;
+        String finalPath = filePath+ "/"+nameXls;
+        String suffix = file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
         File tempfile = new File(filePath);
         if(!tempfile.exists()){
             tempfile.mkdirs();
         }
-        String path = filePath + file.getOriginalFilename();
-        File newFile = new File(path);
+        File newFile = new File(finalPath);
         file.transferTo(newFile);
+        Map<String, String> map  = readExcel(finalPath);
+        PcmsSupplierMaterialModel psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(vendor_id,"555"/*,userInfo.getEmployeeModel().getCompany()*/);
+        PcmsMaterialVersionModel pcmsMaterialVersionModel = new PcmsMaterialVersionModel();
+        if(null != psmm){
+            if(StringUtil.isNotNull(map)) {
+                List<PcmsSupplierMaterialModel> list = new ArrayList<>();
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    String value = entry.getValue();
+                    PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
+                    String[] psm = value.split(",");
+                    for (int i = 0; i < psm.length; i++) {
+                        if(psm[i].equals("NULL")) {
+                            psm[i] = null;
+                        }
+                    }
+                    tdm.setVendor_name(psm[0]);
+                    tdm.setCategory(psm[1]);
+                    tdm.setSpecifications(psm[2]);
+                    tdm.setUnit(psm[3]);
+                    tdm.setRanges(psm[4]);
+                    tdm.setComparison_price(Double.parseDouble(psm[5]));
+                    tdm.setNote(psm[6]);
+                    tdm.setVendor_id(vendor_id);
+                    tdm.setCreate_time(new Date());
+                    tdm.setCompany("5555");
+                    tdm.setVersion(psmm.getVersion()+1);
+                    list.add(tdm);
+                }
+                pcmsSupplierMaterialService.insertBatch(list);
+            }
+            pcmsMaterialVersionModel.setCompany("5555");
+            pcmsMaterialVersionModel.setCreate_time(new Date());
+            pcmsMaterialVersionModel.setName(suffix);
+            pcmsMaterialVersionModel.setVendor_id(vendor_id);
+            pcmsMaterialVersionModel.setUrl(finalPath);
+            pcmsMaterialVersionModel.setVersion(psmm.getVersion()+1);
+        }else{
+            if(StringUtil.isNotNull(map)) {
+                List<PcmsSupplierMaterialModel> list = new ArrayList<>();
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    String value = entry.getValue();
+                    PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
+                    String[] psm = value.split(",");
+                    for (int i = 0; i < psm.length; i++) {
+                        if(psm[i].equals("NULL")) {
+                            psm[i] = null;
+                        }
+                    }
+                    tdm.setVendor_name(psm[0]);
+                    tdm.setCategory(psm[1]);
+                    tdm.setSpecifications(psm[2]);
+                    tdm.setUnit(psm[3]);
+                    tdm.setRanges(psm[4]);
+                    tdm.setComparison_price(Double.parseDouble(psm[5]));
+                    tdm.setNote(psm[6]);
+                    tdm.setVendor_id(vendor_id);
+                    tdm.setCreate_time(new Date());
+                    tdm.setCompany("5555");
+                    tdm.setVersion(10000);
+                    list.add(tdm);
+                }
+                pcmsSupplierMaterialService.insertBatch(list);
+            }
+            pcmsMaterialVersionModel.setCompany("5555");
+            pcmsMaterialVersionModel.setCreate_time(new Date());
+            pcmsMaterialVersionModel.setName(suffix);
+            pcmsMaterialVersionModel.setVendor_id(vendor_id);
+            pcmsMaterialVersionModel.setUrl(finalPath);
+            pcmsMaterialVersionModel.setVersion(10000);
+        }
+        baseMapper.insert(pcmsMaterialVersionModel);
+        return ResultVo.get(ResultVo.SUCCESS);
     }
     public static Map<String, String> readExcel(String filePath) {
         Map<String, String> map = new HashMap<String, String>();
@@ -148,7 +202,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
                                         value += "'" + date1.replaceAll("'", "") + "',";
 
                                     } else {
-                                        value += "'" + (int) cell.getNumericCellValue() + "',";
+                                        value += "'" + cell.getNumericCellValue() + "',";
                                     }
                                     break;
                                 case HSSFCell.CELL_TYPE_STRING:
