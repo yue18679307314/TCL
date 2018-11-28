@@ -20,6 +20,15 @@ public class PcmsShowcaseVo {
     private String children1_linear;
     @ApiModelProperty("展台投建时间")
     private String children1_buildtime;
+    @ApiModelProperty(" 展台重建原因\n")
+    private String children1_reason;
+
+    @ApiModelProperty(" 标内费用")
+    private String children1_inner;
+
+    @ApiModelProperty(" 标外费用")
+    private String children1_outer;
+
 
     public Integer getScid() {
         return scid;
@@ -67,5 +76,29 @@ public class PcmsShowcaseVo {
 
     public void setChildren1_buildtime(String children1_buildtime) {
         this.children1_buildtime = children1_buildtime;
+    }
+
+    public String getChildren1_reason() {
+        return children1_reason;
+    }
+
+    public void setChildren1_reason(String children1_reason) {
+        this.children1_reason = children1_reason;
+    }
+
+    public String getChildren1_inner() {
+        return children1_inner;
+    }
+
+    public void setChildren1_inner(String children1_inner) {
+        this.children1_inner = children1_inner;
+    }
+
+    public String getChildren1_outer() {
+        return children1_outer;
+    }
+
+    public void setChildren1_outer(String children1_outer) {
+        this.children1_outer = children1_outer;
     }
 }

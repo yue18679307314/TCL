@@ -167,6 +167,7 @@ public class LoginFilter implements Filter {
 
 
 		needLoginUris.add("/tpm/supplier/findPcmsSupplierListByPage");
+		needLoginUris.add("/tpm/market/getItemDetail");
 
     }
 

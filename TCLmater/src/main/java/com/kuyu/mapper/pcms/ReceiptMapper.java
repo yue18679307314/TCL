@@ -29,4 +29,7 @@ public interface ReceiptMapper extends BaseMapper<ReceiptModel> {
     List<PcmsOthertmVo> getPcmsOthertmInfo(@Param("itid") Integer itid);
     /**广告物料信息*/
     List<MaterialResult> getMaterialResultInfo(@Param("itid") Integer itid);
+
+    /***/
+    ReceiptDetailModel getItemDetail(@Param("itid") Integer itid);
 }

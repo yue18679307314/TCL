@@ -33,4 +33,7 @@ public interface ReceiptService extends IService<ReceiptModel> {
     /**查看物料被驳回物料信息*/
     ResultVo selectRejectLog(Integer itid)throws Exception;
 
+    /**市场人员查看立项单详情*/
+    ResultVo getItemDetail(Integer itid)throws Exception;
+
 }

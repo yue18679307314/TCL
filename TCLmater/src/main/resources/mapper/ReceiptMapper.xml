@@ -45,13 +45,17 @@
         </where>
     </select>
 
-
     <select id="getPcmsShopInfo" resultType="com.kuyu.vo.pcms.PcmsShopVo">
         SELECT
         ps.SHOP_NAME AS shop_name,
         ps.SHOP_PROVINCE AS shop_province,
         ps.SHOP_CITY AS shop_city,
-        ps.SHOP_COUNTY AS shop_county
+        ps.SHOP_COUNTY AS shop_county,
+        ps.SHOP_CRM_CODE AS shop_crm_code,
+        ps.SHOP_LEVEL AS shop_level,
+        ps.SHOP_BRANCH AS shop_branch,
+        ps.SHOP_CHANNEL AS shop_channel,
+        ps.DETAIL_TASK AS detail_task
         FROM pcms_item p
         LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
         LEFT JOIN pcms_shop ps ON pt.SHOP_CRM_CODE = ps.SHOP_CRM_CODE
@@ -68,9 +72,12 @@
         ps.CHILDREN1_LAST_BUILDTIME AS children1_last_buildtime,
         ps.CHILDREN1_AREA AS children1_area,
         ps.CHILDREN1_LINEAR AS children1_linear,
-        ps.CHILDREN1_BUILDTIME AS children1_buildtime
+        ps.CHILDREN1_BUILDTIME AS children1_buildtime,
+        ps.CHILDREN1_INNER AS children1_inner,
+        ps.CHILDREN1_OUTER AS children1_outer,
+        ps.CHILDREN1_REASON AS children1_reason
         FROM pcms_item p
-        right JOIN pcms_showcase ps ON p.request_id = ps.resuest_id AND p.vendor_id = ps.vendor_id
+        RIGHT JOIN pcms_showcase ps ON p.request_id = ps.resuest_id AND p.vendor_id = ps.vendor_id
         <where>
             p.itid = #{itid,jdbcType=INTEGER}
         </where>
@@ -100,6 +107,32 @@
         pm.comparison_price AS comparisonPrice
         FROM pcms_item p
         RIGHT JOIN `pcms_material` pm ON pm.`resuest_id` = p.`request_id` AND pm.`vendor_id`=p.`vendor_id`
+        <where>
+            p.itid = #{itid,jdbcType=INTEGER}
+        </where>
+    </select>
+
+
+    <select id="getItemDetail" resultType="com.kuyu.model.pcms.ReceiptDetailModel">
+        SELECT p.item_number AS item_number,
+        pt.REQUEST_DEPT AS request_dept,
+        pt.request_user_name AS request_user_name,
+        pt.REQUEST_TITLE AS request_title,
+        p.itid AS itid,
+        p.item_price AS item_price,
+        p.status AS STATUS,
+        p.it_type AS TYPE,
+        pt.REQUEST_COMPANY_CODE AS request_company_code,
+        p.create_time AS create_time,
+        p.end_time AS end_time,
+        p.dispatch_time AS dispatch_time,
+        p.dispatch AS dispatch,
+        pt.DETAIL_ACCOUNT AS subclass,
+        ps.vendor_name AS vendor_name,
+        pt.REQUEST_ID AS request_id
+        FROM pcms_item p
+        LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
+        LEFT JOIN pcms_supplier ps ON p.vendor_id = ps.vendor_id
         <where>
             p.itid = #{itid,jdbcType=INTEGER}
         </where>
