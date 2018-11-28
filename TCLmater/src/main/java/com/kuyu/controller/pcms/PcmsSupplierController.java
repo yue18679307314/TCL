@@ -3,6 +3,7 @@ package com.kuyu.controller.pcms;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.model.pcms.PcmsSupplierCompanyModel;
+import com.kuyu.model.pcms.PcmsSupplierInvoiceModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.service.PcmsSupplierCompanyService;
 import com.kuyu.service.PcmsSupplierService;
@@ -195,5 +196,18 @@ public class PcmsSupplierController extends BaseController {
             }
         }
         return ResultVo.getData(ResultVo.SUCCESS, file);
+    }
+
+    /**
+     * 添加发票信息
+     * @param pcmsSupplierInvoiceModel
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "添加发票信息", notes = "添加发票信息", response = PcmsSupplierInvoiceModel.class)
+    @ApiParam(name = "insertSupplierInvoice", value = "发票信息")
+    @RequestMapping(value = "/insertSupplierInvoice", method = { RequestMethod.POST })
+    public ResultVo insertSupplierInvoice(@RequestBody PcmsSupplierInvoiceModel pcmsSupplierInvoiceModel) throws Exception {
+        return pcmsSupplierService.insertSupplierInvoice(pcmsSupplierInvoiceModel);
     }
 }

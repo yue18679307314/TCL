@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.itextpdf.text.DocumentException;
 import com.kuyu.exception.ParamException;
+import com.kuyu.mapper.pcms.PcmsSupplierInvoiceMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMapper;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmOptLogsModel;
-import com.kuyu.model.pcms.PcmsSupplierLogModel;
-import com.kuyu.model.pcms.PcmsSupplierModel;
-import com.kuyu.model.pcms.PcmsSupplierUserModel;
-import com.kuyu.model.pcms.PcmsUserModel;
+import com.kuyu.model.pcms.*;
 import com.kuyu.service.*;
 import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.DateUtils;
@@ -28,10 +26,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by pc on 2018/11/14
@@ -59,6 +60,9 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
     @Autowired
     private PcmsSupplierLogService pcmsSupplierLogService;
+
+    @Resource
+    private PcmsSupplierInvoiceMapper pcmsSupplierInvoiceMapper;
 
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
@@ -187,6 +191,20 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
             }
         }
         return null;
+    }
+
+    @Override
+    public ResultVo insertSupplierInvoice(PcmsSupplierInvoiceModel pcmsSupplierInvoiceModel) throws Exception {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("vendor_id",pcmsSupplierInvoiceModel.getVendor_id());
+        map.put("itid",pcmsSupplierInvoiceModel.getItid());
+        List<PcmsSupplierInvoiceModel> list = pcmsSupplierInvoiceMapper.selectByMap(map);
+        if(null == list && list.size()==0){
+            pcmsSupplierInvoiceMapper.insert(pcmsSupplierInvoiceModel);
+        }else{
+            throw new ParamException("不能重复添加发票信息");
+        }
+        return ResultVo.get(ResultVo.SUCCESS);
     }
 
     public void createBankInfoXls(List<PcmsSupplierModelVo> supplierList, String url)

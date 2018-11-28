@@ -2,6 +2,7 @@ package com.kuyu.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.pcms.PcmsSupplierInvoiceModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.model.pcms.PcmsUserModel;
 import com.kuyu.vo.pcms.PcmsVendorIdVo;
@@ -33,4 +34,7 @@ public interface PcmsSupplierService extends IService<PcmsSupplierModel> {
 
     /**导出供应商*/
     String getPcmsSupplierUrl(List<PcmsVendorIdVo> list, String pdfOrxls, LoginUserInfo userInfo) throws Exception;
+    /**添加发票信息*/
+    public ResultVo insertSupplierInvoice(PcmsSupplierInvoiceModel pcmsSupplierInvoiceModel) throws Exception;
+
 }
