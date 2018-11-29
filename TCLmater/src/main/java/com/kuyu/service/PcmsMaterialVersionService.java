@@ -1,7 +1,6 @@
 package com.kuyu.service;
 
 import com.baomidou.mybatisplus.service.IService;
-import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsMaterialVersionModel;
 import com.kuyu.vo.ResultVo;
 import org.springframework.web.multipart.MultipartFile;

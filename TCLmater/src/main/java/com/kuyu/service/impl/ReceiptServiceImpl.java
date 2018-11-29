@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.*;
+import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsUserService;
 import com.kuyu.service.ReceiptService;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,7 +78,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
             receiptDetailModel.setPcmsShowcaseVo(pcmsShowcaseVo);
             receiptDetailModel.setPcmsPendingMaterialModelList(list);
-        }else if((receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==1) || (receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==0)){
+        }else if((receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==0)){
             /**门店信息*/
             PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
             /**展台展柜信息*/
@@ -86,6 +88,20 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         }else if(receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==3){
             /**物料信息*/
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
+            receiptDetailModel.setPcmsPendingMaterialModelList(list);
+        }else if(receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==1){
+            /**门店信息*/
+            PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
+            /**展台展柜信息*/
+            PcmsShowcaseVo pcmsShowcaseVo = baseMapper.getPcmsShowcaseInfo(itid);
+            /**物料信息*/
+            List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
+            if(null == list || list.size() == 0){
+                PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
+                list.add(pcmsPendingMaterialModel);
+            }
+            receiptDetailModel.setPcmsShopVo(pcmsShopVo);
+            receiptDetailModel.setPcmsShowcaseVo(pcmsShowcaseVo);
             receiptDetailModel.setPcmsPendingMaterialModelList(list);
         }
         if((receiptDetailModel.getType() == 2 && receiptDetailModel.getStatus()==2) || (receiptDetailModel.getType() == 2 && receiptDetailModel.getStatus()==4)){
@@ -98,7 +114,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
             receiptDetailModel.setPcmsOthertmVoList(list);
             receiptDetailModel.setPcmsPendingMaterialModelList(list1);
-        }else if((receiptDetailModel.getStatus() == 2 && receiptDetailModel.getStatus()==1) || (receiptDetailModel.getType() == 2 && receiptDetailModel.getStatus()==0)){
+        }else if((receiptDetailModel.getType() == 2 && receiptDetailModel.getStatus()==0)){
             /**门店信息*/
             PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
             /**其他展台*/
@@ -109,6 +125,20 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**物料信息*/
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
             receiptDetailModel.setPcmsPendingMaterialModelList(list);
+        }else if(receiptDetailModel.getStatus() == 2 && receiptDetailModel.getStatus()==1){
+            /**门店信息*/
+            PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
+            /**其他展台*/
+            List<PcmsOthertmVo> list = baseMapper.getPcmsOthertmInfo(itid);
+            /**物料信息*/
+            List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
+            if(null == list1 || list1.size() == 0){
+                PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
+                list1.add(pcmsPendingMaterialModel);
+            }
+            receiptDetailModel.setPcmsShopVo(pcmsShopVo);
+            receiptDetailModel.setPcmsOthertmVoList(list);
+            receiptDetailModel.setPcmsPendingMaterialModelList(list1);
         }
         if((receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==2) || (receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==4)){
             /**广告物料*/
@@ -117,7 +147,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
             receiptDetailModel.setMaterialResultList(list);
             receiptDetailModel.setPcmsPendingMaterialModelList(list1);
-        }else if((receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==1) || (receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==0)){
+        }else if((receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==0)){
             /**广告物料*/
             List<MaterialResult> list = baseMapper.getMaterialResultInfo(itid);
             receiptDetailModel.setMaterialResultList(list);
@@ -125,6 +155,17 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**物料信息*/
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
             receiptDetailModel.setPcmsPendingMaterialModelList(list);
+        }else if(receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==1){
+            /**广告物料*/
+            List<MaterialResult> list = baseMapper.getMaterialResultInfo(itid);
+            /**物料信息*/
+            List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
+            if(null == list1 || list1.size() == 0){
+                PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
+                list1.add(pcmsPendingMaterialModel);
+            }
+            receiptDetailModel.setMaterialResultList(list);
+            receiptDetailModel.setPcmsPendingMaterialModelList(list1);
         }
         return ResultVo.getDataWithSuccess(receiptDetailModel);
     }
@@ -226,6 +267,41 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             receiptDetailModel.setMaterialResultList(list);
         }
         return ResultVo.getDataWithSuccess(receiptDetailModel);
+    }
+
+    @Override
+    public ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel, LoginUserInfo userInfo) throws Exception {
+        if(StringUtil.isEmpty(pcmsRejectLogModel.getContext())){
+            throw new ParamException("驳回理由不能为空");
+        }
+        PcmsItem pcmsItem = pcmsItemMapper.selectByPrimaryKey(pcmsRejectLogModel.getItid());
+        if(null == pcmsItem){
+            throw new ParamException("立项单不存在");
+        }
+        pcmsItem.setStatus(4);
+        pcmsRejectLogModel.setCreate_time(new Date());
+        pcmsRejectLogModel.setType(2);
+        pcmsRejectLogModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+        pcmsRejectLogMapper.insert(pcmsRejectLogModel);
+        pcmsItemMapper.updateByPrimaryKey(pcmsItem);
+        return ResultVo.get(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo doRejectSuccess(Integer itid, LoginUserInfo userInfo) throws Exception {
+        PcmsItem pcmsItem = pcmsItemMapper.selectByPrimaryKey(itid);
+        if(null == pcmsItem){
+            throw new ParamException("立项单不存在");
+        }
+        PcmsRejectLogModel pcmsRejectLogModel = new PcmsRejectLogModel();
+        pcmsRejectLogModel.setItid(itid);
+        pcmsRejectLogModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+        pcmsRejectLogModel.setCreate_time(new Date());
+        pcmsRejectLogModel.setType(1);
+        pcmsItem.setStatus(3);
+        pcmsItemMapper.updateByPrimaryKey(pcmsItem);
+        pcmsRejectLogMapper.insert(pcmsRejectLogModel);
+        return ResultVo.get(ResultVo.SUCCESS);
     }
 
 }

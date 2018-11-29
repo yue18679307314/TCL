@@ -7,6 +7,7 @@ import com.kuyu.service.PcmsSupplierMaterialService;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.vo.FinancialResultVo;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.SupplierMaterialVo;
 import com.kuyu.vo.query.SupplierMaterialQuery;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -62,4 +63,17 @@ public class PcmsSupplierMaterialController extends BaseController {
     public ResultVo findSupplierMaterialList(@RequestBody SupplierMaterialQuery query) throws Exception {
         return pcmsSupplierMaterialService.findSupplierMaterialByPage(getLoginUserInfo(),query);
     }
+
+    /**
+     * 根据openid查询供应商物料信息
+     * @param query
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "根据openid查询供应商物料信息",response = PcmsSupplierMaterialModel.class)
+    @PostMapping("/querySupplierMaterialList")
+    public ResultVo querySupplierMaterialList(@RequestBody SupplierMaterialVo query) throws Exception {
+        return pcmsSupplierMaterialService.querySupplierMaterialList(query);
+    }
+
 }
