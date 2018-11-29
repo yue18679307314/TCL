@@ -34,9 +34,9 @@ public class PcmsSupplierMaterialController extends BaseController {
     @ApiOperation(value = "供应商物料信息", notes = "新增供应商物料信息", response = PcmsSupplierMaterialModel.class)
     @ApiParam(name = "PcmsSupplierMaterialModel", value = "供应商物料信息")
     @RequestMapping(value = "/addPcmsSupplierMaterial", method = { RequestMethod.POST })
-    public FinancialResultVo addSupplierMaterial(@RequestBody PcmsSupplierMaterialModel pcmsSupplierMaterialModel) throws Exception {
+    public ResultVo addSupplierMaterial(@RequestBody PcmsSupplierMaterialModel pcmsSupplierMaterialModel) throws Exception {
         pcmsSupplierMaterialService.insertPcmsSupplierMaterial(pcmsSupplierMaterialModel,getLoginUserInfo());
-        return FinancialResultVo.get(FinancialResultVo.SUCCESS);
+        return ResultVo.get(ResultVo.SUCCESS);
     }
 
     /**

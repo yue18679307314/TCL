@@ -101,6 +101,18 @@ public class ReceiptController{
     }
 
     /**
+     * 修改待验收物料
+     * @param pcmsPendingMaterialModel
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "修改待验收物料",response = PcmsPendingMaterialModel.class)
+    @PostMapping("/updatePendingMaterial")
+    public ResultVo updatePendingMaterial(@RequestBody PcmsPendingMaterialModel pcmsPendingMaterialModel) throws Exception {
+        return receiptService.updatePendingMaterial(pcmsPendingMaterialModel);
+    }
+
+    /**
      * 删除待验收物料
      * @param id
      * @return

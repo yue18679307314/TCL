@@ -66,7 +66,7 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
     private String[] image;
 
 
-    private List<PcmsMaterialImgModel> list;
+    private List<PcmsMaterialImgModel> imgList;
 
     public Integer getId() {
         return id;
@@ -140,12 +140,12 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
         this.image = image;
     }
 
-    public List<PcmsMaterialImgModel> getList() {
-        return list;
+    public List<PcmsMaterialImgModel> getImgList() {
+        return imgList;
     }
 
-    public void setList(List<PcmsMaterialImgModel> list) {
-        this.list = list;
+    public void setImgList(List<PcmsMaterialImgModel> imgList) {
+        this.imgList = imgList;
     }
 
     @Override

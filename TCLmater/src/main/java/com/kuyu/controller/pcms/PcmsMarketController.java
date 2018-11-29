@@ -21,12 +21,12 @@ public class PcmsMarketController extends BaseController {
     @Resource
     private ReceiptService receiptService;
     /**
-     * 详情
+     * 市场人员查看立项单详情
      * @param itid
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "详情",response = PcmsUserItemModel.class)
+    @ApiOperation(value = "市场人员查看立项单详情",response = PcmsUserItemModel.class)
     @GetMapping("/getItemDetail")
     public ResultVo getItemDetail(@RequestParam(value = "itid") Integer itid) throws Exception{
         return receiptService.getItemDetail(itid);

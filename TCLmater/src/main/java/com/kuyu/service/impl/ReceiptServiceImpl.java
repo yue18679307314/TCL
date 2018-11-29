@@ -89,7 +89,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
             for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
                 List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
-                pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
                 pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
             }
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
@@ -120,7 +120,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             }else{
                 for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
                     List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
-                    pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                    pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
                     pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
                 }
             }
@@ -138,7 +138,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
             for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
                 List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
-                pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
                 pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
             }
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
@@ -169,7 +169,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             }else{
                 for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
                     List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
-                    pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                    pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
                     pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
                 }
             }
@@ -204,7 +204,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             }else{
                 for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
                     List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
-                    pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                    pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
                     pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
                 }
             }
@@ -238,6 +238,10 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     public ResultVo addPendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel) throws Exception {
         pcmsPendingMaterialMapper.insertPendingMaterial(pcmsPendingMaterialModel);
         String[] image = pcmsPendingMaterialModel.getImage();
+        File tempfile = new File(filePath);
+        if(!tempfile.exists()){
+            tempfile.mkdirs();
+        }
         if(image==null||image.length==0)
             return null;
         String data="";
@@ -269,7 +273,52 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             out.flush();
             out.close();
             PcmsMaterialImgModel pcmsMaterialImgModel = new PcmsMaterialImgModel();
-            pcmsMaterialImgModel.setImage(sb.toString());
+            pcmsMaterialImgModel.setImage(sb);
+            pcmsMaterialImgModel.setPending_material_id(pcmsPendingMaterialModel.getId());
+            pcmsMaterialImgMapper.insert(pcmsMaterialImgModel);
+        }
+        return ResultVo.get(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo updatePendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel) throws Exception {
+        List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+        pcmsMaterialImgMapper.deleteBatchIds(pcmsMaterialImg);
+        pcmsPendingMaterialMapper.insertPendingMaterial(pcmsPendingMaterialModel);
+        pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel);
+        String[] image = pcmsPendingMaterialModel.getImage();
+        if(image==null||image.length==0)
+            return null;
+        String data="";
+        String dataprefix="";
+        for(String file:image){
+            String[] str=file.split("base64,");
+            if(str==null||str.length!=2)
+                return null;
+            dataprefix=str[0];
+            data=str[1];
+            String suffix = "";
+            if("data:image/jpeg;".equalsIgnoreCase(dataprefix)){//data:image/jpeg;base64,base64编码的jpeg图片数据
+                suffix = ".jpg";
+            } else if("data:image/x-icon;".equalsIgnoreCase(dataprefix)){//data:image/x-icon;base64,base64编码的icon图片数据
+                suffix = ".ico";
+            } else if("data:image/gif;".equalsIgnoreCase(dataprefix)){//data:image/gif;base64,base64编码的gif图片数据
+                suffix = ".gif";
+            } else if("data:image/png;".equalsIgnoreCase(dataprefix)){//data:image/png;base64,base64编码的png图片数据
+                suffix = ".png";
+            }else{
+                throw new Exception("上传图片格式不合法");
+            }
+            //因为BASE64Decoder的jar问题，此处使用spring框架提供的工具包
+            byte[] bs = Base64Utils.decodeFromString(data);
+            //FileUtils.writeByteArrayToFile(new File(savepath+System.currentTimeMillis()+suffix), bs);
+            FileOutputStream out=new FileOutputStream(new File(filePath+System.currentTimeMillis()+suffix));
+            String sb = filePath+System.currentTimeMillis()+suffix;
+            out.write(bs);
+            out.flush();
+            out.close();
+            PcmsMaterialImgModel pcmsMaterialImgModel = new PcmsMaterialImgModel();
+            pcmsMaterialImgModel.setImage(sb);
             pcmsMaterialImgModel.setPending_material_id(pcmsPendingMaterialModel.getId());
             pcmsMaterialImgMapper.insert(pcmsMaterialImgModel);
         }

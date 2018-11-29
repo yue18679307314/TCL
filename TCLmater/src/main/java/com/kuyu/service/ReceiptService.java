@@ -29,6 +29,9 @@ public interface ReceiptService extends IService<ReceiptModel> {
     /**添加待验收物料*/
     ResultVo addPendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel)throws Exception;
 
+    /**修改待验收物料*/
+    ResultVo updatePendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel)throws Exception;
+
     /**删除待验收物料*/
     ResultVo deletePendingMaterial(Integer id)throws Exception;
 
