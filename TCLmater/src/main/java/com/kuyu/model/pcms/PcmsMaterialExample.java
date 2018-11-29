@@ -705,6 +705,66 @@ public class PcmsMaterialExample {
             return (Criteria) this;
         }
 
+        public Criteria andUnitPriceIsNull() {
+            addCriterion("unit_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceIsNotNull() {
+            addCriterion("unit_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceEqualTo(Double value) {
+            addCriterion("unit_price =", value, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceNotEqualTo(Double value) {
+            addCriterion("unit_price <>", value, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceGreaterThan(Double value) {
+            addCriterion("unit_price >", value, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceGreaterThanOrEqualTo(Double value) {
+            addCriterion("unit_price >=", value, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceLessThan(Double value) {
+            addCriterion("unit_price <", value, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceLessThanOrEqualTo(Double value) {
+            addCriterion("unit_price <=", value, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceIn(List<Double> values) {
+            addCriterion("unit_price in", values, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceNotIn(List<Double> values) {
+            addCriterion("unit_price not in", values, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceBetween(Double value1, Double value2) {
+            addCriterion("unit_price between", value1, value2, "unitPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUnitPriceNotBetween(Double value1, Double value2) {
+            addCriterion("unit_price not between", value1, value2, "unitPrice");
+            return (Criteria) this;
+        }
+
         public Criteria andNumberIsNull() {
             addCriterion("number is null");
             return (Criteria) this;
@@ -885,73 +945,73 @@ public class PcmsMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andRangeIsNull() {
-            addCriterion("range is null");
+        public Criteria andRangePriceIsNull() {
+            addCriterion("range_price is null");
             return (Criteria) this;
         }
 
-        public Criteria andRangeIsNotNull() {
-            addCriterion("range is not null");
+        public Criteria andRangePriceIsNotNull() {
+            addCriterion("range_price is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRangeEqualTo(String value) {
-            addCriterion("range =", value, "range");
+        public Criteria andRangePriceEqualTo(String value) {
+            addCriterion("range_price =", value, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeNotEqualTo(String value) {
-            addCriterion("range <>", value, "range");
+        public Criteria andRangePriceNotEqualTo(String value) {
+            addCriterion("range_price <>", value, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeGreaterThan(String value) {
-            addCriterion("range >", value, "range");
+        public Criteria andRangePriceGreaterThan(String value) {
+            addCriterion("range_price >", value, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeGreaterThanOrEqualTo(String value) {
-            addCriterion("range >=", value, "range");
+        public Criteria andRangePriceGreaterThanOrEqualTo(String value) {
+            addCriterion("range_price >=", value, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeLessThan(String value) {
-            addCriterion("range <", value, "range");
+        public Criteria andRangePriceLessThan(String value) {
+            addCriterion("range_price <", value, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeLessThanOrEqualTo(String value) {
-            addCriterion("range <=", value, "range");
+        public Criteria andRangePriceLessThanOrEqualTo(String value) {
+            addCriterion("range_price <=", value, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeLike(String value) {
-            addCriterion("range like", value, "range");
+        public Criteria andRangePriceLike(String value) {
+            addCriterion("range_price like", value, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeNotLike(String value) {
-            addCriterion("range not like", value, "range");
+        public Criteria andRangePriceNotLike(String value) {
+            addCriterion("range_price not like", value, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeIn(List<String> values) {
-            addCriterion("range in", values, "range");
+        public Criteria andRangePriceIn(List<String> values) {
+            addCriterion("range_price in", values, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeNotIn(List<String> values) {
-            addCriterion("range not in", values, "range");
+        public Criteria andRangePriceNotIn(List<String> values) {
+            addCriterion("range_price not in", values, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeBetween(String value1, String value2) {
-            addCriterion("range between", value1, value2, "range");
+        public Criteria andRangePriceBetween(String value1, String value2) {
+            addCriterion("range_price between", value1, value2, "rangePrice");
             return (Criteria) this;
         }
 
-        public Criteria andRangeNotBetween(String value1, String value2) {
-            addCriterion("range not between", value1, value2, "range");
+        public Criteria andRangePriceNotBetween(String value1, String value2) {
+            addCriterion("range_price not between", value1, value2, "rangePrice");
             return (Criteria) this;
         }
 

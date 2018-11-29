@@ -368,4 +368,25 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where scid = #{scid,jdbcType=INTEGER}
   </update>
+  
+  <!-- ============================================================================================== -->
+<select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.ShowcaseResult">
+	SELECT
+	b.scid,
+	c.vendor_name AS vendorName,
+	b.CHILDREN1_TYPE ,
+	b.CHILDREN1_LAST_BUILDTIME,
+	b.CHILDREN1_REASON,
+	b.CHILDREN1_AREA,
+	b.CHILDREN1_LINEAR,
+	b.CHILDREN1_BUILDTIME,
+	b.CHILDREN1_INNER,
+	b.CHILDREN1_OUTER
+FROM
+	pcms_item_relation a
+LEFT JOIN pcms_showcase b ON a.relation_id = b.scid
+LEFT JOIN pcms_supplier c ON b.vendor_id=c.vendor_id
+WHERE
+	a.itid = #{itid}
+</select>
 </mapper>

@@ -416,6 +416,7 @@
   <select id="getItemItemDetailById" parameterType="int" resultType="com.kuyu.vo.pcms.ItemDetail">
   		SELECT
 			a.itid,
+			a.it_type AS itType,
 			b.vendor_name AS vendorName,
 			a.request_id AS requestId,
 			c.REQUEST_TITLE AS requestTitle,
@@ -427,12 +428,20 @@
 			c.REQUEST_DEPT AS requestDept,
 			c.REQUEST_CREATE_TIME AS requestCreateTime,
 			c.REQUEST_END_TIME AS requestEndTime,
-			a.`status`
+			a.`status`,
+			e.SHOP_CRM_CODE,
+			e.SHOP_NAME,
+			e.SHOP_CHANNEL,
+			CONCAT(e.SHOP_PROVINCE,e.SHOP_CITY,e.SHOP_COUNTY) AS SHOP_ADDRESS,
+			e.SHOP_BRANCH,
+			e.SHOP_LEVEL,
+			e.DETAIL_TASK
 		FROM
 			pcms_item a
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 		LEFT JOIN tpm_dept d ON c.REQUEST_USER=d.org_name
+		LEFT JOIN pcms_shop e ON e.SHOP_CRM_CODE=c.SHOP_CRM_CODE
 		where a.itid=#{itid}
   </select>
 </mapper>

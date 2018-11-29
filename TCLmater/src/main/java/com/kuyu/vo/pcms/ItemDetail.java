@@ -6,6 +6,8 @@ public class ItemDetail {
 
 	private Integer itid;
 	
+	private Integer itType; //订单类型
+	
 	private String vendorName; //供应商名字
 	
 	private String requestId; //立项单单号
@@ -28,9 +30,83 @@ public class ItemDetail {
 	
 	private String requestEndTime;  //过期时间
 	
+	private String SHOP_NAME; //门店名称
+	
+	private String SHOP_CRM_CODE;  //门店编码
+	
+	private String SHOP_CHANNEL; //渠道
+	
+	private String SHOP_ADDRESS;  //所在地
+	
+	private String SHOP_BRANCH; //所属分部
+	
+	private String SHOP_LEVEL;  //级别
+	
+	private String DETAIL_TASK; //门店任务
+	
 	private Integer status;  //状态
 	
 	private List<MaterialResult> mrList;
+	
+	private List<OthertmResult> otList;
+	
+	private List<ShowcaseResult> scList;
+
+	public String getSHOP_NAME() {
+		return SHOP_NAME;
+	}
+
+	public void setSHOP_NAME(String sHOP_NAME) {
+		SHOP_NAME = sHOP_NAME;
+	}
+
+	public String getSHOP_CRM_CODE() {
+		return SHOP_CRM_CODE;
+	}
+
+	public void setSHOP_CRM_CODE(String sHOP_CRM_CODE) {
+		SHOP_CRM_CODE = sHOP_CRM_CODE;
+	}
+
+	public String getSHOP_CHANNEL() {
+		return SHOP_CHANNEL;
+	}
+
+	public void setSHOP_CHANNEL(String sHOP_CHANNEL) {
+		SHOP_CHANNEL = sHOP_CHANNEL;
+	}
+
+	public String getSHOP_ADDRESS() {
+		return SHOP_ADDRESS;
+	}
+
+	public void setSHOP_ADDRESS(String sHOP_ADDRESS) {
+		SHOP_ADDRESS = sHOP_ADDRESS;
+	}
+
+	public String getSHOP_BRANCH() {
+		return SHOP_BRANCH;
+	}
+
+	public void setSHOP_BRANCH(String sHOP_BRANCH) {
+		SHOP_BRANCH = sHOP_BRANCH;
+	}
+
+	public String getSHOP_LEVEL() {
+		return SHOP_LEVEL;
+	}
+
+	public void setSHOP_LEVEL(String sHOP_LEVEL) {
+		SHOP_LEVEL = sHOP_LEVEL;
+	}
+
+	public String getDETAIL_TASK() {
+		return DETAIL_TASK;
+	}
+
+	public void setDETAIL_TASK(String dETAIL_TASK) {
+		DETAIL_TASK = dETAIL_TASK;
+	}
 
 	public Integer getItid() {
 		return itid;
@@ -38,6 +114,14 @@ public class ItemDetail {
 
 	public void setItid(Integer itid) {
 		this.itid = itid;
+	}
+
+	public Integer getItType() {
+		return itType;
+	}
+
+	public void setItType(Integer itType) {
+		this.itType = itType;
 	}
 
 	public String getVendorName() {
@@ -144,5 +228,22 @@ public class ItemDetail {
 		this.mrList = mrList;
 	}
 
+	public List<OthertmResult> getOtList() {
+		return otList;
+	}
+
+	public void setOtList(List<OthertmResult> otList) {
+		this.otList = otList;
+	}
+
+	public List<ShowcaseResult> getScList() {
+		return scList;
+	}
+
+	public void setScList(List<ShowcaseResult> scList) {
+		this.scList = scList;
+	}
+
+	
 	
 }

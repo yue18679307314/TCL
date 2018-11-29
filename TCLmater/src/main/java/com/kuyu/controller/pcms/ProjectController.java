@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.kuyu.annotation.AOP_Controller_LOG;
@@ -52,11 +53,9 @@ public class ProjectController {
     @ApiOperation(value = "查看原始立项单")
     @RequestMapping(value = "/detail",produces = "application/json;charset=UTF-8")
     public ResultVo detail(String requestId)throws Exception{
-    	
-    	
-    	PcmsProjectVo result=pcmsProjectService.getProjectDeatil(requestId);
-    	
-        return ResultVo.getData(ResultVo.SUCCESS, result);
+    	PcmsProjectVo result= pcmsProjectService.getProjectDeatil(requestId);
+    		
+    		return ResultVo.getData(ResultVo.SUCCESS, result);
     }
 	
 }

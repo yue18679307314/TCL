@@ -2,11 +2,15 @@ package com.kuyu.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.mapper.pcms.PcmsItemMapper;
 import com.kuyu.mapper.pcms.PcmsItemRelationMapper;
@@ -81,7 +85,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		BeanUtils.copyProperties(projectvo, peojct);
 		peojct.setRequestJson(JSON.toJSONString(projectvo));
 		peojct.setCreatTime(createTime);
-		peojct.setStatus(1);
+		peojct.setStatus(1);//设置为未拆单状态
 		pcmsProjectMapper.insertSelective(peojct);
 		
 		
@@ -89,41 +93,51 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		if(projectType==null){
 			throw new RuntimeException("导入的立项单类型不能为空");
 		}
+		
 		//展台展柜
 		if(projectType==1){
-			
+			//创建门店信息
 			createShop(projectvo);
 			
+			//写入展台展柜数据
 			List<PcmsShowcase> showcaseList=projectvo.getShowcaseList();
 			for (PcmsShowcase showcase : showcaseList) {
 				showcase.setCreateTime(createTime);
 				pcmsShopcaseMapper.insertSelective(showcase);
 			}
-			//生成结算单
-			createItem(requestId,projectType);
+			
+			//拆单
+			splitProjet(requestId,projectType);
 			
 		}
+		
 		//其他终端
 		if(projectType==2){
+			//创建门店信息
 			createShop(projectvo);
+			
+			//写入其他终端数据
 			List<PcmsOthertm> oTList=projectvo.getOtherTerminalList();
 			for (PcmsOthertm oT : oTList) {
 				oT.setCreateTime(createTime);
 				pcmsOthertmMapper.insertSelective(oT);
 			}
 			
-			//生成结算单
-			createItem(requestId,projectType);
+			//拆单
+			splitProjet(requestId,projectType);
 		}
+		
 		//物料--物料数据目前不走这里！！！！
 		if(projectType==3){
+			
+			//写入物料数据
 			List<PcmsMaterial> materialList=projectvo.getMaterialList();
 			if(materialList!=null&&materialList.size()>0){
 				for (PcmsMaterial material : materialList) {
 					pcmsMaterialMapper.insertSelective(material);
 				}
-				//生成结算单
-				createItem(requestId,projectType);
+				//拆单
+				splitProjet(requestId,projectType);
 			}else{
 				//数据不对
 				peojct.setStatus(2);
@@ -138,179 +152,141 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 	
 	
 	
-	private void createItem(String requestId,Integer projectType) {
+	private void splitProjet(String requestId,Integer projectType) {
 		
-		//查询原始立项单
-		PcmsProject project=pcmsProjectMapper.selectByPrimaryKey(requestId);
-		//截取公司代码
-		String companyCodeAndName=project.getRequestCompanyCode();
-		String companyCode=companyCodeAndName
-				.substring(companyCodeAndName.length()-5, companyCodeAndName.length())
-				.replace(")", "").trim();
+		
 		
 		// 展台展柜
 		if (projectType == 1) {
+			
+			//根据立项单ID查询展台展柜数据
 			PcmsShowcaseExample scParam=new PcmsShowcaseExample();
 			scParam.createCriteria().andResuestIdEqualTo(requestId);
 			List<PcmsShowcase> showcaseList = pcmsShopcaseMapper.selectByExample(scParam);
 			
+			//根据供应商分类并且写入订单表
 			if (showcaseList != null && showcaseList.size() > 0) {
-				 List<PcmsShowcase> group = new ArrayList<PcmsShowcase>();  
+				 List<PcmsShowcase> group = new ArrayList<PcmsShowcase>(); 
+				 Double sumPrice=0d;//汇总价格
+				 Map<Integer,String> itemNumberMap=new HashMap<Integer,String>(); 
+				 String itNumber="";
 			        for (PcmsShowcase ma : showcaseList) {  
 			            boolean state = false;  
+			            
+			            //写入对应关系
+			            PcmsItemRelation itRe=new PcmsItemRelation();
+			            
 			            for (PcmsShowcase mas : group) {  
 			                if(ma.getVendorId().equals(mas.getVendorId())){  
-			                	
+			                	sumPrice+=Double.valueOf(ma.getChildren1Amount());
 			                    state = true;  
 			                }  
 			            }  
 			            if(!state){  
-			            	group.add(ma);  
+			            	//创建唯一订单号
+			            	itNumber=PcmsProjectUtil.creatItemNumber();
+			            	itemNumberMap.put(ma.getScid(), itNumber);
+			            	group.add(ma);
 			            } 
-			            
-			            //写入对应关系
-			            PcmsItemRelation itRe=new PcmsItemRelation();
-			            itRe.setType(requestId);
+			            itRe.setType(itNumber);
 			            itRe.setRelationId(ma.getScid());
 			            itRe.setCreateTime(new Date());
 			            pcmsItemRelationMapper.insertSelective(itRe);
+			            
+			           
 			        }  
 			        for (PcmsShowcase insert : group) {
-			        	PcmsItem item=new PcmsItem();
-			        	//生成立项单唯一编号
-			    		item.setItemNumber(PcmsProjectUtil.creatItemNumber());
-			    		item.setCreateTime(new Date());
-			    		item.setVendorId(insert.getVendorId());
-			    		item.setRequestId(requestId);
-//			    		item.setItemPrice(99d);
-			    		item.setItType(1);
-			    		item.setStatus(0);
-			    		//设置立项单的分公司标识
-			    		item.setRequestCompanyCode(companyCode);
-			    		pcmsItemMapper.insertSelective(item);
-			    		
-			    		//更新中间表
-			    		PcmsItemRelation record=new PcmsItemRelation();
-			    		record.setItid(item.getItid());
-			    		PcmsItemRelationExample example=new PcmsItemRelationExample();
-			    		example.createCriteria().andTypeEqualTo(requestId);
-			    		pcmsItemRelationMapper.updateByExampleSelective(record, example);
-			    		
-			    		//拆单成功
-			    		project.setStatus(0);
-			    		PcmsProjectExample example2=new PcmsProjectExample();
-			    		example2.createCriteria().andRequestIdEqualTo(requestId);
-			    		pcmsProjectMapper.updateByExampleSelective(project, example2);
+			        	createItem(requestId,insert.getVendorId(),projectType,sumPrice,itemNumberMap.get(insert.getScid()));
 			        }  
 				
 			} 
 		}
+		
 		// 其他终端
 		if (projectType == 2) {
+			
+			//根据立项单ID查询其他终端数据
 			PcmsOthertmExample otParam=new PcmsOthertmExample();
 			otParam.createCriteria().andRequestIdEqualTo(requestId);
 			List<PcmsOthertm> othertmList = pcmsOthertmMapper.selectByExample(otParam);
 			
+			//根据供应商分类并且写入订单表
 			if (othertmList != null && othertmList.size() > 0) {
 				 List<PcmsOthertm> group = new ArrayList<PcmsOthertm>();  
+				 Double sumPrice=0d;//汇总价格
+				 Map<Integer,String> itemNumberMap=new HashMap<Integer,String>(); 
+				 String itNumber="";
 			        for (PcmsOthertm ma : othertmList) {  
 			            boolean state = false;  
+			            
+			            //写入对应关系
+			            PcmsItemRelation itRe=new PcmsItemRelation();
+			            
 			            for (PcmsOthertm mas : group) {  
 			                if(ma.getVendorId().equals(mas.getVendorId())){  
-			                	
+			                	sumPrice+=Double.valueOf(ma.getChildren3Amount());
 			                    state = true;  
 			                }  
 			            }  
 			            if(!state){  
-			            	group.add(ma);  
+			            	//创建唯一订单号
+			            	itNumber=PcmsProjectUtil.creatItemNumber();
+			            	itemNumberMap.put(ma.getOtid(), itNumber);
+			            	group.add(ma);
 			            } 
-			            
-			            //写入对应关系
-			            PcmsItemRelation itRe=new PcmsItemRelation();
-			            itRe.setType(requestId);
+			            itRe.setType(itNumber);
 			            itRe.setRelationId(ma.getOtid());
 			            itRe.setCreateTime(new Date());
 			            pcmsItemRelationMapper.insertSelective(itRe);
 			        }  
 			        for (PcmsOthertm insert : group) {
-			        	PcmsItem item=new PcmsItem();
-			        	//生成立项单唯一编号
-			    		item.setItemNumber(PcmsProjectUtil.creatItemNumber());
-			    		item.setCreateTime(new Date());
-			    		item.setVendorId(insert.getVendorId());
-			    		item.setRequestId(requestId);
-//			    		item.setItemPrice(99d);
-			    		item.setItType(2);
-			    		item.setStatus(0);
-			    		//设置立项单的分公司标识
-			    		item.setRequestCompanyCode(companyCode);
-			    		pcmsItemMapper.insertSelective(item);
-			    		
-			    		//更新中间表
-			    		PcmsItemRelation record=new PcmsItemRelation();
-			    		record.setItid(item.getItid());
-			    		PcmsItemRelationExample example=new PcmsItemRelationExample();
-			    		example.createCriteria().andTypeEqualTo(requestId);
-			    		pcmsItemRelationMapper.updateByExampleSelective(record, example);
-			    		
-			    		//拆单成功
-			    		project.setStatus(0);
-			    		PcmsProjectExample example2=new PcmsProjectExample();
-			    		example2.createCriteria().andRequestIdEqualTo(requestId);
-			    		pcmsProjectMapper.updateByExampleSelective(project, example2);
+			        	createItem(requestId,insert.getVendorId(),projectType,sumPrice,itemNumberMap.get(insert.getOtid()));
 			        }  
 				
 			} 
 		}
+		
 		// 物料
 		if (projectType == 3) {
+			
+			//根据立项单ID查询物料数据
 			PcmsMaterialExample maParam=new PcmsMaterialExample();
 			maParam.createCriteria().andResuestIdEqualTo(requestId);
 			List<PcmsMaterial> materialList = pcmsMaterialMapper.selectByExample(maParam);
+			
+			//根据供应商分类并且写入订单表
 			if (materialList != null && materialList.size() > 0) {
 				 List<PcmsMaterial> group = new ArrayList<PcmsMaterial>();  
-			        for (PcmsMaterial ma : materialList) {  
+				 Double sumPrice=0d;//汇总价格
+				 Map<Integer,String> itemNumberMap=new HashMap<Integer,String>(); 
+				 String itNumber="";
+			        for (PcmsMaterial ma : materialList) {
+			        	//写入对应关系
+			            PcmsItemRelation itRe=new PcmsItemRelation();
+			        	
 			            boolean state = false;  
-			            for (PcmsMaterial mas : group) {  
-			                if(ma.getVendorId().equals(mas.getVendorId())){  
-			                	
+			            for (PcmsMaterial mas : group) {
+			                if(ma.getVendorId().equals(mas.getVendorId())){
+			                	sumPrice+=ma.getComparisonPrice()*ma.getNumber();//单价*数量
 			                    state = true;  
 			                }  
 			            }  
-			            if(!state){  
-			            	group.add(ma);  
+			            if(!state){
+			            	//创建唯一订单号
+			            	itNumber=PcmsProjectUtil.creatItemNumber();
+			            	itemNumberMap.put(ma.getMrid(), itNumber);
+			            	group.add(ma); 
 			            } 
-			            
-			            //写入对应关系
-			            PcmsItemRelation itRe=new PcmsItemRelation();
-			            itRe.setType(requestId);
+			           
+			            itRe.setType(itNumber);
 			            itRe.setRelationId(ma.getMrid());
 			            itRe.setCreateTime(new Date());
 			            pcmsItemRelationMapper.insertSelective(itRe);
 			        }  
+			        
+			        //遍历组信息，新建订单
 			        for (PcmsMaterial insert : group) {
-			        	PcmsItem item=new PcmsItem();
-			    		item.setItemNumber("JS1234");
-			    		item.setCreateTime(new Date());
-			    		item.setVendorId(insert.getVendorId());
-			    		item.setRequestId(requestId);
-//			    		item.setItemPrice(999d);
-			    		item.setItType(3);
-			    		item.setStatus(0);
-			    		pcmsItemMapper.insertSelective(item);
-			    		
-			    		//更新中间表
-			    		PcmsItemRelation record=new PcmsItemRelation();
-			    		record.setItid(item.getItid());
-			    		PcmsItemRelationExample example=new PcmsItemRelationExample();
-			    		example.createCriteria().andTypeEqualTo(requestId);
-			    		pcmsItemRelationMapper.updateByExampleSelective(record, example);
-			    		
-			    		//拆单成功
-			    		project.setStatus(0);
-			    		PcmsProjectExample example2=new PcmsProjectExample();
-			    		example2.createCriteria().andRequestIdEqualTo(requestId);
-			    		pcmsProjectMapper.updateByExampleSelective(project, example2);
+			        	createItem(requestId,insert.getVendorId(),projectType,sumPrice,itemNumberMap.get(insert.getMrid()));
 			        }  
 				
 			} 
@@ -330,36 +306,89 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 //		return false;
 	}
 
+	//创建立项单
+	private Integer createItem(String requestId,String vendorId,Integer projectType,Double price,String itemNumber) {
+		
+		// 查询原始立项单
+		PcmsProject project = pcmsProjectMapper.selectByPrimaryKey(requestId);
+		
+		// 截取公司代码
+		String companyCodeAndName = project.getRequestCompanyCode();
+		String companyCode = companyCodeAndName.substring(companyCodeAndName.length() - 5, companyCodeAndName.length())
+				.replace(")", "").trim();
+		
+		//写入订单表
+		PcmsItem item=new PcmsItem();
+		item.setItemNumber(itemNumber);//生成订单唯一编号
+		item.setCreateTime(new Date());
+		item.setVendorId(vendorId);//设置供应商
+		item.setRequestId(requestId);//写入原始立项单ID
+		item.setItType(projectType);//设置订单类型
+		item.setStatus(0);//设置订单状态为未接单
+		item.setRequestCompanyCode(companyCode);//设置订单的分公司标识
+		item.setItemPrice(price);//设置该单的价格
+		pcmsItemMapper.insertSelective(item);
+		
+		updateItemRelation(item.getItid(),itemNumber);
+		
+		
+		//更新原始立项单表，设置状态为拆单成功
+		project.setStatus(0);
+		PcmsProjectExample example2=new PcmsProjectExample();
+		example2.createCriteria().andRequestIdEqualTo(requestId);
+		pcmsProjectMapper.updateByExampleSelective(project, example2);
+		
+		return item.getItid();
+	}
 
-
+	//更新中间表
+	private void updateItemRelation(Integer itid,String itemNumber){
+		PcmsItemRelation record=new PcmsItemRelation();
+		record.setItid(itid);
+		PcmsItemRelationExample example=new PcmsItemRelationExample();
+		example.createCriteria().andTypeEqualTo(itemNumber);
+		pcmsItemRelationMapper.updateByExampleSelective(record, example);
+	}
+	
+	
 
 	@Override
 	public PcmsProjectVo getProjectDeatil(String requestId) {
-		PcmsProjectVo result=pcmsProjectMapper.getProjectDeatil(requestId);
-		String type=result.getType();
-		//展台展柜
-		if(type.equals("1")){
-			PcmsShowcaseExample scParam=new PcmsShowcaseExample();
-			scParam.createCriteria().andResuestIdEqualTo(requestId);
-			List<PcmsShowcase> showcaseList = pcmsShopcaseMapper.selectByExample(scParam);
-			result.setShowcaseList(showcaseList);
-		}
-		//其他终端
-		if(type.equals("2")){
-			PcmsOthertmExample otParam=new PcmsOthertmExample();
-			otParam.createCriteria().andRequestIdEqualTo(requestId);
-			List<PcmsOthertm> otList = pcmsOthertmMapper.selectByExample(otParam);
-			result.setOtherTerminalList(otList);
-		}
-		//物料
-		if(type.equals("3")){
-			PcmsMaterialExample maParam=new PcmsMaterialExample();
-			maParam.createCriteria().andResuestIdEqualTo(requestId);
-			List<PcmsMaterial> materialList = pcmsMaterialMapper.selectByExample(maParam);
-			result.setMaterialList(materialList);
-		}
 		
-		return result;
+		PcmsProject detail=pcmsProjectMapper.selectByPrimaryKey(requestId);
+		String json=detail.getRequestJson();
+		
+		
+//		PcmsProjectVo result=pcmsProjectMapper.getProjectDeatil(requestId);
+		
+		 //使用JSONObject将原始JSON转换为Java对象
+		PcmsProjectVo jsonBeat=JSONObject.parseObject(json, PcmsProjectVo.class);
+//        System.out.println(jsonBeat);
+		
+//		String type=result.getType();
+//		//展台展柜
+//		if(type.equals("1")){
+//			PcmsShowcaseExample scParam=new PcmsShowcaseExample();
+//			scParam.createCriteria().andResuestIdEqualTo(requestId);
+//			List<PcmsShowcase> showcaseList = pcmsShopcaseMapper.selectByExample(scParam);
+//			result.setShowcaseList(showcaseList);
+//		}
+//		//其他终端
+//		if(type.equals("2")){
+//			PcmsOthertmExample otParam=new PcmsOthertmExample();
+//			otParam.createCriteria().andRequestIdEqualTo(requestId);
+//			List<PcmsOthertm> otList = pcmsOthertmMapper.selectByExample(otParam);
+//			result.setOtherTerminalList(otList);
+//		}
+//		//物料
+//		if(type.equals("3")){
+//			PcmsMaterialExample maParam=new PcmsMaterialExample();
+//			maParam.createCriteria().andResuestIdEqualTo(requestId);
+//			List<PcmsMaterial> materialList = pcmsMaterialMapper.selectByExample(maParam);
+//			result.setMaterialList(materialList);
+//		}
+		
+		return jsonBeat;
 	}
 	
 	

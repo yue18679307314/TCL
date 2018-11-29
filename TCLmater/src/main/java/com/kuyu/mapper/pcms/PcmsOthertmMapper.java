@@ -2,6 +2,8 @@ package com.kuyu.mapper.pcms;
 
 import com.kuyu.model.pcms.PcmsOthertm;
 import com.kuyu.model.pcms.PcmsOthertmExample;
+import com.kuyu.vo.pcms.OthertmResult;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +29,6 @@ public interface PcmsOthertmMapper {
     int updateByPrimaryKeySelective(PcmsOthertm record);
 
     int updateByPrimaryKey(PcmsOthertm record);
+
+	List<OthertmResult> selectByItid(Integer itid);
 }

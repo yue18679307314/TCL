@@ -11,17 +11,31 @@ public class PcmsOthertm {
 
     private String vendorId;
 
-    @JsonProperty("CHILDREN3_DETAIL")
+    private String mrname3;
+
+    private String cost;
+
+    private String unit;
+
+    private String note;
+
+    private String comparisonPrice;
+
+    private String specifications3;
+
     private String children3Detail;
 
     private String children3Vendor;
 
     private String children3Buildtime;
 
+    @JsonProperty("CHILDREN3_COUNT")
     private String children3Count;
 
+    @JsonProperty("CHILDREN3_PRICE")
     private String children3Price;
 
+    @JsonProperty("CHILDREN3_AMOUNT")
     private String children3Amount;
 
     private Date createTime;
@@ -48,6 +62,54 @@ public class PcmsOthertm {
 
     public void setVendorId(String vendorId) {
         this.vendorId = vendorId == null ? null : vendorId.trim();
+    }
+
+    public String getMrname3() {
+        return mrname3;
+    }
+
+    public void setMrname3(String mrname3) {
+        this.mrname3 = mrname3 == null ? null : mrname3.trim();
+    }
+
+    public String getCost() {
+        return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost == null ? null : cost.trim();
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit == null ? null : unit.trim();
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note == null ? null : note.trim();
+    }
+
+    public String getComparisonPrice() {
+        return comparisonPrice;
+    }
+
+    public void setComparisonPrice(String comparisonPrice) {
+        this.comparisonPrice = comparisonPrice == null ? null : comparisonPrice.trim();
+    }
+
+    public String getSpecifications3() {
+        return specifications3;
+    }
+
+    public void setSpecifications3(String specifications3) {
+        this.specifications3 = specifications3 == null ? null : specifications3.trim();
     }
 
     public String getChildren3Detail() {
