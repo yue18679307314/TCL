@@ -12,6 +12,7 @@ import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.util.CheckParamUtils;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.SupplierMaterialVo;
 import com.kuyu.vo.query.SupplierMaterialQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,5 +68,11 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
         List<SupplierMaterialQuery> list = baseMapper.findSupplierMaterialByPage(query,page);
         page.setRecords(list);
         return ResultVo.getDataWithSuccess(page);
+    }
+
+    @Override
+    public ResultVo querySupplierMaterialList(SupplierMaterialVo query) throws Exception {
+        List<PcmsSupplierMaterialModel> list = baseMapper.querySupplierMaterialList(query);
+        return ResultVo.getDataWithSuccess(list);
     }
 }

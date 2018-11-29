@@ -1,7 +1,9 @@
 package com.kuyu.service;
 
 import com.baomidou.mybatisplus.service.IService;
+import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsPendingMaterialModel;
+import com.kuyu.model.pcms.PcmsRejectLogModel;
 import com.kuyu.model.pcms.ReceiptModel;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsShowcaseVo;
@@ -35,5 +37,11 @@ public interface ReceiptService extends IService<ReceiptModel> {
 
     /**市场人员查看立项单详情*/
     ResultVo getItemDetail(Integer itid)throws Exception;
+
+    /**市场人员驳回验收单*/
+    ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel, LoginUserInfo userInfo)throws Exception;
+
+    /**市场人员验收成功*/
+    ResultVo doRejectSuccess(Integer itid, LoginUserInfo userInfo)throws Exception;
 
 }

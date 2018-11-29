@@ -55,4 +55,31 @@
         ORDER BY t.id DESC limit 0,1;
     </select>
 
+    <select id="querySupplierMaterialList" resultType="com.kuyu.model.pcms.PcmsSupplierMaterialModel">
+        SELECT
+        psm.id AS id,
+        psm.category AS category,
+        psm.comparison_price AS comparisonPrice,
+        psm.note AS note,
+        psm.ranges AS ranges,
+        psm.specifications AS specifications,
+        psm.unit AS unit
+        FROM pcms_user p
+        LEFT JOIN  pcms_supplier_user psu ON p.openid = psu.openid
+        LEFT JOIN  pcms_supplier_company psc ON psc.vendor_id = psu.vendor_id
+        RIGHT JOIN  pcms_supplier_material psm ON psc.company = psm.company AND psc.vendor_id = psm.vendor_id
+        <where>
+            <if test="params.category !=null and params.category !=''">
+                psm.category LIKE '%${params.category}%'
+            </if>
+            <if test="params.specifications !=null and params.specifications !=''">
+                OR psm.specifications LIKE '%${params.specifications}%'
+            </if>
+            <if test="params.openid !=null and params.openid !=''">
+                AND p.openid =
+                #{params.openid,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
 </mapper>

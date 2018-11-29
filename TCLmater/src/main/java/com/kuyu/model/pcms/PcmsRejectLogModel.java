@@ -42,6 +42,10 @@ public class PcmsRejectLogModel extends Model<PcmsRejectLogModel> {
     @JsonProperty("operator")
     private String operator;
 
+    @ApiModelProperty("状态")
+    @JsonProperty("type")
+    private Integer type;
+
     public Integer getId() {
         return id;
     }
@@ -80,6 +84,14 @@ public class PcmsRejectLogModel extends Model<PcmsRejectLogModel> {
 
     public void setOperator(String operator) {
         this.operator = operator;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     @Override

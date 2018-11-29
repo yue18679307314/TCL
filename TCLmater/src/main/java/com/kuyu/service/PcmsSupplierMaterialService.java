@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.SupplierMaterialVo;
 import com.kuyu.vo.query.SupplierMaterialQuery;
 
 public interface PcmsSupplierMaterialService extends IService<PcmsSupplierMaterialModel> {
@@ -14,5 +15,8 @@ public interface PcmsSupplierMaterialService extends IService<PcmsSupplierMateri
     public void deletePcmsSupplierMaterial(Integer id) throws Exception;
     /**分页查询*/
     ResultVo findSupplierMaterialByPage(LoginUserInfo userInfo, SupplierMaterialQuery query)throws Exception;
+
+    /**查询*/
+    ResultVo querySupplierMaterialList(SupplierMaterialVo query)throws Exception;
 
 }
