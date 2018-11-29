@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsMaterialImgMapper">
+
+    <select id="selectById" resultType="com.kuyu.model.pcms.PcmsMaterialImgModel">
+        SELECT t.id AS id,
+        t.image AS image,
+        t.pending_material_id AS pending_material_id
+        FROM pcms_material_img t
+        <where>
+            <if test="id !=null and id !=''">
+                 t.pending_material_id =
+                #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+</mapper>

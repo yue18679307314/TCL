@@ -12,4 +12,6 @@ import java.util.List;
 public interface PcmsPendingMaterialMapper extends BaseMapper<PcmsPendingMaterialModel> {
 
     List<PcmsPendingMaterialModel> selectByItid(@Param("itid") Integer itid);
+
+    int insertPendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel);
 }

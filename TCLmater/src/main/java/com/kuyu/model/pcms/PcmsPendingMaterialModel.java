@@ -1,6 +1,7 @@
 package com.kuyu.model.pcms;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by pc on 2018/11/27
@@ -19,6 +21,9 @@ import java.util.Date;
 @TableName("pcms_pending_material")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
+
+    @TableField(exist=false)
+    private static final long serialVersionUID = 4998163694304048704L;
     /**id*/
     @TableId(type= IdType.AUTO)
     private Integer id;
@@ -58,7 +63,10 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
     /**单价数量范围*/
     @ApiModelProperty("图片")
     @JsonProperty("image")
-    private String image;
+    private String[] image;
+
+
+    private List<PcmsMaterialImgModel> list;
 
     public Integer getId() {
         return id;
@@ -124,12 +132,20 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
         this.itid = itid;
     }
 
-    public String getImage() {
+    public String[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(String[] image) {
         this.image = image;
+    }
+
+    public List<PcmsMaterialImgModel> getList() {
+        return list;
+    }
+
+    public void setList(List<PcmsMaterialImgModel> list) {
+        this.list = list;
     }
 
     @Override

@@ -12,5 +12,12 @@
         </where>
     </select>
 
+    <insert id="insertPendingMaterial" parameterType="com.kuyu.model.pcms.PcmsPendingMaterialModel" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		pcms_pending_material(itid,category,specifications,unit,ranges,comparison_price,create_time)
+		VALUES
+		(#{itid},#{category},#{specifications},#{unit},#{ranges},#{comparison_price},SYSDATE())
+	</insert>
+
 
 </mapper>

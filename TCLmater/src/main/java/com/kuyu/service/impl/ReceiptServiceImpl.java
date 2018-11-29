@@ -17,10 +17,15 @@ import com.kuyu.vo.pcms.PcmsShopVo;
 import com.kuyu.vo.pcms.PcmsShowcaseVo;
 import com.kuyu.vo.query.ReceiptQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +36,9 @@ import java.util.List;
 @Transactional
 public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         implements ReceiptService {
+    @Value("${image.path}")
+    private String filePath;
+
     @Autowired
     private PcmsUserService pcmsUserService;
 
@@ -45,6 +53,9 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Resource
     private PcmsRejectLogMapper pcmsRejectLogMapper;
+
+    @Resource
+    private PcmsMaterialImgMapper pcmsMaterialImgMapper;
 
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
@@ -74,10 +85,16 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**展台展柜信息*/
             PcmsShowcaseVo pcmsShowcaseVo = baseMapper.getPcmsShowcaseInfo(itid);
             /**物料信息*/
+            List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
+            for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
+                List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+                pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+            }
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
             receiptDetailModel.setPcmsShowcaseVo(pcmsShowcaseVo);
-            receiptDetailModel.setPcmsPendingMaterialModelList(list);
+            receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
         }else if((receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==0)){
             /**门店信息*/
             PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
@@ -95,14 +112,21 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**展台展柜信息*/
             PcmsShowcaseVo pcmsShowcaseVo = baseMapper.getPcmsShowcaseInfo(itid);
             /**物料信息*/
+            List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
             if(null == list || list.size() == 0){
                 PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
                 list.add(pcmsPendingMaterialModel);
+            }else{
+                for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
+                    List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+                    pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                    pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+                }
             }
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
             receiptDetailModel.setPcmsShowcaseVo(pcmsShowcaseVo);
-            receiptDetailModel.setPcmsPendingMaterialModelList(list);
+            receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
         }
         if((receiptDetailModel.getType() == 2 && receiptDetailModel.getStatus()==2) || (receiptDetailModel.getType() == 2 && receiptDetailModel.getStatus()==4)){
             /**门店信息*/
@@ -110,10 +134,16 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**其他展台*/
             List<PcmsOthertmVo> list = baseMapper.getPcmsOthertmInfo(itid);
             /**物料信息*/
+            List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
+            for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
+                List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+                pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+            }
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
             receiptDetailModel.setPcmsOthertmVoList(list);
-            receiptDetailModel.setPcmsPendingMaterialModelList(list1);
+            receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
         }else if((receiptDetailModel.getType() == 2 && receiptDetailModel.getStatus()==0)){
             /**门店信息*/
             PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
@@ -131,14 +161,21 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**其他展台*/
             List<PcmsOthertmVo> list = baseMapper.getPcmsOthertmInfo(itid);
             /**物料信息*/
+            List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
             if(null == list1 || list1.size() == 0){
                 PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
                 list1.add(pcmsPendingMaterialModel);
+            }else{
+                for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
+                    List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+                    pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                    pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+                }
             }
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
             receiptDetailModel.setPcmsOthertmVoList(list);
-            receiptDetailModel.setPcmsPendingMaterialModelList(list1);
+            receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
         }
         if((receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==2) || (receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==4)){
             /**广告物料*/
@@ -159,13 +196,20 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**广告物料*/
             List<MaterialResult> list = baseMapper.getMaterialResultInfo(itid);
             /**物料信息*/
+            List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
             if(null == list1 || list1.size() == 0){
                 PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
                 list1.add(pcmsPendingMaterialModel);
+            }else{
+                for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
+                    List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+                    pcmsPendingMaterialModel.setList(pcmsMaterialImg);
+                    pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+                }
             }
             receiptDetailModel.setMaterialResultList(list);
-            receiptDetailModel.setPcmsPendingMaterialModelList(list1);
+            receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
         }
         return ResultVo.getDataWithSuccess(receiptDetailModel);
     }
@@ -192,7 +236,43 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Override
     public ResultVo addPendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel) throws Exception {
-        pcmsPendingMaterialMapper.insert(pcmsPendingMaterialModel);
+        pcmsPendingMaterialMapper.insertPendingMaterial(pcmsPendingMaterialModel);
+        String[] image = pcmsPendingMaterialModel.getImage();
+        if(image==null||image.length==0)
+            return null;
+        String data="";
+        String dataprefix="";
+        for(String file:image){
+            String[] str=file.split("base64,");
+            if(str==null||str.length!=2)
+                return null;
+            dataprefix=str[0];
+            data=str[1];
+            String suffix = "";
+            if("data:image/jpeg;".equalsIgnoreCase(dataprefix)){//data:image/jpeg;base64,base64编码的jpeg图片数据
+                suffix = ".jpg";
+            } else if("data:image/x-icon;".equalsIgnoreCase(dataprefix)){//data:image/x-icon;base64,base64编码的icon图片数据
+                suffix = ".ico";
+            } else if("data:image/gif;".equalsIgnoreCase(dataprefix)){//data:image/gif;base64,base64编码的gif图片数据
+                suffix = ".gif";
+            } else if("data:image/png;".equalsIgnoreCase(dataprefix)){//data:image/png;base64,base64编码的png图片数据
+                suffix = ".png";
+            }else{
+                throw new Exception("上传图片格式不合法");
+            }
+            //因为BASE64Decoder的jar问题，此处使用spring框架提供的工具包
+            byte[] bs = Base64Utils.decodeFromString(data);
+            //FileUtils.writeByteArrayToFile(new File(savepath+System.currentTimeMillis()+suffix), bs);
+            FileOutputStream out=new FileOutputStream(new File(filePath+System.currentTimeMillis()+suffix));
+            String sb = filePath+System.currentTimeMillis()+suffix;
+            out.write(bs);
+            out.flush();
+            out.close();
+            PcmsMaterialImgModel pcmsMaterialImgModel = new PcmsMaterialImgModel();
+            pcmsMaterialImgModel.setImage(sb.toString());
+            pcmsMaterialImgModel.setPending_material_id(pcmsPendingMaterialModel.getId());
+            pcmsMaterialImgMapper.insert(pcmsMaterialImgModel);
+        }
         return ResultVo.get(ResultVo.SUCCESS);
     }
 

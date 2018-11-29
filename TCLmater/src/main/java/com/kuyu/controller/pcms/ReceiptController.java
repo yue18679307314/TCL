@@ -21,6 +21,9 @@ import javax.annotation.Resource;
 @RequestMapping("/receipt")
 public class ReceiptController{
 
+
+
+
     @Resource
     private ReceiptService receiptService;
     @Resource
@@ -93,7 +96,7 @@ public class ReceiptController{
      */
     @ApiOperation(value = "添加待验收物料",response = PcmsPendingMaterialModel.class)
     @PostMapping("/addPendingMaterial")
-    public ResultVo addPendingMaterial(@RequestBody PcmsPendingMaterialModel pcmsPendingMaterialModel) throws Exception {
+    public ResultVo add(@RequestBody PcmsPendingMaterialModel pcmsPendingMaterialModel) throws Exception {
         return receiptService.addPendingMaterial(pcmsPendingMaterialModel);
     }
 
