@@ -1,5 +1,6 @@
 package com.kuyu.vo.pcms;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,9 +12,14 @@ import com.kuyu.model.pcms.PcmsShowcase;
 import io.swagger.annotations.ApiModelProperty;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PcmsProjectVo {
+public class PcmsProjectVo implements Serializable{
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@JsonProperty("REQUEST_ID")
 	private String requestId;
 	
@@ -21,16 +27,16 @@ public class PcmsProjectVo {
 	private String requestTitle;
 	
 	@JsonProperty("DETAIL_ACCOUNT")
-	private String DETAIL_ACCOUNT;
+	private String detailAccount;
 	
 	@JsonProperty("REQUEST_COMPANY_CODE")
 	private String requestCompanyCode;
 	
 	@JsonProperty("DETAIL_SUBJECT")
-	private String DETAIL_SUBJECT;
+	private String detailSubject;
 	
 	@JsonProperty("REQUEST_DEPT")
-	private String REQUEST_DEPT;
+	private String requestDept;
 	
 	@JsonProperty("REQUEST_USER")
 	private String REQUEST_USER;
@@ -48,19 +54,19 @@ public class PcmsProjectVo {
 	private String REQUEST_INFO;
 	
 	@JsonProperty("request_user_name")
-	private String request_user_name; //申请人
+	private String requestUserName; //申请人
 	
 	@JsonProperty("finance_user")
 	private String finance_user;     //财务人工号
 	
 	@JsonProperty("finance_user_name")
-	private String finance_user_name; //财务人姓名
+	private String financeUserName; //财务人姓名
 	
 	@JsonProperty("REQUEST_CREATE_TIME")
-	private String REQUEST_CREATE_TIME;
+	private String requestCreateTime;
 	
 	@JsonProperty("REQUEST_END_TIME")
-	private String REQUEST_END_TIME;
+	private String requestEndTime;
 	
 	@JsonProperty("TYPE")
 	private String type;            //类型1表示展台展柜，2表示其他终端，3表示广告物料
@@ -105,7 +111,7 @@ public class PcmsProjectVo {
 	private String DETAIL_CHANNEL;
 	
 	@JsonProperty("DETAIL_TASK")
-	private String DETAIL_TASK;
+	private String detailTask;
 	
 	@JsonProperty("DETAIL_AMOUNT")
 	private String DETAIL_AMOUNT;
@@ -118,6 +124,9 @@ public class PcmsProjectVo {
 
 	@JsonProperty("ACTIVITY_CITY")
 	private String ACTIVITY_CITY;
+	
+	@JsonProperty("SHOP_CITY")
+	private String shopCity;
 	
 	@JsonProperty("SHOP_LEVEL")
 	private String shopLevel;
@@ -140,7 +149,7 @@ public class PcmsProjectVo {
 	
 	@JsonProperty("materialList")
     @ApiModelProperty("物料数据列表")
-	List<PcmsMaterial> MaterialList;
+	List<PcmsMaterial> materialList;
 	
 	@JsonProperty("showcaseList")
     @ApiModelProperty("展柜展台")
@@ -162,12 +171,12 @@ public class PcmsProjectVo {
 		this.requestTitle = requestTitle;
 	}
 
-	public String getDETAIL_ACCOUNT() {
-		return DETAIL_ACCOUNT;
+	public String getDetailAccount() {
+		return detailAccount;
 	}
 
-	public void setDETAIL_ACCOUNT(String dETAIL_ACCOUNT) {
-		DETAIL_ACCOUNT = dETAIL_ACCOUNT;
+	public void setDetailAccount(String detailAccount) {
+		this.detailAccount = detailAccount;
 	}
 
 	public String getRequestCompanyCode() {
@@ -178,20 +187,20 @@ public class PcmsProjectVo {
 		this.requestCompanyCode = requestCompanyCode;
 	}
 
-	public String getDETAIL_SUBJECT() {
-		return DETAIL_SUBJECT;
+	public String getDetailSubject() {
+		return detailSubject;
 	}
 
-	public void setDETAIL_SUBJECT(String dETAIL_SUBJECT) {
-		DETAIL_SUBJECT = dETAIL_SUBJECT;
+	public void setDetailSubject(String detailSubject) {
+		this.detailSubject = detailSubject;
 	}
 
-	public String getREQUEST_DEPT() {
-		return REQUEST_DEPT;
+	public String getRequestDept() {
+		return requestDept;
 	}
 
-	public void setREQUEST_DEPT(String rEQUEST_DEPT) {
-		REQUEST_DEPT = rEQUEST_DEPT;
+	public void setRequestDept(String requestDept) {
+		this.requestDept = requestDept;
 	}
 
 	public String getREQUEST_USER() {
@@ -234,12 +243,12 @@ public class PcmsProjectVo {
 		REQUEST_INFO = rEQUEST_INFO;
 	}
 
-	public String getRequest_user_name() {
-		return request_user_name;
+	public String getRequestUserName() {
+		return requestUserName;
 	}
 
-	public void setRequest_user_name(String request_user_name) {
-		this.request_user_name = request_user_name;
+	public void setRequestUserName(String requestUserName) {
+		this.requestUserName = requestUserName;
 	}
 
 	public String getFinance_user() {
@@ -250,31 +259,29 @@ public class PcmsProjectVo {
 		this.finance_user = finance_user;
 	}
 
-	public String getFinance_user_name() {
-		return finance_user_name;
+	public String getFinanceUserName() {
+		return financeUserName;
 	}
 
-	public void setFinance_user_name(String finance_user_name) {
-		this.finance_user_name = finance_user_name;
+	public void setFinanceUserName(String financeUserName) {
+		this.financeUserName = financeUserName;
 	}
 
-	public String getREQUEST_CREATE_TIME() {
-		return REQUEST_CREATE_TIME;
+	public String getRequestCreateTime() {
+		return requestCreateTime;
 	}
 
-	public void setREQUEST_CREATE_TIME(String rEQUEST_CREATE_TIME) {
-		REQUEST_CREATE_TIME = rEQUEST_CREATE_TIME;
+	public void setRequestCreateTime(String requestCreateTime) {
+		this.requestCreateTime = requestCreateTime;
 	}
 
-	public String getREQUEST_END_TIME() {
-		return REQUEST_END_TIME;
+	public String getRequestEndTime() {
+		return requestEndTime;
 	}
 
-	public void setREQUEST_END_TIME(String rEQUEST_END_TIME) {
-		REQUEST_END_TIME = rEQUEST_END_TIME;
+	public void setRequestEndTime(String requestEndTime) {
+		this.requestEndTime = requestEndTime;
 	}
-
-	
 
 	public String getType() {
 		return type;
@@ -388,12 +395,14 @@ public class PcmsProjectVo {
 		DETAIL_CHANNEL = dETAIL_CHANNEL;
 	}
 
-	public String getDETAIL_TASK() {
-		return DETAIL_TASK;
+	
+
+	public String getDetailTask() {
+		return detailTask;
 	}
 
-	public void setDETAIL_TASK(String dETAIL_TASK) {
-		DETAIL_TASK = dETAIL_TASK;
+	public void setDetailTask(String detailTask) {
+		this.detailTask = detailTask;
 	}
 
 	public String getDETAIL_AMOUNT() {
@@ -476,12 +485,14 @@ public class PcmsProjectVo {
 		this.otherTerminalList = otherTerminalList;
 	}
 
+	
+
 	public List<PcmsMaterial> getMaterialList() {
-		return MaterialList;
+		return materialList;
 	}
 
 	public void setMaterialList(List<PcmsMaterial> materialList) {
-		MaterialList = materialList;
+		this.materialList = materialList;
 	}
 
 	public List<PcmsShowcase> getShowcaseList() {
@@ -492,6 +503,13 @@ public class PcmsProjectVo {
 		this.showcaseList = showcaseList;
 	}
 
-	
+	public String getShopCity() {
+		return shopCity;
+	}
+
+	public void setShopCity(String shopCity) {
+		this.shopCity = shopCity;
+	}
+
 	
 }

@@ -1,37 +1,43 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.kuyu.mapper.pcms.PcmsOthertmMapper" >
-  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsOthertm" >
-    <id column="otid" property="otid" jdbcType="INTEGER" />
-    <result column="request_id" property="requestId" jdbcType="VARCHAR" />
-    <result column="vendor_id" property="vendorId" jdbcType="VARCHAR" />
-    <result column="CHILDREN3_DETAIL" property="children3Detail" jdbcType="VARCHAR" />
-    <result column="CHILDREN3_VENDOR" property="children3Vendor" jdbcType="VARCHAR" />
-    <result column="CHILDREN3_BUILDTIME" property="children3Buildtime" jdbcType="VARCHAR" />
-    <result column="CHILDREN3_COUNT" property="children3Count" jdbcType="VARCHAR" />
-    <result column="CHILDREN3_PRICE" property="children3Price" jdbcType="VARCHAR" />
-    <result column="CHILDREN3_AMOUNT" property="children3Amount" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsOthertmMapper">
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsOthertm">
+    <id column="otid" jdbcType="INTEGER" property="otid" />
+    <result column="request_id" jdbcType="VARCHAR" property="requestId" />
+    <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
+    <result column="mrname3" jdbcType="VARCHAR" property="mrname3" />
+    <result column="cost" jdbcType="VARCHAR" property="cost" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="comparison_price" jdbcType="VARCHAR" property="comparisonPrice" />
+    <result column="specifications3" jdbcType="VARCHAR" property="specifications3" />
+    <result column="CHILDREN3_DETAIL" jdbcType="VARCHAR" property="children3Detail" />
+    <result column="CHILDREN3_VENDOR" jdbcType="VARCHAR" property="children3Vendor" />
+    <result column="CHILDREN3_BUILDTIME" jdbcType="VARCHAR" property="children3Buildtime" />
+    <result column="CHILDREN3_COUNT" jdbcType="VARCHAR" property="children3Count" />
+    <result column="CHILDREN3_PRICE" jdbcType="VARCHAR" property="children3Price" />
+    <result column="CHILDREN3_AMOUNT" jdbcType="VARCHAR" property="children3Amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -42,25 +48,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -71,166 +77,231 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
-    otid, request_id, vendor_id, CHILDREN3_DETAIL, CHILDREN3_VENDOR, CHILDREN3_BUILDTIME, 
-    CHILDREN3_COUNT, CHILDREN3_PRICE, CHILDREN3_AMOUNT, create_time
+  <sql id="Base_Column_List">
+    otid, request_id, vendor_id, mrname3, cost, unit, note, comparison_price, specifications3, 
+    CHILDREN3_DETAIL, CHILDREN3_VENDOR, CHILDREN3_BUILDTIME, CHILDREN3_COUNT, CHILDREN3_PRICE, 
+    CHILDREN3_AMOUNT, create_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsOthertmExample" >
+  <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsOthertmExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from pcms_othertm
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from pcms_othertm
     where otid = #{otid,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from pcms_othertm
     where otid = #{otid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsOthertmExample" >
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsOthertmExample">
     delete from pcms_othertm
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsOthertm" >
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsOthertm">
     insert into pcms_othertm (otid, request_id, vendor_id, 
+      mrname3, cost, unit, 
+      note, comparison_price, specifications3, 
       CHILDREN3_DETAIL, CHILDREN3_VENDOR, CHILDREN3_BUILDTIME, 
       CHILDREN3_COUNT, CHILDREN3_PRICE, CHILDREN3_AMOUNT, 
       create_time)
     values (#{otid,jdbcType=INTEGER}, #{requestId,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
+      #{mrname3,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR}, #{comparisonPrice,jdbcType=VARCHAR}, #{specifications3,jdbcType=VARCHAR}, 
       #{children3Detail,jdbcType=VARCHAR}, #{children3Vendor,jdbcType=VARCHAR}, #{children3Buildtime,jdbcType=VARCHAR}, 
       #{children3Count,jdbcType=VARCHAR}, #{children3Price,jdbcType=VARCHAR}, #{children3Amount,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsOthertm" >
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsOthertm">
     insert into pcms_othertm
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="otid != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="otid != null">
         otid,
       </if>
-      <if test="requestId != null" >
+      <if test="requestId != null">
         request_id,
       </if>
-      <if test="vendorId != null" >
+      <if test="vendorId != null">
         vendor_id,
       </if>
-      <if test="children3Detail != null" >
+      <if test="mrname3 != null">
+        mrname3,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="comparisonPrice != null">
+        comparison_price,
+      </if>
+      <if test="specifications3 != null">
+        specifications3,
+      </if>
+      <if test="children3Detail != null">
         CHILDREN3_DETAIL,
       </if>
-      <if test="children3Vendor != null" >
+      <if test="children3Vendor != null">
         CHILDREN3_VENDOR,
       </if>
-      <if test="children3Buildtime != null" >
+      <if test="children3Buildtime != null">
         CHILDREN3_BUILDTIME,
       </if>
-      <if test="children3Count != null" >
+      <if test="children3Count != null">
         CHILDREN3_COUNT,
       </if>
-      <if test="children3Price != null" >
+      <if test="children3Price != null">
         CHILDREN3_PRICE,
       </if>
-      <if test="children3Amount != null" >
+      <if test="children3Amount != null">
         CHILDREN3_AMOUNT,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="otid != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="otid != null">
         #{otid,jdbcType=INTEGER},
       </if>
-      <if test="requestId != null" >
+      <if test="requestId != null">
         #{requestId,jdbcType=VARCHAR},
       </if>
-      <if test="vendorId != null" >
+      <if test="vendorId != null">
         #{vendorId,jdbcType=VARCHAR},
       </if>
-      <if test="children3Detail != null" >
+      <if test="mrname3 != null">
+        #{mrname3,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="comparisonPrice != null">
+        #{comparisonPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications3 != null">
+        #{specifications3,jdbcType=VARCHAR},
+      </if>
+      <if test="children3Detail != null">
         #{children3Detail,jdbcType=VARCHAR},
       </if>
-      <if test="children3Vendor != null" >
+      <if test="children3Vendor != null">
         #{children3Vendor,jdbcType=VARCHAR},
       </if>
-      <if test="children3Buildtime != null" >
+      <if test="children3Buildtime != null">
         #{children3Buildtime,jdbcType=VARCHAR},
       </if>
-      <if test="children3Count != null" >
+      <if test="children3Count != null">
         #{children3Count,jdbcType=VARCHAR},
       </if>
-      <if test="children3Price != null" >
+      <if test="children3Price != null">
         #{children3Price,jdbcType=VARCHAR},
       </if>
-      <if test="children3Amount != null" >
+      <if test="children3Amount != null">
         #{children3Amount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsOthertmExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsOthertmExample" resultType="java.lang.Integer">
     select count(*) from pcms_othertm
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update pcms_othertm
-    <set >
-      <if test="record.otid != null" >
+    <set>
+      <if test="record.otid != null">
         otid = #{record.otid,jdbcType=INTEGER},
       </if>
-      <if test="record.requestId != null" >
+      <if test="record.requestId != null">
         request_id = #{record.requestId,jdbcType=VARCHAR},
       </if>
-      <if test="record.vendorId != null" >
+      <if test="record.vendorId != null">
         vendor_id = #{record.vendorId,jdbcType=VARCHAR},
       </if>
-      <if test="record.children3Detail != null" >
+      <if test="record.mrname3 != null">
+        mrname3 = #{record.mrname3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cost != null">
+        cost = #{record.cost,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comparisonPrice != null">
+        comparison_price = #{record.comparisonPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications3 != null">
+        specifications3 = #{record.specifications3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children3Detail != null">
         CHILDREN3_DETAIL = #{record.children3Detail,jdbcType=VARCHAR},
       </if>
-      <if test="record.children3Vendor != null" >
+      <if test="record.children3Vendor != null">
         CHILDREN3_VENDOR = #{record.children3Vendor,jdbcType=VARCHAR},
       </if>
-      <if test="record.children3Buildtime != null" >
+      <if test="record.children3Buildtime != null">
         CHILDREN3_BUILDTIME = #{record.children3Buildtime,jdbcType=VARCHAR},
       </if>
-      <if test="record.children3Count != null" >
+      <if test="record.children3Count != null">
         CHILDREN3_COUNT = #{record.children3Count,jdbcType=VARCHAR},
       </if>
-      <if test="record.children3Price != null" >
+      <if test="record.children3Price != null">
         CHILDREN3_PRICE = #{record.children3Price,jdbcType=VARCHAR},
       </if>
-      <if test="record.children3Amount != null" >
+      <if test="record.children3Amount != null">
         CHILDREN3_AMOUNT = #{record.children3Amount,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update pcms_othertm
     set otid = #{record.otid,jdbcType=INTEGER},
       request_id = #{record.requestId,jdbcType=VARCHAR},
       vendor_id = #{record.vendorId,jdbcType=VARCHAR},
+      mrname3 = #{record.mrname3,jdbcType=VARCHAR},
+      cost = #{record.cost,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      note = #{record.note,jdbcType=VARCHAR},
+      comparison_price = #{record.comparisonPrice,jdbcType=VARCHAR},
+      specifications3 = #{record.specifications3,jdbcType=VARCHAR},
       CHILDREN3_DETAIL = #{record.children3Detail,jdbcType=VARCHAR},
       CHILDREN3_VENDOR = #{record.children3Vendor,jdbcType=VARCHAR},
       CHILDREN3_BUILDTIME = #{record.children3Buildtime,jdbcType=VARCHAR},
@@ -238,47 +309,71 @@
       CHILDREN3_PRICE = #{record.children3Price,jdbcType=VARCHAR},
       CHILDREN3_AMOUNT = #{record.children3Amount,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsOthertm" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsOthertm">
     update pcms_othertm
-    <set >
-      <if test="requestId != null" >
+    <set>
+      <if test="requestId != null">
         request_id = #{requestId,jdbcType=VARCHAR},
       </if>
-      <if test="vendorId != null" >
+      <if test="vendorId != null">
         vendor_id = #{vendorId,jdbcType=VARCHAR},
       </if>
-      <if test="children3Detail != null" >
+      <if test="mrname3 != null">
+        mrname3 = #{mrname3,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="comparisonPrice != null">
+        comparison_price = #{comparisonPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications3 != null">
+        specifications3 = #{specifications3,jdbcType=VARCHAR},
+      </if>
+      <if test="children3Detail != null">
         CHILDREN3_DETAIL = #{children3Detail,jdbcType=VARCHAR},
       </if>
-      <if test="children3Vendor != null" >
+      <if test="children3Vendor != null">
         CHILDREN3_VENDOR = #{children3Vendor,jdbcType=VARCHAR},
       </if>
-      <if test="children3Buildtime != null" >
+      <if test="children3Buildtime != null">
         CHILDREN3_BUILDTIME = #{children3Buildtime,jdbcType=VARCHAR},
       </if>
-      <if test="children3Count != null" >
+      <if test="children3Count != null">
         CHILDREN3_COUNT = #{children3Count,jdbcType=VARCHAR},
       </if>
-      <if test="children3Price != null" >
+      <if test="children3Price != null">
         CHILDREN3_PRICE = #{children3Price,jdbcType=VARCHAR},
       </if>
-      <if test="children3Amount != null" >
+      <if test="children3Amount != null">
         CHILDREN3_AMOUNT = #{children3Amount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where otid = #{otid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsOthertm" >
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsOthertm">
     update pcms_othertm
     set request_id = #{requestId,jdbcType=VARCHAR},
       vendor_id = #{vendorId,jdbcType=VARCHAR},
+      mrname3 = #{mrname3,jdbcType=VARCHAR},
+      cost = #{cost,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      comparison_price = #{comparisonPrice,jdbcType=VARCHAR},
+      specifications3 = #{specifications3,jdbcType=VARCHAR},
       CHILDREN3_DETAIL = #{children3Detail,jdbcType=VARCHAR},
       CHILDREN3_VENDOR = #{children3Vendor,jdbcType=VARCHAR},
       CHILDREN3_BUILDTIME = #{children3Buildtime,jdbcType=VARCHAR},
@@ -288,4 +383,22 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where otid = #{otid,jdbcType=INTEGER}
   </update>
+
+  
+  <!-- ============================================================================================== -->
+<select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.OthertmResult">
+	SELECT
+	b.otid,
+	b.mrname3,
+	'其他终端建设' AS cost,
+	b.CHILDREN3_COUNT,
+	b.CHILDREN3_PRICE,
+	b.CHILDREN3_AMOUNT,
+	b.CHILDREN3_BUILDTIME
+FROM
+	pcms_item_relation a
+LEFT JOIN pcms_othertm b ON a.relation_id = b.otid
+WHERE
+	a.itid = #{itid}
+</select>
 </mapper>

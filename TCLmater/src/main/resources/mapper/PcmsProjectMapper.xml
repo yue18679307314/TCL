@@ -738,14 +738,14 @@
 	a.REQUEST_ID AS requestId,
 	a.REQUEST_TITLE AS requestTitle,
 	a.TYPE,
-	a.DETAIL_ACCOUNT,
-	a.request_user_name,
-	a.REQUEST_COMPANY_CODE,
-	a.REQUEST_DEPT,
-	a.finance_user_name,
-	a.DETAIL_SUBJECT,
-	a.REQUEST_CREATE_TIME,
-	a.REQUEST_END_TIME,
+	a.DETAIL_ACCOUNT AS detailAccount,
+	a.request_user_name AS requestUserName,
+	a.REQUEST_COMPANY_CODE AS requestCompanyCode,
+	a.REQUEST_DEPT AS requestDept,
+	a.finance_user_name AS financeUserName,
+	a.DETAIL_SUBJECT AS detailSubject,
+	a.REQUEST_CREATE_TIME AS requestCreateTime,
+	a.REQUEST_END_TIME AS requestEndTime,
 	b.SHOP_NAME AS shopName,
 	b.SHOP_CRM_CODE AS shopCrmCode,
 	b.SHOP_PROVINCE,
@@ -762,4 +762,7 @@ WHERE
 	a.REQUEST_ID = #{requestId}
   </select>
   
+   <select id="getProjectDeatilJson" parameterType="string" resultType="com.kuyu.vo.pcms.PcmsProjectVo">
+  
+  </select>
 </mapper>

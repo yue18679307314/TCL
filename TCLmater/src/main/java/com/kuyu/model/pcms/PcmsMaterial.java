@@ -21,13 +21,15 @@ public class PcmsMaterial {
 
     private String unit;
 
+    private Double unitPrice;
+
     private Integer number;
 
     private Integer minRange;
 
     private Integer maxRange;
 
-    private String range;
+    private String rangePrice;
 
     private Double comparisonPrice;
 
@@ -111,6 +113,14 @@ public class PcmsMaterial {
         this.unit = unit == null ? null : unit.trim();
     }
 
+    public Double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
     public Integer getNumber() {
         return number;
     }
@@ -135,12 +145,12 @@ public class PcmsMaterial {
         this.maxRange = maxRange;
     }
 
-    public String getRange() {
-        return range;
+    public String getRangePrice() {
+        return rangePrice;
     }
 
-    public void setRange(String range) {
-        this.range = range == null ? null : range.trim();
+    public void setRangePrice(String rangePrice) {
+        this.rangePrice = rangePrice == null ? null : rangePrice.trim();
     }
 
     public Double getComparisonPrice() {

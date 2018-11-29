@@ -37,4 +37,6 @@ public interface PcmsProjectMapper {
     int updateByPrimaryKey(PcmsProject record);
 
 	PcmsProjectVo getProjectDeatil(String requestId);
+
+	PcmsProjectVo getProjectDeatilJson(String requestId);
 }
