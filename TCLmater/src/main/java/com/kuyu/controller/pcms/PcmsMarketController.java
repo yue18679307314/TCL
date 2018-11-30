@@ -2,6 +2,7 @@ package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
+import com.kuyu.model.pcms.PcmsPendingMaterialModel;
 import com.kuyu.model.pcms.PcmsRejectLogModel;
 import com.kuyu.model.pcms.PcmsUserItemModel;
 import com.kuyu.service.ReceiptService;
@@ -54,6 +55,18 @@ public class PcmsMarketController extends BaseController {
     @GetMapping("/doRejectSuccess")
     public ResultVo doRejectSuccess(@RequestParam(value = "itid") Integer itid)throws Exception{
         return receiptService.doRejectSuccess(itid,getUserInfo());
+    }
+
+    /**
+     * 市场人员查看立项物料清单
+     * @param itid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "市场人员查看立项物料清单",response = PcmsPendingMaterialModel.class)
+    @GetMapping("/selectPendingMaterial")
+    public ResultVo selectPendingMaterial(@RequestParam(value = "itid") Integer itid)throws Exception{
+        return null;
     }
 
 }

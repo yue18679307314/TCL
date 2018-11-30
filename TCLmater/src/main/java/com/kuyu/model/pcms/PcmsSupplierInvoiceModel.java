@@ -57,7 +57,7 @@ public class PcmsSupplierInvoiceModel extends Model<PcmsSupplierInvoiceModel> {
 
     @ApiModelProperty("图片")
     @TableField("image")
-    private String image;
+    private String[] image;
 
     public Integer getId() {
         return id;
@@ -131,11 +131,11 @@ public class PcmsSupplierInvoiceModel extends Model<PcmsSupplierInvoiceModel> {
         this.tax = tax;
     }
 
-    public String getImage() {
+    public String[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(String[] image) {
         this.image = image;
     }
 

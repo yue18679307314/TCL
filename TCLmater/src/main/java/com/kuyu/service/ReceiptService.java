@@ -47,4 +47,7 @@ public interface ReceiptService extends IService<ReceiptModel> {
     /**市场人员验收成功*/
     ResultVo doRejectSuccess(Integer itid, LoginUserInfo userInfo)throws Exception;
 
+    /**市场人员查看立项物料清单*/
+    ResultVo selectPendingMaterial(Integer itid)throws Exception;
+
 }

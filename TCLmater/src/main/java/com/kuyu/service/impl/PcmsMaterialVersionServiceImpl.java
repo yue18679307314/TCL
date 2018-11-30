@@ -3,6 +3,7 @@ package com.kuyu.service.impl;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.mapper.pcms.PcmsMaterialVersionMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMaterialMapper;
+import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsMaterialVersionModel;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
@@ -134,6 +135,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
         baseMapper.insert(pcmsMaterialVersionModel);
         return ResultVo.get(ResultVo.SUCCESS);
     }
+
     public static Map<String, String> readExcel(String filePath) {
         Map<String, String> map = new HashMap<String, String>();
         Workbook workbook = null;
@@ -236,6 +238,12 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             e.printStackTrace();
         }
         return map;
+    }
+
+    @Override
+    public ResultVo selectMaterialVersion(String vendor_id, LoginUserInfo userInfo) throws Exception {
+        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+        return ResultVo.getDataWithSuccess(list);
     }
 
 }

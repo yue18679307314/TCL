@@ -4,15 +4,13 @@ import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.exception.ParamException;
 import com.kuyu.model.pcms.PcmsMaterialVersionModel;
+import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.vo.ResultVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -109,5 +107,15 @@ public class PcmsMaterialVersionController extends BaseController {
         }
     }
 
-
+    /**
+     * 查看历史版本物料清单
+     * @param vendor_id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "查看历史版本物料清单",response = PcmsMaterialVersionModel.class)
+    @GetMapping("/selectMaterialVersion")
+    public ResultVo selectMaterialVersion(@RequestParam(value = "vendor_id") String vendor_id) throws Exception{
+        return pcmsMaterialVersionService.selectMaterialVersion(vendor_id,getUserInfo());
+    }
 }

@@ -60,7 +60,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
         if(StringUtil.isEmpty(query.getOpenid())){
-            throw new ParamException("openid为空");
+            throw new ParamException(ResultVo.getData("403","未绑定"));
         }
         PcmsUserModel pcmsUserModel = new PcmsUserModel();
         pcmsUserModel.setOpenid(query.getOpenid());
@@ -348,10 +348,16 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**展台展柜信息*/
             PcmsShowcaseVo pcmsShowcaseVo = baseMapper.getPcmsShowcaseInfo(itid);
             /**物料信息*/
+            List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
+            for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
+                List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+                pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
+                pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+            }
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
             receiptDetailModel.setPcmsShowcaseVo(pcmsShowcaseVo);
-            receiptDetailModel.setPcmsPendingMaterialModelList(list);
+            receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
             /**制作中展台展柜*/
         }else if(receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==1){
             /**门店信息*/
@@ -368,10 +374,16 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**其他展台*/
             List<PcmsOthertmVo> list = baseMapper.getPcmsOthertmInfo(itid);
             /**物料信息*/
+            List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
+            for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
+                List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+                pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
+                pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+            }
             receiptDetailModel.setPcmsShopVo(pcmsShopVo);
             receiptDetailModel.setPcmsOthertmVoList(list);
-            receiptDetailModel.setPcmsPendingMaterialModelList(list1);
+            receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
             /**制作中的其他终端*/
         }else if((receiptDetailModel.getStatus() == 2 && receiptDetailModel.getType()==1) || (receiptDetailModel.getStatus() == 2 && receiptDetailModel.getType()==0)){
             /**门店信息*/
@@ -386,9 +398,15 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**广告物料*/
             List<MaterialResult> list = baseMapper.getMaterialResultInfo(itid);
             /**物料信息*/
+            List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
+            for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
+                List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+                pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
+                pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+            }
             receiptDetailModel.setMaterialResultList(list);
-            receiptDetailModel.setPcmsPendingMaterialModelList(list1);
+            receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
             /**制作中的广告物料*/
         }else if(receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==1){
             /**广告物料*/
@@ -431,6 +449,18 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         pcmsItemMapper.updateByPrimaryKey(pcmsItem);
         pcmsRejectLogMapper.insert(pcmsRejectLogModel);
         return ResultVo.get(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo selectPendingMaterial(Integer itid) throws Exception {
+        List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
+        List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
+        for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
+            List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+            pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
+            pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+        }
+        return ResultVo.getDataWithSuccess(pcmsPendingMaterialModelList);
     }
 
 }

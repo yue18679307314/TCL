@@ -3,6 +3,17 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsMaterialVersionMapper">
 
 
-
+    <select id="selectMaterialVersion" resultType="com.kuyu.model.pcms.PcmsMaterialVersionModel">
+        SELECT
+        t.create_time,
+        t.name,
+        t.url,
+        t.version
+        FROM pcms_material_version
+        <where>
+                vendor_id = #{vendor_id}
+                AND company = #{company}
+        </where>
+    </select>
 
 </mapper>
