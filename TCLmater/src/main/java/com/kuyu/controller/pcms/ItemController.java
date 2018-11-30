@@ -54,19 +54,19 @@ public class ItemController extends BaseController{
 			 size=10;
 		}
 		
-		LoginUserInfo user=getUserInfo();
+//		LoginUserInfo user=getUserInfo();
 		
 		
 		
 		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务;
-		String userType=user.getUserType();
-//		String userType="1";
+//		String userType=user.getUserType();
+		String userType="1";
 		//分公司代码和部门代码
-		TpmEmployeeModel emp=user.getEmployeeModel();
-		String companyCode=emp.getCompany();
-		String deptCode=emp.getOrg_code();
-//		String companyCode="";
-//		String deptCode="";
+//		TpmEmployeeModel emp=user.getEmployeeModel();
+//		String companyCode=emp.getCompany();
+//		String deptCode=emp.getOrg_code();
+		String companyCode="";
+		String deptCode="";
 		
 		Page<ItemResult> result =pcmsItemService.getItemListByParam(searchKey,current,size,companyCode,userType,deptCode,approvalStatrTime,approvalEndTime,status);
 		
@@ -97,47 +97,46 @@ public class ItemController extends BaseController{
 	@RequestMapping(value = "/abolishItem", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo abolishItem(HttpServletRequest request,
 			Integer itid) {
-		
-		int i=pcmsItemService.abolishItem(itid);
-		if(i==1){
-			return ResultVo.get(ResultVo.SUCCESS);
-		}else{
-			return null; 
-		}
+		return pcmsItemService.abolishItem(itid);
 	}
 	
 	
 
-	/**
-	 * 导入物料单
-	 * @param request
-	 * @return
-	 * @throws IOException 
-	 * @throws IllegalStateException 
-	 */
-	@ApiOperation("导入物料单")
-	@RequestMapping(value = "/importExcel")
-	public @ResponseBody ResultVo importExcel(@RequestParam MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
-		
-		if(!file.isEmpty()){
-            String filePath = file.getOriginalFilename();
-            //windows
-            String savePath = request.getSession().getServletContext().getRealPath(filePath);
-
-            //linux
-            //String savePath = "/home/odcuser/webapps/file";
-
-            File targetFile = new File(savePath);
-
-            if(!targetFile.exists()){
-                targetFile.mkdirs();
-            }
-            file.transferTo(targetFile);
-            return ResultVo.get(ResultVo.SUCCESS);
-        }
-
-		return ResultVo.get(ResultVo.FILE_IS_NULL);
-	}
+//	/**
+//	 * 导入物料单
+//	 * @param request
+//	 * @return
+//	 * @throws IOException 
+//	 * @throws IllegalStateException 
+//	 */
+//	@ApiOperation("导入物料单")
+//	@RequestMapping(value = "/importExcel")
+//	public @ResponseBody ResultVo importExcel(@RequestParam MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
+//		
+//		String abd="test";
+//		
+//		System.out.println("system:=============="+abd);
+//		
+//		
+//		if(!file.isEmpty()){
+//            String filePath = file.getOriginalFilename();
+//            //windows
+//            String savePath = request.getSession().getServletContext().getRealPath(filePath);
+//
+//            //linux
+//            //String savePath = "/home/odcuser/webapps/file";
+//
+//            File targetFile = new File(savePath);
+//
+//            if(!targetFile.exists()){
+//                targetFile.mkdirs();
+//            }
+//            file.transferTo(targetFile);
+//            return ResultVo.get(ResultVo.SUCCESS);
+//        }
+//
+//		return ResultVo.get(ResultVo.FILE_IS_NULL);
+//	}
 	
 	
 	

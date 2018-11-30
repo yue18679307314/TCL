@@ -376,6 +376,9 @@
 		WHERE 1=1 
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
+  </if>
+  <if test="status != null">
+  		AND a.`status`=#{status}
   </if>	
   <if test="searchKey != null">
   	AND (
@@ -399,7 +402,10 @@
 		WHERE 1=1 
 <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
-  </if>		
+  </if>
+  <if test="status != null">
+  		AND a.`status`=#{status}
+  </if>			
   <if test="searchKey != null">
   	AND (
 		b.vendor_name LIKE #{searchKey}

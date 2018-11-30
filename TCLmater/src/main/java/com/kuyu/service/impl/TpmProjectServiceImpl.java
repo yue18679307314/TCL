@@ -41,6 +41,7 @@ import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.TpmOtherFeeOriginalModel;
 import com.kuyu.model.TpmProjectModel;
 import com.kuyu.model.TpmPromotionFeeOriginalModel;
+import com.kuyu.service.PcmsProjectService;
 import com.kuyu.service.TpmBranchAdminService;
 import com.kuyu.service.TpmProjectService;
 import com.kuyu.util.CheckParamUtils;
@@ -52,6 +53,7 @@ import com.kuyu.vo.ActivityDetailVo;
 import com.kuyu.vo.ProjectActivityQuery;
 import com.kuyu.vo.ProjectDetailVo;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.project.OtherFeeOriginalModelVo;
 import com.kuyu.vo.project.ProjectDetialModelVo;
 import com.kuyu.vo.project.ProjectModelVo;
@@ -69,6 +71,11 @@ public class TpmProjectServiceImpl extends ServiceImpl<TpmProjectMapper, TpmProj
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
+	//临促系统service
+	@Autowired
+    private PcmsProjectService pcmsProjectService;
+	
+	
 	@Autowired
 	private TpmActivityMapper tpmActivityMapper;
 
@@ -181,6 +188,14 @@ public class TpmProjectServiceImpl extends ServiceImpl<TpmProjectMapper, TpmProj
 
 		}
 
+//		//处理临促物料  2018-11-10
+//		PcmsProjectVo info=new PcmsProjectVo();
+//		BeanUtils.copyProperties(vo, info);//数据转换
+//		pcmsProjectService.importProjectDetail(info);//导入临促物料信息
+		
+		
+		
+		
 		log.info("成功导入立项单,单号为:{}", vo.getRequestId());
 
 		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));

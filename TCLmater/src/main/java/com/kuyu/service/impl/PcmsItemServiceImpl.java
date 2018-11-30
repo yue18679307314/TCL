@@ -20,6 +20,7 @@ import com.kuyu.model.pcms.PcmsMaterial;
 import com.kuyu.model.pcms.PcmsMaterialExample;
 import com.kuyu.model.pcms.PcmsShowcase;
 import com.kuyu.service.PcmsItemService;
+import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
 import com.kuyu.vo.pcms.MaterialResult;
@@ -111,13 +112,22 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 	@Override
-	public int abolishItem(Integer itid) {
+	public ResultVo abolishItem(Integer itid) {
+		//TODO
+		//检测是否有权限作废立项单
+		
+		
+		//更新为作废状态
 		PcmsItemExample example=new PcmsItemExample();
 		example.createCriteria().andItidEqualTo(itid);
 		PcmsItem item=new PcmsItem();
 		item.setStatus(-1);
 		item.setUpdateTime(new Date());
-		return pcmsItemMapper.updateByExampleSelective(item, example);
+		int i= pcmsItemMapper.updateByExampleSelective(item, example);
+		if(i==1){
+			return ResultVo.get(ResultVo.SUCCESS);
+		}
+		return ResultVo.get(ResultVo.FAIL);
 	}
 
 }
