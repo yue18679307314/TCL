@@ -62,6 +62,8 @@ public class CommonConstants {
     public static final String MANAGER_URL = "managerUrl";
     
     public static final String FINANCIAL_URL = "financialUrl";
+
+	public static final String TOURIST_URL = "touristUrl";
     
     public static final String LOGIN_USER_TYPE_LINCHU="1";
     

@@ -91,7 +91,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     }
 
     @Override
-    public ResultVo getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel, PcmsUserModel pcmsUserModel)throws Exception {
+    public ResultVo getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel, LoginUserInfo userInfol)throws Exception {
         if (StringUtil.isEmpty(pcmsSupplierModel.getMobile())){
             throw new ParamException("手机号不能为空");
         }
@@ -109,6 +109,10 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         if(null != pcmsUserModel1){
             throw new ParamException("公司名称不能为空");
         }*/
+        PcmsUserModel pcmsUserModel = new PcmsUserModel();
+        pcmsUserModel.setOpenid(userInfol.getWeixinUserInfo().getOpenId());
+        pcmsUserModel.setOpen_name(userInfol.getWeixinUserInfo().getNikeName());
+        pcmsUserModel.setImg(userInfol.getWeixinUserInfo().getHeadImgUrl());
         pcmsUserModel.setType(1);
         pcmsUserModel.setCreate_time(DateUtils.getLongDateStr());
         PcmsUserModel pcmsUserModel1 =  pcmsUserService.selectPcmsUserModel(pcmsUserModel);

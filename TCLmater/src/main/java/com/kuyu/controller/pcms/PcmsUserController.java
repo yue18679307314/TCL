@@ -39,7 +39,6 @@ public class PcmsUserController extends BaseController {
      * @param vendor_name 公司名称
      * @param legal_person 法人
      * @param mobile 电话
-     * @param openid
      * @return
      * @throws Exception
      */
@@ -47,19 +46,12 @@ public class PcmsUserController extends BaseController {
     @ResponseBody
     public ResultVo bindingweixin(@RequestParam(value = "vendor_name") String vendor_name,
                                   @RequestParam(value = "legal_person") String legal_person,
-                                  @RequestParam(value = "mobile") String mobile,
-                                  @RequestParam(value = "openid") String openid,
-                                  @RequestParam(value = "open_name") String open_name,
-                                  @RequestParam(value = "img") String img) throws Exception{
+                                  @RequestParam(value = "mobile") String mobile) throws Exception{
         PcmsSupplierModel pcmsSupplierModel = new PcmsSupplierModel();
         pcmsSupplierModel.setMobile(mobile);
         pcmsSupplierModel.setLegal_person(legal_person);
         pcmsSupplierModel.setVendor_name(vendor_name);
-        PcmsUserModel pcmsUserModel = new PcmsUserModel();
-        pcmsUserModel.setOpenid(openid);
-        pcmsUserModel.setOpen_name(open_name);
-        pcmsUserModel.setImg(img);
-        return pcmsSupplierService.getPcmsSupplierFor(pcmsSupplierModel,pcmsUserModel);
+        return pcmsSupplierService.getPcmsSupplierFor(pcmsSupplierModel,getUserInfo());
     }
 
     /**

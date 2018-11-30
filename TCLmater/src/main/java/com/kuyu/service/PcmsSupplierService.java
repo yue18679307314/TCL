@@ -22,7 +22,7 @@ public interface PcmsSupplierService extends IService<PcmsSupplierModel> {
     public PcmsSupplierModel getPcmsSupplier(PcmsSupplierVo pcmsSupplierVo);
 
     /**绑定供应商*/
-    public ResultVo getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel, PcmsUserModel pcmsUserModel)throws Exception;
+    public ResultVo getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel, LoginUserInfo userInfo)throws Exception;
     /**同步推送更新供应商*/
     public void updatePcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception;
 
