@@ -332,7 +332,8 @@ public class WeixinController extends BaseController{
 			redirectUrl = propertiesConfigService.selectBykey(CommonConstants.FINANCIAL_URL).getPvalue();
 		}
 		String random = String.valueOf(Math.random());
-		redirectUrl = redirectUrl.contains("?")?redirectUrl+"&random="+random:redirectUrl+"?random="+random;
+//		redirectUrl = redirectUrl.contains("?")?redirectUrl+"&random="+random:redirectUrl+"?random="+random;
+		redirectUrl =  "http://tcl.yemindream.com/wap/#/supplier/updateAccount";
 		response.sendRedirect(redirectUrl);
 		log.debug("auth end :" + (System.currentTimeMillis() - temptime)
 				+ ",auth_url:" + url);
