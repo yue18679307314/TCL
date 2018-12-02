@@ -161,9 +161,9 @@ public class PcmsSupplierController extends BaseController {
     @ApiOperation(value = "更新供应商信息", notes = "更新供应商信息", response = PcmsSupplierModel.class)
     @ApiParam(name = "PcmsSupplierModel", value = "供应商信息实体类参数")
     @RequestMapping(value = "/updatePcmsSupplier", method = { RequestMethod.POST })
-    public FinancialResultVo updatePcmsSupplier(@RequestBody PcmsSupplierModel pcmsSupplierModel) throws Exception {
+    public ResultVo updatePcmsSupplier(@RequestBody PcmsSupplierModel pcmsSupplierModel) throws Exception {
         pcmsSupplierService.updatePcmsSupplierModel(pcmsSupplierModel,getLoginUserInfo());
-        return FinancialResultVo.get(FinancialResultVo.SUCCESS);
+        return ResultVo.get(ResultVo.SUCCESS);
     }
 
     /**

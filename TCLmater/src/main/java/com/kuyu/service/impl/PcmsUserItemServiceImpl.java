@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.PcmsItemMapper;
 import com.kuyu.mapper.pcms.PcmsUserItemMapper;
+import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsItem;
 import com.kuyu.model.pcms.PcmsUserItemModel;
 import com.kuyu.model.pcms.PcmsUserModel;
@@ -17,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 /**
  * Created by pc on 2018/11/22
  */
@@ -25,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PcmsUserItemServiceImpl extends ServiceImpl<PcmsUserItemMapper, PcmsUserItemModel>
         implements PcmsUserItemService {
 
-    @Autowired
+    @Resource
     private PcmsItemMapper pcmsItemMapper;
 
     @Autowired
@@ -47,6 +50,7 @@ public class PcmsUserItemServiceImpl extends ServiceImpl<PcmsUserItemMapper, Pcm
             throw new ParamException(pcmsUserItemModel.getOpenid()+"用户不存在");
         }
         pcmsUserItemModel.setCreate_time(DateUtils.getLongDateStr());
+        pcmsUserItemModel.setOpenid(pcmsUserItemModel.getOpenid());
         baseMapper.insert(pcmsUserItemModel);
         pcmsItem.setStatus(1);
         pcmsItemMapper.updateByPrimaryKey(pcmsItem);

@@ -217,42 +217,14 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
             throw new ParamException("不能重复添加发票信息");
         }
         String[] image = pcmsSupplierInvoiceModel.getImage();
-        File tempfile = new File(filePath);
-        if(!tempfile.exists()){
-            tempfile.mkdirs();
-        }
-        if(image==null||image.length==0)
-            return null;
-        String data="";
-        String dataprefix="";
-        for(String file:image){
-            String[] str=file.split("base64,");
-            if(str==null||str.length!=2)
-                return null;
-            dataprefix=str[0];
-            data=str[1];
-            String suffix = "";
-            if("data:image/jpeg;".equalsIgnoreCase(dataprefix)){//data:image/jpeg;base64,base64编码的jpeg图片数据
-                suffix = ".jpg";
-            } else if("data:image/x-icon;".equalsIgnoreCase(dataprefix)){//data:image/x-icon;base64,base64编码的icon图片数据
-                suffix = ".ico";
-            } else if("data:image/gif;".equalsIgnoreCase(dataprefix)){//data:image/gif;base64,base64编码的gif图片数据
-                suffix = ".gif";
-            } else if("data:image/png;".equalsIgnoreCase(dataprefix)){//data:image/png;base64,base64编码的png图片数据
-                suffix = ".png";
-            }else{
-                throw new Exception("上传图片格式不合法");
+        PcmsInvoiceImageModel pcmsInvoiceImageModel = new PcmsInvoiceImageModel();
+        if(image.length>0 && image != null){
+            for(String url:image){
+                pcmsInvoiceImageModel.setImage(url);
+                pcmsInvoiceImageModel.setInvoice_id(pcmsSupplierInvoiceModel.getId());
+                pcmsMaterialImgModel.insert(pcmsInvoiceImageModel);
             }
-            //因为BASE64Decoder的jar问题，此处使用spring框架提供的工具包
-            byte[] bs = Base64Utils.decodeFromString(data);
-            //FileUtils.writeByteArrayToFile(new File(savepath+System.currentTimeMillis()+suffix), bs);
-            FileOutputStream out=new FileOutputStream(new File(filePath+System.currentTimeMillis()+suffix));
-            String sb = filePath+System.currentTimeMillis()+suffix;
-            out.write(bs);
-            out.flush();
-            out.close();
-            PcmsInvoiceImageModel pcmsInvoiceImageModel = new PcmsInvoiceImageModel();
-            pcmsInvoiceImageModel.setImage(sb);
+        }else{
             pcmsInvoiceImageModel.setInvoice_id(pcmsSupplierInvoiceModel.getId());
             pcmsMaterialImgModel.insert(pcmsInvoiceImageModel);
         }

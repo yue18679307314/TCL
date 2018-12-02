@@ -5,8 +5,10 @@ import com.kuyu.controller.BaseController;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsSupplierMaterialService;
 import com.kuyu.service.PcmsSupplierService;
+import com.kuyu.util.StringUtil;
 import com.kuyu.vo.FinancialResultVo;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.PcmsVendorIdVo;
 import com.kuyu.vo.pcms.SupplierMaterialVo;
 import com.kuyu.vo.query.SupplierMaterialQuery;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +16,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @AOP_Controller_LOG
 @RequestMapping("/supplierMaterial")
@@ -74,6 +77,18 @@ public class PcmsSupplierMaterialController extends BaseController {
     @PostMapping("/querySupplierMaterialList")
     public ResultVo querySupplierMaterialList(@RequestBody SupplierMaterialVo query) throws Exception {
         return pcmsSupplierMaterialService.querySupplierMaterialList(query);
+    }
+
+    @ApiOperation(value = "获取下载的url")
+    @PostMapping("/getSupplierMaterialUrl")
+    public ResultVo getSupplierMaterialUrl(@RequestBody List<PcmsSupplierMaterialModel> supplierMaterialList) throws Exception {
+        String file = null;
+        if (StringUtil.isNotNull(supplierMaterialList)) {
+            if (supplierMaterialList.size() > 0) {
+                file = pcmsSupplierMaterialService.getSupplierMaterialUrl(supplierMaterialList,getUserInfo());
+            }
+        }
+        return ResultVo.getData(ResultVo.SUCCESS, file);
     }
 
 }

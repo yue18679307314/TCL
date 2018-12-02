@@ -7,7 +7,9 @@ import com.kuyu.model.pcms.PcmsMaterialVersionModel;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
 import com.kuyu.util.ResultVoUtils;
+import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.PcmsVendorIdVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.List;
 
 /**
  * Created by pc on 2018/11/26
@@ -118,4 +121,5 @@ public class PcmsMaterialVersionController extends BaseController {
     public ResultVo selectMaterialVersion(@RequestParam(value = "vendor_id") String vendor_id) throws Exception{
         return pcmsMaterialVersionService.selectMaterialVersion(vendor_id,getUserInfo());
     }
+
 }

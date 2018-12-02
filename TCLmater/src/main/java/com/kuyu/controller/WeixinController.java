@@ -322,20 +322,23 @@ public class WeixinController extends BaseController{
 		
 		// 获取页面URL
 		String redirectUrl = "";
+		String random = String.valueOf(Math.random());
 		if (CommonConstants.LINCU_URL.equals(type)) {
 			redirectUrl = propertiesConfigService.selectBykey(CommonConstants.LINCU_URL).getPvalue();
+			redirectUrl = redirectUrl.contains("?")?redirectUrl+"&random="+random:redirectUrl+"?random="+random;
 		}
 		if (CommonConstants.MANAGER_URL.equals(type)) {
 			redirectUrl = propertiesConfigService.selectBykey(CommonConstants.MANAGER_URL).getPvalue();
+			redirectUrl = redirectUrl.contains("?")?redirectUrl+"&random="+random:redirectUrl+"?random="+random;
 		}
 		if (CommonConstants.FINANCIAL_URL.equals(type)) {
 			redirectUrl = propertiesConfigService.selectBykey(CommonConstants.FINANCIAL_URL).getPvalue();
+			redirectUrl = redirectUrl.contains("?")?redirectUrl+"&random="+random:redirectUrl+"?random="+random;
 		}
 		if("3".equals(type)){
 			redirectUrl = propertiesConfigService.selectBykey(CommonConstants.TOURIST_URL).getPvalue();
+			redirectUrl = redirectUrl +"?openid="+openid;
 		}
-		String random = String.valueOf(Math.random());
-		redirectUrl = redirectUrl+"?success=0";
 		response.sendRedirect(redirectUrl);
 		log.debug("auth end :" + (System.currentTimeMillis() - temptime)
 				+ ",auth_url:" + url);

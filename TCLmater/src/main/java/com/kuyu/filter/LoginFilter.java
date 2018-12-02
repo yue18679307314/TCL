@@ -60,7 +60,7 @@ public class LoginFilter implements Filter {
         
         ServletRequest requestWrapper = null; 
         String param ="";
-        if(!uri.startsWith("/tpm/fileupload/upload") && !uri.startsWith("/tpm/materialVersion/uploadExcel") && !uri.startsWith("/tpm/receipt/addPendingMaterial")){
+        if(!uri.startsWith("/tpm/fileupload/upload") && !uri.startsWith("/tpm/materialVersion/uploadExcel") && !uri.startsWith("/tpm/photoUpload/upload")){
         	if(req instanceof HttpServletRequest) {    
         		requestWrapper = new BodyReaderHttpServletRequestWrapper((HttpServletRequest) req);  //替换  
         	} 
@@ -167,7 +167,7 @@ public class LoginFilter implements Filter {
 
 
 		needLoginUris.add("/tpm/supplier/findPcmsSupplierListByPage");
-		needLoginUris.add("/tpm/market/getItemDetail");
+//		needLoginUris.add("/tpm/market/getItemDetail");
 
     }
 

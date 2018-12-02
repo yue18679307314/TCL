@@ -21,7 +21,7 @@
                 #{params.openid,jdbcType=VARCHAR}
             </if>
             <if test="params.openid !=null and params.openid !=''">
-                AND p.status = #{params.status,jdbcType=INTEGER}
+                AND p.status = #{params.state,jdbcType=INTEGER}
             </if>
         </where>
         ORDER BY p.create_time DESC

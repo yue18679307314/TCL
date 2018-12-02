@@ -1,6 +1,7 @@
 package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
+import com.kuyu.controller.BaseController;
 import com.kuyu.model.pcms.PcmsPendingMaterialModel;
 import com.kuyu.model.pcms.PcmsRejectLogModel;
 import com.kuyu.model.pcms.PcmsUserItemModel;
@@ -19,7 +20,7 @@ import javax.annotation.Resource;
  */
 @AOP_Controller_LOG
 @RequestMapping("/receipt")
-public class ReceiptController{
+public class ReceiptController extends BaseController {
 
 
 

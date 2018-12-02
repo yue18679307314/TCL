@@ -96,7 +96,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
-            pcmsMaterialVersionModel.setUrl(finalPath);
+            pcmsMaterialVersionModel.setUrl(fileUrl+nameXls);
             pcmsMaterialVersionModel.setVersion(psmm.getVersion()+1);
         }else{
             if(StringUtil.isNotNull(map)) {
@@ -129,7 +129,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
-            pcmsMaterialVersionModel.setUrl(finalPath);
+            pcmsMaterialVersionModel.setUrl(fileUrl+nameXls);
             pcmsMaterialVersionModel.setVersion(10000);
         }
         baseMapper.insert(pcmsMaterialVersionModel);

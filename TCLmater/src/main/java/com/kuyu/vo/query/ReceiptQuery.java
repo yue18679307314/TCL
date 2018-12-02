@@ -11,7 +11,7 @@ public class ReceiptQuery extends BasePageQuery {
 
     private String openid;
 
-    private Integer status;
+    private Integer state;
 
     public String getOpenid() {
         return openid;
@@ -21,11 +21,11 @@ public class ReceiptQuery extends BasePageQuery {
         this.openid = openid;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getState() {
+        return state;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setState(Integer state) {
+        this.state = state;
     }
 }
