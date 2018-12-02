@@ -1,6 +1,7 @@
 package com.kuyu.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.PcmsMaterialVersionMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMaterialMapper;
 import com.kuyu.model.LoginUserInfo;
@@ -8,6 +9,7 @@ import com.kuyu.model.pcms.PcmsMaterialVersionModel;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
 import com.kuyu.service.PcmsSupplierMaterialService;
+import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -155,6 +157,9 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
 
             // 获取到Excel文件中的所有行数
             int rows = sheet.getPhysicalNumberOfRows();
+            if(rows == 0){
+                throw new ParamException(ResultVoUtils.fail("文件为空"));
+            }
             int max_cells = 0;
             // 获取最长的列，在实践中发现如果列中间有空值的话，那么读到空值的地方就停止了。所以我们需要取得最长的列。
             //如果每个列正好都有一个空值得话，通过这种方式获得的列长会比真实的列要少一列。所以我自己会在将要倒入数据库中的EXCEL表加一个表头
