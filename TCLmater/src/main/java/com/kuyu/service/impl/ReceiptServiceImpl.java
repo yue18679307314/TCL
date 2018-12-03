@@ -20,11 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,9 +56,10 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
-        if(null == query.getOpenid()){
+        if(null == query.getOpenid() || "".equals(query.getOpenid())){
             throw new ParamException(ResultVo.getData("403","未绑定"));
         }
+        /**查询该用户是否已绑定*/
         PcmsUserModel pcmsUserModel = new PcmsUserModel();
         pcmsUserModel.setOpenid(query.getOpenid());
         PcmsUserModel pcmsUserModel1 = pcmsUserService.selectPcmsUserModel(pcmsUserModel);
@@ -88,6 +86,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**物料信息*/
             List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
+            /**上传的图片信息*/
             for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
                 List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
                 pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
@@ -115,6 +114,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**物料信息*/
             List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
+            /**上传的图片信息*/
             if(null == list || list.size() == 0){
                 PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
                 list.add(pcmsPendingMaterialModel);
@@ -137,6 +137,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**物料信息*/
             List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
+            /**上传的图片信息*/
             for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list1){
                 List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
                 pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
@@ -164,6 +165,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**物料信息*/
             List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
+            /**上传的图片信息*/
             if(null == list1 || list1.size() == 0){
                 PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
                 list1.add(pcmsPendingMaterialModel);
@@ -199,6 +201,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             /**物料信息*/
             List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
             List<PcmsPendingMaterialModel> list1 =  pcmsPendingMaterialMapper.selectByItid(itid);
+            /**上传的图片信息*/
             if(null == list1 || list1.size() == 0){
                 PcmsPendingMaterialModel pcmsPendingMaterialModel = new PcmsPendingMaterialModel();
                 list1.add(pcmsPendingMaterialModel);

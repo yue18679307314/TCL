@@ -3,7 +3,6 @@ package com.kuyu.controller.pcms;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.model.pcms.PcmsSupplierModel;
-import com.kuyu.model.pcms.PcmsUserModel;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.service.PcmsSupplierUserService;
 import com.kuyu.vo.ResultVo;
@@ -51,7 +50,7 @@ public class PcmsUserController extends BaseController {
         pcmsSupplierModel.setMobile(mobile);
         pcmsSupplierModel.setLegal_person(legal_person);
         pcmsSupplierModel.setVendor_name(vendor_name);
-        return pcmsSupplierService.getPcmsSupplierFor(pcmsSupplierModel,getUserInfo());
+        return pcmsSupplierService.getPcmsSupplierFor(pcmsSupplierModel,getLoginUserInfo());
     }
 
     /**
