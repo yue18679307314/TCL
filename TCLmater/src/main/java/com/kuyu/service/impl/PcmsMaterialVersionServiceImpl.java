@@ -105,7 +105,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
-            pcmsMaterialVersionModel.setUrl(fileUrl+nameXls);
+            pcmsMaterialVersionModel.setUrl(fileUrl+"/"+nameXls);
             pcmsMaterialVersionModel.setVersion(psmm.get(0).getVersion()+1);
             pcmsMaterialVersionModel.setState(1);
         }else{
@@ -137,7 +137,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
-            pcmsMaterialVersionModel.setUrl(fileUrl+nameXls);
+            pcmsMaterialVersionModel.setUrl(fileUrl+"/"+nameXls);
             pcmsMaterialVersionModel.setVersion(10000);
             pcmsMaterialVersionModel.setState(1);
         }

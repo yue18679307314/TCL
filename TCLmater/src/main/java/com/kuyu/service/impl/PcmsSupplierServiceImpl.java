@@ -209,7 +209,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 //        map.put("vendor_id",pcmsSupplierInvoiceModel.getVendor_id());
         map.put("itid",pcmsSupplierInvoiceModel.getItid());
         List<PcmsSupplierInvoiceModel> list = pcmsSupplierInvoiceMapper.selectByMap(map);
-        if(null == list && list.size()==0){
+        if(list.size()==0){
             pcmsSupplierInvoiceMapper.insertPcmsSupplierInvoice(pcmsSupplierInvoiceModel);
         }else{
             throw new ParamException("不能重复添加发票信息");

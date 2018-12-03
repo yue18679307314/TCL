@@ -84,6 +84,9 @@ public class ReceiptDetailModel implements Serializable{
     @ApiModelProperty("待验收的物料信息")
     private List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList;
 
+    @ApiModelProperty("驳回信息")
+    private List<PcmsRejectLogModel> pcmsRejectLogModelList;
+
     public Integer getItid() {
         return itid;
     }
@@ -250,5 +253,13 @@ public class ReceiptDetailModel implements Serializable{
 
     public void setSubclass(String subclass) {
         this.subclass = subclass;
+    }
+
+    public List<PcmsRejectLogModel> getPcmsRejectLogModelList() {
+        return pcmsRejectLogModelList;
+    }
+
+    public void setPcmsRejectLogModelList(List<PcmsRejectLogModel> pcmsRejectLogModelList) {
+        this.pcmsRejectLogModelList = pcmsRejectLogModelList;
     }
 }
