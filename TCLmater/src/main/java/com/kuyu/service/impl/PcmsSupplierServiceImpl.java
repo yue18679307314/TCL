@@ -18,7 +18,6 @@ import com.kuyu.vo.PcmsSupplierListVo;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsSupplierModelVo;
-import com.kuyu.vo.pcms.PcmsVendorIdVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.CellRangeAddress;
@@ -174,14 +173,14 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
 
     @Override
-    public String getPcmsSupplierUrl(List<PcmsVendorIdVo> list, String pdfOrxls, LoginUserInfo userInfo) throws Exception {
+    public String getPcmsSupplierUrl(String pdfOrxls, LoginUserInfo userInfo) throws Exception {
         File tempfile = new File(pcmsSupplierPath);
         if(!tempfile.exists()){
             tempfile.mkdirs();
         }
         String path = StringUtil.getUUID();
         String file = pcmsSupplierPath + "/"+ path;
-        List<PcmsSupplierModelVo> supplierList = baseMapper.getPcmsSupplierForIds(list);
+        List<PcmsSupplierModelVo> supplierList = baseMapper.getPcmsSupplierForIds(userInfo.getEmployeeModel().getCompany());
         if(supplierList != null && supplierList.size() > 0) {
             String personName = userInfo.getEmployeeModel().getPerson_name();
             String personCode = userInfo.getEmployeeModel().getPerson_code();
@@ -198,7 +197,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
             if("xls".equals(pdfOrxls)) {
                 file += ".xls";
                 createBankInfoXls(supplierList,file);
-                return  pcmsSupplierPath+"/"+path+".xls";
+                return  pcmsSupplierUrl+"/"+path+".xls";
             }
         }
         return null;
@@ -207,7 +206,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     @Override
     public ResultVo insertSupplierInvoice(PcmsSupplierInvoiceModel pcmsSupplierInvoiceModel) throws Exception {
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("vendor_id",pcmsSupplierInvoiceModel.getVendor_id());
+//        map.put("vendor_id",pcmsSupplierInvoiceModel.getVendor_id());
         map.put("itid",pcmsSupplierInvoiceModel.getItid());
         List<PcmsSupplierInvoiceModel> list = pcmsSupplierInvoiceMapper.selectByMap(map);
         if(null == list && list.size()==0){

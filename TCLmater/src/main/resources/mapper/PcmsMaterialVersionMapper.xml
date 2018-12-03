@@ -5,15 +5,18 @@
 
     <select id="selectMaterialVersion" resultType="com.kuyu.model.pcms.PcmsMaterialVersionModel">
         SELECT
+        t.id,
         t.create_time,
         t.name,
         t.url,
+        t.state,
         t.version
         FROM pcms_material_version t
         <where>
                 t.vendor_id = #{vendor_id}
                 AND t.company = #{company}
         </where>
+        order by t.id desc
     </select>
 
 </mapper>

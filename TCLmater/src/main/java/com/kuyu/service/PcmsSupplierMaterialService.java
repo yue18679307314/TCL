@@ -23,6 +23,6 @@ public interface PcmsSupplierMaterialService extends IService<PcmsSupplierMateri
     ResultVo querySupplierMaterialList(SupplierMaterialVo query)throws Exception;
 
     /**导出物料*/
-    String getSupplierMaterialUrl(List<PcmsSupplierMaterialModel> supplierMaterialList, LoginUserInfo userInfo) throws Exception;
+    String getSupplierMaterialUrl(String vendor_id, LoginUserInfo userInfo) throws Exception;
 
 }

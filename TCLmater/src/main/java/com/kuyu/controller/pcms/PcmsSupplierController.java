@@ -13,7 +13,6 @@ import com.kuyu.vo.FinancialResultVo;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.PsmsCompanyVo;
 import com.kuyu.vo.ResultVo;
-import com.kuyu.vo.pcms.PcmsVendorIdVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -184,20 +183,16 @@ public class PcmsSupplierController extends BaseController {
 
     /**
      * 导出供应商excel
-     * @param vendoridList
+     * @param
      * @return
      * @throws Exception
      */
     @ApiOperation(value = "获取下载的url")
     @PostMapping("/getPcmsSupplierUrl")
-    public ResultVo getPcmsSupplierUrl(@RequestBody List<PcmsVendorIdVo> vendoridList) throws Exception {
+    public ResultVo getPcmsSupplierUrl() throws Exception {
         String file = null;
         String xls = "xls";
-        if (StringUtil.isNotNull(vendoridList)) {
-            if (vendoridList.size() > 0) {
-                file = pcmsSupplierService.getPcmsSupplierUrl(vendoridList,xls,getUserInfo());
-            }
-        }
+        file = pcmsSupplierService.getPcmsSupplierUrl(xls,getUserInfo());
         return ResultVo.getData(ResultVo.SUCCESS, file);
     }
 

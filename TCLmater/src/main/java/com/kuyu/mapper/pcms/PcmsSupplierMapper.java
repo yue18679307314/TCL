@@ -30,7 +30,7 @@ public interface PcmsSupplierMapper extends BaseMapper<PcmsSupplierModel> {
     /**分页查询*/
     List<PcmsSupplierListVo> findPcmsSupplierListByPage(@Param("params") PcmsSupplierQuery query, Page<PcmsSupplierListVo> page);
     /**根据ID批量查询*/
-    List<PcmsSupplierModelVo> getPcmsSupplierForIds(List<PcmsVendorIdVo> list);
+    List<PcmsSupplierModelVo> getPcmsSupplierForIds(@Param("company") String company);
     /**查询供应商*/
     public PcmsSupplierModel getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel);
 

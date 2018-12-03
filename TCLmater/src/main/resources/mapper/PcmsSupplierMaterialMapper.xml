@@ -52,7 +52,7 @@
                 #{vendor_id,jdbcType=VARCHAR}
             </if>
         </where>
-        ORDER BY t.id DESC limit 0,1;
+        ORDER BY t.id DESC;
     </select>
 
     <select id="querySupplierMaterialList" resultType="com.kuyu.model.pcms.PcmsSupplierMaterialModel">
@@ -78,6 +78,24 @@
             <if test="params.openid !=null and params.openid !=''">
                 AND p.openid =
                 #{params.openid,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="getSupplierMaterialUrl" resultType="com.kuyu.model.pcms.PcmsSupplierMaterialModel">
+        SELECT
+        t.category AS category,
+        t.comparison_price AS comparison_price,
+        t.note AS note,
+        t.ranges AS ranges,
+        t.specifications AS specifications,
+        t.unit AS unit,
+        t.vendor_name AS vendor_name
+        FROM pcms_supplier_material t
+        <where>
+            <if test="vendor_id !=null vendor_id !=''">
+                AND t.vendor_id =
+                #{vendor_id,jdbcType=VARCHAR}
             </if>
         </where>
     </select>

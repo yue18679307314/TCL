@@ -50,7 +50,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
     @Value("${excel.url}")
     private String fileUrl;
     @Override
-    public ResultVo uploadAndInsert(MultipartFile file, String vendor_id/*, LoginUserInfo userInfo*/) throws Exception {
+    public ResultVo uploadAndInsert(MultipartFile file, String vendor_id, LoginUserInfo userInfo) throws Exception {
 
         String xls = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")).toLowerCase();
         String paths = StringUtil.getUUID();
@@ -68,74 +68,85 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             newFile.delete();
             throw new ParamException("数据为空");
         }
-        PcmsSupplierMaterialModel psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(vendor_id,"555"/*,userInfo.getEmployeeModel().getCompany()*/);
+        List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(vendor_id,userInfo.getEmployeeModel().getCompany());
         PcmsMaterialVersionModel pcmsMaterialVersionModel = new PcmsMaterialVersionModel();
-        if(null != psmm){
-            if(StringUtil.isNotNull(map)) {
-                List<PcmsSupplierMaterialModel> list = new ArrayList<>();
-                for (Map.Entry<String, String> entry : map.entrySet()) {
-                    String value = entry.getValue();
-                    PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
-                    String[] psm = value.split(",");
-                    for (int i = 0; i < psm.length; i++) {
-                        if(psm[i].equals("NULL")) {
-                            psm[i] = null;
-                        }
+        if(null != psmm && psmm.size()>0){
+            List<PcmsSupplierMaterialModel> list = new ArrayList<>();
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String value = entry.getValue();
+                PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
+                String[] psm = value.split(",");
+                for (int i = 0; i < psm.length; i++) {
+                    if(psm[i].equals("NULL")) {
+                        psm[i] = null;
                     }
-                    tdm.setVendor_name(psm[0]);
-                    tdm.setCategory(psm[1]);
-                    tdm.setSpecifications(psm[2]);
-                    tdm.setUnit(psm[3]);
-                    tdm.setRanges(psm[4]);
-                    tdm.setComparison_price(Double.parseDouble(psm[5]));
-                    tdm.setNote(psm[6]);
-                    tdm.setVendor_id(vendor_id);
-                    tdm.setCreate_time(new Date());
-                    tdm.setCompany("5555");
-                    tdm.setVersion(psmm.getVersion()+1);
-                    list.add(tdm);
                 }
-                pcmsSupplierMaterialService.insertBatch(list);
+                tdm.setVendor_name(psm[0]);
+                tdm.setCategory(psm[1]);
+                tdm.setSpecifications(psm[2]);
+                tdm.setUnit(psm[3]);
+                tdm.setRanges(psm[4]);
+                tdm.setComparison_price(Double.parseDouble(psm[5]));
+                tdm.setNote(psm[6]);
+                tdm.setVendor_id(vendor_id);
+                tdm.setCreate_time(new Date());
+                tdm.setCompany(userInfo.getEmployeeModel().getCompany());
+                tdm.setVersion(psmm.get(0).getVersion()+1);
+                list.add(tdm);
             }
-            pcmsMaterialVersionModel.setCompany("5555");
+            List<Integer> listId = new ArrayList<>();
+            for (PcmsSupplierMaterialModel id : psmm){
+                Integer ids = id.getId();
+                listId.add(ids);
+            }
+            pcmsSupplierMaterialService.deleteBatchIds(listId);
+            pcmsSupplierMaterialService.insertBatch(list);
+            pcmsMaterialVersionModel.setCompany(userInfo.getEmployeeModel().getCompany());
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
             pcmsMaterialVersionModel.setUrl(fileUrl+nameXls);
-            pcmsMaterialVersionModel.setVersion(psmm.getVersion()+1);
+            pcmsMaterialVersionModel.setVersion(psmm.get(0).getVersion()+1);
+            pcmsMaterialVersionModel.setState(1);
         }else{
-            if(StringUtil.isNotNull(map)) {
-                List<PcmsSupplierMaterialModel> list = new ArrayList<>();
-                for (Map.Entry<String, String> entry : map.entrySet()) {
-                    String value = entry.getValue();
-                    PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
-                    String[] psm = value.split(",");
-                    for (int i = 0; i < psm.length; i++) {
-                        if(psm[i].equals("NULL")) {
-                            psm[i] = null;
-                        }
+            List<PcmsSupplierMaterialModel> list = new ArrayList<>();
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                String value = entry.getValue();
+                PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
+                String[] psm = value.split(",");
+                for (int i = 0; i < psm.length; i++) {
+                    if(psm[i].equals("NULL")) {
+                        psm[i] = null;
                     }
-                    tdm.setVendor_name(psm[0]);
-                    tdm.setCategory(psm[1]);
-                    tdm.setSpecifications(psm[2]);
-                    tdm.setUnit(psm[3]);
-                    tdm.setRanges(psm[4]);
-                    tdm.setComparison_price(Double.parseDouble(psm[5]));
-                    tdm.setNote(psm[6]);
-                    tdm.setVendor_id(vendor_id);
-                    tdm.setCreate_time(new Date());
-                    tdm.setCompany("5555");
-                    tdm.setVersion(10000);
-                    list.add(tdm);
                 }
-                pcmsSupplierMaterialService.insertBatch(list);
+                tdm.setVendor_name(psm[0]);
+                tdm.setCategory(psm[1]);
+                tdm.setSpecifications(psm[2]);
+                tdm.setUnit(psm[3]);
+                tdm.setRanges(psm[4]);
+                tdm.setComparison_price(Double.parseDouble(psm[5]));
+                tdm.setNote(psm[6]);
+                tdm.setVendor_id(vendor_id);
+                tdm.setCreate_time(new Date());
+                tdm.setCompany(userInfo.getEmployeeModel().getCompany());
+                tdm.setVersion(10000);
+                list.add(tdm);
             }
-            pcmsMaterialVersionModel.setCompany("5555");
+            pcmsSupplierMaterialService.insertBatch(list);
+            pcmsMaterialVersionModel.setCompany(userInfo.getEmployeeModel().getCompany());
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
             pcmsMaterialVersionModel.setUrl(fileUrl+nameXls);
             pcmsMaterialVersionModel.setVersion(10000);
+            pcmsMaterialVersionModel.setState(1);
+        }
+        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+        if(list.size() > 0 && null != list){
+            PcmsMaterialVersionModel pcmsMaterialVersionModel1 = list.get(0);
+            PcmsMaterialVersionModel pcmsMaterialVersionModel2 = baseMapper.selectById(pcmsMaterialVersionModel1.getId());
+            pcmsMaterialVersionModel2.setState(0);
+            baseMapper.updateById(pcmsMaterialVersionModel2);
         }
         baseMapper.insert(pcmsMaterialVersionModel);
         return ResultVo.get(ResultVo.SUCCESS);

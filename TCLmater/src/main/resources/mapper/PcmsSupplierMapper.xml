@@ -159,7 +159,7 @@
 	</select>
 
 
-	<select id="getPcmsSupplierForIds" resultType="com.kuyu.vo.pcms.PcmsSupplierModelVo" parameterType="com.kuyu.vo.pcms.PcmsVendorIdVo">
+	<select id="getPcmsSupplierForIds" resultType="com.kuyu.vo.pcms.PcmsSupplierModelVo">
 		SELECT
 		DISTINCT
 		t.vendor_name AS vendor_name,
@@ -167,12 +167,14 @@
 		t.legal_person AS legal_person,
 		t.mobile AS mobile
 		/*td.org_name_parent AS request_company*/
-		FROM pcms_supplier t,pcms_supplier_company f,tpm_employee tm/*,tpm_dept td*/
+		FROM pcms_supplier t
+		LEFT JOIN pcms_supplier_company f ON f.vendor_id = t.vendor_id
+		LEFT JOIN tpm_employee tm ON f.company = tm.company/*,tpm_dept td*/
 		<where>
-			<foreach collection="list" index="index" item="item" open="t.vendor_id IN(" close=")" separator=",">
-				#{item.vendor_id}
-			</foreach>
-			AND f.vendor_id = t.vendor_id AND f.company = tm.company /*AND tm.org_code = td.org_code*/
+			<if test="company !=null and company !=''">
+				AND f.company =
+				#{company,jdbcType=VARCHAR}
+			</if>
 		</where>
 	</select>
 </mapper>

@@ -14,9 +14,11 @@ public interface PcmsSupplierMaterialMapper extends BaseMapper<PcmsSupplierMater
     /**分页查询*/
     List<SupplierMaterialQuery> findSupplierMaterialByPage(@Param("params") SupplierMaterialQuery query, Page<SupplierMaterialQuery> page);
     /**根据供应商和公司编码查询最新版本号*/
-    PcmsSupplierMaterialModel findSupplierMaterialByVendorAndCompany(@Param("vendor_id")String vendor_id,@Param("company")String company);
+    List<PcmsSupplierMaterialModel> findSupplierMaterialByVendorAndCompany(@Param("vendor_id")String vendor_id,@Param("company")String company);
 
     /***/
     List<PcmsSupplierMaterialModel> querySupplierMaterialList(@Param("params") SupplierMaterialVo query);
+    /**根据供应商ID导出物料清单*/
+    List<PcmsSupplierMaterialModel> getSupplierMaterialUrl(@Param("vendor_id")String vendor_id);
 
 }

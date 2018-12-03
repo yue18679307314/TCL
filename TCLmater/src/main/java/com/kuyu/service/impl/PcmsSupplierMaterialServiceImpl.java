@@ -55,15 +55,15 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
         if(null == pcmsSupplierModel){
             throw new ParamException("供应商不存在");
         }
-        PcmsSupplierMaterialModel psm = baseMapper.findSupplierMaterialByVendorAndCompany(pcmsSupplierMaterialModel.getVendor_id(),userInfo.getEmployeeModel().getCompany());
-        if(null == psm){
+        List<PcmsSupplierMaterialModel> psm = baseMapper.findSupplierMaterialByVendorAndCompany(pcmsSupplierMaterialModel.getVendor_id(),userInfo.getEmployeeModel().getCompany());
+        if(null == psm && psm.size()>0){
             pcmsSupplierMaterialModel.setCreate_time(new Date());
             pcmsSupplierMaterialModel.setVersion(10000);
             pcmsSupplierMaterialModel.setCompany(userInfo.getEmployeeModel().getCompany());
             baseMapper.insert(pcmsSupplierMaterialModel);
         }else{
             pcmsSupplierMaterialModel.setCreate_time(new Date());
-            pcmsSupplierMaterialModel.setVersion(psm.getVersion()+1);
+            pcmsSupplierMaterialModel.setVersion(psm.get(0).getVersion()+1);
             pcmsSupplierMaterialModel.setCompany(userInfo.getEmployeeModel().getCompany());
             baseMapper.insert(pcmsSupplierMaterialModel);
         }
@@ -96,14 +96,14 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
     }
 
     @Override
-    public String getSupplierMaterialUrl(List<PcmsSupplierMaterialModel> supplierMaterialList, LoginUserInfo userInfo) throws Exception {
+    public String getSupplierMaterialUrl(String vendor_id, LoginUserInfo userInfo) throws Exception {
         File tempfile = new File(pcmsSupplierPath);
         if(!tempfile.exists()){
             tempfile.mkdirs();
         }
         String path = StringUtil.getUUID();
         String file = pcmsSupplierPath + "/"+ path;
-        List<PcmsSupplierMaterialModel> list = baseMapper.selectBatchIds(supplierMaterialList);
+        List<PcmsSupplierMaterialModel> list = baseMapper.getSupplierMaterialUrl(vendor_id);
         if(list != null && list.size() > 0) {
             String personName = userInfo.getEmployeeModel().getPerson_name();
             String personCode = userInfo.getEmployeeModel().getPerson_code();

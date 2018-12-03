@@ -57,6 +57,10 @@ public class PcmsMaterialVersionModel extends Model<PcmsMaterialVersionModel> {
     @JsonProperty("url")
     private String url;
 
+    /**状态*/
+    @ApiModelProperty("状态")
+    @JsonProperty("state")
+    private Integer state;
     public Integer getId() {
         return id;
     }
@@ -116,5 +120,13 @@ public class PcmsMaterialVersionModel extends Model<PcmsMaterialVersionModel> {
     @Override
     protected Serializable pkVal() {
         return null;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

@@ -77,14 +77,18 @@ public class PcmsSupplierMaterialController extends BaseController {
         return pcmsSupplierMaterialService.querySupplierMaterialList(query);
     }
 
+    /**
+     * 供应商物料导出
+     * @param vendor_id
+     * @return
+     * @throws Exception
+     */
     @ApiOperation(value = "获取下载的url")
-    @PostMapping("/getSupplierMaterialUrl")
-    public ResultVo getSupplierMaterialUrl(@RequestBody List<PcmsSupplierMaterialModel> supplierMaterialList) throws Exception {
+    @GetMapping("/getSupplierMaterialUrl")
+    public ResultVo getSupplierMaterialUrl(@RequestParam(value = "vendor_id") String vendor_id) throws Exception {
         String file = null;
-        if (StringUtil.isNotNull(supplierMaterialList)) {
-            if (supplierMaterialList.size() > 0) {
-                file = pcmsSupplierMaterialService.getSupplierMaterialUrl(supplierMaterialList,getUserInfo());
-            }
+        if (StringUtil.isNotNull(vendor_id)) {
+            file = pcmsSupplierMaterialService.getSupplierMaterialUrl(vendor_id,getUserInfo());
         }
         return ResultVo.getData(ResultVo.SUCCESS, file);
     }

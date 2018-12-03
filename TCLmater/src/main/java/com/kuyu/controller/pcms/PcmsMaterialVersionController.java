@@ -50,7 +50,7 @@ public class PcmsMaterialVersionController extends BaseController {
         if(!file.getOriginalFilename().toLowerCase().endsWith(".xls") && !file.getOriginalFilename().toLowerCase().endsWith(".xlsx")) {
             throw new ParamException(ResultVoUtils.fail("文件不是Excel:"+file));
         }
-        return pcmsMaterialVersionService.uploadAndInsert(file,vendor_id);
+        return pcmsMaterialVersionService.uploadAndInsert(file,vendor_id,getUserInfo());
     }
 
     /**
