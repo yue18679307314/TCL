@@ -90,7 +90,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
     @Override
     public ResultVo getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel, String openid)throws Exception {
-        if (StringUtil.isNotNull(openid)){
+        if (StringUtil.isEmpty(openid)){
             throw new ParamException("openid不能为空");
         }
         if (StringUtil.isEmpty(pcmsSupplierModel.getMobile())){
