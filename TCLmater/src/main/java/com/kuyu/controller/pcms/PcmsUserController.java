@@ -45,12 +45,12 @@ public class PcmsUserController extends BaseController {
     @ResponseBody
     public ResultVo bindingweixin(@RequestParam(value = "vendor_name") String vendor_name,
                                   @RequestParam(value = "legal_person") String legal_person,
-                                  @RequestParam(value = "mobile") String mobile) throws Exception{
+                                  @RequestParam(value = "mobile") String mobile,@RequestParam(value = "openid") String openid) throws Exception{
         PcmsSupplierModel pcmsSupplierModel = new PcmsSupplierModel();
         pcmsSupplierModel.setMobile(mobile);
         pcmsSupplierModel.setLegal_person(legal_person);
         pcmsSupplierModel.setVendor_name(vendor_name);
-        return pcmsSupplierService.getPcmsSupplierFor(pcmsSupplierModel,getLoginUserInfo());
+        return pcmsSupplierService.getPcmsSupplierFor(pcmsSupplierModel,openid);
     }
 
     /**
