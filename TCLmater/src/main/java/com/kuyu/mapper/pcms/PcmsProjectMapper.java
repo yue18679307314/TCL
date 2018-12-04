@@ -2,8 +2,6 @@ package com.kuyu.mapper.pcms;
 
 import com.kuyu.model.pcms.PcmsProject;
 import com.kuyu.model.pcms.PcmsProjectExample;
-import com.kuyu.vo.pcms.PcmsProjectVo;
-
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -35,8 +33,4 @@ public interface PcmsProjectMapper {
     int updateByPrimaryKeyWithBLOBs(PcmsProject record);
 
     int updateByPrimaryKey(PcmsProject record);
-
-	PcmsProjectVo getProjectDeatil(String requestId);
-
-	PcmsProjectVo getProjectDeatilJson(String requestId);
 }

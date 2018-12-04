@@ -61,7 +61,7 @@
         ps.DETAIL_TASK AS detail_task
         FROM pcms_item p
         LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
-        LEFT JOIN pcms_shop ps ON pt.SHOP_CRM_CODE = ps.SHOP_CRM_CODE
+        LEFT JOIN pcms_shop ps ON pt.REQUEST_ID = ps.REQUEST_ID
         <where>
             p.itid = #{itid,jdbcType=INTEGER}
         </where>

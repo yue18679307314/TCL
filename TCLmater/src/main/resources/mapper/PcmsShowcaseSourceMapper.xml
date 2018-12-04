@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsShowcaseSourceMapper">
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsShowcaseSource">
+    <result column="scid" jdbcType="INTEGER" property="scid" />
+    <result column="resuest_id" jdbcType="VARCHAR" property="resuestId" />
+    <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
+    <result column="CHILDREN1_TASK" jdbcType="VARCHAR" property="children1Task" />
+    <result column="CHILDREN1_LAST_BUILDTIME" jdbcType="VARCHAR" property="children1LastBuildtime" />
+    <result column="CHILDREN1_TYPE" jdbcType="VARCHAR" property="children1Type" />
+    <result column="CHILDREN1_REASON" jdbcType="VARCHAR" property="children1Reason" />
+    <result column="CHILDREN1_AREA" jdbcType="VARCHAR" property="children1Area" />
+    <result column="CHILDREN1_LINEAR" jdbcType="VARCHAR" property="children1Linear" />
+    <result column="CHILDREN1_BUILDTIME" jdbcType="VARCHAR" property="children1Buildtime" />
+    <result column="CHILDREN1_VENDOR" jdbcType="VARCHAR" property="children1Vendor" />
+    <result column="CHILDREN1_INNER" jdbcType="VARCHAR" property="children1Inner" />
+    <result column="CHILDREN1_OUTER" jdbcType="VARCHAR" property="children1Outer" />
+    <result column="CHILDREN1_AMOUNT" jdbcType="VARCHAR" property="children1Amount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    scid, resuest_id, vendor_id, CHILDREN1_TASK, CHILDREN1_LAST_BUILDTIME, CHILDREN1_TYPE, 
+    CHILDREN1_REASON, CHILDREN1_AREA, CHILDREN1_LINEAR, CHILDREN1_BUILDTIME, CHILDREN1_VENDOR, 
+    CHILDREN1_INNER, CHILDREN1_OUTER, CHILDREN1_AMOUNT, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsShowcaseSourceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pcms_showcase_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsShowcaseSourceExample">
+    delete from pcms_showcase_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsShowcaseSource">
+    insert into pcms_showcase_source (scid, resuest_id, vendor_id, 
+      CHILDREN1_TASK, CHILDREN1_LAST_BUILDTIME, 
+      CHILDREN1_TYPE, CHILDREN1_REASON, CHILDREN1_AREA, 
+      CHILDREN1_LINEAR, CHILDREN1_BUILDTIME, CHILDREN1_VENDOR, 
+      CHILDREN1_INNER, CHILDREN1_OUTER, CHILDREN1_AMOUNT, 
+      create_time)
+    values (#{scid,jdbcType=INTEGER}, #{resuestId,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
+      #{children1Task,jdbcType=VARCHAR}, #{children1LastBuildtime,jdbcType=VARCHAR}, 
+      #{children1Type,jdbcType=VARCHAR}, #{children1Reason,jdbcType=VARCHAR}, #{children1Area,jdbcType=VARCHAR}, 
+      #{children1Linear,jdbcType=VARCHAR}, #{children1Buildtime,jdbcType=VARCHAR}, #{children1Vendor,jdbcType=VARCHAR}, 
+      #{children1Inner,jdbcType=VARCHAR}, #{children1Outer,jdbcType=VARCHAR}, #{children1Amount,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsShowcaseSource">
+    insert into pcms_showcase_source
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="scid != null">
+        scid,
+      </if>
+      <if test="resuestId != null">
+        resuest_id,
+      </if>
+      <if test="vendorId != null">
+        vendor_id,
+      </if>
+      <if test="children1Task != null">
+        CHILDREN1_TASK,
+      </if>
+      <if test="children1LastBuildtime != null">
+        CHILDREN1_LAST_BUILDTIME,
+      </if>
+      <if test="children1Type != null">
+        CHILDREN1_TYPE,
+      </if>
+      <if test="children1Reason != null">
+        CHILDREN1_REASON,
+      </if>
+      <if test="children1Area != null">
+        CHILDREN1_AREA,
+      </if>
+      <if test="children1Linear != null">
+        CHILDREN1_LINEAR,
+      </if>
+      <if test="children1Buildtime != null">
+        CHILDREN1_BUILDTIME,
+      </if>
+      <if test="children1Vendor != null">
+        CHILDREN1_VENDOR,
+      </if>
+      <if test="children1Inner != null">
+        CHILDREN1_INNER,
+      </if>
+      <if test="children1Outer != null">
+        CHILDREN1_OUTER,
+      </if>
+      <if test="children1Amount != null">
+        CHILDREN1_AMOUNT,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="scid != null">
+        #{scid,jdbcType=INTEGER},
+      </if>
+      <if test="resuestId != null">
+        #{resuestId,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Task != null">
+        #{children1Task,jdbcType=VARCHAR},
+      </if>
+      <if test="children1LastBuildtime != null">
+        #{children1LastBuildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Type != null">
+        #{children1Type,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Reason != null">
+        #{children1Reason,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Area != null">
+        #{children1Area,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Linear != null">
+        #{children1Linear,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Buildtime != null">
+        #{children1Buildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Vendor != null">
+        #{children1Vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Inner != null">
+        #{children1Inner,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Outer != null">
+        #{children1Outer,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Amount != null">
+        #{children1Amount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsShowcaseSourceExample" resultType="java.lang.Integer">
+    select count(*) from pcms_showcase_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update pcms_showcase_source
+    <set>
+      <if test="record.scid != null">
+        scid = #{record.scid,jdbcType=INTEGER},
+      </if>
+      <if test="record.resuestId != null">
+        resuest_id = #{record.resuestId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendorId != null">
+        vendor_id = #{record.vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Task != null">
+        CHILDREN1_TASK = #{record.children1Task,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1LastBuildtime != null">
+        CHILDREN1_LAST_BUILDTIME = #{record.children1LastBuildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Type != null">
+        CHILDREN1_TYPE = #{record.children1Type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Reason != null">
+        CHILDREN1_REASON = #{record.children1Reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Area != null">
+        CHILDREN1_AREA = #{record.children1Area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Linear != null">
+        CHILDREN1_LINEAR = #{record.children1Linear,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Buildtime != null">
+        CHILDREN1_BUILDTIME = #{record.children1Buildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Vendor != null">
+        CHILDREN1_VENDOR = #{record.children1Vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Inner != null">
+        CHILDREN1_INNER = #{record.children1Inner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Outer != null">
+        CHILDREN1_OUTER = #{record.children1Outer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children1Amount != null">
+        CHILDREN1_AMOUNT = #{record.children1Amount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update pcms_showcase_source
+    set scid = #{record.scid,jdbcType=INTEGER},
+      resuest_id = #{record.resuestId,jdbcType=VARCHAR},
+      vendor_id = #{record.vendorId,jdbcType=VARCHAR},
+      CHILDREN1_TASK = #{record.children1Task,jdbcType=VARCHAR},
+      CHILDREN1_LAST_BUILDTIME = #{record.children1LastBuildtime,jdbcType=VARCHAR},
+      CHILDREN1_TYPE = #{record.children1Type,jdbcType=VARCHAR},
+      CHILDREN1_REASON = #{record.children1Reason,jdbcType=VARCHAR},
+      CHILDREN1_AREA = #{record.children1Area,jdbcType=VARCHAR},
+      CHILDREN1_LINEAR = #{record.children1Linear,jdbcType=VARCHAR},
+      CHILDREN1_BUILDTIME = #{record.children1Buildtime,jdbcType=VARCHAR},
+      CHILDREN1_VENDOR = #{record.children1Vendor,jdbcType=VARCHAR},
+      CHILDREN1_INNER = #{record.children1Inner,jdbcType=VARCHAR},
+      CHILDREN1_OUTER = #{record.children1Outer,jdbcType=VARCHAR},
+      CHILDREN1_AMOUNT = #{record.children1Amount,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+ 
+   <!-- ============================================================================================== -->
+<select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.ShowcaseResult">
+	SELECT
+	b.scid,
+	c.vendor_name AS vendorName,
+	b.CHILDREN1_TYPE ,
+	b.CHILDREN1_LAST_BUILDTIME,
+	b.CHILDREN1_REASON,
+	b.CHILDREN1_AREA,
+	b.CHILDREN1_LINEAR,
+	b.CHILDREN1_BUILDTIME,
+	b.CHILDREN1_INNER,
+	b.CHILDREN1_OUTER
+FROM
+	pcms_item_relation a
+LEFT JOIN pcms_showcase_source b ON a.relation_id = b.scid
+LEFT JOIN pcms_supplier c ON b.vendor_id=c.vendor_id
+WHERE
+	a.itid = #{itid}
+</select>
+ 
+ 
+</mapper>

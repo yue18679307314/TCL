@@ -43,9 +43,13 @@ public class ItemController extends BaseController{
 	 */
 	@ApiOperation("获取立项单列表")
 	@RequestMapping(value = "/list", produces = "application/json;charset=utf-8")
-	public @ResponseBody ResultVo itemList(HttpServletRequest request,String searchKey,
-			Integer current,Integer size,String approvalStatrTime,String approvalEndTime,
-			Integer status) throws Exception {
+	public @ResponseBody ResultVo itemList(HttpServletRequest request,
+			@RequestParam(value = "searchKey",required=false)String searchKey,
+			@RequestParam(value = "current",required=false)Integer current,
+			@RequestParam(value = "size",required=false)Integer size,
+			@RequestParam(value = "approvalStatrTime",required=false)String approvalStatrTime,
+			@RequestParam(value = "approvalEndTime",required=false)String approvalEndTime,
+			@RequestParam(value = "status",required=false)Integer status) throws Exception {
 		
 		if(current==null||current<=0){
 			current=1;
@@ -55,7 +59,7 @@ public class ItemController extends BaseController{
 		}
 		
 //		LoginUserInfo user=getUserInfo();
-		
+
 		
 		
 		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务;
@@ -75,32 +79,53 @@ public class ItemController extends BaseController{
 	
 	/**
 	 * 获取立项单详情
+	 * type 0 查询原始立项单详情  type 1 查询待验收立项单详情
 	 * @param request
 	 * @return
 	 */
-	@ApiOperation("获取待立项单详情")
+	@ApiOperation("获取立项单详情")
 	@RequestMapping(value = "/detail", produces = "application/json;charset=utf-8")
-	public @ResponseBody ResultVo detail(HttpServletRequest request,Integer itid) {
+	public @ResponseBody ResultVo detail(HttpServletRequest request,
+			@RequestParam(value = "itid",required=true)Integer itid,
+			@RequestParam(value = "type",required=true)Integer type) {
 		
-		ItemDetail result =pcmsItemService.getItemDetailById(itid);
+		ItemDetail result =pcmsItemService.getItemDetailById(itid,type);
 		
 		return ResultVo.getData(ResultVo.SUCCESS, result); 
 	}
 	
 	
 	/**
-	 * 作废立项单
+	 * 更改立项单状态
+	 * //0:未接单 1:已接单制作中 2待验收 3待结算 4已驳回 5结算中 6结算失败 7已结算 -1已作废
 	 * @param request
 	 * @return
 	 */
-	@ApiOperation("作废立项单")
-	@RequestMapping(value = "/abolishItem", produces = "application/json;charset=utf-8")
-	public @ResponseBody ResultVo abolishItem(HttpServletRequest request,
-			Integer itid) {
-		return pcmsItemService.abolishItem(itid);
+	@ApiOperation("更改立项单状态")
+	@RequestMapping(value = "/statusItem", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo statusItem(HttpServletRequest request,
+			@RequestParam(value = "itid")Integer itid,
+			@RequestParam(value = "status")Integer status) {
+		
+		return pcmsItemService.changeItemStatus(itid,status);
 	}
 	
-	
+	/**
+	 * 批量结算
+	 * @param request
+	 * @return
+	 */
+	@ApiOperation("更改立项单状态")
+	@RequestMapping(value = "/settlement", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo settlement(HttpServletRequest request,
+			@RequestParam(value = "itid")String itids) {
+			String itid[] =itids.split(",");
+			for (String id : itid) {
+				pcmsItemService.changeItemStatus(Integer.valueOf(id),5);
+			}
+		
+		return ResultVo.get(ResultVo.SUCCESS);
+	}
 
 //	/**
 //	 * 导入物料单

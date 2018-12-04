@@ -14,11 +14,11 @@ public interface PcmsItemService  {
 			String companyCode,String userType,String deptCode,String approvalStatrTime,
 			String approvalEndTime,Integer status);
 
-	ItemDetail getItemDetailById(Integer itid);
+	ItemDetail getItemDetailById(Integer itid,Integer type);
 
 	int editMaterial(PcmsMaterial metarial);
 
-	ResultVo abolishItem(Integer itid);
+	ResultVo changeItemStatus(Integer itid,Integer status);
 
 	
 

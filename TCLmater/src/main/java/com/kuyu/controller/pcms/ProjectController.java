@@ -1,5 +1,9 @@
 package com.kuyu.controller.pcms;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +16,7 @@ import com.kuyu.service.PcmsProjectService;
 import com.kuyu.service.TpmProjectService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsProjectVo;
+import com.kuyu.vo.pcms.RequestUserVo;
 import com.kuyu.vo.project.ProjectDetialModelVo;
 
 import io.swagger.annotations.Api;
@@ -58,4 +63,33 @@ public class ProjectController {
     		return ResultVo.getData(ResultVo.SUCCESS, result);
     }
 	
+    
+    /**
+     * 负责人列表
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "负责人列表")
+    @RequestMapping(value = "/requestNameList",produces = "application/json;charset=UTF-8")
+    public ResultVo requestNameList(HttpServletRequest request,String orgCode)throws Exception{
+    	List<RequestUserVo> result=pcmsProjectService.getRequestNameList(orgCode);
+    		
+    		return ResultVo.getData(ResultVo.SUCCESS, result);
+    }
+    
+    
+    /**
+     * 改变负责人
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "改变负责人")
+    @RequestMapping(value = "/changeRequestName",produces = "application/json;charset=UTF-8")
+    public ResultVo changeRequestName(String requestId,String personCode)throws Exception{
+    	ResultVo result= pcmsProjectService.changeRequestName(requestId,personCode);
+    		
+    	return result;
+    }
 }

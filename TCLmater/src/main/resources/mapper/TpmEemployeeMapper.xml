@@ -140,4 +140,16 @@
 			#{item}
 		</foreach>
 	</select>
+	
+	<select id="getRequestNameList" resultType="com.kuyu.vo.pcms.RequestUserVo" parameterType="string">
+		SELECT
+			person_code AS personCode,
+			person_name AS personName,
+			mobile
+		FROM
+			tpm_employee
+		WHERE
+			org_code = #{orgCode}
+	</select>
+	
 </mapper>
