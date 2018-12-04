@@ -25,6 +25,8 @@ public class PcmsProject {
 
     private String requestUserName;
 
+    private String requestUserNameCopy;
+
     private String financeUser;
 
     private String financeUserName;
@@ -34,22 +36,6 @@ public class PcmsProject {
     private String requestEndTime;
 
     private String type;
-
-    private String activityStore;
-
-    private String shopCrmCode;
-
-    private String activityCity;
-
-    private String shopLevel;
-
-    private String shopBranch;
-
-    private String shopChannel;
-
-    private String detailTask;
-
-    private String shopSalesAmount;
 
     private String createUser;
 
@@ -155,6 +141,14 @@ public class PcmsProject {
         this.requestUserName = requestUserName == null ? null : requestUserName.trim();
     }
 
+    public String getRequestUserNameCopy() {
+        return requestUserNameCopy;
+    }
+
+    public void setRequestUserNameCopy(String requestUserNameCopy) {
+        this.requestUserNameCopy = requestUserNameCopy == null ? null : requestUserNameCopy.trim();
+    }
+
     public String getFinanceUser() {
         return financeUser;
     }
@@ -193,70 +187,6 @@ public class PcmsProject {
 
     public void setType(String type) {
         this.type = type == null ? null : type.trim();
-    }
-
-    public String getActivityStore() {
-        return activityStore;
-    }
-
-    public void setActivityStore(String activityStore) {
-        this.activityStore = activityStore == null ? null : activityStore.trim();
-    }
-
-    public String getShopCrmCode() {
-        return shopCrmCode;
-    }
-
-    public void setShopCrmCode(String shopCrmCode) {
-        this.shopCrmCode = shopCrmCode == null ? null : shopCrmCode.trim();
-    }
-
-    public String getActivityCity() {
-        return activityCity;
-    }
-
-    public void setActivityCity(String activityCity) {
-        this.activityCity = activityCity == null ? null : activityCity.trim();
-    }
-
-    public String getShopLevel() {
-        return shopLevel;
-    }
-
-    public void setShopLevel(String shopLevel) {
-        this.shopLevel = shopLevel == null ? null : shopLevel.trim();
-    }
-
-    public String getShopBranch() {
-        return shopBranch;
-    }
-
-    public void setShopBranch(String shopBranch) {
-        this.shopBranch = shopBranch == null ? null : shopBranch.trim();
-    }
-
-    public String getShopChannel() {
-        return shopChannel;
-    }
-
-    public void setShopChannel(String shopChannel) {
-        this.shopChannel = shopChannel == null ? null : shopChannel.trim();
-    }
-
-    public String getDetailTask() {
-        return detailTask;
-    }
-
-    public void setDetailTask(String detailTask) {
-        this.detailTask = detailTask == null ? null : detailTask.trim();
-    }
-
-    public String getShopSalesAmount() {
-        return shopSalesAmount;
-    }
-
-    public void setShopSalesAmount(String shopSalesAmount) {
-        this.shopSalesAmount = shopSalesAmount == null ? null : shopSalesAmount.trim();
     }
 
     public String getCreateUser() {

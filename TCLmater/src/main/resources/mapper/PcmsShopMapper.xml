@@ -3,6 +3,7 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsShopMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsShop">
     <id column="sid" jdbcType="INTEGER" property="sid" />
+    <result column="REQUEST_ID" jdbcType="VARCHAR" property="requestId" />
     <result column="SHOP_CRM_CODE" jdbcType="VARCHAR" property="shopCrmCode" />
     <result column="SHOP_NAME" jdbcType="VARCHAR" property="shopName" />
     <result column="SHOP_LEVEL" jdbcType="VARCHAR" property="shopLevel" />
@@ -75,8 +76,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    sid, SHOP_CRM_CODE, SHOP_NAME, SHOP_LEVEL, SHOP_BRANCH, SHOP_CUSTOMER, SHOP_CHANNEL, 
-    SHOP_PROVINCE, SHOP_CITY, SHOP_COUNTY, DETAIL_TASK, SHOP_SALES_AMOUNT, create_time
+    sid, REQUEST_ID, SHOP_CRM_CODE, SHOP_NAME, SHOP_LEVEL, SHOP_BRANCH, SHOP_CUSTOMER, 
+    SHOP_CHANNEL, SHOP_PROVINCE, SHOP_CITY, SHOP_COUNTY, DETAIL_TASK, SHOP_SALES_AMOUNT, 
+    create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsShopExample" resultMap="BaseResultMap">
     select
@@ -109,22 +111,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsShop">
-    insert into pcms_shop (sid, SHOP_CRM_CODE, SHOP_NAME, 
-      SHOP_LEVEL, SHOP_BRANCH, SHOP_CUSTOMER, 
-      SHOP_CHANNEL, SHOP_PROVINCE, SHOP_CITY, 
-      SHOP_COUNTY, DETAIL_TASK, SHOP_SALES_AMOUNT, 
-      create_time)
-    values (#{sid,jdbcType=INTEGER}, #{shopCrmCode,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
-      #{shopLevel,jdbcType=VARCHAR}, #{shopBranch,jdbcType=VARCHAR}, #{shopCustomer,jdbcType=VARCHAR}, 
-      #{shopChannel,jdbcType=VARCHAR}, #{shopProvince,jdbcType=VARCHAR}, #{shopCity,jdbcType=VARCHAR}, 
-      #{shopCounty,jdbcType=VARCHAR}, #{detailTask,jdbcType=VARCHAR}, #{shopSalesAmount,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into pcms_shop (sid, REQUEST_ID, SHOP_CRM_CODE, 
+      SHOP_NAME, SHOP_LEVEL, SHOP_BRANCH, 
+      SHOP_CUSTOMER, SHOP_CHANNEL, SHOP_PROVINCE, 
+      SHOP_CITY, SHOP_COUNTY, DETAIL_TASK, 
+      SHOP_SALES_AMOUNT, create_time)
+    values (#{sid,jdbcType=INTEGER}, #{requestId,jdbcType=VARCHAR}, #{shopCrmCode,jdbcType=VARCHAR}, 
+      #{shopName,jdbcType=VARCHAR}, #{shopLevel,jdbcType=VARCHAR}, #{shopBranch,jdbcType=VARCHAR}, 
+      #{shopCustomer,jdbcType=VARCHAR}, #{shopChannel,jdbcType=VARCHAR}, #{shopProvince,jdbcType=VARCHAR}, 
+      #{shopCity,jdbcType=VARCHAR}, #{shopCounty,jdbcType=VARCHAR}, #{detailTask,jdbcType=VARCHAR}, 
+      #{shopSalesAmount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsShop">
     insert into pcms_shop
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="sid != null">
         sid,
+      </if>
+      <if test="requestId != null">
+        REQUEST_ID,
       </if>
       <if test="shopCrmCode != null">
         SHOP_CRM_CODE,
@@ -166,6 +171,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sid != null">
         #{sid,jdbcType=INTEGER},
+      </if>
+      <if test="requestId != null">
+        #{requestId,jdbcType=VARCHAR},
       </if>
       <if test="shopCrmCode != null">
         #{shopCrmCode,jdbcType=VARCHAR},
@@ -217,6 +225,9 @@
       <if test="record.sid != null">
         sid = #{record.sid,jdbcType=INTEGER},
       </if>
+      <if test="record.requestId != null">
+        REQUEST_ID = #{record.requestId,jdbcType=VARCHAR},
+      </if>
       <if test="record.shopCrmCode != null">
         SHOP_CRM_CODE = #{record.shopCrmCode,jdbcType=VARCHAR},
       </if>
@@ -261,6 +272,7 @@
   <update id="updateByExample" parameterType="map">
     update pcms_shop
     set sid = #{record.sid,jdbcType=INTEGER},
+      REQUEST_ID = #{record.requestId,jdbcType=VARCHAR},
       SHOP_CRM_CODE = #{record.shopCrmCode,jdbcType=VARCHAR},
       SHOP_NAME = #{record.shopName,jdbcType=VARCHAR},
       SHOP_LEVEL = #{record.shopLevel,jdbcType=VARCHAR},
@@ -280,6 +292,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsShop">
     update pcms_shop
     <set>
+      <if test="requestId != null">
+        REQUEST_ID = #{requestId,jdbcType=VARCHAR},
+      </if>
       <if test="shopCrmCode != null">
         SHOP_CRM_CODE = #{shopCrmCode,jdbcType=VARCHAR},
       </if>
@@ -321,7 +336,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsShop">
     update pcms_shop
-    set SHOP_CRM_CODE = #{shopCrmCode,jdbcType=VARCHAR},
+    set REQUEST_ID = #{requestId,jdbcType=VARCHAR},
+      SHOP_CRM_CODE = #{shopCrmCode,jdbcType=VARCHAR},
       SHOP_NAME = #{shopName,jdbcType=VARCHAR},
       SHOP_LEVEL = #{shopLevel,jdbcType=VARCHAR},
       SHOP_BRANCH = #{shopBranch,jdbcType=VARCHAR},
@@ -335,5 +351,6 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where sid = #{sid,jdbcType=INTEGER}
   </update>
+  
   
 </mapper>

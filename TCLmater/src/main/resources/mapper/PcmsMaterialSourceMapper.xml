@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsMaterialSourceMapper">
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsMaterialSource">
+    <result column="mrid" jdbcType="INTEGER" property="mrid" />
+    <result column="resuest_id" jdbcType="VARCHAR" property="resuestId" />
+    <result column="mrtype" jdbcType="INTEGER" property="mrtype" />
+    <result column="mrcode" jdbcType="INTEGER" property="mrcode" />
+    <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
+    <result column="mrname" jdbcType="VARCHAR" property="mrname" />
+    <result column="cost" jdbcType="VARCHAR" property="cost" />
+    <result column="specifications" jdbcType="VARCHAR" property="specifications" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="unit_price" jdbcType="DOUBLE" property="unitPrice" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="min_range" jdbcType="INTEGER" property="minRange" />
+    <result column="max_range" jdbcType="INTEGER" property="maxRange" />
+    <result column="range_price" jdbcType="VARCHAR" property="rangePrice" />
+    <result column="comparison_price" jdbcType="DOUBLE" property="comparisonPrice" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    mrid, resuest_id, mrtype, mrcode, vendor_id, mrname, cost, specifications, unit, 
+    unit_price, number, min_range, max_range, range_price, comparison_price, status, 
+    note, update_time, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialSourceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pcms_material_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialSourceExample">
+    delete from pcms_material_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsMaterialSource">
+    insert into pcms_material_source (mrid, resuest_id, mrtype, 
+      mrcode, vendor_id, mrname, 
+      cost, specifications, unit, 
+      unit_price, number, min_range, 
+      max_range, range_price, comparison_price, 
+      status, note, update_time, 
+      create_time)
+    values (#{mrid,jdbcType=INTEGER}, #{resuestId,jdbcType=VARCHAR}, #{mrtype,jdbcType=INTEGER}, 
+      #{mrcode,jdbcType=INTEGER}, #{vendorId,jdbcType=VARCHAR}, #{mrname,jdbcType=VARCHAR}, 
+      #{cost,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{unitPrice,jdbcType=DOUBLE}, #{number,jdbcType=INTEGER}, #{minRange,jdbcType=INTEGER}, 
+      #{maxRange,jdbcType=INTEGER}, #{rangePrice,jdbcType=VARCHAR}, #{comparisonPrice,jdbcType=DOUBLE}, 
+      #{status,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsMaterialSource">
+    insert into pcms_material_source
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mrid != null">
+        mrid,
+      </if>
+      <if test="resuestId != null">
+        resuest_id,
+      </if>
+      <if test="mrtype != null">
+        mrtype,
+      </if>
+      <if test="mrcode != null">
+        mrcode,
+      </if>
+      <if test="vendorId != null">
+        vendor_id,
+      </if>
+      <if test="mrname != null">
+        mrname,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="specifications != null">
+        specifications,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="unitPrice != null">
+        unit_price,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+      <if test="minRange != null">
+        min_range,
+      </if>
+      <if test="maxRange != null">
+        max_range,
+      </if>
+      <if test="rangePrice != null">
+        range_price,
+      </if>
+      <if test="comparisonPrice != null">
+        comparison_price,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mrid != null">
+        #{mrid,jdbcType=INTEGER},
+      </if>
+      <if test="resuestId != null">
+        #{resuestId,jdbcType=VARCHAR},
+      </if>
+      <if test="mrtype != null">
+        #{mrtype,jdbcType=INTEGER},
+      </if>
+      <if test="mrcode != null">
+        #{mrcode,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null">
+        #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="mrname != null">
+        #{mrname,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null">
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="minRange != null">
+        #{minRange,jdbcType=INTEGER},
+      </if>
+      <if test="maxRange != null">
+        #{maxRange,jdbcType=INTEGER},
+      </if>
+      <if test="rangePrice != null">
+        #{rangePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="comparisonPrice != null">
+        #{comparisonPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialSourceExample" resultType="java.lang.Integer">
+    select count(*) from pcms_material_source
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update pcms_material_source
+    <set>
+      <if test="record.mrid != null">
+        mrid = #{record.mrid,jdbcType=INTEGER},
+      </if>
+      <if test="record.resuestId != null">
+        resuest_id = #{record.resuestId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mrtype != null">
+        mrtype = #{record.mrtype,jdbcType=INTEGER},
+      </if>
+      <if test="record.mrcode != null">
+        mrcode = #{record.mrcode,jdbcType=INTEGER},
+      </if>
+      <if test="record.vendorId != null">
+        vendor_id = #{record.vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mrname != null">
+        mrname = #{record.mrname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cost != null">
+        cost = #{record.cost,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null">
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null">
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitPrice != null">
+        unit_price = #{record.unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=INTEGER},
+      </if>
+      <if test="record.minRange != null">
+        min_range = #{record.minRange,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxRange != null">
+        max_range = #{record.maxRange,jdbcType=INTEGER},
+      </if>
+      <if test="record.rangePrice != null">
+        range_price = #{record.rangePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comparisonPrice != null">
+        comparison_price = #{record.comparisonPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update pcms_material_source
+    set mrid = #{record.mrid,jdbcType=INTEGER},
+      resuest_id = #{record.resuestId,jdbcType=VARCHAR},
+      mrtype = #{record.mrtype,jdbcType=INTEGER},
+      mrcode = #{record.mrcode,jdbcType=INTEGER},
+      vendor_id = #{record.vendorId,jdbcType=VARCHAR},
+      mrname = #{record.mrname,jdbcType=VARCHAR},
+      cost = #{record.cost,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      unit_price = #{record.unitPrice,jdbcType=DOUBLE},
+      number = #{record.number,jdbcType=INTEGER},
+      min_range = #{record.minRange,jdbcType=INTEGER},
+      max_range = #{record.maxRange,jdbcType=INTEGER},
+      range_price = #{record.rangePrice,jdbcType=VARCHAR},
+      comparison_price = #{record.comparisonPrice,jdbcType=DOUBLE},
+      status = #{record.status,jdbcType=INTEGER},
+      note = #{record.note,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  <!-- ============================================================================================== -->
+<select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.MaterialResult">
+	SELECT
+	b.mrid,
+	b.mrname,
+	b.cost,
+	b.specifications,
+	b.number,
+	b.unit,
+	b.comparison_price,
+	b.number*b.comparison_price AS sumPrice,
+	b.note
+FROM
+	pcms_item_relation a
+LEFT JOIN pcms_material_source b ON a.relation_id = b.mrid
+WHERE
+	a.itid = #{itid}
+</select>
+  
+</mapper>

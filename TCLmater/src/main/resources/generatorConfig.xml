@@ -38,7 +38,7 @@
  
  
 	<!--  想要逆向生成的表在这里进行配置   -->
-		<table schema="gp" tableName="pcms_othertm" domainObjectName="PcmsOthertm">
+		<table schema="gp" tableName="pcms_shop" domainObjectName="PcmsShop">
             <property name="useActualColumnNames" value="false"/>
             <!--<generatedKey column="ID" sqlStatement="DB2" identity="true"/>-->
             <columnOverride column="DATE_FIELD" property="startDate"/>

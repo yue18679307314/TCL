@@ -165,6 +165,76 @@ public class PcmsShopExample {
             return (Criteria) this;
         }
 
+        public Criteria andRequestIdIsNull() {
+            addCriterion("REQUEST_ID is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdIsNotNull() {
+            addCriterion("REQUEST_ID is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdEqualTo(String value) {
+            addCriterion("REQUEST_ID =", value, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdNotEqualTo(String value) {
+            addCriterion("REQUEST_ID <>", value, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdGreaterThan(String value) {
+            addCriterion("REQUEST_ID >", value, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdGreaterThanOrEqualTo(String value) {
+            addCriterion("REQUEST_ID >=", value, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdLessThan(String value) {
+            addCriterion("REQUEST_ID <", value, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdLessThanOrEqualTo(String value) {
+            addCriterion("REQUEST_ID <=", value, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdLike(String value) {
+            addCriterion("REQUEST_ID like", value, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdNotLike(String value) {
+            addCriterion("REQUEST_ID not like", value, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdIn(List<String> values) {
+            addCriterion("REQUEST_ID in", values, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdNotIn(List<String> values) {
+            addCriterion("REQUEST_ID not in", values, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdBetween(String value1, String value2) {
+            addCriterion("REQUEST_ID between", value1, value2, "requestId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestIdNotBetween(String value1, String value2) {
+            addCriterion("REQUEST_ID not between", value1, value2, "requestId");
+            return (Criteria) this;
+        }
+
         public Criteria andShopCrmCodeIsNull() {
             addCriterion("SHOP_CRM_CODE is null");
             return (Criteria) this;

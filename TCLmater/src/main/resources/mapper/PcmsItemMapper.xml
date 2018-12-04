@@ -380,6 +380,9 @@
   <if test="status != null">
   		AND a.`status`=#{status}
   </if>	
+  <if test="approvalStatrTime != null">
+  		AND DATE_FORMAT(c.REQUEST_CREATE_TIME,'%Y-%m-%d') BETWEEN #{approvalStatrTime} AND #{approvalEndTime}
+  </if>	
   <if test="searchKey != null">
   	AND (
 		b.vendor_name LIKE #{searchKey}
@@ -388,7 +391,7 @@
 		OR c.REQUEST_DEPT LIKE #{searchKey}
 		)
   </if>
-  
+  ORDER BY c.creat_time DESC 
   limit #{linimt}, #{size}
   </select> 
   
@@ -405,7 +408,10 @@
   </if>
   <if test="status != null">
   		AND a.`status`=#{status}
-  </if>			
+  </if>
+  <if test="approvalStatrTime != null">
+  		AND DATE_FORMAT(c.REQUEST_CREATE_TIME,'%Y-%m-%d') BETWEEN #{approvalStatrTime} AND #{approvalEndTime}
+  </if>				
   <if test="searchKey != null">
   	AND (
 		b.vendor_name LIKE #{searchKey}
@@ -414,7 +420,6 @@
 		OR c.REQUEST_DEPT LIKE #{searchKey}
 		)
   </if>
-  
   </select> 
   
   

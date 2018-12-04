@@ -5,6 +5,8 @@ import java.util.Date;
 public class PcmsShop {
     private Integer sid;
 
+    private String requestId;
+
     private String shopCrmCode;
 
     private String shopName;
@@ -35,6 +37,14 @@ public class PcmsShop {
 
     public void setSid(Integer sid) {
         this.sid = sid;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId == null ? null : requestId.trim();
     }
 
     public String getShopCrmCode() {

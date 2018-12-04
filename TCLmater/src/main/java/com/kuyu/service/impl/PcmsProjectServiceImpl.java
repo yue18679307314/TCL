@@ -12,30 +12,41 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.kuyu.common.CommonConstants;
+import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.PcmsItemMapper;
 import com.kuyu.mapper.pcms.PcmsItemRelationMapper;
 import com.kuyu.mapper.pcms.PcmsMaterialMapper;
+import com.kuyu.mapper.pcms.PcmsMaterialSourceMapper;
 import com.kuyu.mapper.pcms.PcmsOthertmMapper;
+import com.kuyu.mapper.pcms.PcmsOthertmSourceMapper;
 import com.kuyu.mapper.pcms.PcmsProjectMapper;
 import com.kuyu.mapper.pcms.PcmsShopMapper;
 import com.kuyu.mapper.pcms.PcmsShowcaseMapper;
+import com.kuyu.mapper.pcms.PcmsShowcaseSourceMapper;
+import com.kuyu.model.TpmActivityModel;
+import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.PcmsItem;
 import com.kuyu.model.pcms.PcmsItemRelation;
 import com.kuyu.model.pcms.PcmsItemRelationExample;
 import com.kuyu.model.pcms.PcmsMaterial;
 import com.kuyu.model.pcms.PcmsMaterialExample;
+import com.kuyu.model.pcms.PcmsMaterialSource;
 import com.kuyu.model.pcms.PcmsOthertm;
 import com.kuyu.model.pcms.PcmsOthertmExample;
+import com.kuyu.model.pcms.PcmsOthertmSource;
 import com.kuyu.model.pcms.PcmsProject;
 import com.kuyu.model.pcms.PcmsProjectExample;
 import com.kuyu.model.pcms.PcmsShop;
 import com.kuyu.model.pcms.PcmsShowcase;
 import com.kuyu.model.pcms.PcmsShowcaseExample;
+import com.kuyu.model.pcms.PcmsShowcaseSource;
 import com.kuyu.service.PcmsProjectService;
 import com.kuyu.util.PcmsProjectUtil;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
+import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsProjectVo;
+import com.kuyu.vo.pcms.RequestUserVo;
 
 @Service
 public class PcmsProjectServiceImpl implements PcmsProjectService{
@@ -60,6 +71,18 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 	
 	@Autowired
 	private PcmsItemRelationMapper pcmsItemRelationMapper;
+	
+	@Autowired
+	private PcmsShowcaseSourceMapper pcmsShowcaseSourceMapper;
+	
+	@Autowired
+	private PcmsMaterialSourceMapper pcmsMaterialSourceMapper;
+	
+	@Autowired
+	private PcmsOthertmSourceMapper pcmsOthertmSourceMapper;
+	
+	@Autowired
+	private TpmEmployeeMapper tpmEmployeeMapper;
 
 	@Override
 	public String importProjectDetail(PcmsProjectVo projectvo) {
@@ -170,13 +193,20 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				 Double sumPrice=0d;//汇总价格
 				 Map<Integer,String> itemNumberMap=new HashMap<Integer,String>(); 
 				 String itNumber="";
-			        for (PcmsShowcase ma : showcaseList) {  
+			        for (PcmsShowcase ma : showcaseList) {
+			        	//复制数据
+		            	PcmsShowcaseSource soure=new PcmsShowcaseSource();
+		            	BeanUtils.copyProperties(ma, soure);
+		            	pcmsShowcaseSourceMapper.insertSelective(soure);
+			        	
+			        	
+			        	
 			            boolean state = false;  
 			            
 			            //写入对应关系
 			            PcmsItemRelation itRe=new PcmsItemRelation();
 			            
-			            for (PcmsShowcase mas : group) {  
+			            for (PcmsShowcase mas : group) {
 			                if(ma.getVendorId().equals(mas.getVendorId())){  
 			                	sumPrice+=Double.valueOf(ma.getChildren1Amount());
 			                    state = true;  
@@ -216,7 +246,13 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				 Double sumPrice=0d;//汇总价格
 				 Map<Integer,String> itemNumberMap=new HashMap<Integer,String>(); 
 				 String itNumber="";
-			        for (PcmsOthertm ma : othertmList) {  
+			        for (PcmsOthertm ma : othertmList) {
+			         	//复制数据
+		            	PcmsOthertmSource soure=new PcmsOthertmSource();
+		            	BeanUtils.copyProperties(ma, soure);
+		            	pcmsOthertmSourceMapper.insertSelective(soure);
+			        	
+			        	
 			            boolean state = false;  
 			            
 			            //写入对应关系
@@ -261,10 +297,17 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				 Map<Integer,String> itemNumberMap=new HashMap<Integer,String>(); 
 				 String itNumber="";
 			        for (PcmsMaterial ma : materialList) {
+			         	//复制数据
+		            	PcmsMaterialSource soure=new PcmsMaterialSource();
+		            	BeanUtils.copyProperties(ma, soure);
+		            	pcmsMaterialSourceMapper.insertSelective(soure);
+			        	
+			        	
+		            	boolean state = false;  
+			        	
 			        	//写入对应关系
 			            PcmsItemRelation itRe=new PcmsItemRelation();
 			        	
-			            boolean state = false;  
 			            for (PcmsMaterial mas : group) {
 			                if(ma.getVendorId().equals(mas.getVendorId())){
 			                	sumPrice+=ma.getComparisonPrice()*ma.getNumber();//单价*数量
@@ -389,6 +432,33 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 //		}
 		
 		return jsonBeat;
+	}
+
+
+
+
+	@Override
+	public List<RequestUserVo> getRequestNameList(String orgCode) {
+		return tpmEmployeeMapper.getRequestNameList(orgCode);
+	}
+
+
+
+
+	@Override
+	public ResultVo changeRequestName(String requestId,String personCode) {
+		TpmEmployeeModel emp=tpmEmployeeMapper.getTpmEmployeebyPersonCode(personCode);
+		
+		PcmsProject record=new PcmsProject();
+		record.setRequestId(requestId);
+		PcmsProjectExample example=new PcmsProjectExample();
+		example.createCriteria().andRequestUserNameEqualTo(emp.getPerson_name());
+		int i=pcmsProjectMapper.updateByExampleSelective(record, example);
+		if (i==1){
+			return ResultVo.get(ResultVo.SUCCESS);
+		}
+		
+		 return ResultVo.get(ResultVo.FAIL);
 	}
 	
 	
