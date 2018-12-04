@@ -9,6 +9,7 @@ import com.kuyu.mapper.pcms.PcmsSupplierInvoiceMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMapper;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmOptLogsModel;
+import com.kuyu.model.WeixinUserInfo;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.*;
 import com.kuyu.util.CheckParamUtils;
@@ -70,6 +71,9 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     @Resource
     private PcmsInvoiceImageMapper pcmsMaterialImgModel;
 
+    @Autowired
+    private WeixinUserInfoService weixinUserInfoService;
+
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
         if (StringUtil.isNotNull(pcmsSupplierVo.getCreate_date())
@@ -110,10 +114,11 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         if(null != pcmsUserModel1){
             throw new ParamException("公司名称不能为空");
         }*/
+        WeixinUserInfo weixinUserInfo = weixinUserInfoService.selectBykey(openid);
         PcmsUserModel pcmsUserModel = new PcmsUserModel();
         pcmsUserModel.setOpenid(openid);
- /*       pcmsUserModel.setOpen_name(userInfol.getWeixinUserInfo().getNikeName());
-        pcmsUserModel.setImg(userInfol.getWeixinUserInfo().getHeadImgUrl());*/
+        pcmsUserModel.setOpen_name(weixinUserInfo.getNikeName());
+        pcmsUserModel.setImg(weixinUserInfo.getHeadImgUrl());
         pcmsUserModel.setType(1);
         pcmsUserModel.setCreate_time(DateUtils.getLongDateStr());
         PcmsUserModel pcmsUserModel1 =  pcmsUserService.selectPcmsUserModel(pcmsUserModel);

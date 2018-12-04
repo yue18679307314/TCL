@@ -9,6 +9,8 @@ import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsShowcaseVo;
 import com.kuyu.vo.query.ReceiptQuery;
 
+import java.util.List;
+
 /**
  * Created by pc on 2018/11/21
  */
@@ -50,4 +52,6 @@ public interface ReceiptService extends IService<ReceiptModel> {
     /**市场人员查看立项物料清单*/
     ResultVo selectPendingMaterial(Integer itid)throws Exception;
 
+    /**市场人员修改立项物料清单*/
+    ResultVo updatePendingMaterialFor(List<PcmsPendingMaterialModel> list)throws Exception;
 }

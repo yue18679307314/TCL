@@ -7,6 +7,7 @@ import com.kuyu.service.PcmsSupplierMaterialService;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.SupplierMaterialResultVo;
 import com.kuyu.vo.pcms.SupplierMaterialVo;
 import com.kuyu.vo.query.SupplierMaterialQuery;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +15,6 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @AOP_Controller_LOG
 @RequestMapping("/supplierMaterial")
@@ -36,7 +36,7 @@ public class PcmsSupplierMaterialController extends BaseController {
     @ApiParam(name = "PcmsSupplierMaterialModel", value = "供应商物料信息")
     @RequestMapping(value = "/addPcmsSupplierMaterial", method = { RequestMethod.POST })
     public ResultVo addSupplierMaterial(@RequestBody PcmsSupplierMaterialModel pcmsSupplierMaterialModel) throws Exception {
-        pcmsSupplierMaterialService.insertPcmsSupplierMaterial(pcmsSupplierMaterialModel,getLoginUserInfo());
+        pcmsSupplierMaterialService.insertPcmsSupplierMaterial(pcmsSupplierMaterialModel,getUserInfo());
         return ResultVo.get(ResultVo.SUCCESS);
     }
 
@@ -62,19 +62,43 @@ public class PcmsSupplierMaterialController extends BaseController {
     @ApiOperation(value = "分页",response = SupplierMaterialQuery.class)
     @PostMapping("/findSupplierMaterialList")
     public ResultVo findSupplierMaterialList(@RequestBody SupplierMaterialQuery query) throws Exception {
-        return pcmsSupplierMaterialService.findSupplierMaterialByPage(getLoginUserInfo(),query);
+        return pcmsSupplierMaterialService.findSupplierMaterialByPage(getUserInfo(),query);
     }
 
     /**
-     * 根据openid查询供应商物料信息
+     * 查看刚刚导入供应商物料分页
      * @param query
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "根据openid查询供应商物料信息",response = PcmsSupplierMaterialModel.class)
+    @ApiOperation(value = "查看刚刚导入供应商物料分页",response = SupplierMaterialQuery.class)
+    @PostMapping("/findBySupplierMaterialList")
+    public ResultVo findBySupplierMaterialList(@RequestBody SupplierMaterialQuery query) throws Exception {
+        return pcmsSupplierMaterialService.findBySupplierMaterialByPage(getUserInfo(),query);
+    }
+
+    /**
+     * 供应商查询供应商物料信息
+     * @param query
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "供应商查询供应商物料信息",response = PcmsSupplierMaterialModel.class)
     @PostMapping("/querySupplierMaterialList")
     public ResultVo querySupplierMaterialList(@RequestBody SupplierMaterialVo query) throws Exception {
         return pcmsSupplierMaterialService.querySupplierMaterialList(query);
+    }
+
+    /**
+     *  市场人员查询供应商物料信息
+     * @param supplierMaterialResultVo
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "市场人员查询供应商物料信息",response = PcmsSupplierMaterialModel.class)
+    @PostMapping("/queryBySupplierMaterialList")
+    public ResultVo queryBySupplierMaterialList(@RequestBody SupplierMaterialResultVo supplierMaterialResultVo) throws Exception {
+        return pcmsSupplierMaterialService.queryBySupplierMaterialList(supplierMaterialResultVo,getUserInfo());
     }
 
     /**
@@ -92,5 +116,19 @@ public class PcmsSupplierMaterialController extends BaseController {
         }
         return ResultVo.getData(ResultVo.SUCCESS, file);
     }
+
+    /**
+     * 确定导入
+     * @param vendor_id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "确定导入")
+    @GetMapping("/confirmSupplierMaterial")
+    public ResultVo confirmSupplierMaterial(@RequestParam(value = "vendor_id") String vendor_id)throws Exception{
+        return pcmsSupplierMaterialService.confirmSupplierMaterial(vendor_id,getUserInfo());
+    }
+
+
 
 }

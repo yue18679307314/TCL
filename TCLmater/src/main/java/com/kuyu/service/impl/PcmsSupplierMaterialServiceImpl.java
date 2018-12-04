@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.itextpdf.text.DocumentException;
 import com.kuyu.exception.ParamException;
+import com.kuyu.mapper.pcms.PcmsMaterialVersionMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMaterialMapper;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmOptLogsModel;
+import com.kuyu.model.pcms.PcmsMaterialVersionModel;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.service.PcmsSupplierMaterialService;
@@ -16,6 +18,7 @@ import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.SupplierMaterialResultVo;
 import com.kuyu.vo.pcms.SupplierMaterialVo;
 import com.kuyu.vo.query.SupplierMaterialQuery;
 import org.apache.poi.hssf.usermodel.*;
@@ -25,8 +28,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +51,9 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
 
     @Autowired
     private TpmOptLogsService tpmOptLogsService;
+
+    @Resource
+    private PcmsMaterialVersionMapper pcmsMaterialVersionMapper;
 
     @Override
     public void insertPcmsSupplierMaterial(PcmsSupplierMaterialModel pcmsSupplierMaterialModel, LoginUserInfo userInfo) throws Exception {
@@ -90,8 +98,26 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
     }
 
     @Override
+    public ResultVo findBySupplierMaterialByPage(LoginUserInfo userInfo, SupplierMaterialQuery query) throws Exception {
+        query.setCompany(userInfo.getEmployeeModel().getCompany());
+        query.setState(0);
+        query = (SupplierMaterialQuery) CheckParamUtils.trimWithObjectField(query);
+        Page<SupplierMaterialQuery> page = new Page<>(query.getCurrent(),query.getSize());
+        List<SupplierMaterialQuery> list = baseMapper.findSupplierMaterialByPage(query,page);
+        page.setRecords(list);
+        return ResultVo.getDataWithSuccess(page);
+    }
+
+    @Override
     public ResultVo querySupplierMaterialList(SupplierMaterialVo query) throws Exception {
         List<PcmsSupplierMaterialModel> list = baseMapper.querySupplierMaterialList(query);
+        return ResultVo.getDataWithSuccess(list);
+    }
+
+    @Override
+    public ResultVo queryBySupplierMaterialList(SupplierMaterialResultVo supplierMaterialResultVo,LoginUserInfo userInfo) throws Exception {
+        supplierMaterialResultVo.setCompany(userInfo.getEmployeeModel().getCompany());
+        List<PcmsSupplierMaterialModel> list = baseMapper.queryBySupplierMaterialList(supplierMaterialResultVo);
         return ResultVo.getDataWithSuccess(list);
     }
 
@@ -122,6 +148,41 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
         }
         return null;
     }
+
+    @Override
+    public ResultVo confirmSupplierMaterial(String vendor_id, LoginUserInfo userInfo) throws Exception {
+        List<PcmsSupplierMaterialModel> list = baseMapper.getSupplierMaterialByState(vendor_id,userInfo.getEmployeeModel().getCompany(),0);
+        List<PcmsSupplierMaterialModel> list1 = baseMapper.getSupplierMaterialByState(vendor_id,userInfo.getEmployeeModel().getCompany(),1);
+        List<Integer> listId = new ArrayList<>();
+        if(list1.size()>0 || null != list1){
+            for(PcmsSupplierMaterialModel pcmsSupplierMaterialModel : list1){
+                Integer ids = pcmsSupplierMaterialModel.getId();
+                listId.add(ids);
+            }
+        }
+        baseMapper.deleteBatchIds(listId);
+        for(PcmsSupplierMaterialModel pcmsSupplierMaterialModel : list){
+            pcmsSupplierMaterialModel.setState(1);
+            baseMapper.updateById(pcmsSupplierMaterialModel);
+        }
+
+        List<PcmsMaterialVersionModel> list2 = pcmsMaterialVersionMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+        if(list.size() > 0 && null != list2){
+            PcmsMaterialVersionModel pcmsMaterialVersionModel1 = list2.get(0);
+            PcmsMaterialVersionModel pcmsMaterialVersionModel2 = pcmsMaterialVersionMapper.selectById(pcmsMaterialVersionModel1.getId());
+            pcmsMaterialVersionModel2.setState(0);
+            pcmsMaterialVersionMapper.updateById(pcmsMaterialVersionModel2);
+        }
+
+        if(list.size() > 0 && null != list2){
+            PcmsMaterialVersionModel pcmsMaterialVersionModel1 = list2.get(1);
+            PcmsMaterialVersionModel pcmsMaterialVersionModel2 = pcmsMaterialVersionMapper.selectById(pcmsMaterialVersionModel1.getId());
+            pcmsMaterialVersionModel2.setState(1);
+            pcmsMaterialVersionMapper.updateById(pcmsMaterialVersionModel2);
+        }
+        return ResultVo.get(ResultVo.SUCCESS);
+    }
+
     public void createBankInfoXls(List<PcmsSupplierMaterialModel> list, String url)
             throws Exception, DocumentException {
         File file = new File(url);
