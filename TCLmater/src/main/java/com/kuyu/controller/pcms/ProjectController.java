@@ -72,8 +72,8 @@ public class ProjectController {
      */
     @ApiOperation(value = "负责人列表")
     @RequestMapping(value = "/requestNameList",produces = "application/json;charset=UTF-8")
-    public ResultVo requestNameList(HttpServletRequest request,String orgCode)throws Exception{
-    	List<RequestUserVo> result=pcmsProjectService.getRequestNameList(orgCode);
+    public ResultVo requestNameList(HttpServletRequest request,String orgCode,String searchKey)throws Exception{
+    	List<RequestUserVo> result=pcmsProjectService.getRequestNameList(orgCode,searchKey);
     		
     		return ResultVo.getData(ResultVo.SUCCESS, result);
     }

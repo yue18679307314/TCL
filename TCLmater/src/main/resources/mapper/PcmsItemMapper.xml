@@ -452,7 +452,7 @@
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 		LEFT JOIN tpm_dept d ON c.REQUEST_USER=d.org_name
-		LEFT JOIN pcms_shop e ON e.SHOP_CRM_CODE=c.SHOP_CRM_CODE
+		LEFT JOIN pcms_shop e ON e.REQUEST_ID=c.REQUEST_ID
 		where a.itid=#{itid}
   </select>
 </mapper>

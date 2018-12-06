@@ -438,8 +438,13 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 
 
 	@Override
-	public List<RequestUserVo> getRequestNameList(String orgCode) {
-		return tpmEmployeeMapper.getRequestNameList(orgCode);
+	public List<RequestUserVo> getRequestNameList(String orgCode,String searchKey) {
+		if(searchKey!=null&&!searchKey.equals("")){
+			searchKey="%"+searchKey+"%";
+		}else{
+			searchKey=null;
+		}
+		return tpmEmployeeMapper.getRequestNameList(orgCode,searchKey);
 	}
 
 
@@ -450,9 +455,9 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		TpmEmployeeModel emp=tpmEmployeeMapper.getTpmEmployeebyPersonCode(personCode);
 		
 		PcmsProject record=new PcmsProject();
-		record.setRequestId(requestId);
+		record.setRequestUserName(emp.getPerson_name());
 		PcmsProjectExample example=new PcmsProjectExample();
-		example.createCriteria().andRequestUserNameEqualTo(emp.getPerson_name());
+		example.createCriteria().andRequestIdEqualTo(requestId);
 		int i=pcmsProjectMapper.updateByExampleSelective(record, example);
 		if (i==1){
 			return ResultVo.get(ResultVo.SUCCESS);

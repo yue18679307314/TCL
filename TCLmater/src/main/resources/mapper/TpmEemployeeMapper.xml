@@ -150,6 +150,10 @@
 			tpm_employee
 		WHERE
 			org_code = #{orgCode}
+		<if test="searchKey!=null">
+		AND (person_name LIKE #{searchKey} OR mobile LIKE #{searchKey})
+		
+		</if>
 	</select>
 	
 </mapper>
