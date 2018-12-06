@@ -105,9 +105,10 @@ public class ItemController extends BaseController{
 	@RequestMapping(value = "/statusItem", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo statusItem(HttpServletRequest request,
 			@RequestParam(value = "itid")Integer itid,
-			@RequestParam(value = "status")Integer status) {
+			@RequestParam(value = "status")Integer status,
+											 @RequestParam(value = "context")String context) {
 		
-		return pcmsItemService.changeItemStatus(itid,status);
+		return pcmsItemService.changeItemStatus(itid,status,getLoginUserInfo(),context);
 	}
 	
 	/**
@@ -121,7 +122,7 @@ public class ItemController extends BaseController{
 			@RequestParam(value = "itid")String itids) {
 			String itid[] =itids.split(",");
 			for (String id : itid) {
-				pcmsItemService.changeItemStatus(Integer.valueOf(id),5);
+				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,getLoginUserInfo(),null);
 			}
 		
 		return ResultVo.get(ResultVo.SUCCESS);

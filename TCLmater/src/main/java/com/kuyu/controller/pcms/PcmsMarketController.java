@@ -1,9 +1,12 @@
 package com.kuyu.controller.pcms;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.model.pcms.PcmsPendingMaterialModel;
 import com.kuyu.model.pcms.PcmsRejectLogModel;
+import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.model.pcms.PcmsUserItemModel;
 import com.kuyu.service.ReceiptService;
 import com.kuyu.vo.ResultVo;
@@ -72,13 +75,16 @@ public class PcmsMarketController extends BaseController {
 
     /**
      * 市场人员修改立项物料清单
-     * @param list
+     * @param vendor_id
      * @return
      * @throws Exception
      */
     @ApiOperation(value = "市场人员修改立项物料清单",response = PcmsPendingMaterialModel.class)
-    @PostMapping("/updatePendingMaterialFor")
-    public ResultVo updatePendingMaterialFor(@RequestBody List<PcmsPendingMaterialModel> list)throws Exception{
+    @GetMapping("/updatePendingMaterialFor")
+    public ResultVo updatePendingMaterialFor(@RequestParam(value = "vendor_id") String vendor_id)throws Exception{
+        String s = vendor_id.replace("&quot;","\"");
+        ObjectMapper mapper = new ObjectMapper();
+        List<PcmsPendingMaterialModel> list = mapper.readValue(s, new TypeReference<List<PcmsPendingMaterialModel>>() {});
         return receiptService.updatePendingMaterialFor(list);
     }
 

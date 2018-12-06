@@ -45,6 +45,8 @@ public class ItemDetail {
 	private String DETAIL_TASK; //门店任务
 	
 	private Integer status;  //状态
+
+	private String context; //作废原因
 	
 	private List<MaterialResult> mrList;
 	
@@ -244,6 +246,11 @@ public class ItemDetail {
 		this.scList = scList;
 	}
 
-	
-	
+	public String getContext() {
+		return context;
+	}
+
+	public void setContext(String context) {
+		this.context = context;
+	}
 }
