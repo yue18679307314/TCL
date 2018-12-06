@@ -11,26 +11,31 @@
         t.note AS note,
         t.ranges AS ranges,
         t.specifications AS specifications,
-        t.unit AS unit
+        t.unit AS unit,
+        t.url AS url
         FROM pcms_supplier_material t
         <where>
-            <if test="params.category !=null and params.category !=''">
+            <!--<if test="params.category !=null and params.category !=''">
                 t.category LIKE '%${params.category}%'
             </if>
             <if test="params.specifications !=null and params.specifications !=''">
                 OR t.specifications LIKE '%${params.specifications}%'
-            </if>
+            </if>-->
             <if test="params.company !=null and params.company !=''">
                 AND t.company =
                 #{params.company,jdbcType=VARCHAR}
             </if>
-            <if test="params.version !=null and params.version !=''">
+            <!--<if test="params.version !=null and params.version !=''">
                 AND t.version =
                 #{params.version,jdbcType=VARCHAR}
-            </if>
+            </if>-->
             <if test="params.vendor_id !=null and params.vendor_id !=''">
                 AND t.vendor_id =
                 #{params.vendor_id,jdbcType=VARCHAR}
+            </if>
+            <if test="params.state == 0">
+                AND t.state =
+                #{params.state,jdbcType=INTEGER}
             </if>
         </where>
         ORDER BY t.create_time DESC
@@ -55,6 +60,32 @@
         ORDER BY t.id DESC;
     </select>
 
+    <select id="getSupplierMaterialByState" resultType="com.kuyu.model.pcms.PcmsSupplierMaterialModel">
+        SELECT
+        psm.id AS id,
+        psm.category AS category,
+        psm.comparison_price AS comparisonPrice,
+        psm.note AS note,
+        psm.ranges AS ranges,
+        psm.specifications AS specifications,
+        psm.unit AS unit
+        FROM pcms_supplier_material psm
+        <where>
+            <if test="company !=null and company !=''">
+                AND psm.company =
+                #{company,jdbcType=VARCHAR}
+            </if>
+            <if test="vendor_id !=null and vendor_id !=''">
+                AND psm.vendor_id =
+                #{vendor_id,jdbcType=VARCHAR}
+            </if>
+                AND psm.state =
+                #{state,jdbcType=INTEGER}
+        </where>
+        ORDER BY psm.id DESC;
+    </select>
+
+
     <select id="querySupplierMaterialList" resultType="com.kuyu.model.pcms.PcmsSupplierMaterialModel">
         SELECT
         psm.id AS id,
@@ -78,6 +109,32 @@
             <if test="params.openid !=null and params.openid !=''">
                 AND p.openid =
                 #{params.openid,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryBySupplierMaterialList" resultType="com.kuyu.model.pcms.PcmsSupplierMaterialModel">
+        SELECT
+        psm.id AS id,
+        psm.category AS category,
+        psm.comparison_price AS comparisonPrice,
+        psm.note AS note,
+        psm.ranges AS ranges,
+        psm.specifications AS specifications,
+        psm.unit AS unit
+        FROM pcms_supplier_company psc
+        RIGHT JOIN  pcms_supplier_material psm ON psc.company = psm.company AND psc.vendor_id = psm.vendor_id
+        <where>
+            <if test="params.category !=null and params.category !=''">
+                psm.category LIKE '%${params.category}%'
+            </if>
+            <if test="params.vendor_id !=null and params.vendor_id !=''">
+                AND psm.vendor_id =
+                #{params.vendor_id,jdbcType=VARCHAR}
+            </if>
+            <if test="params.company !=null and params.company !=''">
+                AND psc.company =
+                #{params.company,jdbcType=VARCHAR}
             </if>
         </where>
     </select>

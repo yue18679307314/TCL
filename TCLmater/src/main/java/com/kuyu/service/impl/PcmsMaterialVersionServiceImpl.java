@@ -68,6 +68,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             newFile.delete();
             throw new ParamException("数据为空");
         }
+//        List<PcmsSupplierMaterialModel> list = new ArrayList<>();
         List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(vendor_id,userInfo.getEmployeeModel().getCompany());
         PcmsMaterialVersionModel pcmsMaterialVersionModel = new PcmsMaterialVersionModel();
         if(null != psmm && psmm.size()>0){
@@ -92,22 +93,26 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
                 tdm.setCreate_time(new Date());
                 tdm.setCompany(userInfo.getEmployeeModel().getCompany());
                 tdm.setVersion(psmm.get(0).getVersion()+1);
+                tdm.setUrl(finalPath);
+                tdm.setState(0);
                 list.add(tdm);
             }
-            List<Integer> listId = new ArrayList<>();
+            /*List<Integer> listId = new ArrayList<>();
             for (PcmsSupplierMaterialModel id : psmm){
                 Integer ids = id.getId();
                 listId.add(ids);
             }
-            pcmsSupplierMaterialService.deleteBatchIds(listId);
-            pcmsSupplierMaterialService.insertBatch(list);
+            pcmsSupplierMaterialService.deleteBatchIds(listId);*/
+//            pcmsSupplierMaterialService.insertBatch(list);
             pcmsMaterialVersionModel.setCompany(userInfo.getEmployeeModel().getCompany());
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
             pcmsMaterialVersionModel.setUrl(fileUrl+"/"+nameXls);
             pcmsMaterialVersionModel.setVersion(psmm.get(0).getVersion()+1);
-            pcmsMaterialVersionModel.setState(1);
+            pcmsMaterialVersionModel.setState(2);
+            baseMapper.insert(pcmsMaterialVersionModel);
+            return ResultVo.getDataWithSuccess(list);
         }else{
             List<PcmsSupplierMaterialModel> list = new ArrayList<>();
             for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -130,26 +135,29 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
                 tdm.setCreate_time(new Date());
                 tdm.setCompany(userInfo.getEmployeeModel().getCompany());
                 tdm.setVersion(10000);
+                tdm.setUrl(finalPath);
+                tdm.setState(0);
                 list.add(tdm);
             }
-            pcmsSupplierMaterialService.insertBatch(list);
+//            pcmsSupplierMaterialService.insertBatch(list);
             pcmsMaterialVersionModel.setCompany(userInfo.getEmployeeModel().getCompany());
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
             pcmsMaterialVersionModel.setUrl(fileUrl+"/"+nameXls);
             pcmsMaterialVersionModel.setVersion(10000);
-            pcmsMaterialVersionModel.setState(1);
+            pcmsMaterialVersionModel.setState(2);
+            baseMapper.insert(pcmsMaterialVersionModel);
+            return ResultVo.getDataWithSuccess(list);
         }
-        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+/*        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
         if(list.size() > 0 && null != list){
             PcmsMaterialVersionModel pcmsMaterialVersionModel1 = list.get(0);
             PcmsMaterialVersionModel pcmsMaterialVersionModel2 = baseMapper.selectById(pcmsMaterialVersionModel1.getId());
             pcmsMaterialVersionModel2.setState(0);
             baseMapper.updateById(pcmsMaterialVersionModel2);
-        }
-        baseMapper.insert(pcmsMaterialVersionModel);
-        return ResultVo.get(ResultVo.SUCCESS);
+        }*/
+//        return ResultVo.getDataWithSuccess(list);
     }
 
     public static Map<String, String> readExcel(String filePath) {
@@ -247,7 +255,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
 
                     String valueresult = value.substring(0, value.length() - 1);
                     valueresult = valueresult.replaceAll("'", "");
-                    map.put(b_id, valueresult);
+                    map.put(StringUtil.getUUID(), valueresult);
                 }
             }
         } catch (Exception e) {
@@ -262,6 +270,53 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
     public ResultVo selectMaterialVersion(String vendor_id, LoginUserInfo userInfo) throws Exception {
         List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
         return ResultVo.getDataWithSuccess(list);
+    }
+
+    @Override
+    public ResultVo confirmSupplierMaterial(List<PcmsSupplierMaterialModel> list, LoginUserInfo userInfo) throws Exception {
+        if(list.size()>0||null != list){
+            List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(list.get(0).getVendor_id(),userInfo.getEmployeeModel().getCompany());
+            if(null != psmm && psmm.size()>0){
+                List<Integer> listId = new ArrayList<>();
+                for (PcmsSupplierMaterialModel id : psmm){
+                    Integer ids = id.getId();
+                    listId.add(ids);
+                }
+                pcmsSupplierMaterialService.deleteBatchIds(listId);
+            }
+//            pcmsSupplierMaterialService.insertBatch(list);
+            /*List<PcmsSupplierMaterialModel> listVO = list.stream()
+                    .map(pcmsSupplierMaterialVo->{
+                        PcmsSupplierMaterialModel pcmsSupplierMaterialModel = new PcmsSupplierMaterialModel();
+                        BeanUtils.copyProperties(pcmsSupplierMaterialVo,pcmsSupplierMaterialModel);
+                        return pcmsSupplierMaterialModel;
+                    }).collect(Collectors.toList());*/
+            pcmsSupplierMaterialService.insertBatch(list);
+            List<PcmsMaterialVersionModel> list1 = baseMapper.selectMaterialVersion(list.get(0).getVendor_id(),userInfo.getEmployeeModel().getCompany());
+            if(list1.size() ==1){
+                PcmsMaterialVersionModel pcmsMaterialVersionModel = baseMapper.selectById(list1.get(0).getId());
+                pcmsMaterialVersionModel.setState(0);
+                baseMapper.updateById(pcmsMaterialVersionModel);
+            }else if(list1.size() > 1){
+//                baseMapper.deleteById(list1.get(0).getId());
+                PcmsMaterialVersionModel pcmsMaterialVersionModel = baseMapper.selectById(list1.get(0).getId());
+                pcmsMaterialVersionModel.setState(0);
+                baseMapper.updateById(pcmsMaterialVersionModel);
+                PcmsMaterialVersionModel pcmsMaterialVersionModel2 = baseMapper.selectById(list1.get(1).getId());
+                pcmsMaterialVersionModel2.setState(1);
+                baseMapper.updateById(pcmsMaterialVersionModel2);
+            }
+        }
+        return ResultVo.get(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo giveUpSupplierMaterial(String vendor_id, String url, LoginUserInfo userInfo) throws Exception {
+        File newFile = new File(url);
+        newFile.delete();
+        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+        baseMapper.deleteById(list.get(0).getId());
+        return ResultVo.get(ResultVo.SUCCESS);
     }
 
 }

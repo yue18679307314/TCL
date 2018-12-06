@@ -328,7 +328,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             receiptDetailModel.setPcmsShowcaseVo(pcmsShowcaseVo);
             receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
             /**制作中展台展柜*/
-        }else if((receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==1) || (receiptDetailModel.getStatus() == 2 && receiptDetailModel.getType()==1)){
+        }else if((receiptDetailModel.getType() == 1 && receiptDetailModel.getStatus()==1) || (receiptDetailModel.getStatus() == -1 && receiptDetailModel.getType()==1) || (receiptDetailModel.getStatus() == 0 && receiptDetailModel.getType()==1)){
             /**门店信息*/
             PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
             /**展台展柜信息*/
@@ -373,7 +373,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             receiptDetailModel.setPcmsOthertmVoList(list);
             receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
             /**制作中的其他终端*/
-        }else if((receiptDetailModel.getStatus() == 1 && receiptDetailModel.getType()==2) || (receiptDetailModel.getStatus() == 0 && receiptDetailModel.getType()==2)){
+        }else if((receiptDetailModel.getStatus() == 1 && receiptDetailModel.getType()==2) || (receiptDetailModel.getStatus() == 0 && receiptDetailModel.getType()==2) || (receiptDetailModel.getStatus() == -1 && receiptDetailModel.getType()==2)){
             /**门店信息*/
             PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
             /**其他展台*/
@@ -415,7 +415,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             receiptDetailModel.setMaterialResultList(list);
             receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
             /**制作中的广告物料*/
-        }else if((receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==1) || (receiptDetailModel.getStatus() == 0 && receiptDetailModel.getType()==3)){
+        }else if((receiptDetailModel.getType() == 3 && receiptDetailModel.getStatus()==1) || (receiptDetailModel.getStatus() == 0 && receiptDetailModel.getType()==2) || (receiptDetailModel.getStatus() == -1 && receiptDetailModel.getType()==2)){
             /**广告物料*/
             List<MaterialResult> list = baseMapper.getMaterialResultInfo(itid);
             receiptDetailModel.setMaterialResultList(list);
@@ -485,6 +485,20 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
         }
         return ResultVo.getDataWithSuccess(pcmsPendingMaterialModelList);
+    }
+
+    @Override
+    public ResultVo updatePendingMaterialFor(List<PcmsPendingMaterialModel> list) throws Exception {
+        if(list != null || list.size()>0){
+            for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
+                PcmsPendingMaterialModel pcmsPendingMaterialModel1 = pcmsPendingMaterialMapper.selectById(pcmsPendingMaterialModel.getId());
+                pcmsPendingMaterialModel1.setCategory(pcmsPendingMaterialModel.getCategory());
+                pcmsPendingMaterialModel1.setSpecifications(pcmsPendingMaterialModel.getSpecifications());
+                pcmsPendingMaterialModel1.setRanges(pcmsPendingMaterialModel.getRanges());
+                pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel1);
+            }
+        }
+        return ResultVo.get(ResultVo.SUCCESS);
     }
 
 }

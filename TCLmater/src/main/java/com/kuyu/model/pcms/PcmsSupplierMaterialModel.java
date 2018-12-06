@@ -74,6 +74,10 @@ public class PcmsSupplierMaterialModel extends Model<PcmsSupplierMaterialModel> 
     @JsonProperty("create_time")
     private Date create_time;
 
+    private String url;
+
+    private Integer state;
+
     public Integer getId() {
         return id;
     }
@@ -168,6 +172,22 @@ public class PcmsSupplierMaterialModel extends Model<PcmsSupplierMaterialModel> 
 
     public void setRanges(String ranges) {
         this.ranges = ranges;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     @Override

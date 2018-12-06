@@ -45,6 +45,10 @@ public class SupplierMaterialQuery extends BasePageQuery {
     @ApiModelProperty("供应商编码")
     private String vendor_id;
 
+    private String url;
+
+    private Integer state;
+
     public Integer getId() {
         return id;
     }
@@ -123,5 +127,21 @@ public class SupplierMaterialQuery extends BasePageQuery {
 
     public void setRanges(String ranges) {
         this.ranges = ranges;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

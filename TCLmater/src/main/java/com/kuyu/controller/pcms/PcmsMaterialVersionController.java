@@ -1,9 +1,12 @@
 package com.kuyu.controller.pcms;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.exception.ParamException;
 import com.kuyu.model.pcms.PcmsMaterialVersionModel;
+import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.vo.ResultVo;
@@ -16,6 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.List;
 
 /**
  * Created by pc on 2018/11/26
@@ -118,4 +122,37 @@ public class PcmsMaterialVersionController extends BaseController {
         return pcmsMaterialVersionService.selectMaterialVersion(vendor_id,getUserInfo());
     }
 
+    /**
+     * 确定导入
+     * @param vendor_id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "确定导入",response = PcmsSupplierMaterialModel.class)
+    @RequestMapping(value = "/confirmSupplierMaterial", method = RequestMethod.GET)
+    public ResultVo confirmSupplierMaterial(@RequestParam(value = "vendor_id") String vendor_id,@RequestParam(value = "url") String url)throws Exception{
+        try{
+            String s = vendor_id.replace("&quot;","\"");
+            System.out.println(s);
+            ObjectMapper mapper = new ObjectMapper();
+            List<PcmsSupplierMaterialModel> beanList = mapper.readValue(s, new TypeReference<List<PcmsSupplierMaterialModel>>() {});
+            return pcmsMaterialVersionService.confirmSupplierMaterial(beanList,getUserInfo());
+        }catch (Exception e){
+            pcmsMaterialVersionService.giveUpSupplierMaterial(vendor_id,url,getUserInfo());
+            throw new ParamException("导入失败");
+        }
+    }
+
+    /**
+     * 放弃导入
+     * @param vendor_id
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "放弃导入",response = PcmsMaterialVersionModel.class)
+    @GetMapping("/giveUpSupplierMaterial")
+    public ResultVo giveUpSupplierMaterial(@RequestParam(value = "vendor_id") String vendor_id,@RequestParam(value = "url") String url)throws Exception{
+        return pcmsMaterialVersionService.giveUpSupplierMaterial(vendor_id,url,getUserInfo());
+    }
 }

@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by pc on 2018/11/27
@@ -66,7 +67,21 @@ public class PcmsMarketController extends BaseController {
     @ApiOperation(value = "市场人员查看立项物料清单",response = PcmsPendingMaterialModel.class)
     @GetMapping("/selectPendingMaterial")
     public ResultVo selectPendingMaterial(@RequestParam(value = "itid") Integer itid)throws Exception{
-        return null;
+        return receiptService.selectPendingMaterial(itid);
     }
+
+    /**
+     * 市场人员修改立项物料清单
+     * @param list
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "市场人员修改立项物料清单",response = PcmsPendingMaterialModel.class)
+    @PostMapping("/updatePendingMaterialFor")
+    public ResultVo updatePendingMaterialFor(@RequestBody List<PcmsPendingMaterialModel> list)throws Exception{
+        return receiptService.updatePendingMaterialFor(list);
+    }
+
+
 
 }
