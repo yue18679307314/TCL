@@ -82,7 +82,7 @@
                 AND psm.state =
                 #{state,jdbcType=INTEGER}
         </where>
-        ORDER BY t.id DESC;
+        ORDER BY psm.id DESC;
     </select>
 
 

@@ -34,4 +34,7 @@ public interface PcmsSupplierMaterialService extends IService<PcmsSupplierMateri
 
     /**确定导入*/
     ResultVo confirmSupplierMaterial(String vendor_id, LoginUserInfo userInfo)throws Exception;
+
+    /**放弃导入*/
+    ResultVo giveUpSupplierMaterial(String vendor_id, String url,LoginUserInfo userInfo)throws Exception;
 }

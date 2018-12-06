@@ -55,6 +55,9 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
     @Resource
     private PcmsMaterialVersionMapper pcmsMaterialVersionMapper;
 
+    @Resource
+    private PcmsSupplierMaterialService pcmsSupplierMaterialService;
+
     @Override
     public void insertPcmsSupplierMaterial(PcmsSupplierMaterialModel pcmsSupplierMaterialModel, LoginUserInfo userInfo) throws Exception {
         PcmsSupplierVo supplier = new PcmsSupplierVo();
@@ -160,7 +163,9 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
                 listId.add(ids);
             }
         }
-        baseMapper.deleteBatchIds(listId);
+        if(listId != null && listId.size()>0){
+            baseMapper.deleteBatchIds(listId);
+        }
         for(PcmsSupplierMaterialModel pcmsSupplierMaterialModel : list){
             pcmsSupplierMaterialModel.setState(1);
             baseMapper.updateById(pcmsSupplierMaterialModel);
@@ -180,6 +185,22 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
             pcmsMaterialVersionModel2.setState(1);
             pcmsMaterialVersionMapper.updateById(pcmsMaterialVersionModel2);
         }
+        return ResultVo.get(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo giveUpSupplierMaterial(String vendor_id, String url, LoginUserInfo userInfo) throws Exception {
+        File newFile = new File(url);
+        newFile.delete();
+        List<PcmsMaterialVersionModel> list = pcmsMaterialVersionMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+        baseMapper.deleteById(list.get(0).getId());
+        List<PcmsSupplierMaterialModel> psmm = baseMapper.getSupplierMaterialByState(vendor_id,userInfo.getEmployeeModel().getCompany(),0);
+        List<Integer> listId = new ArrayList<>();
+        for (PcmsSupplierMaterialModel id : psmm){
+            Integer ids = id.getId();
+            listId.add(ids);
+        }
+        pcmsSupplierMaterialService.deleteBatchIds(listId);
         return ResultVo.get(ResultVo.SUCCESS);
     }
 

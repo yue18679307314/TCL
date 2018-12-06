@@ -19,7 +19,7 @@ public interface PcmsMaterialVersionService extends IService<PcmsMaterialVersion
     public ResultVo selectMaterialVersion(String vendor_id, LoginUserInfo userInfo) throws Exception;
 
     /**确定导入*/
-    public ResultVo confirmSupplierMaterial(List<PcmsSupplierMaterialModel> list,LoginUserInfo userInfo) throws Exception;
+    public ResultVo confirmSupplierMaterial(List<PcmsSupplierMaterialModel> list, LoginUserInfo userInfo) throws Exception;
 
     /**放弃导入*/
     public ResultVo giveUpSupplierMaterial(String vendor_id, String url, LoginUserInfo userInfo)throws Exception;

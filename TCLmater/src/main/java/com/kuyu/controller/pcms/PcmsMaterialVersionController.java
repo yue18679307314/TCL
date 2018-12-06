@@ -1,5 +1,7 @@
 package com.kuyu.controller.pcms;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.exception.ParamException;
@@ -122,14 +124,23 @@ public class PcmsMaterialVersionController extends BaseController {
 
     /**
      * 确定导入
-     * @param list
+     * @param vendor_id
      * @return
      * @throws Exception
      */
     @ApiOperation(value = "确定导入",response = PcmsSupplierMaterialModel.class)
-    @PostMapping("/confirmSupplierMaterial")
-    public ResultVo confirmSupplierMaterial(@RequestBody List<PcmsSupplierMaterialModel> list)throws Exception{
-        return pcmsMaterialVersionService.confirmSupplierMaterial(list,getUserInfo());
+    @RequestMapping(value = "/confirmSupplierMaterial", method = RequestMethod.GET)
+    public ResultVo confirmSupplierMaterial(@RequestParam(value = "vendor_id") String vendor_id,@RequestParam(value = "url") String url)throws Exception{
+        try{
+            String s = vendor_id.replace("&quot;","\"");
+            System.out.println(s);
+            ObjectMapper mapper = new ObjectMapper();
+            List<PcmsSupplierMaterialModel> beanList = mapper.readValue(s, new TypeReference<List<PcmsSupplierMaterialModel>>() {});
+            return pcmsMaterialVersionService.confirmSupplierMaterial(beanList,getUserInfo());
+        }catch (Exception e){
+            pcmsMaterialVersionService.giveUpSupplierMaterial(vendor_id,url,getUserInfo());
+            throw new ParamException("导入失败");
+        }
     }
 
     /**

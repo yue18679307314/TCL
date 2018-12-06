@@ -68,7 +68,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             newFile.delete();
             throw new ParamException("数据为空");
         }
-
+//        List<PcmsSupplierMaterialModel> list = new ArrayList<>();
         List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(vendor_id,userInfo.getEmployeeModel().getCompany());
         PcmsMaterialVersionModel pcmsMaterialVersionModel = new PcmsMaterialVersionModel();
         if(null != psmm && psmm.size()>0){
@@ -150,14 +150,14 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             baseMapper.insert(pcmsMaterialVersionModel);
             return ResultVo.getDataWithSuccess(list);
         }
-        /*List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+/*        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
         if(list.size() > 0 && null != list){
             PcmsMaterialVersionModel pcmsMaterialVersionModel1 = list.get(0);
             PcmsMaterialVersionModel pcmsMaterialVersionModel2 = baseMapper.selectById(pcmsMaterialVersionModel1.getId());
             pcmsMaterialVersionModel2.setState(0);
             baseMapper.updateById(pcmsMaterialVersionModel2);
         }*/
-
+//        return ResultVo.getDataWithSuccess(list);
     }
 
     public static Map<String, String> readExcel(String filePath) {
@@ -273,20 +273,32 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
     }
 
     @Override
-    public ResultVo confirmSupplierMaterial(List<PcmsSupplierMaterialModel> list,LoginUserInfo userInfo) throws Exception {
+    public ResultVo confirmSupplierMaterial(List<PcmsSupplierMaterialModel> list, LoginUserInfo userInfo) throws Exception {
         if(list.size()>0||null != list){
             List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(list.get(0).getVendor_id(),userInfo.getEmployeeModel().getCompany());
-            List<Integer> listId = new ArrayList<>();
-            for (PcmsSupplierMaterialModel id : psmm){
-                Integer ids = id.getId();
-                listId.add(ids);
+            if(null != psmm && psmm.size()>0){
+                List<Integer> listId = new ArrayList<>();
+                for (PcmsSupplierMaterialModel id : psmm){
+                    Integer ids = id.getId();
+                    listId.add(ids);
+                }
+                pcmsSupplierMaterialService.deleteBatchIds(listId);
             }
-            pcmsSupplierMaterialService.deleteBatchIds(listId);
+//            pcmsSupplierMaterialService.insertBatch(list);
+            /*List<PcmsSupplierMaterialModel> listVO = list.stream()
+                    .map(pcmsSupplierMaterialVo->{
+                        PcmsSupplierMaterialModel pcmsSupplierMaterialModel = new PcmsSupplierMaterialModel();
+                        BeanUtils.copyProperties(pcmsSupplierMaterialVo,pcmsSupplierMaterialModel);
+                        return pcmsSupplierMaterialModel;
+                    }).collect(Collectors.toList());*/
             pcmsSupplierMaterialService.insertBatch(list);
-
             List<PcmsMaterialVersionModel> list1 = baseMapper.selectMaterialVersion(list.get(0).getVendor_id(),userInfo.getEmployeeModel().getCompany());
-            baseMapper.deleteById(list1.get(0).getId());
-            if(list.size() > 0 && null != list1){
+            if(list1.size() ==1){
+                PcmsMaterialVersionModel pcmsMaterialVersionModel = baseMapper.selectById(list1.get(0).getId());
+                pcmsMaterialVersionModel.setState(0);
+                baseMapper.updateById(pcmsMaterialVersionModel);
+            }else if(list1.size() > 1){
+//                baseMapper.deleteById(list1.get(0).getId());
                 PcmsMaterialVersionModel pcmsMaterialVersionModel = baseMapper.selectById(list1.get(0).getId());
                 pcmsMaterialVersionModel.setState(0);
                 baseMapper.updateById(pcmsMaterialVersionModel);
