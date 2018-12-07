@@ -2,6 +2,7 @@ package com.kuyu.service;
 
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsMaterial;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
@@ -18,7 +19,8 @@ public interface PcmsItemService  {
 
 	int editMaterial(PcmsMaterial metarial);
 
-	ResultVo changeItemStatus(Integer itid,Integer status,String reason);
+//	ResultVo changeItemStatus(Integer itid,Integer status,String reason);
+	ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context);
 
 	
 

@@ -1,14 +1,13 @@
 package com.kuyu.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
+import com.kuyu.mapper.pcms.*;
+import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.pcms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.mapper.pcms.PcmsItemLogMapper;
@@ -35,37 +34,43 @@ import com.kuyu.vo.pcms.MaterialResult;
 import com.kuyu.vo.pcms.OthertmResult;
 import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.pcms.ShowcaseResult;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.annotation.Resource;
 
 @Service
 //@Transactional
 public class PcmsItemServiceImpl implements PcmsItemService{
 
-	@Autowired
+	@Resource
 	private PcmsProjectMapper pcmsProjectMapper;
 	
-	@Autowired
+	@Resource
 	private PcmsItemMapper pcmsItemMapper;
 	
-	@Autowired
+	@Resource
 	private PcmsMaterialMapper pcmsMaterialMapper;
 	
-	@Autowired
+	@Resource
 	private PcmsOthertmMapper pcmsOthertmMapper;
 	
-	@Autowired
+	@Resource
 	private PcmsShowcaseMapper pcmsShowcaseMapper;
 	
-	@Autowired
+	@Resource
 	private PcmsShowcaseSourceMapper pcmsShowcaseSourceMapper;
 	
-	@Autowired
+	@Resource
 	private PcmsMaterialSourceMapper pcmsMaterialSourceMapper;
 	
-	@Autowired
+	@Resource
 	private PcmsOthertmSourceMapper pcmsOthertmSourceMapper;
 	
 	@Autowired
 	private PcmsItemLogMapper pcmsItemLogMapper;
+
+	@Resource
+	private PcmsTovoidItemMapper pcmsTovoidItemMapper;
 	
 	
 	@Override
@@ -109,7 +114,12 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public ItemDetail getItemDetailById(Integer itid,Integer type) {
 		ItemDetail result=pcmsItemMapper.getItemItemDetailById(itid);
-		
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("itid",itid);
+		List<PcmsTovoidItemModel> pcmsTovoidItem = pcmsTovoidItemMapper.selectByMap(map);
+		if(pcmsTovoidItem != null && pcmsTovoidItem.size()>0){
+			result.setContext(pcmsTovoidItem.get(0).getContext());
+		}
 		// 类型1表示展台展柜，2表示其他终端，3表示广告物料
 		Integer itType = result.getItType();
 		if(type==1){
@@ -156,7 +166,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	
 	//0:未接单 1:已接单制作中 2待验收 3待结算 4已驳回 5结算中 6结算失败 7已结算 -1已作废
 	@Override
-	public ResultVo changeItemStatus(Integer itid,Integer status,String reason) {
+//	public ResultVo changeItemStatus(Integer itid,Integer status,String reason) {
+	public ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context) {
 		//TODO
 		//检测是否有权限操作
 		
@@ -171,18 +182,26 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	    log.setItid(itid);
 	    log.setStatus(status);
 	    if(status==4){
-	    	log.setNote("驳回原因:"+reason);
+	    	log.setNote("驳回原因:"+context);
 	    }
 	    if(status==3){
 	    	log.setNote("物料已验收，费用待结算");
 	    }
 	    if(status==-1){
-	    	log.setNote("作废原因:"+reason);
+	    	log.setNote("作废原因:"+context);
 	    }
 	    log.setCreateTime(new Date());
 	    pcmsItemLogMapper.insertSelective(log);
 		
-		
+	    
+		if(status ==-1){
+			PcmsTovoidItemModel pcmsTovoidItemModel = new PcmsTovoidItemModel();
+			pcmsTovoidItemModel.setContext(context);
+			pcmsTovoidItemModel.setCreate_time(new Date());
+			pcmsTovoidItemModel.setItid(itid);
+			pcmsTovoidItemModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+			pcmsTovoidItemMapper.insert(pcmsTovoidItemModel);
+		}
 		
 		//更新为对应状态
 		PcmsItemExample example=new PcmsItemExample();

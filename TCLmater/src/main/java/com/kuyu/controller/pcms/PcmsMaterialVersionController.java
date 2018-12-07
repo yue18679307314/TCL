@@ -133,7 +133,6 @@ public class PcmsMaterialVersionController extends BaseController {
     public ResultVo confirmSupplierMaterial(@RequestParam(value = "vendor_id") String vendor_id,@RequestParam(value = "url") String url)throws Exception{
         try{
             String s = vendor_id.replace("&quot;","\"");
-            System.out.println(s);
             ObjectMapper mapper = new ObjectMapper();
             List<PcmsSupplierMaterialModel> beanList = mapper.readValue(s, new TypeReference<List<PcmsSupplierMaterialModel>>() {});
             return pcmsMaterialVersionService.confirmSupplierMaterial(beanList,getUserInfo());

@@ -107,8 +107,9 @@ public class ItemController extends BaseController{
 			@RequestParam(value = "itid")Integer itid,
 			@RequestParam(value = "status")Integer status,
 			@RequestParam(value = "reason")String reason) {
-		
-		return pcmsItemService.changeItemStatus(itid,status,reason);
+											  
+//		return pcmsItemService.changeItemStatus(itid,status,reason);
+		return pcmsItemService.changeItemStatus(itid,status,getLoginUserInfo(),reason);
 	}
 	
 	/**
@@ -122,7 +123,8 @@ public class ItemController extends BaseController{
 			@RequestParam(value = "itid")String itids) {
 			String itid[] =itids.split(",");
 			for (String id : itid) {
-				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,null);
+//				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,null);
+				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,getLoginUserInfo(),null);
 			}
 		
 		return ResultVo.get(ResultVo.SUCCESS);

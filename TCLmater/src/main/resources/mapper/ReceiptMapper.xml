@@ -24,7 +24,7 @@
                 AND p.status = #{params.state,jdbcType=INTEGER}
             </if>
             <if test="params.state ==1">
-                AND p.status = 1 or p.status = 2 or p.status =3 or p.status = 4
+                AND (p.status = 1 or p.status = 2 or p.status =3 or p.status = 4)
             </if>
         </where>
         ORDER BY p.create_time DESC
