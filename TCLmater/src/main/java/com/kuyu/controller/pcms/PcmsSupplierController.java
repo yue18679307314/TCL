@@ -2,6 +2,7 @@ package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
+import com.kuyu.exception.ParamException;
 import com.kuyu.model.pcms.PcmsSupplierCompanyModel;
 import com.kuyu.model.pcms.PcmsSupplierInvoiceModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
@@ -78,6 +79,9 @@ public class PcmsSupplierController extends BaseController {
     @ApiParam(name = "PcmsSupplierVo", value = "供应商信息实体类参数")
     @RequestMapping(value = "/doPcmsSupplier", method = { RequestMethod.POST })
     public FinancialResultVo doPcmsSupplier(@RequestBody List<PcmsSupplierVo> supplierList) throws Exception {
+        if(supplierList == null || supplierList.size()==0){
+            throw new ParamException("数据为空");
+        }
         for (PcmsSupplierVo supplier : supplierList) {
             PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
             if(pcmsSupplierModel != null){
