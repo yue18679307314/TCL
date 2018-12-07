@@ -114,12 +114,20 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public ItemDetail getItemDetailById(Integer itid,Integer type) {
 		ItemDetail result=pcmsItemMapper.getItemItemDetailById(itid);
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("itid",itid);
-		List<PcmsTovoidItemModel> pcmsTovoidItem = pcmsTovoidItemMapper.selectByMap(map);
-		if(pcmsTovoidItem != null && pcmsTovoidItem.size()>0){
-			result.setContext(pcmsTovoidItem.get(0).getContext());
-		}
+//		Map<String,Object> map = new HashMap<String,Object>();
+//		map.put("itid",itid);
+//		List<PcmsTovoidItemModel> pcmsTovoidItem = pcmsTovoidItemMapper.selectByMap(map);
+		PcmsItemLogExample example=new PcmsItemLogExample();
+		example.createCriteria().andItidEqualTo(itid);
+		example.setOrderByClause("create_time DESC");
+		List<PcmsItemLog> logList = pcmsItemLogMapper.selectByExample(example);
+//		if(pcmsTovoidItem != null && pcmsTovoidItem.size()>0){
+//			result.setContext(pcmsTovoidItem.get(0).getContext());
+//		}
+		result.setItemLog(logList);
+//		if(logList != null && logList.size()>0){
+//			result.setContext(logList.get(0).getNote());
+//		}
 		// 类型1表示展台展柜，2表示其他终端，3表示广告物料
 		Integer itType = result.getItType();
 		if(type==1){

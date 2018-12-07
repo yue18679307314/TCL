@@ -5,6 +5,7 @@ import java.util.List;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.pcms.RequestUserVo;
+import com.kuyu.vo.project.ProjectDetialModelVo;
 
 public interface PcmsProjectService {
 
@@ -15,5 +16,7 @@ public interface PcmsProjectService {
 	List<RequestUserVo> getRequestNameList(String orgCode,String searchKey);
 
 	ResultVo changeRequestName(String requestId,String personCode);
+
+	void importProjectMaterialDetail(ProjectDetialModelVo vo);
 
 }

@@ -2,6 +2,8 @@ package com.kuyu.vo.pcms;
 
 import java.util.List;
 
+import com.kuyu.model.pcms.PcmsItemLog;
+
 public class ItemDetail {
 
 	private Integer itid;
@@ -48,11 +50,21 @@ public class ItemDetail {
 
 	private String context; //作废原因
 	
+	private List<PcmsItemLog> itemLog; //日志
+	
 	private List<MaterialResult> mrList;
 	
 	private List<OthertmResult> otList;
 	
 	private List<ShowcaseResult> scList;
+	
+	public List<PcmsItemLog> getItemLog() {
+		return itemLog;
+	}
+
+	public void setItemLog(List<PcmsItemLog> itemLog) {
+		this.itemLog = itemLog;
+	}
 
 	public String getSHOP_NAME() {
 		return SHOP_NAME;

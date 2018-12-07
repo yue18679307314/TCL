@@ -188,10 +188,8 @@ public class TpmProjectServiceImpl extends ServiceImpl<TpmProjectMapper, TpmProj
 
 		}
 
-//		//处理临促物料  2018-11-10
-//		PcmsProjectVo info=new PcmsProjectVo();
-//		BeanUtils.copyProperties(vo, info);//数据转换
-//		pcmsProjectService.importProjectDetail(info);//导入临促物料信息
+		//处理临促物料  2018-11-10
+		pcmsProjectService.importProjectMaterialDetail(vo);//导入临促物料信息
 		
 		
 		

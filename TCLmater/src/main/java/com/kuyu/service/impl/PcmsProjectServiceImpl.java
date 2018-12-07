@@ -48,6 +48,9 @@ import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.pcms.RequestUserVo;
+import com.kuyu.vo.project.OtherFeeOriginalModelVo;
+import com.kuyu.vo.project.ProjectDetialModelVo;
+import com.kuyu.vo.project.TpmActivityOriginalModelVo;
 
 @Service
 public class PcmsProjectServiceImpl implements PcmsProjectService{
@@ -469,6 +472,48 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		}
 		
 		 return ResultVo.get(ResultVo.FAIL);
+	}
+
+
+
+
+	@Override
+	public void importProjectMaterialDetail(ProjectDetialModelVo vo) {
+		PcmsProjectVo projectvo=new PcmsProjectVo();
+		String requestId=vo.getRequestId();
+		projectvo.setRequestId(requestId);
+		projectvo.setRequestTitle(vo.getRequestTitle());
+		projectvo.setRequestCompanyCode(vo.getRequestCompanyCode());
+		projectvo.setType("3");
+		projectvo.setRequestCreateTime(vo.getRequestCreateTime());
+		projectvo.setRequestEndTime(vo.getRequestEndTime());
+		projectvo.setREQUEST_USER(vo.getRequestUser());
+		
+		
+		List<PcmsMaterial> materialList=new ArrayList<>();
+		
+		List<TpmActivityOriginalModelVo> ActivityOriginalList=vo.getActivityOriginalList();
+		for (TpmActivityOriginalModelVo allList : ActivityOriginalList) {
+			List<OtherFeeOriginalModelVo> meList=allList.getOtherFeeOriginalModelList();
+			for (OtherFeeOriginalModelVo material : meList) {
+				PcmsMaterial info=new PcmsMaterial();
+				info.setResuestId(requestId);
+				info.setVendorId(material.getActivityVendor());
+				info.setMrname(material.getMaterialCategory());
+				//TODO 费用细类为空
+				info.setCost("");
+				info.setSpecifications(material.getSpecifications());
+				info.setUnit(material.getUnit());
+				info.setNumber(material.getAmount().intValue());
+				info.setUnitPrice(material.getUnitPrice());
+				
+				materialList.add(info);
+			}
+		}
+		projectvo.setMaterialList(materialList);
+		
+		//导入物料单
+		this.importProjectDetail(projectvo);
 	}
 	
 	
