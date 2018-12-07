@@ -18,7 +18,7 @@ public interface PcmsItemService  {
 
 	int editMaterial(PcmsMaterial metarial);
 
-	ResultVo changeItemStatus(Integer itid,Integer status);
+	ResultVo changeItemStatus(Integer itid,Integer status,String reason);
 
 	
 

@@ -53,6 +53,9 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Resource
     private PcmsMaterialImgMapper pcmsMaterialImgMapper;
+    
+    @Resource
+    private PcmsItemLogMapper pcmsItemLogMapper;
 
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
@@ -250,6 +253,14 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         PcmsItem pcmsItem  = pcmsItemMapper.selectByPrimaryKey(itid);
         pcmsItem.setStatus(2);
         pcmsItemMapper.updateByPrimaryKey(pcmsItem);
+        
+        //增加立项单日志
+	    PcmsItemLog log=new PcmsItemLog();
+	    log.setItid(itid);
+	    log.setStatus(2);
+	    log.setNote("已提交验收");
+	    log.setCreateTime(new Date());
+	    pcmsItemLogMapper.insertSelective(log);
         return ResultVo.get(ResultVo.SUCCESS);
     }
 

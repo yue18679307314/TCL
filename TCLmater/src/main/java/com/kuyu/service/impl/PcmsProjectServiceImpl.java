@@ -26,6 +26,7 @@ import com.kuyu.mapper.pcms.PcmsShowcaseSourceMapper;
 import com.kuyu.model.TpmActivityModel;
 import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.PcmsItem;
+import com.kuyu.model.pcms.PcmsItemLog;
 import com.kuyu.model.pcms.PcmsItemRelation;
 import com.kuyu.model.pcms.PcmsItemRelationExample;
 import com.kuyu.model.pcms.PcmsMaterial;
@@ -110,6 +111,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		peojct.setCreatTime(createTime);
 		peojct.setStatus(1);//设置为未拆单状态
 		pcmsProjectMapper.insertSelective(peojct);
+		
 		
 		
 		//判断是什么类型的立项单
@@ -352,6 +354,8 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 	//创建立项单
 	private Integer createItem(String requestId,String vendorId,Integer projectType,Double price,String itemNumber) {
 		
+		Date createTime=new Date();
+		
 		// 查询原始立项单
 		PcmsProject project = pcmsProjectMapper.selectByPrimaryKey(requestId);
 		
@@ -363,7 +367,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		//写入订单表
 		PcmsItem item=new PcmsItem();
 		item.setItemNumber(itemNumber);//生成订单唯一编号
-		item.setCreateTime(new Date());
+		item.setCreateTime(createTime);
 		item.setVendorId(vendorId);//设置供应商
 		item.setRequestId(requestId);//写入原始立项单ID
 		item.setItType(projectType);//设置订单类型
@@ -380,6 +384,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		PcmsProjectExample example2=new PcmsProjectExample();
 		example2.createCriteria().andRequestIdEqualTo(requestId);
 		pcmsProjectMapper.updateByExampleSelective(project, example2);
+		
 		
 		return item.getItid();
 	}

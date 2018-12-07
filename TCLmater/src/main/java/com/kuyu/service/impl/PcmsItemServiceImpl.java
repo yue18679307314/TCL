@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.kuyu.mapper.pcms.PcmsItemLogMapper;
 import com.kuyu.mapper.pcms.PcmsItemMapper;
 import com.kuyu.mapper.pcms.PcmsMaterialMapper;
 import com.kuyu.mapper.pcms.PcmsMaterialSourceMapper;
@@ -21,6 +22,7 @@ import com.kuyu.mapper.pcms.PcmsShowcaseMapper;
 import com.kuyu.mapper.pcms.PcmsShowcaseSourceMapper;
 import com.kuyu.model.pcms.PcmsItem;
 import com.kuyu.model.pcms.PcmsItemExample;
+import com.kuyu.model.pcms.PcmsItemLog;
 import com.kuyu.model.pcms.PcmsMaterial;
 import com.kuyu.model.pcms.PcmsMaterialExample;
 import com.kuyu.model.pcms.PcmsProject;
@@ -61,6 +63,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	
 	@Autowired
 	private PcmsOthertmSourceMapper pcmsOthertmSourceMapper;
+	
+	@Autowired
+	private PcmsItemLogMapper pcmsItemLogMapper;
 	
 	
 	@Override
@@ -151,7 +156,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	
 	//0:未接单 1:已接单制作中 2待验收 3待结算 4已驳回 5结算中 6结算失败 7已结算 -1已作废
 	@Override
-	public ResultVo changeItemStatus(Integer itid,Integer status) {
+	public ResultVo changeItemStatus(Integer itid,Integer status,String reason) {
 		//TODO
 		//检测是否有权限操作
 		
@@ -160,6 +165,23 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			//TODO
 			//通知共享系统处理结算
 		}
+		
+		 //增加立项单日志
+	    PcmsItemLog log=new PcmsItemLog();
+	    log.setItid(itid);
+	    log.setStatus(status);
+	    if(status==4){
+	    	log.setNote("驳回原因:"+reason);
+	    }
+	    if(status==3){
+	    	log.setNote("物料已验收，费用待结算");
+	    }
+	    if(status==-1){
+	    	log.setNote("作废原因:"+reason);
+	    }
+	    log.setCreateTime(new Date());
+	    pcmsItemLogMapper.insertSelective(log);
+		
 		
 		
 		//更新为对应状态

@@ -21,7 +21,8 @@ public class MaterialResult {
 	private Double sumPrice;
 	@ApiModelProperty("备注")
 	private String note;
-	
+	@ApiModelProperty("单价")
+	private Double unitPrice;
 	
 	public Integer getMrid() {
 		return mrid;
@@ -76,6 +77,12 @@ public class MaterialResult {
 	}
 	public void setNote(String note) {
 		this.note = note;
+	}
+	public Double getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(Double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 
 	

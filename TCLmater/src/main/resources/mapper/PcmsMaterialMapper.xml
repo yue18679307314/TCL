@@ -436,19 +436,20 @@
 <!-- ============================================================================================== -->
 <select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.MaterialResult">
 	SELECT
-	b.mrid,
-	b.mrname,
-	b.cost,
-	b.specifications,
-	b.number,
-	b.unit,
-	b.comparison_price,
-	b.number*b.comparison_price AS sumPrice,
-	b.note
-FROM
-	pcms_item_relation a
-LEFT JOIN pcms_material b ON a.relation_id = b.mrid
-WHERE
-	a.itid = #{itid}
+		b.mrid,
+		b.mrname,
+		b.cost,
+		b.specifications,
+		b.number,
+		b.unit,
+		b.comparison_price,
+		b.number*b.unit_price AS sumPrice,
+		b.note,
+		b.unit_price AS unitPrice
+	FROM
+		pcms_item_relation a
+	LEFT JOIN pcms_material b ON a.relation_id = b.mrid
+	WHERE
+		a.itid = #{itid}
 </select>
 </mapper>
