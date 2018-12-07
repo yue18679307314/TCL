@@ -19,6 +19,16 @@
 		(#{itid},#{category},#{specifications},#{unit},#{ranges},#{comparison_price},SYSDATE())
 	</insert>
 
+    <select id="selectId" resultType="com.kuyu.model.pcms.PcmsPendingMaterialModel">
+        SELECT t.category,t.id,t.comparison_price,t.image,t.ranges,t.specifications,t.ranges,t.unit,t.itid
+        FROM pcms_pending_material t
+        <where>
+            <if test="id != null and id != ''">
+                t.id = #{id}
+            </if>
+        </where>
+    </select>
+
 
 
 

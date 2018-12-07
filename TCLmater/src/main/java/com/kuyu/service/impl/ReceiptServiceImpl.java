@@ -452,7 +452,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Override
     public ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel, LoginUserInfo userInfo) throws Exception {
-        if(StringUtil.isNotNull(pcmsRejectLogModel.getContext())){
+        if(StringUtil.isEmpty(pcmsRejectLogModel.getContext())){
             throw new ParamException("驳回理由不能为空");
         }
         PcmsItem pcmsItem = pcmsItemMapper.selectByPrimaryKey(pcmsRejectLogModel.getItid());
@@ -502,7 +502,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     public ResultVo updatePendingMaterialFor(List<PcmsPendingMaterialModel> list) throws Exception {
         if(list != null || list.size()>0){
             for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
-                PcmsPendingMaterialModel pcmsPendingMaterialModel1 = pcmsPendingMaterialMapper.selectById(pcmsPendingMaterialModel.getId());
+                PcmsPendingMaterialModel pcmsPendingMaterialModel1 = pcmsPendingMaterialMapper.selectId(pcmsPendingMaterialModel.getId());
                 pcmsPendingMaterialModel1.setCategory(pcmsPendingMaterialModel.getCategory());
                 pcmsPendingMaterialModel1.setSpecifications(pcmsPendingMaterialModel.getSpecifications());
                 pcmsPendingMaterialModel1.setRanges(pcmsPendingMaterialModel.getRanges());
