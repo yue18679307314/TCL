@@ -126,6 +126,17 @@ public class ReceiptController extends BaseController {
     }
 
     /**
+     * 查看待验收物料详情
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "查看待验收物料详情",response = PcmsUserItemModel.class)
+    @GetMapping("/queryPendingMaterial")
+    public ResultVo queryPendingMaterial(@RequestParam(value = "id") Integer id) throws Exception{
+        return receiptService.queryPendingMaterial(id);
+    }
+    /**
      * 查看物料被驳回物料信息
      * @param itid
      * @return

@@ -1,42 +1,17 @@
 package com.kuyu.service.impl;
 
-import java.util.*;
-
+import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.kuyu.mapper.pcms.PcmsItemLogMapper;
-import com.kuyu.mapper.pcms.PcmsItemMapper;
-import com.kuyu.mapper.pcms.PcmsMaterialMapper;
-import com.kuyu.mapper.pcms.PcmsMaterialSourceMapper;
-import com.kuyu.mapper.pcms.PcmsOthertmMapper;
-import com.kuyu.mapper.pcms.PcmsOthertmSourceMapper;
-import com.kuyu.mapper.pcms.PcmsProjectMapper;
-import com.kuyu.mapper.pcms.PcmsShowcaseMapper;
-import com.kuyu.mapper.pcms.PcmsShowcaseSourceMapper;
-import com.kuyu.model.pcms.PcmsItem;
-import com.kuyu.model.pcms.PcmsItemExample;
-import com.kuyu.model.pcms.PcmsItemLog;
-import com.kuyu.model.pcms.PcmsMaterial;
-import com.kuyu.model.pcms.PcmsMaterialExample;
-import com.kuyu.model.pcms.PcmsProject;
-import com.kuyu.model.pcms.PcmsShowcase;
 import com.kuyu.service.PcmsItemService;
 import com.kuyu.vo.ResultVo;
-import com.kuyu.vo.pcms.ItemDetail;
-import com.kuyu.vo.pcms.ItemResult;
-import com.kuyu.vo.pcms.MaterialResult;
-import com.kuyu.vo.pcms.OthertmResult;
-import com.kuyu.vo.pcms.PcmsProjectVo;
-import com.kuyu.vo.pcms.ShowcaseResult;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.kuyu.vo.pcms.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.*;
 
 @Service
 //@Transactional
@@ -66,11 +41,20 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Resource
 	private PcmsOthertmSourceMapper pcmsOthertmSourceMapper;
 	
-	@Autowired
+	@Resource
 	private PcmsItemLogMapper pcmsItemLogMapper;
 
 	@Resource
 	private PcmsTovoidItemMapper pcmsTovoidItemMapper;
+
+	@Resource
+	private PcmsRejectLogMapper pcmsRejectLogMapper;
+
+	@Resource
+	private PcmsPendingMaterialMapper pcmsPendingMaterialMapper;
+
+	@Resource
+	private PcmsMaterialImgMapper pcmsMaterialImgMapper;
 	
 	
 	@Override
@@ -128,6 +112,18 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 //		if(logList != null && logList.size()>0){
 //			result.setContext(logList.get(0).getNote());
 //		}
+
+		/**上传的图片信息*/
+		List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList =  new ArrayList<>();
+		List<PcmsPendingMaterialModel> list =  pcmsPendingMaterialMapper.selectByItid(itid);
+		if(list.size()>0){
+			for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
+				List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+				pcmsPendingMaterialModel.setImgList(pcmsMaterialImg);
+				pcmsPendingMaterialModelList.add(pcmsPendingMaterialModel);
+			}
+			result.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
+		}
 		// 类型1表示展台展柜，2表示其他终端，3表示广告物料
 		Integer itType = result.getItType();
 		if(type==1){
@@ -191,26 +187,28 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	    log.setStatus(status);
 	    if(status==4){
 	    	log.setNote("驳回原因:"+context);
+	    	PcmsRejectLogModel pcmsRejectLogModel = new PcmsRejectLogModel();
+	    	pcmsRejectLogModel.setContext(context);
+	    	pcmsRejectLogModel.setCreate_time(new Date());
+	    	pcmsRejectLogModel.setItid(itid);
+	    	pcmsRejectLogModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+			pcmsRejectLogMapper.insert(pcmsRejectLogModel);
 	    }
 	    if(status==3){
 	    	log.setNote("物料已验收，费用待结算");
 	    }
 	    if(status==-1){
 	    	log.setNote("作废原因:"+context);
-	    }
-	    log.setCreateTime(new Date());
-	    pcmsItemLogMapper.insertSelective(log);
-		
-	    
-		if(status ==-1){
 			PcmsTovoidItemModel pcmsTovoidItemModel = new PcmsTovoidItemModel();
 			pcmsTovoidItemModel.setContext(context);
 			pcmsTovoidItemModel.setCreate_time(new Date());
 			pcmsTovoidItemModel.setItid(itid);
 			pcmsTovoidItemModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
 			pcmsTovoidItemMapper.insert(pcmsTovoidItemModel);
-		}
-		
+	    }
+	    log.setCreateTime(new Date());
+	    pcmsItemLogMapper.insertSelective(log);
+
 		//更新为对应状态
 		PcmsItemExample example=new PcmsItemExample();
 		example.createCriteria().andItidEqualTo(itid);

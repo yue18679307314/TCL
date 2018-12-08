@@ -87,7 +87,9 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
                 tdm.setSpecifications(psm[2]);
                 tdm.setUnit(psm[3]);
                 tdm.setRanges(psm[4]);
-                tdm.setComparison_price(Double.parseDouble(psm[5]));
+                if(psm[5] != null){
+                    tdm.setComparison_price(Double.parseDouble(psm[5]));
+                }
                 tdm.setNote(psm[6]);
                 tdm.setVendor_id(vendor_id);
                 tdm.setCreate_time(new Date());
@@ -129,7 +131,9 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
                 tdm.setSpecifications(psm[2]);
                 tdm.setUnit(psm[3]);
                 tdm.setRanges(psm[4]);
-                tdm.setComparison_price(Double.parseDouble(psm[5]));
+                if(psm[5] != null){
+                    tdm.setComparison_price(Double.parseDouble(psm[5]));
+                }
                 tdm.setNote(psm[6]);
                 tdm.setVendor_id(vendor_id);
                 tdm.setCreate_time(new Date());

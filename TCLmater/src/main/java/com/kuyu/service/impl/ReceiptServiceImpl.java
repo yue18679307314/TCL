@@ -312,6 +312,14 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
+    public ResultVo queryPendingMaterial(Integer id) throws Exception {
+        PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectById(id);
+        List<PcmsMaterialImgModel> imgList = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
+        pcmsPendingMaterialModel.setImgList(imgList);
+        return ResultVo.getDataWithSuccess(pcmsPendingMaterialModel);
+    }
+
+    @Override
     public ResultVo selectRejectLog(Integer itid) throws Exception {
         PcmsRejectLogModel pcmsRejectLogModel = pcmsRejectLogMapper.selectRejectLog(itid);
         return ResultVo.getDataWithSuccess(pcmsRejectLogModel);
@@ -451,7 +459,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
-    public ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel, LoginUserInfo userInfo) throws Exception {
+    public ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel/*, LoginUserInfo userInfo*/) throws Exception {
         if(StringUtil.isEmpty(pcmsRejectLogModel.getContext())){
             throw new ParamException("驳回理由不能为空");
         }
@@ -462,7 +470,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         pcmsItem.setStatus(4);
         pcmsRejectLogModel.setCreate_time(new Date());
         pcmsRejectLogModel.setType(2);
-        pcmsRejectLogModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+        pcmsRejectLogModel.setOperator(/*userInfo.getEmployeeModel().getPerson_name()*/"555");
         pcmsRejectLogModel.setContext(pcmsRejectLogModel.getContext());
         pcmsRejectLogMapper.insert(pcmsRejectLogModel);
         pcmsItemMapper.updateByPrimaryKey(pcmsItem);
@@ -470,14 +478,14 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
-    public ResultVo doRejectSuccess(Integer itid, LoginUserInfo userInfo) throws Exception {
+    public ResultVo doRejectSuccess(Integer itid/*, LoginUserInfo userInfo*/) throws Exception {
         PcmsItem pcmsItem = pcmsItemMapper.selectByPrimaryKey(itid);
         if(null == pcmsItem){
             throw new ParamException("立项单不存在");
         }
         PcmsRejectLogModel pcmsRejectLogModel = new PcmsRejectLogModel();
         pcmsRejectLogModel.setItid(itid);
-        pcmsRejectLogModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+        pcmsRejectLogModel.setOperator(/*userInfo.getEmployeeModel().getPerson_name()*/"555");
         pcmsRejectLogModel.setCreate_time(new Date());
         pcmsRejectLogModel.setType(1);
         pcmsItem.setStatus(3);

@@ -37,6 +37,9 @@ public interface ReceiptService extends IService<ReceiptModel> {
     /**删除待验收物料*/
     ResultVo deletePendingMaterial(Integer id)throws Exception;
 
+    /**删除待验收物料*/
+    ResultVo queryPendingMaterial(Integer id)throws Exception;
+
     /**查看物料被驳回物料信息*/
     ResultVo selectRejectLog(Integer itid)throws Exception;
 
@@ -44,10 +47,10 @@ public interface ReceiptService extends IService<ReceiptModel> {
     ResultVo getItemDetail(Integer itid)throws Exception;
 
     /**市场人员驳回验收单*/
-    ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel, LoginUserInfo userInfo)throws Exception;
+    ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel/*, LoginUserInfo userInfo*/)throws Exception;
 
     /**市场人员验收成功*/
-    ResultVo doRejectSuccess(Integer itid, LoginUserInfo userInfo)throws Exception;
+    ResultVo doRejectSuccess(Integer itid/*, LoginUserInfo userInfo*/)throws Exception;
 
     /**市场人员查看立项物料清单*/
     ResultVo selectPendingMaterial(Integer itid)throws Exception;

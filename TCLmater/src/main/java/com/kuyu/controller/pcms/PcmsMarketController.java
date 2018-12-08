@@ -46,7 +46,7 @@ public class PcmsMarketController extends BaseController {
     @ApiOperation(value = "驳回",response = PcmsRejectLogModel.class)
     @PostMapping("/doRejectFail")
     public ResultVo doReject(@RequestBody PcmsRejectLogModel pcmsRejectLogModel)throws Exception{
-        return receiptService.doReject(pcmsRejectLogModel,getUserInfo());
+        return receiptService.doReject(pcmsRejectLogModel/*,getUserInfo()*/);
     }
 
     /**
@@ -58,7 +58,7 @@ public class PcmsMarketController extends BaseController {
     @ApiOperation(value = "验收成功",response = PcmsRejectLogModel.class)
     @GetMapping("/doRejectSuccess")
     public ResultVo doRejectSuccess(@RequestParam(value = "itid") Integer itid)throws Exception{
-        return receiptService.doRejectSuccess(itid,getUserInfo());
+        return receiptService.doRejectSuccess(itid/*,getUserInfo()*/);
     }
 
     /**
