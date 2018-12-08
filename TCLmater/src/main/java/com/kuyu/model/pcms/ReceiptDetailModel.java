@@ -33,6 +33,9 @@ public class ReceiptDetailModel implements Serializable{
     @ApiModelProperty("供应商名称")
     private String vendor_name;
 
+    @ApiModelProperty("供应商ID")
+    private String vendor_id;
+
     @ApiModelProperty("费用细类")
     private String subclass;
 
@@ -261,5 +264,13 @@ public class ReceiptDetailModel implements Serializable{
 
     public void setPcmsRejectLogModelList(List<PcmsRejectLogModel> pcmsRejectLogModelList) {
         this.pcmsRejectLogModelList = pcmsRejectLogModelList;
+    }
+
+    public String getVendor_id() {
+        return vendor_id;
+    }
+
+    public void setVendor_id(String vendor_id) {
+        this.vendor_id = vendor_id;
     }
 }

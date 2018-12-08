@@ -3,7 +3,7 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsPendingMaterialMapper">
     <!-- 根据openid查询是否绑定 -->
     <select id="selectByItid" resultType="com.kuyu.model.pcms.PcmsPendingMaterialModel">
-        SELECT t.category,t.id,t.comparison_price,t.image,t.ranges,t.specifications,t.ranges,t.unit,t.itid
+        SELECT t.category,t.id,t.comparison_price,t.image,t.ranges,t.specifications,t.ranges,t.unit,t.itid,t.number,t.all_price
         FROM pcms_pending_material t
         <where>
             <if test="itid != null and itid != ''">

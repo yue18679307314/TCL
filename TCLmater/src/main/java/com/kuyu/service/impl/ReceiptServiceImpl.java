@@ -514,6 +514,8 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
                 pcmsPendingMaterialModel1.setCategory(pcmsPendingMaterialModel.getCategory());
                 pcmsPendingMaterialModel1.setSpecifications(pcmsPendingMaterialModel.getSpecifications());
                 pcmsPendingMaterialModel1.setRanges(pcmsPendingMaterialModel.getRanges());
+                pcmsPendingMaterialModel1.setNumber(pcmsPendingMaterialModel.getNumber());
+                pcmsPendingMaterialModel1.setAll_price(pcmsPendingMaterialModel.getAll_price());
                 pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel1);
             }
         }

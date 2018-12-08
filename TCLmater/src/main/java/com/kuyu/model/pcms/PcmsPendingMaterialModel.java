@@ -59,6 +59,11 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
     @JsonProperty("itid")
     private Integer itid;
 
+    @ApiModelProperty("拆单的主键ID")
+    @JsonProperty("number")
+    private Integer number;
+
+    private Double all_price;
 
     /**单价数量范围*/
     @ApiModelProperty("图片")
@@ -146,6 +151,22 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
 
     public void setImgList(List<PcmsMaterialImgModel> imgList) {
         this.imgList = imgList;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    public Double getAll_price() {
+        return all_price;
+    }
+
+    public void setAll_price(Double all_price) {
+        this.all_price = all_price;
     }
 
     @Override

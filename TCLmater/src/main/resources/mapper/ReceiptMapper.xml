@@ -132,6 +132,7 @@
         p.dispatch AS dispatch,
         pt.DETAIL_ACCOUNT AS subclass,
         ps.vendor_name AS vendor_name,
+        ps.vendor_id AS vendor_id,
         pt.REQUEST_ID AS request_id
         FROM pcms_item p
         LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
