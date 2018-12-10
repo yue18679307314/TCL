@@ -9,7 +9,9 @@ import io.swagger.annotations.ApiModelProperty;
 public class ItemDetail {
 
 	private Integer itid;
-	
+
+	private String vendor_id;
+
 	private Integer itType; //订单类型
 	
 	private String vendorName; //供应商名字
@@ -277,5 +279,13 @@ public class ItemDetail {
 
 	public void setPcmsPendingMaterialModelList(List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList) {
 		this.pcmsPendingMaterialModelList = pcmsPendingMaterialModelList;
+	}
+
+	public String getVendor_id() {
+		return vendor_id;
+	}
+
+	public void setVendor_id(String vendor_id) {
+		this.vendor_id = vendor_id;
 	}
 }

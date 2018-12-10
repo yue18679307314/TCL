@@ -429,6 +429,7 @@
 			a.itid,
 			a.it_type AS itType,
 			b.vendor_name AS vendorName,
+			b.vendor_id as vendor_id,
 			a.request_id AS requestId,
 			c.REQUEST_TITLE AS requestTitle,
 			c.DETAIL_ACCOUNT AS detailAccount,

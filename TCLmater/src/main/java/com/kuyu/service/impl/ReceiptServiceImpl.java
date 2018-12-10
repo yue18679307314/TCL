@@ -313,7 +313,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Override
     public ResultVo queryPendingMaterial(Integer id) throws Exception {
-        PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectById(id);
+        PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectId(id);
         List<PcmsMaterialImgModel> imgList = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
         pcmsPendingMaterialModel.setImgList(imgList);
         return ResultVo.getDataWithSuccess(pcmsPendingMaterialModel);

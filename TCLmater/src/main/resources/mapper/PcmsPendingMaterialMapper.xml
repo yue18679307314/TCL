@@ -14,13 +14,13 @@
 
     <insert id="insertPendingMaterial" parameterType="com.kuyu.model.pcms.PcmsPendingMaterialModel" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO
-		pcms_pending_material(itid,category,specifications,unit,ranges,comparison_price,create_time)
+		pcms_pending_material(itid,category,specifications,unit,ranges,comparison_price,number,all_price,create_time)
 		VALUES
-		(#{itid},#{category},#{specifications},#{unit},#{ranges},#{comparison_price},SYSDATE())
+		(#{itid},#{category},#{specifications},#{unit},#{ranges},#{comparison_price},#{number},#{all_price},SYSDATE())
 	</insert>
 
     <select id="selectId" resultType="com.kuyu.model.pcms.PcmsPendingMaterialModel">
-        SELECT t.category,t.id,t.comparison_price,t.image,t.ranges,t.specifications,t.ranges,t.unit,t.itid
+        SELECT t.category,t.id,t.comparison_price,t.image,t.ranges,t.specifications,t.ranges,t.unit,t.itid,t.number,t.all_price
         FROM pcms_pending_material t
         <where>
             <if test="id != null and id != ''">
