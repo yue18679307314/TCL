@@ -31,6 +31,8 @@ public class PcmsSupplierCompanyModel extends Model<PcmsSupplierCompanyModel> im
     @TableField("create_time")
     private String create_time;
 
+    private Integer statement_date;
+
     public Integer getId() {
         return id;
     }
@@ -61,6 +63,14 @@ public class PcmsSupplierCompanyModel extends Model<PcmsSupplierCompanyModel> im
 
     public void setCreate_time(String create_time) {
         this.create_time = create_time;
+    }
+
+    public Integer getStatement_date() {
+        return statement_date;
+    }
+
+    public void setStatement_date(Integer statement_date) {
+        this.statement_date = statement_date;
     }
 
     @Override

@@ -11,11 +11,10 @@ import com.kuyu.service.ReceiptService;
 import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
-import com.kuyu.vo.pcms.MaterialResult;
-import com.kuyu.vo.pcms.PcmsOthertmVo;
-import com.kuyu.vo.pcms.PcmsShopVo;
-import com.kuyu.vo.pcms.PcmsShowcaseVo;
+import com.kuyu.vo.pcms.*;
 import com.kuyu.vo.query.ReceiptQuery;
+import com.kuyu.vo.query.SettlementQuery;
+import com.kuyu.vo.query.TransferQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -56,6 +55,9 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     
     @Resource
     private PcmsItemLogMapper pcmsItemLogMapper;
+
+    @Resource
+    private PcmsTransferMapper pcmsTransferMapper;
 
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
@@ -286,9 +288,20 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     @Override
     public ResultVo updatePendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel) throws Exception {
         List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pcmsPendingMaterialModel.getId());
-        pcmsMaterialImgMapper.deleteBatchIds(pcmsMaterialImg);
-//        pcmsPendingMaterialMapper.insertPendingMaterial(pcmsPendingMaterialModel);
-        pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel);
+        List<Integer> ids = new ArrayList<>();
+        if(pcmsMaterialImg.size()>0){
+            for(PcmsMaterialImgModel pmi : pcmsMaterialImg){
+                ids.add(pmi.getId());
+            }
+            pcmsMaterialImgMapper.deleteBatchIds(ids);
+        }
+        PcmsPendingMaterialModel pcmsPendingMaterialModels = pcmsPendingMaterialMapper.selectId(pcmsPendingMaterialModel.getId());
+        pcmsPendingMaterialModels.setAll_price(pcmsPendingMaterialModel.getAll_price());
+        pcmsPendingMaterialModels.setNumber(pcmsPendingMaterialModel.getNumber());
+        pcmsPendingMaterialModels.setCategory(pcmsPendingMaterialModel.getCategory());
+        pcmsPendingMaterialModels.setRanges(pcmsPendingMaterialModel.getRanges());
+        pcmsPendingMaterialModels.setSpecifications(pcmsPendingMaterialModel.getSpecifications());
+        pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModels);
         String[] image = pcmsPendingMaterialModel.getImage();
         if(image.length>0 && image != null){
             for(String url:image){
@@ -520,6 +533,36 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             }
         }
         return ResultVo.get(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo selectPendingMaterialByItid(Integer itid) throws Exception {
+        List<PcmsPendingMaterialModel> list = pcmsPendingMaterialMapper.selectPendingMaterialByItid(itid);
+        return ResultVo.getDataWithSuccess(list);
+    }
+
+    @Override
+    public ResultVo selectSettlement(SettlementQuery query) throws Exception {
+        return null;
+    }
+
+    @Override
+    public ResultVo addTransfer(PcmsTransferModel pcmsTransferModel) throws Exception {
+        pcmsTransferMapper.insert(pcmsTransferModel);
+        PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectId(pcmsTransferModel.getPending_id());
+        pcmsPendingMaterialModel.setState(1);
+        pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel);
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo selectTransfer(TransferQuery query,LoginUserInfo userInfo) throws Exception {
+        query.setPerson_name(userInfo.getEmployeeModel().getPerson_name());
+        query = (TransferQuery) CheckParamUtils.trimWithObjectField(query);
+        Page<TransferVo> page = new Page<>(query.getCurrent(),query.getSize());
+        List<TransferVo> transferList = pcmsTransferMapper.selectByState(query,page);
+        page.setRecords(transferList);
+        return ResultVo.getDataWithSuccess(page);
     }
 
 }

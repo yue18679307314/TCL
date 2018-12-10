@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,11 +21,15 @@ import java.util.Date;
 public class PcmsSettlementItemModel extends Model<PcmsSettlementItemModel> {
 
     @TableId(type= IdType.AUTO)
+    @ApiModelProperty("主键")
     private Integer id;
+    @ApiModelProperty("结算单ID")
     @TableField("settlement_id")
     private Integer settlement_id;
+    @ApiModelProperty("立项单ID")
     @TableField("itid")
     private Integer itid;
+    @ApiModelProperty("创建时间")
     @TableField("create_time")
     private Date create_time;
 

@@ -4,12 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
-import com.kuyu.model.pcms.PcmsPendingMaterialModel;
-import com.kuyu.model.pcms.PcmsRejectLogModel;
-import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
-import com.kuyu.model.pcms.PcmsUserItemModel;
+import com.kuyu.model.pcms.*;
 import com.kuyu.service.ReceiptService;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.query.SettlementQuery;
+import com.kuyu.vo.query.TransferQuery;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,6 +87,52 @@ public class PcmsMarketController extends BaseController {
         return receiptService.updatePendingMaterialFor(list);
     }
 
+    /**
+     * 市场人员查询批量结算列表
+     * @param query
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "市场人员查询批量结算列表",response = PcmsPendingMaterialModel.class)
+    @PostMapping("/selectSettlement")
+    public ResultVo selectSettlement(@RequestBody SettlementQuery query)throws Exception{
+        return receiptService.selectSettlement(query);
+    }
 
+    /**
+     * 根据ITID查询可转办的物料清单
+     * @param itid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "根据ITID查询可转办的物料清单",response = PcmsPendingMaterialModel.class)
+    @GetMapping("/selectPendingMaterialByItid")
+    public ResultVo selectPendingMaterialByItid(@RequestParam(value = "itid") Integer itid)throws Exception{
+        return receiptService.selectPendingMaterialByItid(itid);
+    }
+
+    /**
+     * 转办
+     * @param pcmsTransferModel
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "转办",response = PcmsTransferModel.class)
+    @PostMapping("/addTransfer")
+    public ResultVo addTransfer(@RequestBody PcmsTransferModel pcmsTransferModel)throws Exception{
+        return receiptService.addTransfer(pcmsTransferModel);
+    }
+
+    /**
+     * 转办管理
+     * @param query
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "转办管理",response = PcmsPendingMaterialModel.class)
+    @GetMapping("/selectTransfer")
+    public ResultVo selectTransfer(TransferQuery query)throws Exception{
+        return receiptService.selectTransfer(query,getLoginUserInfo());
+    }
 
 }

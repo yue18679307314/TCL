@@ -212,4 +212,13 @@ public class PcmsSupplierController extends BaseController {
     public ResultVo insertSupplierInvoice(@RequestBody PcmsSupplierInvoiceModel pcmsSupplierInvoiceModel) throws Exception {
         return pcmsSupplierService.insertSupplierInvoice(pcmsSupplierInvoiceModel);
     }
+
+    @ApiOperation(value = "根据供应商编号查询供应商详情", notes = "根据供应商编号查询供应商信息详情", response = PcmsSupplierModel.class)
+    @RequestMapping(value = "/updateSupplierCompany", method = { RequestMethod.GET })
+    public ResultVo updateSupplierCompany(@RequestParam(required = true) Integer id,@RequestParam(required = true) Integer statement_date)
+            throws Exception {
+        pcmsSupplierCompanyService.updateSupplierCompany(id,statement_date);
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+
 }

@@ -15,6 +15,8 @@ public interface PcmsPendingMaterialMapper extends BaseMapper<PcmsPendingMateria
 
     int insertPendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel);
 
-
     PcmsPendingMaterialModel selectId(@Param("id") Integer id);
+    /**根据ITID查询可转办的物料清单*/
+    List<PcmsPendingMaterialModel> selectPendingMaterialByItid(@Param("itid") Integer itid);
+
 }

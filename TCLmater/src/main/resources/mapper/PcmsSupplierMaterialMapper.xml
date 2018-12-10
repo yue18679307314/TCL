@@ -7,7 +7,7 @@
         SELECT
         t.id AS id,
         t.category AS category,
-        t.comparison_price AS comparisonPrice,
+        t.comparison_price AS comparison_price,
         t.note AS note,
         t.ranges AS ranges,
         t.specifications AS specifications,

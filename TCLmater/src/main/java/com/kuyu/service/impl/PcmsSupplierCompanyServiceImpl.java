@@ -31,4 +31,13 @@ public class PcmsSupplierCompanyServiceImpl extends ServiceImpl<PcmsSupplierComp
         }
         return null;
     }
+
+    @Override
+    public void updateSupplierCompany(Integer id, Integer statement_date) throws Exception {
+        PcmsSupplierCompanyModel pcmsSupplierCompanyModel = baseMapper.selectById(id);
+        pcmsSupplierCompanyModel.setStatement_date(statement_date);
+        baseMapper.updateById(pcmsSupplierCompanyModel);
+    }
+
+
 }

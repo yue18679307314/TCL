@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsTransferMapper">
+
+    <select id="selectByState" resultType="com.kuyu.vo.pcms.TransferVo">
+        SELECT
+        pt.id AS id,
+        pt.context AS context,
+        ppm.state AS state,
+        ps.vendor_name AS vendor_name,
+        pt.create_time AS create_time,
+        pp.request_user_name AS request_user_name
+        FROM pcms_transfer pt
+        LEFT JOIN pcms_pending_material ppm ON pt.pending_id = ppm.id
+        LEFT JOIN pcms_item pit ON ppm.itid = pit.itid
+        LEFT JOIN pcms_supplier ps ON pit.vendor_id = ps.vendor_id
+        LEFT JOIN pcms_project pp ON pp.REQUEST_ID = pit.request_id
+        <where>
+            <if test="params.vendor_name !=null and params.vendor_name !=''">
+                AND ps.vendor_name LIKE '%${params.vendor_name}%'
+            </if>
+            <if test="params.request_user_name !=null and params.request_user_name !=''">
+                OR pp.request_user_name LIKE '%${params.request_user_name}%'
+            </if>
+            <if test="params.person_name !=null and params.person_name !=''">
+                AND pt.person_name = #{params.person_name,jdbcType=VARCHAR}
+            </if>
+                and ppm.state != 0
+        </where>
+    </select>
+</mapper>

@@ -39,6 +39,8 @@ public class PcmsSupplierListVo {
     @ApiModelProperty("业务来往公司")
     private String request_company;
 
+    private Integer id;
+
     public String getVendor_id() {
         return vendor_id;
     }
@@ -95,5 +97,11 @@ public class PcmsSupplierListVo {
         this.request_company = request_company;
     }
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

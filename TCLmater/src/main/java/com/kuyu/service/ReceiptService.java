@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.service.IService;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsPendingMaterialModel;
 import com.kuyu.model.pcms.PcmsRejectLogModel;
+import com.kuyu.model.pcms.PcmsTransferModel;
 import com.kuyu.model.pcms.ReceiptModel;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsShowcaseVo;
 import com.kuyu.vo.query.ReceiptQuery;
+import com.kuyu.vo.query.SettlementQuery;
+import com.kuyu.vo.query.TransferQuery;
 
 import java.util.List;
 
@@ -57,4 +60,19 @@ public interface ReceiptService extends IService<ReceiptModel> {
 
     /**市场人员修改立项物料清单*/
     ResultVo updatePendingMaterialFor(List<PcmsPendingMaterialModel> list)throws Exception;
+
+    /**根据ITID查询可转办的物料清单*/
+    ResultVo selectPendingMaterialByItid(Integer itid)throws Exception;
+
+    /**市场人员查询批量结算列表*/
+    ResultVo selectSettlement(SettlementQuery query)throws Exception;
+
+    /**转办*/
+    ResultVo addTransfer(PcmsTransferModel pcmsTransferModel)throws Exception;
+
+    /**转办管理*/
+    ResultVo selectTransfer(TransferQuery query,LoginUserInfo userInfo)throws Exception;
+
+
+
 }

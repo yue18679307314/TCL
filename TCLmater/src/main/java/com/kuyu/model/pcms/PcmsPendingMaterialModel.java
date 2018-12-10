@@ -70,6 +70,7 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
     @JsonProperty("image")
     private String[] image;
 
+    private Integer state;
 
     private List<PcmsMaterialImgModel> imgList;
 
@@ -167,6 +168,14 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
 
     public void setAll_price(Double all_price) {
         this.all_price = all_price;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     @Override
