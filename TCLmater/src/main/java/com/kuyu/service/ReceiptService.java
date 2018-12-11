@@ -8,6 +8,7 @@ import com.kuyu.model.pcms.PcmsTransferModel;
 import com.kuyu.model.pcms.ReceiptModel;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsShowcaseVo;
+import com.kuyu.vo.query.FeedbackQuery;
 import com.kuyu.vo.query.ReceiptQuery;
 import com.kuyu.vo.query.SettlementQuery;
 import com.kuyu.vo.query.TransferQuery;
@@ -64,6 +65,12 @@ public interface ReceiptService extends IService<ReceiptModel> {
     /**根据ITID查询可转办的物料清单*/
     ResultVo selectPendingMaterialByItid(Integer itid)throws Exception;
 
+    /**根据姓名查询员工*/
+    ResultVo selectByName(/*String name,LoginUserInfo userInfo*/)throws Exception;
+
+    /**日志信息*/
+    ResultVo selectItemLog(Integer itid)throws Exception;
+
     /**市场人员查询批量结算列表*/
     ResultVo selectSettlement(SettlementQuery query)throws Exception;
 
@@ -72,6 +79,12 @@ public interface ReceiptService extends IService<ReceiptModel> {
 
     /**转办管理*/
     ResultVo selectTransfer(TransferQuery query,LoginUserInfo userInfo)throws Exception;
+
+    /**反馈*/
+    ResultVo addFeedback(FeedbackQuery feedbackQuery)throws Exception;
+
+    /**反馈详情*/
+    ResultVo selectFeedbackDetail(Integer id)throws Exception;
 
 
 

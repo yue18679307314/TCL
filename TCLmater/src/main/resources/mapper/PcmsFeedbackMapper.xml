@@ -10,4 +10,16 @@
 	</insert>
 
 
+	<select id="selectByTransferId" resultType="com.kuyu.vo.pcms.FeedbackVo">
+		SELECT
+		pf.id,
+		pf.context,
+		pf.create_time,
+		pf.transfer_id,
+		pf.number
+		FROM pcms_feedback pf
+		<where>
+			pf.transfer_id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
 </mapper>

@@ -7,6 +7,8 @@
         pt.id AS id,
         pt.context AS context,
         ppm.state AS state,
+        ppm.category as category,
+        ppm.specifications as specifications,
         ps.vendor_name AS vendor_name,
         pt.create_time AS create_time,
         pp.request_user_name AS request_user_name
@@ -27,5 +29,40 @@
             </if>
                 and ppm.state != 0
         </where>
+    </select>
+
+    <select id="selectFeedbackDetail" resultType="com.kuyu.vo.pcms.TransferDetailVo">
+        SELECT
+        pt.id AS id,
+        pt.context AS context,
+        ppm.state AS state,
+        ppm.category as category,
+        ppm.specifications as specifications,
+        ps.vendor_name AS vendor_name,
+        pp.request_user_name AS request_user_name
+        FROM pcms_transfer pt
+        LEFT JOIN pcms_pending_material ppm ON pt.pending_id = ppm.id
+        LEFT JOIN pcms_item pit ON ppm.itid = pit.itid
+        LEFT JOIN pcms_supplier ps ON pit.vendor_id = ps.vendor_id
+        LEFT JOIN pcms_project pp ON pp.REQUEST_ID = pit.request_id
+        <where>
+             pt.id = #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+
+
+
+    <select id="selectItemLog" resultType="com.kuyu.model.pcms.PcmsItemLog">
+        SELECT
+        t.itid,
+        t.tlid,
+        t.note,
+        t.status,
+        t.create_time AS createTime
+        FROM pcms_item_log t
+        <where>
+            t.itid = #{itid,jdbcType=INTEGER}
+        </where>
+        ORDER BY t.status DESC
     </select>
 </mapper>

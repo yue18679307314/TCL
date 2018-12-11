@@ -9,12 +9,16 @@ import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsUserService;
 import com.kuyu.service.ReceiptService;
 import com.kuyu.util.CheckParamUtils;
+import com.kuyu.util.HttpRequest;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.*;
+import com.kuyu.vo.query.FeedbackQuery;
 import com.kuyu.vo.query.ReceiptQuery;
 import com.kuyu.vo.query.SettlementQuery;
 import com.kuyu.vo.query.TransferQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,8 +36,12 @@ import java.util.List;
 @Transactional
 public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         implements ReceiptService {
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     @Value("${image.path}")
     private String filePath;
+
+    @Value("${tpm.shareUser.url}")
+    private String tpmUrl;
 
     @Autowired
     private PcmsUserService pcmsUserService;
@@ -58,6 +66,12 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Resource
     private PcmsTransferMapper pcmsTransferMapper;
+
+    @Resource
+    private PcmsFeedbackMapper pcmsFeedbackMapper;
+
+    @Resource
+    private PcmsFeedbackImgMapper pcmsFeedbackImgMapper;
 
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
@@ -542,6 +556,24 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
+    public ResultVo selectByName(/*String name, LoginUserInfo userInfo*/) throws Exception {
+        String token = "QTAyNERBNDkwMzEyRTgwRTkwOENDRDc5MEVBOTFFOURDNTEyNUY4ODMwRjIyQjM3QTVBNzEyQjk4MEUzNThFOQ";
+        String userId ="panwj";
+        String name = "李国栋";
+        String param = "token="+token+"&userId="+userId+"&param="+name;
+        log.info("准备调用查询用户接口,参数为:{}",param);
+        String message = HttpRequest.sendGet(tpmUrl, param);
+        log.info("调用询用户接口结束，返回的数据为：{}",message);
+        return ResultVo.getDataWithSuccess(message);
+    }
+
+    @Override
+    public ResultVo selectItemLog(Integer itid) throws Exception {
+        List<PcmsItemLog> list = pcmsTransferMapper.selectItemLog(itid);
+        return ResultVo.getDataWithSuccess(list);
+    }
+
+    @Override
     public ResultVo selectSettlement(SettlementQuery query) throws Exception {
         return null;
     }
@@ -552,6 +584,12 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectId(pcmsTransferModel.getPending_id());
         pcmsPendingMaterialModel.setState(1);
         pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel);
+        /*PcmsItemLog pcmsItemLog = new PcmsItemLog();
+        pcmsItemLog.setItid(pcmsPendingMaterialModel.getItid());
+        pcmsItemLog.setNote(pcmsTransferModel.getContext());
+        pcmsItemLog.setCreateTime(new Date());
+        pcmsItemLog.setStatus(10);
+        pcmsItemLogMapper.insert(pcmsItemLog);*/
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 
@@ -563,6 +601,41 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         List<TransferVo> transferList = pcmsTransferMapper.selectByState(query,page);
         page.setRecords(transferList);
         return ResultVo.getDataWithSuccess(page);
+    }
+
+    @Override
+    public ResultVo addFeedback(FeedbackQuery feedbackQuery) throws Exception {
+        PcmsFeedbackModel pcmsFeedbackModel = new PcmsFeedbackModel();
+        pcmsFeedbackModel.setContext(feedbackQuery.getContext());
+        pcmsFeedbackModel.setTransfer_id(feedbackQuery.getTransfer_id());
+        pcmsFeedbackModel.setNumber(feedbackQuery.getNumber());
+        pcmsFeedbackMapper.insertFeedback(pcmsFeedbackModel);
+        String[] image = feedbackQuery.getImage();
+        if(image.length>0){
+            for(String url:image){
+                PcmsFeedbackImgModel pcmsFeedbackImgModel = new PcmsFeedbackImgModel();
+                pcmsFeedbackImgModel.setFeedback_id(pcmsFeedbackModel.getId());
+                pcmsFeedbackImgModel.setImg(url);
+                pcmsFeedbackImgMapper.insert(pcmsFeedbackImgModel);
+            }
+        }
+        PcmsTransferModel pcmsTransferModel = pcmsTransferMapper.selectById(feedbackQuery.getTransfer_id());
+        PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectById(pcmsTransferModel.getPending_id());
+        pcmsPendingMaterialModel.setState(2);
+        pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel);
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo selectFeedbackDetail(Integer id) throws Exception {
+        TransferDetailVo transferDetailVo = pcmsTransferMapper.selectFeedbackDetail(id);
+        List<FeedbackVo> listFeedbackVo = pcmsFeedbackMapper.selectByTransferId(transferDetailVo.getId());
+        for(FeedbackVo feedbackVo : listFeedbackVo){
+            List<FeedbackImageVo> list = pcmsFeedbackImgMapper.selectByFeedbackId(feedbackVo.getId());
+            feedbackVo.setList(list);
+        }
+        transferDetailVo.setListFeedbackVo(listFeedbackVo);
+        return ResultVo.getDataWithSuccess(transferDetailVo);
     }
 
 }

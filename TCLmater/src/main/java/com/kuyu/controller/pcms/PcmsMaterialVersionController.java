@@ -10,6 +10,7 @@ import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.vo.ResultVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import java.util.List;
  * Created by pc on 2018/11/26
  */
 @AOP_Controller_LOG
+@Api(tags = "历史物料查询与下载接口")
 @RequestMapping("/materialVersion")
 public class PcmsMaterialVersionController extends BaseController {
 

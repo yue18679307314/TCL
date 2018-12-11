@@ -7,8 +7,11 @@ import com.kuyu.controller.BaseController;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.ReceiptService;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.TransferDetailVo;
+import com.kuyu.vo.query.FeedbackQuery;
 import com.kuyu.vo.query.SettlementQuery;
 import com.kuyu.vo.query.TransferQuery;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,7 @@ import java.util.List;
  * Created by pc on 2018/11/27
  */
 @AOP_Controller_LOG
+@Api(tags = "市场人员接口")
 @RequestMapping("/market")
 public class PcmsMarketController extends BaseController {
 
@@ -88,6 +92,30 @@ public class PcmsMarketController extends BaseController {
     }
 
     /**
+     * 根据姓名查询员工
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "根据姓名查询员工",response = PcmsItemLog.class)
+    @GetMapping("/selectByName")
+    public ResultVo selectByName(/*@RequestParam(value = "name") String name*/)throws Exception{
+        return receiptService.selectByName(/*name,getLoginUserInfo()*/);
+    }
+
+    /**
+     * 日志信息
+     * @param itid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "日志信息",response = PcmsItemLog.class)
+    @GetMapping("/selectItemLog")
+    public ResultVo selectItemLog(@RequestParam(value = "itid") Integer itid)throws Exception{
+        return receiptService.selectItemLog(itid);
+    }
+
+
+    /**
      * 市场人员查询批量结算列表
      * @param query
      * @return
@@ -133,6 +161,30 @@ public class PcmsMarketController extends BaseController {
     @GetMapping("/selectTransfer")
     public ResultVo selectTransfer(TransferQuery query)throws Exception{
         return receiptService.selectTransfer(query,getLoginUserInfo());
+    }
+
+    /**
+     * 反馈
+     * @param feedbackQuery
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "反馈",response = PcmsFeedbackModel.class)
+    @PostMapping("/addFeedback")
+    public ResultVo addFeedback(@RequestBody FeedbackQuery feedbackQuery)throws Exception{
+        return receiptService.addFeedback(feedbackQuery);
+    }
+
+    /**
+     * 反馈详情
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "反馈详情",response = TransferDetailVo.class)
+    @GetMapping("/selectFeedbackDetail")
+    public ResultVo selectFeedbackDetail(@RequestParam(value = "id") Integer id)throws Exception{
+        return receiptService.selectFeedbackDetail(id);
     }
 
 }

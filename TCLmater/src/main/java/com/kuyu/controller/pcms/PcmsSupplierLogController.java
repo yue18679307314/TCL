@@ -5,6 +5,7 @@ import com.kuyu.controller.BaseController;
 import com.kuyu.service.PcmsSupplierLogService;
 import com.kuyu.vo.query.PcmsSupplierLogQuery;
 import com.kuyu.vo.ResultVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
  * Created by pc on 2018/11/21
  */
 @AOP_Controller_LOG
+@Api(tags = "供应商日志接口")
 @RequestMapping("/supplierLog")
 public class PcmsSupplierLogController  extends BaseController {
 

@@ -1,11 +1,12 @@
 package com.kuyu.vo.pcms;
 
 import java.util.Date;
+import java.util.List;
 
 /**
- * Created by pc on 2018/12/10
+ * Created by pc on 2018/12/11
  */
-public class TransferVo {
+public class TransferDetailVo {
 
     private Integer id;
 
@@ -15,13 +16,21 @@ public class TransferVo {
 
     private String request_user_name;
 
-    private Date create_time;
-
     private Integer state;
 
     private String category;
 
     private String specifications;
+
+    private List<FeedbackVo> listFeedbackVo;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getContext() {
         return context;
@@ -47,28 +56,12 @@ public class TransferVo {
         this.request_user_name = request_user_name;
     }
 
-    public Date getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
-    }
-
     public Integer getState() {
         return state;
     }
 
     public void setState(Integer state) {
         this.state = state;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getCategory() {
@@ -85,5 +78,13 @@ public class TransferVo {
 
     public void setSpecifications(String specifications) {
         this.specifications = specifications;
+    }
+
+    public List<FeedbackVo> getListFeedbackVo() {
+        return listFeedbackVo;
+    }
+
+    public void setListFeedbackVo(List<FeedbackVo> listFeedbackVo) {
+        this.listFeedbackVo = listFeedbackVo;
     }
 }

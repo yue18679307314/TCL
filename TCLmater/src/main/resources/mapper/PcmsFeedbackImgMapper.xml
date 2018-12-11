@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsFeedbackImgMapper">
+
+    <select id="selectByFeedbackId" resultType="com.kuyu.vo.pcms.FeedbackImageVo">
+        SELECT
+        pf.img
+        FROM pcms_feedback_img pf
+        <where>
+            pf.feedback_id = #{id,jdbcType=INTEGER}
+        </where>
+    </select>
+</mapper>

@@ -1,26 +1,15 @@
-package com.kuyu.model.pcms;
+package com.kuyu.vo.pcms;
 
-import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Created by pc on 2018/12/10
+ * Created by pc on 2018/12/11
  */
-@ApiModel("PcmsFeedbackModel(反馈信息模型)")
-@TableName("pcms_feedback")
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PcmsFeedbackModel extends Model<PcmsFeedbackModel> {
+public class FeedbackVo {
 
-    @ApiModelProperty("主键")
-    @TableId(type= IdType.AUTO)
     private Integer id;
 
     @ApiModelProperty("创建时间")
@@ -35,13 +24,7 @@ public class PcmsFeedbackModel extends Model<PcmsFeedbackModel> {
     @ApiModelProperty("数量")
     private Integer number;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private List<FeedbackImageVo> list;
 
     public Date getCreate_time() {
         return create_time;
@@ -75,8 +58,19 @@ public class PcmsFeedbackModel extends Model<PcmsFeedbackModel> {
         this.number = number;
     }
 
-    @Override
-    protected Serializable pkVal() {
-        return null;
+    public List<FeedbackImageVo> getList() {
+        return list;
+    }
+
+    public void setList(List<FeedbackImageVo> list) {
+        this.list = list;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

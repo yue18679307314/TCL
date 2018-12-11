@@ -1,27 +1,14 @@
-package com.kuyu.model.pcms;
+package com.kuyu.vo.query;
 
-import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by pc on 2018/12/10
+ * Created by pc on 2018/12/11
  */
-@ApiModel("PcmsFeedbackModel(反馈信息模型)")
-@TableName("pcms_feedback")
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PcmsFeedbackModel extends Model<PcmsFeedbackModel> {
-
-    @ApiModelProperty("主键")
-    @TableId(type= IdType.AUTO)
-    private Integer id;
+public class FeedbackQuery {
 
     @ApiModelProperty("创建时间")
     private Date create_time;
@@ -32,16 +19,11 @@ public class PcmsFeedbackModel extends Model<PcmsFeedbackModel> {
     @ApiModelProperty("反馈主键")
     private Integer transfer_id;
 
-    @ApiModelProperty("数量")
     private Integer number;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @ApiModelProperty("图片")
+    @JsonProperty("image")
+    private String[] image;
 
     public Date getCreate_time() {
         return create_time;
@@ -75,8 +57,11 @@ public class PcmsFeedbackModel extends Model<PcmsFeedbackModel> {
         this.number = number;
     }
 
-    @Override
-    protected Serializable pkVal() {
-        return null;
+    public String[] getImage() {
+        return image;
+    }
+
+    public void setImage(String[] image) {
+        this.image = image;
     }
 }

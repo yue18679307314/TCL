@@ -15,6 +15,7 @@ import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.PsmsCompanyVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import java.util.List;
  * Created by zyl on 2018/11/14
  */
 @AOP_Controller_LOG
+@Api(tags = "供应商信息相关接口")
 @RequestMapping("/supplier")
 public class PcmsSupplierController extends BaseController {
 

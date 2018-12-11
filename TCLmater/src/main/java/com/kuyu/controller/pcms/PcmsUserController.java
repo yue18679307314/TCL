@@ -7,6 +7,7 @@ import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.service.PcmsSupplierUserService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsSupplierUserVo;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import java.util.List;
  * 微信端,用户绑定供应商
  */
 @AOP_Controller_LOG
+@Api(tags = "供应商用户绑定接口")
 @RequestMapping("/user")
 public class PcmsUserController extends BaseController {
 
