@@ -24,6 +24,14 @@
         ORDER BY t.id DESC
     </select>
 
-
+    <select id="queryRejectLogList" resultType="com.kuyu.vo.pcms.PcmsRejectLogVo">
+        SELECT t.context,t.id,t.itid,t.operator,t.create_time FROM pcms_reject_log t
+        <where>
+            <if test="itid != null and itid != ''">
+                t.itid = #{itid}
+            </if>
+        </where>
+        ORDER BY t.id DESC
+    </select>
 
 </mapper>

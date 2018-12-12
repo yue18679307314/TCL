@@ -15,6 +15,7 @@ import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.PsmsCompanyVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import java.util.List;
  * Created by zyl on 2018/11/14
  */
 @AOP_Controller_LOG
+@Api(tags = "供应商信息相关接口")
 @RequestMapping("/supplier")
 public class PcmsSupplierController extends BaseController {
 
@@ -212,4 +214,13 @@ public class PcmsSupplierController extends BaseController {
     public ResultVo insertSupplierInvoice(@RequestBody PcmsSupplierInvoiceModel pcmsSupplierInvoiceModel) throws Exception {
         return pcmsSupplierService.insertSupplierInvoice(pcmsSupplierInvoiceModel);
     }
+
+    @ApiOperation(value = "根据供应商编号查询供应商详情", notes = "根据供应商编号查询供应商信息详情", response = PcmsSupplierModel.class)
+    @RequestMapping(value = "/updateSupplierCompany", method = { RequestMethod.GET })
+    public ResultVo updateSupplierCompany(@RequestParam(required = true) Integer id,@RequestParam(required = true) Integer statement_date)
+            throws Exception {
+        pcmsSupplierCompanyService.updateSupplierCompany(id,statement_date);
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.kuyu.mapper.pcms;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.kuyu.model.pcms.PcmsPendingMaterialModel;
+import com.kuyu.vo.pcms.PendingMaterialVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -15,6 +16,11 @@ public interface PcmsPendingMaterialMapper extends BaseMapper<PcmsPendingMateria
 
     int insertPendingMaterial(PcmsPendingMaterialModel pcmsPendingMaterialModel);
 
-
     PcmsPendingMaterialModel selectId(@Param("id") Integer id);
+    /**根据ITID查询可转办的物料清单*/
+    List<PcmsPendingMaterialModel> selectPendingMaterialByItid(@Param("itid") Integer itid);
+
+
+    List<PendingMaterialVo> queryByItid(@Param("itid") Integer itid);
+
 }

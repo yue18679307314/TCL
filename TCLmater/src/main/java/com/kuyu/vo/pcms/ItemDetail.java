@@ -3,11 +3,15 @@ package com.kuyu.vo.pcms;
 import java.util.List;
 
 import com.kuyu.model.pcms.PcmsItemLog;
+import com.kuyu.model.pcms.PcmsPendingMaterialModel;
+import io.swagger.annotations.ApiModelProperty;
 
 public class ItemDetail {
 
 	private Integer itid;
-	
+
+	private String vendor_id;
+
 	private Integer itType; //订单类型
 	
 	private String vendorName; //供应商名字
@@ -61,6 +65,9 @@ public class ItemDetail {
 	public List<PcmsItemLog> getItemLog() {
 		return itemLog;
 	}
+
+	@ApiModelProperty("待验收的物料信息")
+	private List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList;
 
 	public void setItemLog(List<PcmsItemLog> itemLog) {
 		this.itemLog = itemLog;
@@ -264,5 +271,21 @@ public class ItemDetail {
 
 	public void setContext(String context) {
 		this.context = context;
+	}
+
+	public List<PcmsPendingMaterialModel> getPcmsPendingMaterialModelList() {
+		return pcmsPendingMaterialModelList;
+	}
+
+	public void setPcmsPendingMaterialModelList(List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList) {
+		this.pcmsPendingMaterialModelList = pcmsPendingMaterialModelList;
+	}
+
+	public String getVendor_id() {
+		return vendor_id;
+	}
+
+	public void setVendor_id(String vendor_id) {
+		this.vendor_id = vendor_id;
 	}
 }

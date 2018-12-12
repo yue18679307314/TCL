@@ -132,6 +132,8 @@
 	<!-- 供应商信息分页 -->
 	<select id="findPcmsSupplierListByPage" resultType="com.kuyu.vo.PcmsSupplierListVo">
 		SELECT
+		f.id as id,
+		f.statement_date as statement_date,
 		t.vendor_id as vendor_id,
 		t.vendor_name as vendor_name,
 		t.city as city,

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsSettlementMapper">
+
+    <insert id="insertSettlement" parameterType="com.kuyu.model.pcms.PcmsSettlementModel" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		pcms_settlement(pay_type,application_title,application_notes,state,create_time)
+		VALUES
+		(#{pay_type},#{application_title},#{application_notes},#{state},SYSDATE())
+	</insert>
+
+
+</mapper>

@@ -1,40 +1,22 @@
-package com.kuyu.model.pcms;
+package com.kuyu.vo.pcms;
 
-import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by pc on 2018/11/27
+ * Created by pc on 2018/12/11
  */
-@ApiModel("PcmsPendingMaterialModel(待验收物料模型)")
-@TableName("pcms_pending_material")
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
-
-    @TableField(exist=false)
-    private static final long serialVersionUID = 4998163694304048704L;
-    /**id*/
-    @TableId(type= IdType.AUTO)
+public class PendingMaterialVo {
     private Integer id;
 
     /**供应商id*/
     @ApiModelProperty("物料类别")
-    @JsonProperty("category")
     private String category;
 
     @ApiModelProperty("物料规格")
-    @JsonProperty("specifications")
     private String specifications;
 
     @ApiModelProperty("单位")
@@ -42,37 +24,25 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
     private String unit;
 
     @ApiModelProperty("参考价")
-    @JsonProperty("comparisonPrice")
     private Double comparison_price;
 
     /**单价数量范围*/
     @ApiModelProperty("单价数量范围")
-    @JsonProperty("ranges")
     private String ranges;
 
     /**创建时间*/
     @ApiModelProperty("创建时间")
-    @JsonProperty("create_time")
     private Date create_time;
 
     @ApiModelProperty("拆单的主键ID")
-    @JsonProperty("itid")
     private Integer itid;
 
     @ApiModelProperty("拆单的主键ID")
-    @JsonProperty("number")
     private Integer number;
 
     private Double all_price;
 
-    /**单价数量范围*/
-    @ApiModelProperty("图片")
-    @JsonProperty("image")
-    private String[] image;
-
-    private Integer state;
-
-    private List<PcmsMaterialImgModel> imgList;
+    private List<PcmsMaterialImgVo> pcmsMaterialImgVoList;
 
     public Integer getId() {
         return id;
@@ -138,22 +108,6 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
         this.itid = itid;
     }
 
-    public String[] getImage() {
-        return image;
-    }
-
-    public void setImage(String[] image) {
-        this.image = image;
-    }
-
-    public List<PcmsMaterialImgModel> getImgList() {
-        return imgList;
-    }
-
-    public void setImgList(List<PcmsMaterialImgModel> imgList) {
-        this.imgList = imgList;
-    }
-
     public Integer getNumber() {
         return number;
     }
@@ -170,16 +124,11 @@ public class PcmsPendingMaterialModel extends Model<PcmsPendingMaterialModel> {
         this.all_price = all_price;
     }
 
-    public Integer getState() {
-        return state;
+    public List<PcmsMaterialImgVo> getPcmsMaterialImgVoList() {
+        return pcmsMaterialImgVoList;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
-    @Override
-    protected Serializable pkVal() {
-        return null;
+    public void setPcmsMaterialImgVoList(List<PcmsMaterialImgVo> pcmsMaterialImgVoList) {
+        this.pcmsMaterialImgVoList = pcmsMaterialImgVoList;
     }
 }

@@ -7,7 +7,7 @@
         SELECT
         t.id AS id,
         t.category AS category,
-        t.comparison_price AS comparisonPrice,
+        t.comparison_price AS comparison_price,
         t.note AS note,
         t.ranges AS ranges,
         t.specifications AS specifications,
@@ -90,7 +90,7 @@
         SELECT
         psm.id AS id,
         psm.category AS category,
-        psm.comparison_price AS comparisonPrice,
+        psm.comparison_price AS comparison_price,
         psm.note AS note,
         psm.ranges AS ranges,
         psm.specifications AS specifications,
@@ -117,7 +117,7 @@
         SELECT
         psm.id AS id,
         psm.category AS category,
-        psm.comparison_price AS comparisonPrice,
+        psm.comparison_price AS comparison_price,
         psm.note AS note,
         psm.ranges AS ranges,
         psm.specifications AS specifications,

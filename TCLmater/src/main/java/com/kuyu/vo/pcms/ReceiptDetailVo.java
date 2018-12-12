@@ -1,26 +1,14 @@
-package com.kuyu.model.pcms;
+package com.kuyu.vo.pcms;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.kuyu.vo.pcms.MaterialResult;
-import com.kuyu.vo.pcms.PcmsOthertmVo;
-import com.kuyu.vo.pcms.PcmsShopVo;
-import com.kuyu.vo.pcms.PcmsShowcaseVo;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by pc on 2018/11/22
+ * Created by pc on 2018/12/11
  */
-@ApiModel("ReceiptDetailModel(挂单详情模型)")
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ReceiptDetailModel implements Serializable{
-
-    private static final long serialVersionUID = 7913174281676854565L;
-
+public class ReceiptDetailVo {
     @ApiModelProperty("立项单ID")
     private Integer itid;
 
@@ -72,6 +60,9 @@ public class ReceiptDetailModel implements Serializable{
     @ApiModelProperty("状态")
     private Integer status;
 
+    @ApiModelProperty("作废信息")
+    private PcmsTovoidItemVo pcmsTovoidItemVo;
+
     @ApiModelProperty("门店信息")
     private PcmsShopVo pcmsShopVo;
 
@@ -85,10 +76,13 @@ public class ReceiptDetailModel implements Serializable{
     private List<PcmsOthertmVo> pcmsOthertmVoList;
 
     @ApiModelProperty("待验收的物料信息")
-    private List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList;
+    private List<PendingMaterialVo> pcmsPendingMaterialList;
 
     @ApiModelProperty("驳回信息")
-    private List<PcmsRejectLogModel> pcmsRejectLogModelList;
+    private List<PcmsRejectLogVo> pcmsRejectLogList;
+
+    @ApiModelProperty("转办信息")
+    private List<List<Transfer>> pcmsTransferVoList;
 
     public Integer getItid() {
         return itid;
@@ -202,14 +196,6 @@ public class ReceiptDetailModel implements Serializable{
         this.pcmsOthertmVoList = pcmsOthertmVoList;
     }
 
-    public List<PcmsPendingMaterialModel> getPcmsPendingMaterialModelList() {
-        return pcmsPendingMaterialModelList;
-    }
-
-    public void setPcmsPendingMaterialModelList(List<PcmsPendingMaterialModel> pcmsPendingMaterialModelList) {
-        this.pcmsPendingMaterialModelList = pcmsPendingMaterialModelList;
-    }
-
     public String getRequest_id() {
         return request_id;
     }
@@ -258,19 +244,43 @@ public class ReceiptDetailModel implements Serializable{
         this.subclass = subclass;
     }
 
-    public List<PcmsRejectLogModel> getPcmsRejectLogModelList() {
-        return pcmsRejectLogModelList;
-    }
-
-    public void setPcmsRejectLogModelList(List<PcmsRejectLogModel> pcmsRejectLogModelList) {
-        this.pcmsRejectLogModelList = pcmsRejectLogModelList;
-    }
-
     public String getVendor_id() {
         return vendor_id;
     }
 
     public void setVendor_id(String vendor_id) {
         this.vendor_id = vendor_id;
+    }
+
+    public List<PendingMaterialVo> getPcmsPendingMaterialList() {
+        return pcmsPendingMaterialList;
+    }
+
+    public void setPcmsPendingMaterialList(List<PendingMaterialVo> pcmsPendingMaterialList) {
+        this.pcmsPendingMaterialList = pcmsPendingMaterialList;
+    }
+
+    public List<PcmsRejectLogVo> getPcmsRejectLogList() {
+        return pcmsRejectLogList;
+    }
+
+    public void setPcmsRejectLogList(List<PcmsRejectLogVo> pcmsRejectLogList) {
+        this.pcmsRejectLogList = pcmsRejectLogList;
+    }
+
+    public List<List<Transfer>> getPcmsTransferVoList() {
+        return pcmsTransferVoList;
+    }
+
+    public void setPcmsTransferVoList(List<List<Transfer>> pcmsTransferVoList) {
+        this.pcmsTransferVoList = pcmsTransferVoList;
+    }
+
+    public PcmsTovoidItemVo getPcmsTovoidItemVo() {
+        return pcmsTovoidItemVo;
+    }
+
+    public void setPcmsTovoidItemVo(PcmsTovoidItemVo pcmsTovoidItemVo) {
+        this.pcmsTovoidItemVo = pcmsTovoidItemVo;
     }
 }

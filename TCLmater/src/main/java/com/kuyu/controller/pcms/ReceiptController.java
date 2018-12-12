@@ -10,6 +10,7 @@ import com.kuyu.service.ReceiptService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsShowcaseVo;
 import com.kuyu.vo.query.ReceiptQuery;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import javax.annotation.Resource;
  * Created by pc on 2018/11/21
  */
 @AOP_Controller_LOG
+@Api(tags = "添加待验收物料等接口")
 @RequestMapping("/receipt")
 public class ReceiptController extends BaseController {
 
@@ -125,6 +127,17 @@ public class ReceiptController extends BaseController {
         return receiptService.deletePendingMaterial(id);
     }
 
+    /**
+     * 查看待验收物料详情
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "查看待验收物料详情",response = PcmsUserItemModel.class)
+    @GetMapping("/queryPendingMaterial")
+    public ResultVo queryPendingMaterial(@RequestParam(value = "id") Integer id) throws Exception{
+        return receiptService.queryPendingMaterial(id);
+    }
     /**
      * 查看物料被驳回物料信息
      * @param itid

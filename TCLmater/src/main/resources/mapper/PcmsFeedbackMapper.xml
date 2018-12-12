@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsFeedbackMapper">
+
+    <insert id="insertFeedback" parameterType="com.kuyu.model.pcms.PcmsFeedbackModel" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		pcms_feedback(transfer_id,number,context,create_time)
+		VALUES
+		(#{transfer_id},#{number},#{context},SYSDATE())
+	</insert>
+
+
+	<select id="selectByTransferId" resultType="com.kuyu.vo.pcms.FeedbackVo">
+		SELECT
+		pf.id,
+		pf.context,
+		pf.create_time,
+		pf.transfer_id,
+		pf.number
+		FROM pcms_feedback pf
+		<where>
+			pf.transfer_id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
+</mapper>

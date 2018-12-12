@@ -4,12 +4,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
-import com.kuyu.model.pcms.PcmsPendingMaterialModel;
-import com.kuyu.model.pcms.PcmsRejectLogModel;
-import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
-import com.kuyu.model.pcms.PcmsUserItemModel;
+import com.kuyu.model.pcms.*;
 import com.kuyu.service.ReceiptService;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.ReceiptDetailVo;
+import com.kuyu.vo.pcms.TransferDetailVo;
+import com.kuyu.vo.query.FeedbackQuery;
+import com.kuyu.vo.query.SettlementQuery;
+import com.kuyu.vo.query.TransferQuery;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,7 @@ import java.util.List;
  * Created by pc on 2018/11/27
  */
 @AOP_Controller_LOG
+@Api(tags = "市场人员接口")
 @RequestMapping("/market")
 public class PcmsMarketController extends BaseController {
 
@@ -31,10 +35,10 @@ public class PcmsMarketController extends BaseController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "市场人员查看立项单详情",response = PcmsUserItemModel.class)
+    @ApiOperation(value = "市场人员查看立项单详情",response = ReceiptDetailVo.class)
     @GetMapping("/getItemDetail")
     public ResultVo getItemDetail(@RequestParam(value = "itid") Integer itid) throws Exception{
-        return receiptService.getItemDetail(itid);
+        return receiptService.getDetail(itid);
     }
 
     /**
@@ -46,7 +50,7 @@ public class PcmsMarketController extends BaseController {
     @ApiOperation(value = "驳回",response = PcmsRejectLogModel.class)
     @PostMapping("/doRejectFail")
     public ResultVo doReject(@RequestBody PcmsRejectLogModel pcmsRejectLogModel)throws Exception{
-        return receiptService.doReject(pcmsRejectLogModel,getUserInfo());
+        return receiptService.doReject(pcmsRejectLogModel/*,getUserInfo()*/);
     }
 
     /**
@@ -58,7 +62,7 @@ public class PcmsMarketController extends BaseController {
     @ApiOperation(value = "验收成功",response = PcmsRejectLogModel.class)
     @GetMapping("/doRejectSuccess")
     public ResultVo doRejectSuccess(@RequestParam(value = "itid") Integer itid)throws Exception{
-        return receiptService.doRejectSuccess(itid,getUserInfo());
+        return receiptService.doRejectSuccess(itid/*,getUserInfo()*/);
     }
 
     /**
@@ -88,6 +92,100 @@ public class PcmsMarketController extends BaseController {
         return receiptService.updatePendingMaterialFor(list);
     }
 
+    /**
+     * 根据姓名查询员工
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "根据姓名查询员工",response = PcmsItemLog.class)
+    @GetMapping("/selectByName")
+    public ResultVo selectByName(/*@RequestParam(value = "name") String name*/)throws Exception{
+        return receiptService.selectByName(/*name,getLoginUserInfo()*/);
+    }
 
+    /**
+     * 日志信息
+     * @param itid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "日志信息",response = PcmsItemLog.class)
+    @GetMapping("/selectItemLog")
+    public ResultVo selectItemLog(@RequestParam(value = "itid") Integer itid)throws Exception{
+        return receiptService.selectItemLog(itid);
+    }
+
+
+    /**
+     * 市场人员查询批量结算列表
+     * @param query
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "市场人员查询批量结算列表",response = PcmsPendingMaterialModel.class)
+    @PostMapping("/selectSettlement")
+    public ResultVo selectSettlement(@RequestBody SettlementQuery query)throws Exception{
+        return receiptService.selectSettlement(query);
+    }
+
+    /**
+     * 根据ITID查询可转办的物料清单
+     * @param itid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "根据ITID查询可转办的物料清单",response = PcmsPendingMaterialModel.class)
+    @GetMapping("/selectPendingMaterialByItid")
+    public ResultVo selectPendingMaterialByItid(@RequestParam(value = "itid") Integer itid)throws Exception{
+        return receiptService.selectPendingMaterialByItid(itid);
+    }
+
+    /**
+     * 转办
+     * @param pcmsTransferModel
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "转办",response = PcmsTransferModel.class)
+    @PostMapping("/addTransfer")
+    public ResultVo addTransfer(@RequestBody PcmsTransferModel pcmsTransferModel)throws Exception{
+        return receiptService.addTransfer(pcmsTransferModel);
+    }
+
+    /**
+     * 转办管理
+     * @param query
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "转办管理",response = PcmsPendingMaterialModel.class)
+    @GetMapping("/selectTransfer")
+    public ResultVo selectTransfer(TransferQuery query)throws Exception{
+        return receiptService.selectTransfer(query,getLoginUserInfo());
+    }
+
+    /**
+     * 反馈
+     * @param feedbackQuery
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "反馈",response = PcmsFeedbackModel.class)
+    @PostMapping("/addFeedback")
+    public ResultVo addFeedback(@RequestBody FeedbackQuery feedbackQuery)throws Exception{
+        return receiptService.addFeedback(feedbackQuery);
+    }
+
+    /**
+     * 反馈详情
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "反馈详情",response = TransferDetailVo.class)
+    @GetMapping("/selectFeedbackDetail")
+    public ResultVo selectFeedbackDetail(@RequestParam(value = "id") Integer id)throws Exception{
+        return receiptService.selectFeedbackDetail(id);
+    }
 
 }

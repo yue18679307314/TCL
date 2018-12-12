@@ -15,4 +15,17 @@
         </where>
     </select>
 
+    <select id="queryById" resultType="com.kuyu.vo.pcms.PcmsMaterialImgVo">
+        SELECT t.id AS id,
+        t.image AS image,
+        t.pending_material_id AS pending_material_id
+        FROM pcms_material_img t
+        <where>
+            <if test="id !=null and id !=''">
+                t.pending_material_id =
+                #{id,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
 </mapper>

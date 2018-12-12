@@ -11,6 +11,7 @@ import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.SupplierMaterialResultVo;
 import com.kuyu.vo.pcms.SupplierMaterialVo;
 import com.kuyu.vo.query.SupplierMaterialQuery;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 @AOP_Controller_LOG
+@Api(tags = "供应商物料接口")
 @RequestMapping("/supplierMaterial")
 public class PcmsSupplierMaterialController extends BaseController {
 

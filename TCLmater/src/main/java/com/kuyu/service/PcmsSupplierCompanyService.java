@@ -12,5 +12,8 @@ public interface PcmsSupplierCompanyService extends IService<PcmsSupplierCompany
     public void insertPcmsSupplierCompany(PcmsSupplierCompanyModel pcmsSupplierCompanyModel) throws Exception;
     /**根据供应商编码和公司编码查询*/
     public PcmsSupplierCompanyModel selectByVendorIdAndCompany(PcmsSupplierCompanyModel pcmsSupplierCompanyModel);
+    /**修改*/
+    public void updateSupplierCompany(Integer id,Integer statement_date) throws Exception;
+
 
 }
