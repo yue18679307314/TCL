@@ -403,7 +403,7 @@
   
   <!-- ============================================================================================== -->
 <select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.OthertmResult">
-	SELECT
+	<!--  SELECT
 	b.otid,
 	b.mrname3,
 	'其他终端建设' AS cost,
@@ -414,6 +414,19 @@
 FROM
 	pcms_item_relation a
 LEFT JOIN pcms_othertm b ON a.relation_id = b.otid
+WHERE
+	a.itid = #{itid}-->
+	SELECT
+	b.otid,
+	b.mrname3,
+	'其他终端建设' AS cost,
+	b.CHILDREN3_COUNT,
+	b.CHILDREN3_PRICE,
+	b.CHILDREN3_AMOUNT,
+	b.CHILDREN3_BUILDTIME
+FROM
+	pcms_item a
+LEFT JOIN  pcms_othertm b ON a.detail_id=b.detail_id
 WHERE
 	a.itid = #{itid}
 </select>

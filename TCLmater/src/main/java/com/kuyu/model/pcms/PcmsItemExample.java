@@ -165,6 +165,76 @@ public class PcmsItemExample {
             return (Criteria) this;
         }
 
+        public Criteria andDetailIdIsNull() {
+            addCriterion("detail_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdIsNotNull() {
+            addCriterion("detail_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdEqualTo(String value) {
+            addCriterion("detail_id =", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotEqualTo(String value) {
+            addCriterion("detail_id <>", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdGreaterThan(String value) {
+            addCriterion("detail_id >", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdGreaterThanOrEqualTo(String value) {
+            addCriterion("detail_id >=", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdLessThan(String value) {
+            addCriterion("detail_id <", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdLessThanOrEqualTo(String value) {
+            addCriterion("detail_id <=", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdLike(String value) {
+            addCriterion("detail_id like", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotLike(String value) {
+            addCriterion("detail_id not like", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdIn(List<String> values) {
+            addCriterion("detail_id in", values, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotIn(List<String> values) {
+            addCriterion("detail_id not in", values, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdBetween(String value1, String value2) {
+            addCriterion("detail_id between", value1, value2, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotBetween(String value1, String value2) {
+            addCriterion("detail_id not between", value1, value2, "detailId");
+            return (Criteria) this;
+        }
+
         public Criteria andRequestCompanyCodeIsNull() {
             addCriterion("request_company_code is null");
             return (Criteria) this;
@@ -905,63 +975,263 @@ public class PcmsItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeIsNull() {
-            addCriterion("update_time is null");
+        public Criteria andSubclassIsNull() {
+            addCriterion("subclass is null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeIsNotNull() {
-            addCriterion("update_time is not null");
+        public Criteria andSubclassIsNotNull() {
+            addCriterion("subclass is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeEqualTo(Date value) {
-            addCriterion("update_time =", value, "updateTime");
+        public Criteria andSubclassEqualTo(String value) {
+            addCriterion("subclass =", value, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeNotEqualTo(Date value) {
-            addCriterion("update_time <>", value, "updateTime");
+        public Criteria andSubclassNotEqualTo(String value) {
+            addCriterion("subclass <>", value, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeGreaterThan(Date value) {
-            addCriterion("update_time >", value, "updateTime");
+        public Criteria andSubclassGreaterThan(String value) {
+            addCriterion("subclass >", value, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("update_time >=", value, "updateTime");
+        public Criteria andSubclassGreaterThanOrEqualTo(String value) {
+            addCriterion("subclass >=", value, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeLessThan(Date value) {
-            addCriterion("update_time <", value, "updateTime");
+        public Criteria andSubclassLessThan(String value) {
+            addCriterion("subclass <", value, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("update_time <=", value, "updateTime");
+        public Criteria andSubclassLessThanOrEqualTo(String value) {
+            addCriterion("subclass <=", value, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeIn(List<Date> values) {
-            addCriterion("update_time in", values, "updateTime");
+        public Criteria andSubclassLike(String value) {
+            addCriterion("subclass like", value, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeNotIn(List<Date> values) {
-            addCriterion("update_time not in", values, "updateTime");
+        public Criteria andSubclassNotLike(String value) {
+            addCriterion("subclass not like", value, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
-            addCriterion("update_time between", value1, value2, "updateTime");
+        public Criteria andSubclassIn(List<String> values) {
+            addCriterion("subclass in", values, "subclass");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("update_time not between", value1, value2, "updateTime");
+        public Criteria andSubclassNotIn(List<String> values) {
+            addCriterion("subclass not in", values, "subclass");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubclassBetween(String value1, String value2) {
+            addCriterion("subclass between", value1, value2, "subclass");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubclassNotBetween(String value1, String value2) {
+            addCriterion("subclass not between", value1, value2, "subclass");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchIsNull() {
+            addCriterion("dispatch is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchIsNotNull() {
+            addCriterion("dispatch is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchEqualTo(String value) {
+            addCriterion("dispatch =", value, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchNotEqualTo(String value) {
+            addCriterion("dispatch <>", value, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchGreaterThan(String value) {
+            addCriterion("dispatch >", value, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchGreaterThanOrEqualTo(String value) {
+            addCriterion("dispatch >=", value, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchLessThan(String value) {
+            addCriterion("dispatch <", value, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchLessThanOrEqualTo(String value) {
+            addCriterion("dispatch <=", value, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchLike(String value) {
+            addCriterion("dispatch like", value, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchNotLike(String value) {
+            addCriterion("dispatch not like", value, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchIn(List<String> values) {
+            addCriterion("dispatch in", values, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchNotIn(List<String> values) {
+            addCriterion("dispatch not in", values, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchBetween(String value1, String value2) {
+            addCriterion("dispatch between", value1, value2, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchNotBetween(String value1, String value2) {
+            addCriterion("dispatch not between", value1, value2, "dispatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeIsNull() {
+            addCriterion("dispatch_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeIsNotNull() {
+            addCriterion("dispatch_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeEqualTo(Date value) {
+            addCriterion("dispatch_time =", value, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeNotEqualTo(Date value) {
+            addCriterion("dispatch_time <>", value, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeGreaterThan(Date value) {
+            addCriterion("dispatch_time >", value, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("dispatch_time >=", value, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeLessThan(Date value) {
+            addCriterion("dispatch_time <", value, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeLessThanOrEqualTo(Date value) {
+            addCriterion("dispatch_time <=", value, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeIn(List<Date> values) {
+            addCriterion("dispatch_time in", values, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeNotIn(List<Date> values) {
+            addCriterion("dispatch_time not in", values, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeBetween(Date value1, Date value2) {
+            addCriterion("dispatch_time between", value1, value2, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDispatchTimeNotBetween(Date value1, Date value2) {
+            addCriterion("dispatch_time not between", value1, value2, "dispatchTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNull() {
+            addCriterion("end_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIsNotNull() {
+            addCriterion("end_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeEqualTo(Date value) {
+            addCriterion("end_time =", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotEqualTo(Date value) {
+            addCriterion("end_time <>", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThan(Date value) {
+            addCriterion("end_time >", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("end_time >=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThan(Date value) {
+            addCriterion("end_time <", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeLessThanOrEqualTo(Date value) {
+            addCriterion("end_time <=", value, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeIn(List<Date> values) {
+            addCriterion("end_time in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotIn(List<Date> values) {
+            addCriterion("end_time not in", values, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeBetween(Date value1, Date value2) {
+            addCriterion("end_time between", value1, value2, "endTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEndTimeNotBetween(Date value1, Date value2) {
+            addCriterion("end_time not between", value1, value2, "endTime");
             return (Criteria) this;
         }
 
@@ -1022,6 +1292,66 @@ public class PcmsItemExample {
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIsNull() {
+            addCriterion("update_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIsNotNull() {
+            addCriterion("update_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeEqualTo(Date value) {
+            addCriterion("update_time =", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotEqualTo(Date value) {
+            addCriterion("update_time <>", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThan(Date value) {
+            addCriterion("update_time >", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("update_time >=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThan(Date value) {
+            addCriterion("update_time <", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("update_time <=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIn(List<Date> values) {
+            addCriterion("update_time in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotIn(List<Date> values) {
+            addCriterion("update_time not in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("update_time between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
     }

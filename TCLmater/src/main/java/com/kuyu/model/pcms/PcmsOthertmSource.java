@@ -5,6 +5,8 @@ import java.util.Date;
 public class PcmsOthertmSource {
     private Integer otid;
 
+    private String detailId;
+
     private String requestId;
 
     private String vendorId;
@@ -41,6 +43,14 @@ public class PcmsOthertmSource {
 
     public void setOtid(Integer otid) {
         this.otid = otid;
+    }
+
+    public String getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(String detailId) {
+        this.detailId = detailId == null ? null : detailId.trim();
     }
 
     public String getRequestId() {

@@ -165,6 +165,76 @@ public class PcmsOthertmSourceExample {
             return (Criteria) this;
         }
 
+        public Criteria andDetailIdIsNull() {
+            addCriterion("detail_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdIsNotNull() {
+            addCriterion("detail_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdEqualTo(String value) {
+            addCriterion("detail_id =", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotEqualTo(String value) {
+            addCriterion("detail_id <>", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdGreaterThan(String value) {
+            addCriterion("detail_id >", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdGreaterThanOrEqualTo(String value) {
+            addCriterion("detail_id >=", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdLessThan(String value) {
+            addCriterion("detail_id <", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdLessThanOrEqualTo(String value) {
+            addCriterion("detail_id <=", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdLike(String value) {
+            addCriterion("detail_id like", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotLike(String value) {
+            addCriterion("detail_id not like", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdIn(List<String> values) {
+            addCriterion("detail_id in", values, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotIn(List<String> values) {
+            addCriterion("detail_id not in", values, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdBetween(String value1, String value2) {
+            addCriterion("detail_id between", value1, value2, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotBetween(String value1, String value2) {
+            addCriterion("detail_id not between", value1, value2, "detailId");
+            return (Criteria) this;
+        }
+
         public Criteria andRequestIdIsNull() {
             addCriterion("request_id is null");
             return (Criteria) this;

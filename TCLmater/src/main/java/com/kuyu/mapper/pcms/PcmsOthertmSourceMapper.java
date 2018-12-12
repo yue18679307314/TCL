@@ -12,15 +12,23 @@ public interface PcmsOthertmSourceMapper {
 
     int deleteByExample(PcmsOthertmSourceExample example);
 
+    int deleteByPrimaryKey(Integer otid);
+
     int insert(PcmsOthertmSource record);
 
     int insertSelective(PcmsOthertmSource record);
 
     List<PcmsOthertmSource> selectByExample(PcmsOthertmSourceExample example);
 
+    PcmsOthertmSource selectByPrimaryKey(Integer otid);
+
     int updateByExampleSelective(@Param("record") PcmsOthertmSource record, @Param("example") PcmsOthertmSourceExample example);
 
     int updateByExample(@Param("record") PcmsOthertmSource record, @Param("example") PcmsOthertmSourceExample example);
+
+    int updateByPrimaryKeySelective(PcmsOthertmSource record);
+
+    int updateByPrimaryKey(PcmsOthertmSource record);
 
 	List<OthertmResult> selectByItid(Integer itid);
 }

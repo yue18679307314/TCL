@@ -5,6 +5,8 @@ import java.util.Date;
 public class PcmsItem {
     private Integer itid;
 
+    private String detailId;
+
     private String requestCompanyCode;
 
     private String deptCode;
@@ -27,9 +29,17 @@ public class PcmsItem {
 
     private String operatorName;
 
-    private Date updateTime;
+    private String subclass;
+
+    private String dispatch;
+
+    private Date dispatchTime;
+
+    private Date endTime;
 
     private Date createTime;
+
+    private Date updateTime;
 
     public Integer getItid() {
         return itid;
@@ -37,6 +47,14 @@ public class PcmsItem {
 
     public void setItid(Integer itid) {
         this.itid = itid;
+    }
+
+    public String getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(String detailId) {
+        this.detailId = detailId == null ? null : detailId.trim();
     }
 
     public String getRequestCompanyCode() {
@@ -127,12 +145,36 @@ public class PcmsItem {
         this.operatorName = operatorName == null ? null : operatorName.trim();
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getSubclass() {
+        return subclass;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setSubclass(String subclass) {
+        this.subclass = subclass == null ? null : subclass.trim();
+    }
+
+    public String getDispatch() {
+        return dispatch;
+    }
+
+    public void setDispatch(String dispatch) {
+        this.dispatch = dispatch == null ? null : dispatch.trim();
+    }
+
+    public Date getDispatchTime() {
+        return dispatchTime;
+    }
+
+    public void setDispatchTime(Date dispatchTime) {
+        this.dispatchTime = dispatchTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public Date getCreateTime() {
@@ -141,5 +183,13 @@ public class PcmsItem {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

@@ -3,6 +3,7 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsItemMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsItem">
     <id column="itid" jdbcType="INTEGER" property="itid" />
+    <result column="detail_id" jdbcType="VARCHAR" property="detailId" />
     <result column="request_company_code" jdbcType="VARCHAR" property="requestCompanyCode" />
     <result column="dept_code" jdbcType="VARCHAR" property="deptCode" />
     <result column="item_number" jdbcType="VARCHAR" property="itemNumber" />
@@ -14,8 +15,12 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="operator_id" jdbcType="VARCHAR" property="operatorId" />
     <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="subclass" jdbcType="VARCHAR" property="subclass" />
+    <result column="dispatch" jdbcType="VARCHAR" property="dispatch" />
+    <result column="dispatch_time" jdbcType="TIMESTAMP" property="dispatchTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,8 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    itid, request_company_code, dept_code, item_number, vendor_id, request_id, item_price, 
-    title, it_type, status, operator_id, operator_name, update_time, create_time
+    itid, detail_id, request_company_code, dept_code, item_number, vendor_id, request_id, 
+    item_price, title, it_type, status, operator_id, operator_name, subclass, dispatch, 
+    dispatch_time, end_time, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsItemExample" resultMap="BaseResultMap">
     select
@@ -110,22 +116,29 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsItem">
-    insert into pcms_item (itid, request_company_code, dept_code, 
-      item_number, vendor_id, request_id, 
-      item_price, title, it_type, 
-      status, operator_id, operator_name, 
-      update_time, create_time)
-    values (#{itid,jdbcType=INTEGER}, #{requestCompanyCode,jdbcType=VARCHAR}, #{deptCode,jdbcType=VARCHAR}, 
-      #{itemNumber,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, 
-      #{itemPrice,jdbcType=DOUBLE}, #{title,jdbcType=VARCHAR}, #{itType,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{operatorId,jdbcType=VARCHAR}, #{operatorName,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+    insert into pcms_item (itid, detail_id, request_company_code, 
+      dept_code, item_number, vendor_id, 
+      request_id, item_price, title, 
+      it_type, status, operator_id, 
+      operator_name, subclass, dispatch, 
+      dispatch_time, end_time, create_time, 
+      update_time)
+    values (#{itid,jdbcType=INTEGER}, #{detailId,jdbcType=VARCHAR}, #{requestCompanyCode,jdbcType=VARCHAR}, 
+      #{deptCode,jdbcType=VARCHAR}, #{itemNumber,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
+      #{requestId,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DOUBLE}, #{title,jdbcType=VARCHAR}, 
+      #{itType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{operatorId,jdbcType=VARCHAR}, 
+      #{operatorName,jdbcType=VARCHAR}, #{subclass,jdbcType=VARCHAR}, #{dispatch,jdbcType=VARCHAR}, 
+      #{dispatchTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsItem" useGeneratedKeys="true" keyProperty="itid">
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsItem">
     insert into pcms_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="itid != null">
         itid,
+      </if>
+      <if test="detailId != null">
+        detail_id,
       </if>
       <if test="requestCompanyCode != null">
         request_company_code,
@@ -160,16 +173,31 @@
       <if test="operatorName != null">
         operator_name,
       </if>
-      <if test="updateTime != null">
-        update_time,
+      <if test="subclass != null">
+        subclass,
+      </if>
+      <if test="dispatch != null">
+        dispatch,
+      </if>
+      <if test="dispatchTime != null">
+        dispatch_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
       </if>
       <if test="createTime != null">
         create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="itid != null">
         #{itid,jdbcType=INTEGER},
+      </if>
+      <if test="detailId != null">
+        #{detailId,jdbcType=VARCHAR},
       </if>
       <if test="requestCompanyCode != null">
         #{requestCompanyCode,jdbcType=VARCHAR},
@@ -204,11 +232,23 @@
       <if test="operatorName != null">
         #{operatorName,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
+      <if test="subclass != null">
+        #{subclass,jdbcType=VARCHAR},
+      </if>
+      <if test="dispatch != null">
+        #{dispatch,jdbcType=VARCHAR},
+      </if>
+      <if test="dispatchTime != null">
+        #{dispatchTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -223,6 +263,9 @@
     <set>
       <if test="record.itid != null">
         itid = #{record.itid,jdbcType=INTEGER},
+      </if>
+      <if test="record.detailId != null">
+        detail_id = #{record.detailId,jdbcType=VARCHAR},
       </if>
       <if test="record.requestCompanyCode != null">
         request_company_code = #{record.requestCompanyCode,jdbcType=VARCHAR},
@@ -257,11 +300,23 @@
       <if test="record.operatorName != null">
         operator_name = #{record.operatorName,jdbcType=VARCHAR},
       </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      <if test="record.subclass != null">
+        subclass = #{record.subclass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dispatch != null">
+        dispatch = #{record.dispatch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dispatchTime != null">
+        dispatch_time = #{record.dispatchTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -271,6 +326,7 @@
   <update id="updateByExample" parameterType="map">
     update pcms_item
     set itid = #{record.itid,jdbcType=INTEGER},
+      detail_id = #{record.detailId,jdbcType=VARCHAR},
       request_company_code = #{record.requestCompanyCode,jdbcType=VARCHAR},
       dept_code = #{record.deptCode,jdbcType=VARCHAR},
       item_number = #{record.itemNumber,jdbcType=VARCHAR},
@@ -282,8 +338,12 @@
       status = #{record.status,jdbcType=INTEGER},
       operator_id = #{record.operatorId,jdbcType=VARCHAR},
       operator_name = #{record.operatorName,jdbcType=VARCHAR},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      subclass = #{record.subclass,jdbcType=VARCHAR},
+      dispatch = #{record.dispatch,jdbcType=VARCHAR},
+      dispatch_time = #{record.dispatchTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -291,6 +351,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsItem">
     update pcms_item
     <set>
+      <if test="detailId != null">
+        detail_id = #{detailId,jdbcType=VARCHAR},
+      </if>
       <if test="requestCompanyCode != null">
         request_company_code = #{requestCompanyCode,jdbcType=VARCHAR},
       </if>
@@ -324,18 +387,31 @@
       <if test="operatorName != null">
         operator_name = #{operatorName,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="subclass != null">
+        subclass = #{subclass,jdbcType=VARCHAR},
+      </if>
+      <if test="dispatch != null">
+        dispatch = #{dispatch,jdbcType=VARCHAR},
+      </if>
+      <if test="dispatchTime != null">
+        dispatch_time = #{dispatchTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where itid = #{itid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsItem">
     update pcms_item
-    set request_company_code = #{requestCompanyCode,jdbcType=VARCHAR},
+    set detail_id = #{detailId,jdbcType=VARCHAR},
+      request_company_code = #{requestCompanyCode,jdbcType=VARCHAR},
       dept_code = #{deptCode,jdbcType=VARCHAR},
       item_number = #{itemNumber,jdbcType=VARCHAR},
       vendor_id = #{vendorId,jdbcType=VARCHAR},
@@ -346,8 +422,12 @@
       status = #{status,jdbcType=INTEGER},
       operator_id = #{operatorId,jdbcType=VARCHAR},
       operator_name = #{operatorName,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      subclass = #{subclass,jdbcType=VARCHAR},
+      dispatch = #{dispatch,jdbcType=VARCHAR},
+      dispatch_time = #{dispatchTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where itid = #{itid,jdbcType=INTEGER}
   </update>
   
@@ -356,7 +436,7 @@
   <!--==============================以上为生成的sql部分=====================================-->
   
   <select id="getItemListByParam" parameterType="java.util.Map" resultType="com.kuyu.vo.pcms.ItemResult">
-		  	SELECT
+		  	<!--  SELECT
 			a.itid,
 			b.vendor_name AS vendorName,
 			a.request_id AS requestId,
@@ -373,6 +453,26 @@
 			pcms_item a
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
+		WHERE 1=1 -->
+		SELECT
+			a.itid,
+			b.vendor_name AS vendorName,
+			a.request_id AS requestId,
+			c.REQUEST_TITLE AS requestTitle,
+			a.item_number AS itemNumber,
+			d.DETAIL_ACCOUNT AS detailAccount,
+			a.item_price AS itemPrice,
+			e.person_name AS requestUserName,
+			c.REQUEST_DEPT AS deptName,
+			c.REQUEST_CREATE_TIME AS applyTime,
+			a.`status`,
+			c.type AS projectType
+		FROM
+			pcms_item a
+		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
+	  LEFT JOIN pcms_project_deatil d ON a.detail_id=d.DETAIL_ID
+		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
 		WHERE 1=1 
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
@@ -387,7 +487,7 @@
   	AND (
 		b.vendor_name LIKE #{searchKey}
 		OR a.request_id LIKE #{searchKey}
-		OR c.request_user_name LIKE #{searchKey}
+		OR e.person_name LIKE #{searchKey}
 		OR c.REQUEST_DEPT LIKE #{searchKey}
 		)
   </if>
@@ -402,6 +502,8 @@
 			pcms_item a
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
+		LEFT JOIN pcms_project_deatil d ON a.detail_id=d.DETAIL_ID
+		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
 		WHERE 1=1 
 <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
@@ -416,7 +518,7 @@
   	AND (
 		b.vendor_name LIKE #{searchKey}
 		OR a.request_id LIKE #{searchKey}
-		OR c.request_user_name LIKE #{searchKey}
+		OR e.person_name LIKE #{searchKey}
 		OR c.REQUEST_DEPT LIKE #{searchKey}
 		)
   </if>
@@ -425,7 +527,7 @@
   
   
   <select id="getItemItemDetailById" parameterType="int" resultType="com.kuyu.vo.pcms.ItemDetail">
-  		SELECT
+  		<!--  SELECT
 			a.itid,
 			a.it_type AS itType,
 			b.vendor_name AS vendorName,
@@ -454,6 +556,38 @@
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 		LEFT JOIN tpm_dept d ON c.REQUEST_USER=d.org_name
 		LEFT JOIN pcms_shop e ON e.REQUEST_ID=c.REQUEST_ID
+		where a.itid=#{itid}-->
+		SELECT
+			a.itid,
+			a.it_type AS itType,
+			b.vendor_name AS vendorName,
+			b.vendor_id as vendor_id,
+			a.request_id AS requestId,
+			c.REQUEST_TITLE AS requestTitle,
+			f.DETAIL_ACCOUNT AS detailAccount,
+			c.finance_user_name AS financeUserName,
+			c.REQUEST_COMPANY_CODE AS requestCompanyCode,
+			j.person_name AS requestUserName,
+			f.DETAIL_SUBJECT AS detailSubject,
+			c.REQUEST_DEPT AS requestDept,
+			c.REQUEST_CREATE_TIME AS requestCreateTime,
+			c.REQUEST_END_TIME AS requestEndTime,
+			a.`status`,
+			e.SHOP_CRM_CODE,
+			e.SHOP_NAME,
+			e.SHOP_CHANNEL,
+			CONCAT(e.SHOP_PROVINCE,e.SHOP_CITY,e.SHOP_COUNTY) AS SHOP_ADDRESS,
+			e.SHOP_BRANCH,
+			e.SHOP_LEVEL,
+			e.DETAIL_TASK
+		FROM
+			pcms_item a
+		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
+		LEFT JOIN tpm_dept d ON c.REQUEST_USER=d.org_name
+		LEFT JOIN pcms_shop e ON e.REQUEST_ID=c.REQUEST_ID
+		LEFT JOIN pcms_project_deatil f ON a.detail_id=f.DETAIL_ID
+		LEFT JOIN tpm_employee j ON c.REQUEST_USER=j.person_code 
 		where a.itid=#{itid}
   </select>
 </mapper>

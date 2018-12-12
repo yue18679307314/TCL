@@ -26,16 +26,22 @@ public class PcmsOthertm {
 
     private String specifications3;
 
+    @JsonProperty("CHILDREN3_DETAIL")
     private String children3Detail;
 
+    @JsonProperty("CHILDREN3_VENDOR")
     private String children3Vendor;
 
+    @JsonProperty("CHILDREN3_BUILDTIME")
     private String children3Buildtime;
 
+    @JsonProperty("CHILDREN3_COUNT")
     private String children3Count;
 
+    @JsonProperty("CHILDREN3_PRICE")
     private String children3Price;
 
+    @JsonProperty("CHILDREN3_AMOUNT")
     private String children3Amount;
 
     private Date createTime;

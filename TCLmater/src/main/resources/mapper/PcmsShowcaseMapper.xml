@@ -3,7 +3,7 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsShowcaseMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsShowcase">
     <id column="scid" jdbcType="INTEGER" property="scid" />
-    <result column="detail_id" jdbcType="INTEGER" property="detailId" />
+    <result column="detail_id" jdbcType="VARCHAR" property="detailId" />
     <result column="resuest_id" jdbcType="VARCHAR" property="resuestId" />
     <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
     <result column="CHILDREN1_TASK" jdbcType="VARCHAR" property="children1Task" />
@@ -119,7 +119,7 @@
       CHILDREN1_LINEAR, CHILDREN1_BUILDTIME, CHILDREN1_VENDOR, 
       CHILDREN1_INNER, CHILDREN1_OUTER, CHILDREN1_AMOUNT, 
       create_time)
-    values (#{scid,jdbcType=INTEGER}, #{detailId,jdbcType=INTEGER}, #{resuestId,jdbcType=VARCHAR}, 
+    values (#{scid,jdbcType=INTEGER}, #{detailId,jdbcType=VARCHAR}, #{resuestId,jdbcType=VARCHAR}, 
       #{vendorId,jdbcType=VARCHAR}, #{children1Task,jdbcType=VARCHAR}, #{children1LastBuildtime,jdbcType=VARCHAR}, 
       #{children1Type,jdbcType=VARCHAR}, #{children1Reason,jdbcType=VARCHAR}, #{children1Area,jdbcType=VARCHAR}, 
       #{children1Linear,jdbcType=VARCHAR}, #{children1Buildtime,jdbcType=VARCHAR}, #{children1Vendor,jdbcType=VARCHAR}, 
@@ -183,7 +183,7 @@
         #{scid,jdbcType=INTEGER},
       </if>
       <if test="detailId != null">
-        #{detailId,jdbcType=INTEGER},
+        #{detailId,jdbcType=VARCHAR},
       </if>
       <if test="resuestId != null">
         #{resuestId,jdbcType=VARCHAR},
@@ -242,7 +242,7 @@
         scid = #{record.scid,jdbcType=INTEGER},
       </if>
       <if test="record.detailId != null">
-        detail_id = #{record.detailId,jdbcType=INTEGER},
+        detail_id = #{record.detailId,jdbcType=VARCHAR},
       </if>
       <if test="record.resuestId != null">
         resuest_id = #{record.resuestId,jdbcType=VARCHAR},
@@ -294,7 +294,7 @@
   <update id="updateByExample" parameterType="map">
     update pcms_showcase
     set scid = #{record.scid,jdbcType=INTEGER},
-      detail_id = #{record.detailId,jdbcType=INTEGER},
+      detail_id = #{record.detailId,jdbcType=VARCHAR},
       resuest_id = #{record.resuestId,jdbcType=VARCHAR},
       vendor_id = #{record.vendorId,jdbcType=VARCHAR},
       CHILDREN1_TASK = #{record.children1Task,jdbcType=VARCHAR},
@@ -317,7 +317,7 @@
     update pcms_showcase
     <set>
       <if test="detailId != null">
-        detail_id = #{detailId,jdbcType=INTEGER},
+        detail_id = #{detailId,jdbcType=VARCHAR},
       </if>
       <if test="resuestId != null">
         resuest_id = #{resuestId,jdbcType=VARCHAR},
@@ -366,7 +366,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsShowcase">
     update pcms_showcase
-    set detail_id = #{detailId,jdbcType=INTEGER},
+    set detail_id = #{detailId,jdbcType=VARCHAR},
       resuest_id = #{resuestId,jdbcType=VARCHAR},
       vendor_id = #{vendorId,jdbcType=VARCHAR},
       CHILDREN1_TASK = #{children1Task,jdbcType=VARCHAR},
@@ -383,11 +383,12 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where scid = #{scid,jdbcType=INTEGER}
   </update>
+ 
   
   
   <!-- ============================================================================================== -->
 <select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.ShowcaseResult">
-	SELECT
+ <!--  	SELECT
 	b.scid,
 	c.vendor_name AS vendorName,
 	b.CHILDREN1_TYPE ,
@@ -402,6 +403,23 @@ FROM
 	pcms_item_relation a
 LEFT JOIN pcms_showcase b ON a.relation_id = b.scid
 LEFT JOIN pcms_supplier c ON b.vendor_id=c.vendor_id
+WHERE
+	a.itid = #{itid}-->
+	SELECT
+	b.scid,
+	c.vendor_name AS vendorName,
+	b.CHILDREN1_TYPE ,
+	b.CHILDREN1_LAST_BUILDTIME,
+	b.CHILDREN1_REASON,
+	b.CHILDREN1_AREA,
+	b.CHILDREN1_LINEAR,
+	b.CHILDREN1_BUILDTIME,
+	b.CHILDREN1_INNER,
+	b.CHILDREN1_OUTER
+FROM
+	pcms_item a
+LEFT JOIN pcms_showcase b ON a.detail_id = b.detail_id
+LEFT JOIN pcms_supplier c ON c.vendor_id=a.vendor_id
 WHERE
 	a.itid = #{itid}
 </select>

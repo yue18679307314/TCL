@@ -5,6 +5,8 @@ import java.util.Date;
 public class PcmsShowcaseSource {
     private Integer scid;
 
+    private String detailId;
+
     private String resuestId;
 
     private String vendorId;
@@ -39,6 +41,14 @@ public class PcmsShowcaseSource {
 
     public void setScid(Integer scid) {
         this.scid = scid;
+    }
+
+    public String getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(String detailId) {
+        this.detailId = detailId == null ? null : detailId.trim();
     }
 
     public String getResuestId() {

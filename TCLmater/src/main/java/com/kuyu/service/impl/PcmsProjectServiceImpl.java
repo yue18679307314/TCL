@@ -575,7 +575,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		//写入详情信息
 		for (ProjectDetailVo detail : detailList) {
 			String vendorId=detail.getDetailVendor();
-			
+			String detailId=detail.getDetailId();
 			PcmsProjectDeatil target=new PcmsProjectDeatil();
 			BeanUtils.copyProperties(detail, target);
 			target.setRequestId(requestId);
@@ -623,19 +623,24 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				}
 			}
 			
-			PcmsItem item=new PcmsItem();
-			item.setRequestCompanyCode(projectvo.getRequestCompanyCode());
-			item.setDeptCode(requestDept.substring(requestDept.indexOf("(")+1, requestDept.indexOf(")")));
-			item.setItemNumber(PcmsProjectUtil.creatItemNumber());
-			item.setVendorId(vendorId);
-			item.setRequestId(requestId);
-			item.setItemPrice(Double.valueOf(detail.getDetailAmount()));
-			item.setTitle(projectvo.getRequestTitle());
-			item.setItType(itemType);
-			item.setStatus(0);
-			item.setCreateTime(createTime);
 			
-			pcmsItemMapper.insertSelective(item);
+			if(itemType!=4){
+				PcmsItem item=new PcmsItem();
+				item.setDetailId(detailId);
+				item.setRequestCompanyCode(projectvo.getRequestCompanyCode());
+				item.setDeptCode(requestDept.substring(requestDept.indexOf("(")+1, requestDept.indexOf(")")));
+				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
+				item.setVendorId(vendorId);
+				item.setRequestId(requestId);
+				item.setItemPrice(Double.valueOf(detail.getDetailAmount()));
+				item.setTitle(projectvo.getRequestTitle());
+				item.setItType(itemType);
+				item.setStatus(0);
+				item.setCreateTime(createTime);
+				
+				pcmsItemMapper.insertSelective(item);
+			}
+			
 		}
 		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
 	}

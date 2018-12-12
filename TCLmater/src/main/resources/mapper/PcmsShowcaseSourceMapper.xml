@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kuyu.mapper.pcms.PcmsShowcaseSourceMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsShowcaseSource">
-    <result column="scid" jdbcType="INTEGER" property="scid" />
+    <id column="scid" jdbcType="INTEGER" property="scid" />
+    <result column="detail_id" jdbcType="VARCHAR" property="detailId" />
     <result column="resuest_id" jdbcType="VARCHAR" property="resuestId" />
     <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
     <result column="CHILDREN1_TASK" jdbcType="VARCHAR" property="children1Task" />
@@ -77,9 +78,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    scid, resuest_id, vendor_id, CHILDREN1_TASK, CHILDREN1_LAST_BUILDTIME, CHILDREN1_TYPE, 
-    CHILDREN1_REASON, CHILDREN1_AREA, CHILDREN1_LINEAR, CHILDREN1_BUILDTIME, CHILDREN1_VENDOR, 
-    CHILDREN1_INNER, CHILDREN1_OUTER, CHILDREN1_AMOUNT, create_time
+    scid, detail_id, resuest_id, vendor_id, CHILDREN1_TASK, CHILDREN1_LAST_BUILDTIME, 
+    CHILDREN1_TYPE, CHILDREN1_REASON, CHILDREN1_AREA, CHILDREN1_LINEAR, CHILDREN1_BUILDTIME, 
+    CHILDREN1_VENDOR, CHILDREN1_INNER, CHILDREN1_OUTER, CHILDREN1_AMOUNT, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsShowcaseSourceExample" resultMap="BaseResultMap">
     select
@@ -95,6 +96,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pcms_showcase_source
+    where scid = #{scid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from pcms_showcase_source
+    where scid = #{scid,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsShowcaseSourceExample">
     delete from pcms_showcase_source
     <if test="_parameter != null">
@@ -102,14 +113,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsShowcaseSource">
-    insert into pcms_showcase_source (scid, resuest_id, vendor_id, 
-      CHILDREN1_TASK, CHILDREN1_LAST_BUILDTIME, 
+    insert into pcms_showcase_source (scid, detail_id, resuest_id, 
+      vendor_id, CHILDREN1_TASK, CHILDREN1_LAST_BUILDTIME, 
       CHILDREN1_TYPE, CHILDREN1_REASON, CHILDREN1_AREA, 
       CHILDREN1_LINEAR, CHILDREN1_BUILDTIME, CHILDREN1_VENDOR, 
       CHILDREN1_INNER, CHILDREN1_OUTER, CHILDREN1_AMOUNT, 
       create_time)
-    values (#{scid,jdbcType=INTEGER}, #{resuestId,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
-      #{children1Task,jdbcType=VARCHAR}, #{children1LastBuildtime,jdbcType=VARCHAR}, 
+    values (#{scid,jdbcType=INTEGER}, #{detailId,jdbcType=VARCHAR}, #{resuestId,jdbcType=VARCHAR}, 
+      #{vendorId,jdbcType=VARCHAR}, #{children1Task,jdbcType=VARCHAR}, #{children1LastBuildtime,jdbcType=VARCHAR}, 
       #{children1Type,jdbcType=VARCHAR}, #{children1Reason,jdbcType=VARCHAR}, #{children1Area,jdbcType=VARCHAR}, 
       #{children1Linear,jdbcType=VARCHAR}, #{children1Buildtime,jdbcType=VARCHAR}, #{children1Vendor,jdbcType=VARCHAR}, 
       #{children1Inner,jdbcType=VARCHAR}, #{children1Outer,jdbcType=VARCHAR}, #{children1Amount,jdbcType=VARCHAR}, 
@@ -120,6 +131,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="scid != null">
         scid,
+      </if>
+      <if test="detailId != null">
+        detail_id,
       </if>
       <if test="resuestId != null">
         resuest_id,
@@ -167,6 +181,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="scid != null">
         #{scid,jdbcType=INTEGER},
+      </if>
+      <if test="detailId != null">
+        #{detailId,jdbcType=VARCHAR},
       </if>
       <if test="resuestId != null">
         #{resuestId,jdbcType=VARCHAR},
@@ -224,6 +241,9 @@
       <if test="record.scid != null">
         scid = #{record.scid,jdbcType=INTEGER},
       </if>
+      <if test="record.detailId != null">
+        detail_id = #{record.detailId,jdbcType=VARCHAR},
+      </if>
       <if test="record.resuestId != null">
         resuest_id = #{record.resuestId,jdbcType=VARCHAR},
       </if>
@@ -274,6 +294,7 @@
   <update id="updateByExample" parameterType="map">
     update pcms_showcase_source
     set scid = #{record.scid,jdbcType=INTEGER},
+      detail_id = #{record.detailId,jdbcType=VARCHAR},
       resuest_id = #{record.resuestId,jdbcType=VARCHAR},
       vendor_id = #{record.vendorId,jdbcType=VARCHAR},
       CHILDREN1_TASK = #{record.children1Task,jdbcType=VARCHAR},
@@ -292,10 +313,81 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsShowcaseSource">
+    update pcms_showcase_source
+    <set>
+      <if test="detailId != null">
+        detail_id = #{detailId,jdbcType=VARCHAR},
+      </if>
+      <if test="resuestId != null">
+        resuest_id = #{resuestId,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null">
+        vendor_id = #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Task != null">
+        CHILDREN1_TASK = #{children1Task,jdbcType=VARCHAR},
+      </if>
+      <if test="children1LastBuildtime != null">
+        CHILDREN1_LAST_BUILDTIME = #{children1LastBuildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Type != null">
+        CHILDREN1_TYPE = #{children1Type,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Reason != null">
+        CHILDREN1_REASON = #{children1Reason,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Area != null">
+        CHILDREN1_AREA = #{children1Area,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Linear != null">
+        CHILDREN1_LINEAR = #{children1Linear,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Buildtime != null">
+        CHILDREN1_BUILDTIME = #{children1Buildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Vendor != null">
+        CHILDREN1_VENDOR = #{children1Vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Inner != null">
+        CHILDREN1_INNER = #{children1Inner,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Outer != null">
+        CHILDREN1_OUTER = #{children1Outer,jdbcType=VARCHAR},
+      </if>
+      <if test="children1Amount != null">
+        CHILDREN1_AMOUNT = #{children1Amount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where scid = #{scid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsShowcaseSource">
+    update pcms_showcase_source
+    set detail_id = #{detailId,jdbcType=VARCHAR},
+      resuest_id = #{resuestId,jdbcType=VARCHAR},
+      vendor_id = #{vendorId,jdbcType=VARCHAR},
+      CHILDREN1_TASK = #{children1Task,jdbcType=VARCHAR},
+      CHILDREN1_LAST_BUILDTIME = #{children1LastBuildtime,jdbcType=VARCHAR},
+      CHILDREN1_TYPE = #{children1Type,jdbcType=VARCHAR},
+      CHILDREN1_REASON = #{children1Reason,jdbcType=VARCHAR},
+      CHILDREN1_AREA = #{children1Area,jdbcType=VARCHAR},
+      CHILDREN1_LINEAR = #{children1Linear,jdbcType=VARCHAR},
+      CHILDREN1_BUILDTIME = #{children1Buildtime,jdbcType=VARCHAR},
+      CHILDREN1_VENDOR = #{children1Vendor,jdbcType=VARCHAR},
+      CHILDREN1_INNER = #{children1Inner,jdbcType=VARCHAR},
+      CHILDREN1_OUTER = #{children1Outer,jdbcType=VARCHAR},
+      CHILDREN1_AMOUNT = #{children1Amount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where scid = #{scid,jdbcType=INTEGER}
+  </update>
+ 
  
    <!-- ============================================================================================== -->
 <select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.ShowcaseResult">
-	SELECT
+	<!-- SELECT
 	b.scid,
 	c.vendor_name AS vendorName,
 	b.CHILDREN1_TYPE ,
@@ -310,6 +402,24 @@ FROM
 	pcms_item_relation a
 LEFT JOIN pcms_showcase_source b ON a.relation_id = b.scid
 LEFT JOIN pcms_supplier c ON b.vendor_id=c.vendor_id
+WHERE
+	a.itid = #{itid}-->
+	
+	SELECT
+	b.scid,
+	c.vendor_name AS vendorName,
+	b.CHILDREN1_TYPE ,
+	b.CHILDREN1_LAST_BUILDTIME,
+	b.CHILDREN1_REASON,
+	b.CHILDREN1_AREA,
+	b.CHILDREN1_LINEAR,
+	b.CHILDREN1_BUILDTIME,
+	b.CHILDREN1_INNER,
+	b.CHILDREN1_OUTER
+FROM
+	pcms_item a
+LEFT JOIN pcms_showcase_source b ON a.detail_id = b.detail_id
+LEFT JOIN pcms_supplier c ON c.vendor_id=a.vendor_id
 WHERE
 	a.itid = #{itid}
 </select>

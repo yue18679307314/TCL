@@ -175,52 +175,62 @@ public class PcmsShowcaseExample {
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdEqualTo(Integer value) {
+        public Criteria andDetailIdEqualTo(String value) {
             addCriterion("detail_id =", value, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdNotEqualTo(Integer value) {
+        public Criteria andDetailIdNotEqualTo(String value) {
             addCriterion("detail_id <>", value, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdGreaterThan(Integer value) {
+        public Criteria andDetailIdGreaterThan(String value) {
             addCriterion("detail_id >", value, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andDetailIdGreaterThanOrEqualTo(String value) {
             addCriterion("detail_id >=", value, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdLessThan(Integer value) {
+        public Criteria andDetailIdLessThan(String value) {
             addCriterion("detail_id <", value, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdLessThanOrEqualTo(Integer value) {
+        public Criteria andDetailIdLessThanOrEqualTo(String value) {
             addCriterion("detail_id <=", value, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdIn(List<Integer> values) {
+        public Criteria andDetailIdLike(String value) {
+            addCriterion("detail_id like", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotLike(String value) {
+            addCriterion("detail_id not like", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdIn(List<String> values) {
             addCriterion("detail_id in", values, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdNotIn(List<Integer> values) {
+        public Criteria andDetailIdNotIn(List<String> values) {
             addCriterion("detail_id not in", values, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdBetween(Integer value1, Integer value2) {
+        public Criteria andDetailIdBetween(String value1, String value2) {
             addCriterion("detail_id between", value1, value2, "detailId");
             return (Criteria) this;
         }
 
-        public Criteria andDetailIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andDetailIdNotBetween(String value1, String value2) {
             addCriterion("detail_id not between", value1, value2, "detailId");
             return (Criteria) this;
         }
