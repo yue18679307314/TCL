@@ -65,4 +65,11 @@
         </where>
         ORDER BY t.status DESC
     </select>
+
+    <select id="queryDetailByPendingId" resultType="com.kuyu.vo.pcms.Transfer">
+        SELECT t.id,t.pending_id,t.person_code,t.person_name,t.context,t.create_time FROM pcms_transfer t
+        <where>
+            t.pending_id = #{pendingId,jdbcType=INTEGER}
+        </where>
+    </select>
 </mapper>

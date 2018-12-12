@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.model.pcms.PcmsItemLog;
 import com.kuyu.model.pcms.PcmsTransferModel;
+import com.kuyu.vo.pcms.Transfer;
 import com.kuyu.vo.pcms.TransferDetailVo;
 import com.kuyu.vo.pcms.TransferVo;
 import com.kuyu.vo.query.TransferQuery;
@@ -23,4 +24,6 @@ public interface PcmsTransferMapper extends BaseMapper<PcmsTransferModel> {
 
 
     List<PcmsItemLog> selectItemLog(@Param("itid") Integer itid);
+
+    List<Transfer> queryDetailByPendingId(@Param("pendingId") Integer pendingId);
 }

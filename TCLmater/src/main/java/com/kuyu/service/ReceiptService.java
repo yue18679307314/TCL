@@ -50,6 +50,9 @@ public interface ReceiptService extends IService<ReceiptModel> {
     /**市场人员查看立项单详情*/
     ResultVo getItemDetail(Integer itid)throws Exception;
 
+    /**市场人员查看立项单详情*/
+    ResultVo getDetail(Integer itid)throws Exception;
+
     /**市场人员驳回验收单*/
     ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel/*, LoginUserInfo userInfo*/)throws Exception;
 

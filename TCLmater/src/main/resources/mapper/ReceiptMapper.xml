@@ -142,4 +142,30 @@
         </where>
     </select>
 
+    <select id="getDetail" resultType="com.kuyu.vo.pcms.ReceiptDetailVo">
+        SELECT p.item_number AS item_number,
+        pt.REQUEST_DEPT AS request_dept,
+        pt.request_user_name AS request_user_name,
+        pt.REQUEST_TITLE AS request_title,
+        p.itid AS itid,
+        p.item_price AS item_price,
+        p.status AS STATUS,
+        p.it_type AS TYPE,
+        pt.REQUEST_COMPANY_CODE AS request_company_code,
+        p.create_time AS create_time,
+        p.end_time AS end_time,
+        p.dispatch_time AS dispatch_time,
+        p.dispatch AS dispatch,
+        pt.DETAIL_ACCOUNT AS subclass,
+        ps.vendor_name AS vendor_name,
+        ps.vendor_id AS vendor_id,
+        pt.REQUEST_ID AS request_id
+        FROM pcms_item p
+        LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
+        LEFT JOIN pcms_supplier ps ON p.vendor_id = ps.vendor_id
+        <where>
+            p.itid = #{itid,jdbcType=INTEGER}
+        </where>
+    </select>
+
 </mapper>

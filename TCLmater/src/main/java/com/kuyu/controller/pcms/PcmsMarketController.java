@@ -7,6 +7,7 @@ import com.kuyu.controller.BaseController;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.ReceiptService;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.ReceiptDetailVo;
 import com.kuyu.vo.pcms.TransferDetailVo;
 import com.kuyu.vo.query.FeedbackQuery;
 import com.kuyu.vo.query.SettlementQuery;
@@ -34,10 +35,10 @@ public class PcmsMarketController extends BaseController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "市场人员查看立项单详情",response = PcmsUserItemModel.class)
+    @ApiOperation(value = "市场人员查看立项单详情",response = ReceiptDetailVo.class)
     @GetMapping("/getItemDetail")
     public ResultVo getItemDetail(@RequestParam(value = "itid") Integer itid) throws Exception{
-        return receiptService.getItemDetail(itid);
+        return receiptService.getDetail(itid);
     }
 
     /**

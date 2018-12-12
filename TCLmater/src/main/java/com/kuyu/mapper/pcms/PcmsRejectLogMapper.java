@@ -2,6 +2,7 @@ package com.kuyu.mapper.pcms;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.kuyu.model.pcms.PcmsRejectLogModel;
+import com.kuyu.vo.pcms.PcmsRejectLogVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface PcmsRejectLogMapper extends BaseMapper<PcmsRejectLogModel> {
 
 
     List<PcmsRejectLogModel> selectRejectLogList(@Param("itid") Integer itid);
+
+    List<PcmsRejectLogVo> queryRejectLogList(@Param("itid") Integer itid);
 
 }

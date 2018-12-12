@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.model.pcms.ReceiptDetailModel;
 import com.kuyu.model.pcms.ReceiptModel;
-import com.kuyu.vo.pcms.MaterialResult;
-import com.kuyu.vo.pcms.PcmsOthertmVo;
-import com.kuyu.vo.pcms.PcmsShopVo;
-import com.kuyu.vo.pcms.PcmsShowcaseVo;
+import com.kuyu.vo.pcms.*;
 import com.kuyu.vo.query.ReceiptQuery;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,4 +29,6 @@ public interface ReceiptMapper extends BaseMapper<ReceiptModel> {
 
     /***/
     ReceiptDetailModel getItemDetail(@Param("itid") Integer itid);
+
+    ReceiptDetailVo getDetail(@Param("itid") Integer itid);
 }

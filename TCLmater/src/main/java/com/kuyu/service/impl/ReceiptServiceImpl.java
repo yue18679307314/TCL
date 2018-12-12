@@ -73,6 +73,9 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     @Resource
     private PcmsFeedbackImgMapper pcmsFeedbackImgMapper;
 
+    @Resource
+    private PcmsTovoidItemMapper pcmsTovoidItemMapper;
+
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
         if(null == query.getOpenid() || "".equals(query.getOpenid())){
@@ -483,6 +486,57 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             receiptDetailModel.setPcmsPendingMaterialModelList(pcmsPendingMaterialModelList);
         }
         return ResultVo.getDataWithSuccess(receiptDetailModel);
+    }
+
+    @Override
+    public ResultVo getDetail(Integer itid) throws Exception {
+        ReceiptDetailVo receiptDetailVo = baseMapper.getDetail(itid);
+        /**门店信息*/
+        PcmsShopVo pcmsShopVo = baseMapper.getPcmsShopInfo(itid);
+        if(null != pcmsShopVo){
+            receiptDetailVo.setPcmsShopVo(pcmsShopVo);
+        }
+        /**展台展柜信息*/
+        PcmsShowcaseVo pcmsShowcaseVo = baseMapper.getPcmsShowcaseInfo(itid);
+        if(null != pcmsShowcaseVo){
+            receiptDetailVo.setPcmsShowcaseVo(pcmsShowcaseVo);
+        }
+        /**待验收物料信息*/
+        List<PendingMaterialVo> pendingMaterialVoList =  new ArrayList<>();
+        List<List<Transfer>> pcmsTransferVoList = new ArrayList<>();
+        List<PendingMaterialVo> list =  pcmsPendingMaterialMapper.queryByItid(itid);
+        if(list.size()>0){
+            for(PendingMaterialVo pendingMaterialVo : list){
+                /**待验收物料图片信息*/
+                List<PcmsMaterialImgVo> pcmsMaterialImg = pcmsMaterialImgMapper.queryById(pendingMaterialVo.getId());
+                pendingMaterialVo.setPcmsMaterialImgVoList(pcmsMaterialImg);
+                pendingMaterialVoList.add(pendingMaterialVo);
+                /**转办信息*/
+                List<Transfer> pcmsTransferVoList1 = pcmsTransferMapper.queryDetailByPendingId(pendingMaterialVo.getId());
+                if(pcmsTransferVoList1.size()>0){
+                    pcmsTransferVoList.add(pcmsTransferVoList1);
+                }
+            }
+            receiptDetailVo.setPcmsPendingMaterialList(pendingMaterialVoList);
+            receiptDetailVo.setPcmsTransferVoList(pcmsTransferVoList);
+        }
+
+        /**获取驳回信息*/
+        List<PcmsRejectLogVo> pcmsRejectLogVo = pcmsRejectLogMapper.queryRejectLogList(itid);
+        if(list.size()>0){
+            receiptDetailVo.setPcmsRejectLogList(pcmsRejectLogVo);
+        }
+        /**获取作废信息*/
+        PcmsTovoidItemVo pcmsTovoidItemVo = pcmsTovoidItemMapper.selectdetailByItid(itid);
+        if(null != pcmsTovoidItemVo){
+            receiptDetailVo.setPcmsTovoidItemVo(pcmsTovoidItemVo);
+        }
+        /**广告物料*/
+        List<MaterialResult> materialResultList = baseMapper.getMaterialResultInfo(itid);
+        if(materialResultList.size()>0){
+            receiptDetailVo.setMaterialResultList(materialResultList);
+        }
+        return ResultVo.getDataWithSuccess(receiptDetailVo);
     }
 
     @Override

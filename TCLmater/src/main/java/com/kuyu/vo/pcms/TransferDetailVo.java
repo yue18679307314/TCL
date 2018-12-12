@@ -1,6 +1,5 @@
 package com.kuyu.vo.pcms;
 
-import java.util.Date;
 import java.util.List;
 
 /**

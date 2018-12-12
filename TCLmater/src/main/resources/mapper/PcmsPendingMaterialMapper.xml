@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kuyu.mapper.pcms.PcmsPendingMaterialMapper">
-    <!-- 根据openid查询是否绑定 -->
     <select id="selectByItid" resultType="com.kuyu.model.pcms.PcmsPendingMaterialModel">
+        SELECT t.category,t.id,t.comparison_price,t.image,t.ranges,t.specifications,t.ranges,t.unit,t.itid,t.number,t.all_price,t.state
+        FROM pcms_pending_material t
+        <where>
+            <if test="itid != null and itid != ''">
+                t.itid = #{itid}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByItid" resultType="com.kuyu.vo.pcms.PendingMaterialVo">
         SELECT t.category,t.id,t.comparison_price,t.image,t.ranges,t.specifications,t.ranges,t.unit,t.itid,t.number,t.all_price,t.state
         FROM pcms_pending_material t
         <where>
