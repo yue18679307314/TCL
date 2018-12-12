@@ -2,31 +2,43 @@ package com.kuyu.model.pcms;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PcmsShop {
     private Integer sid;
 
     private String requestId;
 
+    @JsonProperty("SHOP_CRM_CODE")
     private String shopCrmCode;
 
+    @JsonProperty("SHOP_NAME")
     private String shopName;
 
+    @JsonProperty("SHOP_LEVEL")
     private String shopLevel;
 
+    @JsonProperty("SHOP_BRANCH")
     private String shopBranch;
 
+    @JsonProperty("SHOP_CUSTOMER")
     private String shopCustomer;
 
+    @JsonProperty("SHOP_CHANNEL")
     private String shopChannel;
 
+    @JsonProperty("SHOP_PROVINCE")
     private String shopProvince;
 
+    @JsonProperty("SHOP_CITY")
     private String shopCity;
 
+    @JsonProperty("SHOP_COUNTY")
     private String shopCounty;
 
     private String detailTask;
 
+    @JsonProperty("SHOP_SALES_AMOUNT")
     private String shopSalesAmount;
 
     private Date createTime;

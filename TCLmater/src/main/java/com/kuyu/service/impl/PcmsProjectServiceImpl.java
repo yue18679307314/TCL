@@ -19,6 +19,8 @@ import com.kuyu.mapper.pcms.PcmsMaterialMapper;
 import com.kuyu.mapper.pcms.PcmsMaterialSourceMapper;
 import com.kuyu.mapper.pcms.PcmsOthertmMapper;
 import com.kuyu.mapper.pcms.PcmsOthertmSourceMapper;
+import com.kuyu.mapper.pcms.PcmsOutdoorsMapper;
+import com.kuyu.mapper.pcms.PcmsProjectDeatilMapper;
 import com.kuyu.mapper.pcms.PcmsProjectMapper;
 import com.kuyu.mapper.pcms.PcmsShopMapper;
 import com.kuyu.mapper.pcms.PcmsShowcaseMapper;
@@ -35,7 +37,9 @@ import com.kuyu.model.pcms.PcmsMaterialSource;
 import com.kuyu.model.pcms.PcmsOthertm;
 import com.kuyu.model.pcms.PcmsOthertmExample;
 import com.kuyu.model.pcms.PcmsOthertmSource;
+import com.kuyu.model.pcms.PcmsOutdoors;
 import com.kuyu.model.pcms.PcmsProject;
+import com.kuyu.model.pcms.PcmsProjectDeatil;
 import com.kuyu.model.pcms.PcmsProjectExample;
 import com.kuyu.model.pcms.PcmsShop;
 import com.kuyu.model.pcms.PcmsShowcase;
@@ -47,6 +51,8 @@ import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsProjectVo;
+import com.kuyu.vo.pcms.PcmsProjectVo2;
+import com.kuyu.vo.pcms.ProjectDetailVo;
 import com.kuyu.vo.pcms.RequestUserVo;
 import com.kuyu.vo.project.OtherFeeOriginalModelVo;
 import com.kuyu.vo.project.ProjectDetialModelVo;
@@ -87,6 +93,12 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 	
 	@Autowired
 	private TpmEmployeeMapper tpmEmployeeMapper;
+	
+	@Autowired
+	private PcmsProjectDeatilMapper pcmsProjectDeatilMapper;
+	
+	@Autowired
+	private PcmsOutdoorsMapper pcmsOutdoorsMapper;
 
 	@Override
 	public String importProjectDetail(PcmsProjectVo projectvo) {
@@ -112,7 +124,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		BeanUtils.copyProperties(projectvo, peojct);
 		peojct.setRequestJson(JSON.toJSONString(projectvo));
 		peojct.setCreatTime(createTime);
-		peojct.setStatus(1);//设置为未拆单状态
+		peojct.setStatus(0);
 		pcmsProjectMapper.insertSelective(peojct);
 		
 		
@@ -500,8 +512,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				info.setResuestId(requestId);
 				info.setVendorId(material.getActivityVendor());
 				info.setMrname(material.getMaterialCategory());
-				//TODO 费用细类为空
-				info.setCost("");
+				info.setCost(allList.getFeeDetailType());
 				info.setSpecifications(material.getSpecifications());
 				info.setUnit(material.getUnit());
 				info.setNumber(material.getAmount().intValue());
@@ -515,6 +526,121 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		//导入物料单
 		this.importProjectDetail(projectvo);
 	}
+
+
+
+
+	@Override
+	public String importProjectDetail2(PcmsProjectVo2 projectvo) {
+		//获取申请单ID
+		String requestId=projectvo.getRequestId();
+		
+		//查询该立项单是否存在
+		PcmsProject query=pcmsProjectMapper.selectByPrimaryKey(requestId);
+		if(query!=null){
+			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_ERROR_CODE, "立项单已存在"));
+		}
+		
+		
+		Date createTime=new Date();
+		String requestDept=projectvo.getRequestDept();
+		Integer itemType=0;
+		
+		//获取门店信息列表
+		List<PcmsShop> shopList=projectvo.getShopList();
+		
+		//获取详情列表
+		List<ProjectDetailVo> detailList=projectvo.getDETAIL_LIST();
+		
+		//获取外层数据
+		PcmsProject project=new PcmsProject();
+		BeanUtils.copyProperties(projectvo, project);
+		
+		//写入外层数据
+		project.setRequestJson(JSON.toJSONString(projectvo));
+		project.setCreatTime(createTime);
+		project.setStatus(1);//未拆单
+		pcmsProjectMapper.insertSelective(project);
+		
+		
+		//写入门店信息
+		for (PcmsShop shop : shopList) {
+			PcmsShop target=new PcmsShop();
+			BeanUtils.copyProperties(shop, target);
+			shop.setRequestId(requestId);
+			pcmsShopMapper.insertSelective(shop);
+			
+		}
+		
+		//写入详情信息
+		for (ProjectDetailVo detail : detailList) {
+			String vendorId=detail.getDetailVendor();
+			
+			PcmsProjectDeatil target=new PcmsProjectDeatil();
+			BeanUtils.copyProperties(detail, target);
+			target.setRequestId(requestId);
+			pcmsProjectDeatilMapper.insertSelective(target);
+		
+			//展台展柜
+			List<PcmsShowcase> scList=detail.getCHILDREN1_LIST();
+			if(scList!=null&&scList.size()>0){
+				for (PcmsShowcase sc : scList) {
+					sc.setResuestId(requestId);
+					sc.setVendorId(vendorId);
+					pcmsShopcaseMapper.insertSelective(sc);
+					itemType=1;
+					
+					//复制数据
+	            	PcmsShowcaseSource soure=new PcmsShowcaseSource();
+	            	BeanUtils.copyProperties(sc, soure);
+	            	pcmsShowcaseSourceMapper.insertSelective(soure);
+				}
+			}
+			
+			//门头（数据未使用）
+			List<PcmsOutdoors> odList=detail.getCHILDREN2_LIST();
+			if(odList!=null&&odList.size()>0){
+				for (PcmsOutdoors od : odList) {
+					od.setRequestId(requestId);
+					pcmsOutdoorsMapper.insertSelective(od);
+					itemType=4;
+				}
+			}
+			
+			//其他终端
+			List<PcmsOthertm> otList=detail.getCHILDREN3_LIST();
+			if(otList!=null&&otList.size()>0){
+				for (PcmsOthertm ot : otList) {
+					ot.setRequestId(requestId);
+					ot.setVendorId(vendorId);
+					pcmsOthertmMapper.insertSelective(ot);
+					itemType=2;
+					
+					//复制数据
+	            	PcmsOthertmSource soure=new PcmsOthertmSource();
+	            	BeanUtils.copyProperties(ot, soure);
+	            	pcmsOthertmSourceMapper.insertSelective(soure);
+				}
+			}
+			
+			PcmsItem item=new PcmsItem();
+			item.setRequestCompanyCode(projectvo.getRequestCompanyCode());
+			item.setDeptCode(requestDept.substring(requestDept.indexOf("(")+1, requestDept.indexOf(")")));
+			item.setItemNumber(PcmsProjectUtil.creatItemNumber());
+			item.setVendorId(vendorId);
+			item.setRequestId(requestId);
+			item.setItemPrice(Double.valueOf(detail.getDetailAmount()));
+			item.setTitle(projectvo.getRequestTitle());
+			item.setItType(itemType);
+			item.setStatus(0);
+			item.setCreateTime(createTime);
+			
+			pcmsItemMapper.insertSelective(item);
+		}
+		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
+	}
+	
+	
 	
 	
 }

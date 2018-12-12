@@ -16,6 +16,7 @@ import com.kuyu.service.PcmsProjectService;
 import com.kuyu.service.TpmProjectService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsProjectVo;
+import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.RequestUserVo;
 import com.kuyu.vo.project.ProjectDetialModelVo;
 
@@ -33,7 +34,23 @@ public class ProjectController {
     private PcmsProjectService pcmsProjectService;
 	
 	
-	/**
+//	/**
+//     * 同步立项单
+//     * @param
+//     * @return
+//     * @throws Exception
+//     */
+//    @ApiOperation(value = "同步立项单")//00
+//    @PostMapping(value = "/import",produces = "application/json;charset=UTF-8")
+//    public String insertTpmProject(@ApiParam(value = "同步立项单数据", required = true)
+//    @RequestBody PcmsProjectVo projectvo)throws Exception{
+//    	
+//    	System.out.println(JSON.toJSONString(projectvo));
+//    	
+//        return pcmsProjectService.importProjectDetail(projectvo);
+//    }
+    
+    /**
      * 同步立项单
      * @param
      * @return
@@ -41,13 +58,14 @@ public class ProjectController {
      */
     @ApiOperation(value = "同步立项单")//00
     @PostMapping(value = "/import",produces = "application/json;charset=UTF-8")
-    public String insertTpmProject(@ApiParam(value = "同步立项单数据", required = true)
-    @RequestBody PcmsProjectVo projectvo)throws Exception{
+    public String insertTpmProject2(@ApiParam(value = "同步立项单数据", required = true)
+    @RequestBody PcmsProjectVo2 projectvo)throws Exception{
     	
     	System.out.println(JSON.toJSONString(projectvo));
     	
-        return pcmsProjectService.importProjectDetail(projectvo);
+        return pcmsProjectService.importProjectDetail2(projectvo);
     }
+    
     
     /**
      * 查看原始立项单

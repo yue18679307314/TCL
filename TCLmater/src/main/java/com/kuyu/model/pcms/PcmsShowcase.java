@@ -5,39 +5,34 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PcmsShowcase {
+	
     private Integer scid;
+
+    @JsonProperty("DETAIL_ID")
+    private Integer detailId;
 
     private String resuestId;
 
     private String vendorId;
 
-    @JsonProperty("CHILDREN1_TASK")
     private String children1Task;
 
-    @JsonProperty("CHILDREN1_LAST_BUILDTIME")
     private String children1LastBuildtime;
 
-    @JsonProperty("CHILDREN1_TYPE")
     private String children1Type;
 
-    @JsonProperty("CHILDREN1_REASON")
     private String children1Reason;
 
-    @JsonProperty("CHILDREN1_AREA")
     private String children1Area;
-    
-    @JsonProperty("CHILDREN1_LINEAR")
+
     private String children1Linear;
 
-    @JsonProperty("CHILDREN1_BUILDTIME")
     private String children1Buildtime;
 
     private String children1Vendor;
 
-    @JsonProperty("CHILDREN1_INNER")
     private String children1Inner;
 
-    @JsonProperty("CHILDREN1_OUTER")
     private String children1Outer;
 
     private String children1Amount;
@@ -50,6 +45,14 @@ public class PcmsShowcase {
 
     public void setScid(Integer scid) {
         this.scid = scid;
+    }
+
+    public Integer getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(Integer detailId) {
+        this.detailId = detailId;
     }
 
     public String getResuestId() {

@@ -165,6 +165,66 @@ public class PcmsShowcaseExample {
             return (Criteria) this;
         }
 
+        public Criteria andDetailIdIsNull() {
+            addCriterion("detail_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdIsNotNull() {
+            addCriterion("detail_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdEqualTo(Integer value) {
+            addCriterion("detail_id =", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotEqualTo(Integer value) {
+            addCriterion("detail_id <>", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdGreaterThan(Integer value) {
+            addCriterion("detail_id >", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("detail_id >=", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdLessThan(Integer value) {
+            addCriterion("detail_id <", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdLessThanOrEqualTo(Integer value) {
+            addCriterion("detail_id <=", value, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdIn(List<Integer> values) {
+            addCriterion("detail_id in", values, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotIn(List<Integer> values) {
+            addCriterion("detail_id not in", values, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdBetween(Integer value1, Integer value2) {
+            addCriterion("detail_id between", value1, value2, "detailId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("detail_id not between", value1, value2, "detailId");
+            return (Criteria) this;
+        }
+
         public Criteria andResuestIdIsNull() {
             addCriterion("resuest_id is null");
             return (Criteria) this;

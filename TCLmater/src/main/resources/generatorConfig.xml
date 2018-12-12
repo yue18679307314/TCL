@@ -14,7 +14,7 @@
         </commentGenerator>
  
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://100.168.1.199:3306/tpm1.0"
+                        connectionURL="jdbc:mysql://100.168.1.199:3306/tpm2.0"
                         userId="root"
                         password="123456">
         </jdbcConnection>
@@ -38,7 +38,7 @@
  
  
 	<!--  想要逆向生成的表在这里进行配置   -->
-		<table schema="gp" tableName="pcms_item_log" domainObjectName="PcmsItemLog">
+		<table schema="gp" tableName="pcms_othertm" domainObjectName="PcmsOthertm">
             <property name="useActualColumnNames" value="false"/>
             <!--<generatedKey column="ID" sqlStatement="DB2" identity="true"/>-->
             <columnOverride column="DATE_FIELD" property="startDate"/>
@@ -46,6 +46,13 @@
             <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR"/>
         </table>
  
+ 		<table schema="gp" tableName="pcms_showcase" domainObjectName="PcmsShowcase">
+            <property name="useActualColumnNames" value="false"/>
+            <!--<generatedKey column="ID" sqlStatement="DB2" identity="true"/>-->
+            <columnOverride column="DATE_FIELD" property="startDate"/>
+            <ignoreColumn column="FRED"/>
+            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR"/>
+        </table>
  		
  
     </context>
