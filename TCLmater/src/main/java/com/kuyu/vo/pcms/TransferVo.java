@@ -1,26 +1,28 @@
 package com.kuyu.vo.pcms;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 /**
  * Created by pc on 2018/12/10
  */
 public class TransferVo {
-
+    @ApiModelProperty("ID")
     private Integer id;
-
+    @ApiModelProperty("内容")
     private String context;
-
+    @ApiModelProperty("供应商名称")
     private String vendor_name;
-
+    @ApiModelProperty("负责人")
     private String request_user_name;
-
+    @ApiModelProperty("时间")
     private Date create_time;
-
+    @ApiModelProperty("状态")
     private Integer state;
-
+    @ApiModelProperty("类别")
     private String category;
-
+    @ApiModelProperty("规格")
     private String specifications;
 
     public String getContext() {

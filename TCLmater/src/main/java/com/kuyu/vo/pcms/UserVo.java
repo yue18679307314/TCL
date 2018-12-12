@@ -6,168 +6,58 @@ import io.swagger.annotations.ApiModelProperty;
  * Created by pc on 2018/12/11
  */
 public class UserVo {
-    @ApiModelProperty("地址")
-    private String address;
 
-    @ApiModelProperty("员工姓名")
-    private String cn;
+    @ApiModelProperty("分部编码")
+    private String branchId;
 
-    @ApiModelProperty("所属机构编码")
-    private String departmentNumber;
+    @ApiModelProperty("分部名称")
+    private String branchName;
 
-    @ApiModelProperty("所属机构名称")
-    private String departmentsPositions;
+    @ApiModelProperty("分公司编码")
+    private String filialeId;
 
-    @ApiModelProperty("展示顺序 按升序展示（从小到大）")
-    private String displayId;
+    @ApiModelProperty("分公司名称")
+    private String filialeName;
 
-    @ApiModelProperty("员工编码")
-    private String employeeNumber;
-
-    @ApiModelProperty("是否离职 3是在职。0是离职")
-    private String empstatus;
-
-    @ApiModelProperty("英文名")
-    private String en;
-
-    @ApiModelProperty("拓展属性，使用JSON格式存储")
-    private String extras;
-
-    @ApiModelProperty("员工性别")
-    private String gender;
-
-    @ApiModelProperty("邮箱")
-    private String mail;
-
-    @ApiModelProperty("手机")
-    private String mobile;
-
-    @ApiModelProperty("手机短号")
-    private String mobileShort;
-
-    @ApiModelProperty("职位")
+    @ApiModelProperty("职位名称")
     private String positionName;
 
-    @ApiModelProperty("职位英文名称")
-    private String positionNameEn;
+    @ApiModelProperty("用户编码")
+    private String userId;
 
-    @ApiModelProperty("姓名拼音")
-    private String py;
+    @ApiModelProperty("用户姓名")
+    private String userName;
 
-    @ApiModelProperty("电话号码")
-    private String telephoneNumber;
-
-    @ApiModelProperty("办公短号")
-    private String telephoneShort;
-
-    @ApiModelProperty("员工账号")
-    private String uId;
-
-    @ApiModelProperty("更新时间")
-    private String uploadTime;
-
-    public String getAddress() {
-        return address;
+    public String getBranchId() {
+        return branchId;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setBranchId(String branchId) {
+        this.branchId = branchId;
     }
 
-    public String getCn() {
-        return cn;
+    public String getBranchName() {
+        return branchName;
     }
 
-    public void setCn(String cn) {
-        this.cn = cn;
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
     }
 
-    public String getDepartmentNumber() {
-        return departmentNumber;
+    public String getFilialeId() {
+        return filialeId;
     }
 
-    public void setDepartmentNumber(String departmentNumber) {
-        this.departmentNumber = departmentNumber;
+    public void setFilialeId(String filialeId) {
+        this.filialeId = filialeId;
     }
 
-    public String getDepartmentsPositions() {
-        return departmentsPositions;
+    public String getFilialeName() {
+        return filialeName;
     }
 
-    public void setDepartmentsPositions(String departmentsPositions) {
-        this.departmentsPositions = departmentsPositions;
-    }
-
-    public String getDisplayId() {
-        return displayId;
-    }
-
-    public void setDisplayId(String displayId) {
-        this.displayId = displayId;
-    }
-
-    public String getEmployeeNumber() {
-        return employeeNumber;
-    }
-
-    public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
-    }
-
-    public String getEmpstatus() {
-        return empstatus;
-    }
-
-    public void setEmpstatus(String empstatus) {
-        this.empstatus = empstatus;
-    }
-
-    public String getEn() {
-        return en;
-    }
-
-    public void setEn(String en) {
-        this.en = en;
-    }
-
-    public String getExtras() {
-        return extras;
-    }
-
-    public void setExtras(String extras) {
-        this.extras = extras;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getMobileShort() {
-        return mobileShort;
-    }
-
-    public void setMobileShort(String mobileShort) {
-        this.mobileShort = mobileShort;
+    public void setFilialeName(String filialeName) {
+        this.filialeName = filialeName;
     }
 
     public String getPositionName() {
@@ -178,51 +68,19 @@ public class UserVo {
         this.positionName = positionName;
     }
 
-    public String getPositionNameEn() {
-        return positionNameEn;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setPositionNameEn(String positionNameEn) {
-        this.positionNameEn = positionNameEn;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getPy() {
-        return py;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setPy(String py) {
-        this.py = py;
-    }
-
-    public String getTelephoneNumber() {
-        return telephoneNumber;
-    }
-
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
-    }
-
-    public String getTelephoneShort() {
-        return telephoneShort;
-    }
-
-    public void setTelephoneShort(String telephoneShort) {
-        this.telephoneShort = telephoneShort;
-    }
-
-    public String getuId() {
-        return uId;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
-    }
-
-    public String getUploadTime() {
-        return uploadTime;
-    }
-
-    public void setUploadTime(String uploadTime) {
-        this.uploadTime = uploadTime;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
