@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsOutdoorsMapper">
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsOutdoors">
+    <result column="DETAIL_ID" jdbcType="VARCHAR" property="detailId" />
+    <result column="REQUEST_ID" jdbcType="VARCHAR" property="requestId" />
+    <result column="CHILDREN2_TASK" jdbcType="VARCHAR" property="children2Task" />
+    <result column="CHILDREN2_LAST_BUILDTIME" jdbcType="VARCHAR" property="children2LastBuildtime" />
+    <result column="CHILDREN2_AREA" jdbcType="VARCHAR" property="children2Area" />
+    <result column="CHILDREN2_AREA_DETAIL" jdbcType="VARCHAR" property="children2AreaDetail" />
+    <result column="CHILDREN2_BUILDTIME" jdbcType="VARCHAR" property="children2Buildtime" />
+    <result column="CHILDREN2_VENDOR" jdbcType="VARCHAR" property="children2Vendor" />
+    <result column="CHILDREN2_AMOUNT" jdbcType="VARCHAR" property="children2Amount" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    DETAIL_ID, REQUEST_ID, CHILDREN2_TASK, CHILDREN2_LAST_BUILDTIME, CHILDREN2_AREA, 
+    CHILDREN2_AREA_DETAIL, CHILDREN2_BUILDTIME, CHILDREN2_VENDOR, CHILDREN2_AMOUNT
+  </sql>
+  <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsOutdoorsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pcms_outdoors
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsOutdoorsExample">
+    delete from pcms_outdoors
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsOutdoors">
+    insert into pcms_outdoors (DETAIL_ID, REQUEST_ID, CHILDREN2_TASK, 
+      CHILDREN2_LAST_BUILDTIME, CHILDREN2_AREA, 
+      CHILDREN2_AREA_DETAIL, CHILDREN2_BUILDTIME, 
+      CHILDREN2_VENDOR, CHILDREN2_AMOUNT)
+    values (#{detailId,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, #{children2Task,jdbcType=VARCHAR}, 
+      #{children2LastBuildtime,jdbcType=VARCHAR}, #{children2Area,jdbcType=VARCHAR}, 
+      #{children2AreaDetail,jdbcType=VARCHAR}, #{children2Buildtime,jdbcType=VARCHAR}, 
+      #{children2Vendor,jdbcType=VARCHAR}, #{children2Amount,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsOutdoors">
+    insert into pcms_outdoors
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="detailId != null">
+        DETAIL_ID,
+      </if>
+      <if test="requestId != null">
+        REQUEST_ID,
+      </if>
+      <if test="children2Task != null">
+        CHILDREN2_TASK,
+      </if>
+      <if test="children2LastBuildtime != null">
+        CHILDREN2_LAST_BUILDTIME,
+      </if>
+      <if test="children2Area != null">
+        CHILDREN2_AREA,
+      </if>
+      <if test="children2AreaDetail != null">
+        CHILDREN2_AREA_DETAIL,
+      </if>
+      <if test="children2Buildtime != null">
+        CHILDREN2_BUILDTIME,
+      </if>
+      <if test="children2Vendor != null">
+        CHILDREN2_VENDOR,
+      </if>
+      <if test="children2Amount != null">
+        CHILDREN2_AMOUNT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="detailId != null">
+        #{detailId,jdbcType=VARCHAR},
+      </if>
+      <if test="requestId != null">
+        #{requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="children2Task != null">
+        #{children2Task,jdbcType=VARCHAR},
+      </if>
+      <if test="children2LastBuildtime != null">
+        #{children2LastBuildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="children2Area != null">
+        #{children2Area,jdbcType=VARCHAR},
+      </if>
+      <if test="children2AreaDetail != null">
+        #{children2AreaDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="children2Buildtime != null">
+        #{children2Buildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="children2Vendor != null">
+        #{children2Vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="children2Amount != null">
+        #{children2Amount,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsOutdoorsExample" resultType="java.lang.Integer">
+    select count(*) from pcms_outdoors
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update pcms_outdoors
+    <set>
+      <if test="record.detailId != null">
+        DETAIL_ID = #{record.detailId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestId != null">
+        REQUEST_ID = #{record.requestId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children2Task != null">
+        CHILDREN2_TASK = #{record.children2Task,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children2LastBuildtime != null">
+        CHILDREN2_LAST_BUILDTIME = #{record.children2LastBuildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children2Area != null">
+        CHILDREN2_AREA = #{record.children2Area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children2AreaDetail != null">
+        CHILDREN2_AREA_DETAIL = #{record.children2AreaDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children2Buildtime != null">
+        CHILDREN2_BUILDTIME = #{record.children2Buildtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children2Vendor != null">
+        CHILDREN2_VENDOR = #{record.children2Vendor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.children2Amount != null">
+        CHILDREN2_AMOUNT = #{record.children2Amount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update pcms_outdoors
+    set DETAIL_ID = #{record.detailId,jdbcType=VARCHAR},
+      REQUEST_ID = #{record.requestId,jdbcType=VARCHAR},
+      CHILDREN2_TASK = #{record.children2Task,jdbcType=VARCHAR},
+      CHILDREN2_LAST_BUILDTIME = #{record.children2LastBuildtime,jdbcType=VARCHAR},
+      CHILDREN2_AREA = #{record.children2Area,jdbcType=VARCHAR},
+      CHILDREN2_AREA_DETAIL = #{record.children2AreaDetail,jdbcType=VARCHAR},
+      CHILDREN2_BUILDTIME = #{record.children2Buildtime,jdbcType=VARCHAR},
+      CHILDREN2_VENDOR = #{record.children2Vendor,jdbcType=VARCHAR},
+      CHILDREN2_AMOUNT = #{record.children2Amount,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+ 
+</mapper>

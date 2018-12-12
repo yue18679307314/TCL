@@ -3,6 +3,7 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsOthertmMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsOthertm">
     <id column="otid" jdbcType="INTEGER" property="otid" />
+    <result column="detail_id" jdbcType="VARCHAR" property="detailId" />
     <result column="request_id" jdbcType="VARCHAR" property="requestId" />
     <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
     <result column="mrname3" jdbcType="VARCHAR" property="mrname3" />
@@ -78,9 +79,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    otid, request_id, vendor_id, mrname3, cost, unit, note, comparison_price, specifications3, 
-    CHILDREN3_DETAIL, CHILDREN3_VENDOR, CHILDREN3_BUILDTIME, CHILDREN3_COUNT, CHILDREN3_PRICE, 
-    CHILDREN3_AMOUNT, create_time
+    otid, detail_id, request_id, vendor_id, mrname3, cost, unit, note, comparison_price, 
+    specifications3, CHILDREN3_DETAIL, CHILDREN3_VENDOR, CHILDREN3_BUILDTIME, CHILDREN3_COUNT, 
+    CHILDREN3_PRICE, CHILDREN3_AMOUNT, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsOthertmExample" resultMap="BaseResultMap">
     select
@@ -113,24 +114,27 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsOthertm">
-    insert into pcms_othertm (otid, request_id, vendor_id, 
-      mrname3, cost, unit, 
-      note, comparison_price, specifications3, 
-      CHILDREN3_DETAIL, CHILDREN3_VENDOR, CHILDREN3_BUILDTIME, 
-      CHILDREN3_COUNT, CHILDREN3_PRICE, CHILDREN3_AMOUNT, 
-      create_time)
-    values (#{otid,jdbcType=INTEGER}, #{requestId,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
-      #{mrname3,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
-      #{note,jdbcType=VARCHAR}, #{comparisonPrice,jdbcType=VARCHAR}, #{specifications3,jdbcType=VARCHAR}, 
-      #{children3Detail,jdbcType=VARCHAR}, #{children3Vendor,jdbcType=VARCHAR}, #{children3Buildtime,jdbcType=VARCHAR}, 
-      #{children3Count,jdbcType=VARCHAR}, #{children3Price,jdbcType=VARCHAR}, #{children3Amount,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into pcms_othertm (otid, detail_id, request_id, 
+      vendor_id, mrname3, cost, 
+      unit, note, comparison_price, 
+      specifications3, CHILDREN3_DETAIL, CHILDREN3_VENDOR, 
+      CHILDREN3_BUILDTIME, CHILDREN3_COUNT, CHILDREN3_PRICE, 
+      CHILDREN3_AMOUNT, create_time)
+    values (#{otid,jdbcType=INTEGER}, #{detailId,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, 
+      #{vendorId,jdbcType=VARCHAR}, #{mrname3,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{comparisonPrice,jdbcType=VARCHAR}, 
+      #{specifications3,jdbcType=VARCHAR}, #{children3Detail,jdbcType=VARCHAR}, #{children3Vendor,jdbcType=VARCHAR}, 
+      #{children3Buildtime,jdbcType=VARCHAR}, #{children3Count,jdbcType=VARCHAR}, #{children3Price,jdbcType=VARCHAR}, 
+      #{children3Amount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsOthertm">
     insert into pcms_othertm
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="otid != null">
         otid,
+      </if>
+      <if test="detailId != null">
+        detail_id,
       </if>
       <if test="requestId != null">
         request_id,
@@ -181,6 +185,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="otid != null">
         #{otid,jdbcType=INTEGER},
+      </if>
+      <if test="detailId != null">
+        #{detailId,jdbcType=VARCHAR},
       </if>
       <if test="requestId != null">
         #{requestId,jdbcType=VARCHAR},
@@ -241,6 +248,9 @@
       <if test="record.otid != null">
         otid = #{record.otid,jdbcType=INTEGER},
       </if>
+      <if test="record.detailId != null">
+        detail_id = #{record.detailId,jdbcType=VARCHAR},
+      </if>
       <if test="record.requestId != null">
         request_id = #{record.requestId,jdbcType=VARCHAR},
       </if>
@@ -294,6 +304,7 @@
   <update id="updateByExample" parameterType="map">
     update pcms_othertm
     set otid = #{record.otid,jdbcType=INTEGER},
+      detail_id = #{record.detailId,jdbcType=VARCHAR},
       request_id = #{record.requestId,jdbcType=VARCHAR},
       vendor_id = #{record.vendorId,jdbcType=VARCHAR},
       mrname3 = #{record.mrname3,jdbcType=VARCHAR},
@@ -316,6 +327,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsOthertm">
     update pcms_othertm
     <set>
+      <if test="detailId != null">
+        detail_id = #{detailId,jdbcType=VARCHAR},
+      </if>
       <if test="requestId != null">
         request_id = #{requestId,jdbcType=VARCHAR},
       </if>
@@ -366,7 +380,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsOthertm">
     update pcms_othertm
-    set request_id = #{requestId,jdbcType=VARCHAR},
+    set detail_id = #{detailId,jdbcType=VARCHAR},
+      request_id = #{requestId,jdbcType=VARCHAR},
       vendor_id = #{vendorId,jdbcType=VARCHAR},
       mrname3 = #{mrname3,jdbcType=VARCHAR},
       cost = #{cost,jdbcType=VARCHAR},
@@ -383,6 +398,7 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where otid = #{otid,jdbcType=INTEGER}
   </update>
+ 
 
   
   <!-- ============================================================================================== -->

@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PcmsOthertm {
     private Integer otid;
 
+    @JsonProperty("DETAIL_ID")
+    private String detailId;
+
     private String requestId;
 
     private String vendorId;
@@ -29,13 +32,10 @@ public class PcmsOthertm {
 
     private String children3Buildtime;
 
-    @JsonProperty("CHILDREN3_COUNT")
     private String children3Count;
 
-    @JsonProperty("CHILDREN3_PRICE")
     private String children3Price;
 
-    @JsonProperty("CHILDREN3_AMOUNT")
     private String children3Amount;
 
     private Date createTime;
@@ -46,6 +46,14 @@ public class PcmsOthertm {
 
     public void setOtid(Integer otid) {
         this.otid = otid;
+    }
+
+    public String getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(String detailId) {
+        this.detailId = detailId == null ? null : detailId.trim();
     }
 
     public String getRequestId() {
