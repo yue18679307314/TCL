@@ -9,6 +9,8 @@ import com.kuyu.service.ReceiptService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ReceiptDetailVo;
 import com.kuyu.vo.pcms.TransferDetailVo;
+import com.kuyu.vo.pcms.TransferVo;
+import com.kuyu.vo.pcms.UserVo;
 import com.kuyu.vo.query.FeedbackQuery;
 import com.kuyu.vo.query.SettlementQuery;
 import com.kuyu.vo.query.TransferQuery;
@@ -97,10 +99,10 @@ public class PcmsMarketController extends BaseController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "根据姓名查询员工",response = PcmsItemLog.class)
+    @ApiOperation(value = "根据姓名查询员工",response = UserVo.class)
     @GetMapping("/selectByName")
-    public ResultVo selectByName(/*@RequestParam(value = "name") String name*/)throws Exception{
-        return receiptService.selectByName(/*name,getLoginUserInfo()*/);
+    public ResultVo selectByName(@RequestParam(value = "name") String name)throws Exception{
+        return receiptService.selectByName(name,getLoginUserInfo());
     }
 
     /**
@@ -158,7 +160,7 @@ public class PcmsMarketController extends BaseController {
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "转办管理",response = PcmsPendingMaterialModel.class)
+    @ApiOperation(value = "转办管理",response = TransferVo.class)
     @GetMapping("/selectTransfer")
     public ResultVo selectTransfer(TransferQuery query)throws Exception{
         return receiptService.selectTransfer(query,getLoginUserInfo());

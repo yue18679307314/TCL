@@ -1,26 +1,28 @@
 package com.kuyu.vo.pcms;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 
 /**
  * Created by pc on 2018/12/11
  */
 public class TransferDetailVo {
-
+    @ApiModelProperty("ID")
     private Integer id;
-
+    @ApiModelProperty("转办的内容")
     private String context;
-
+    @ApiModelProperty("供应商名称")
     private String vendor_name;
-
+    @ApiModelProperty("负责人")
     private String request_user_name;
-
+    @ApiModelProperty("状态")
     private Integer state;
-
+    @ApiModelProperty("类别")
     private String category;
-
+    @ApiModelProperty("规格")
     private String specifications;
-
+    @ApiModelProperty("反馈信息")
     private List<FeedbackVo> listFeedbackVo;
 
     public Integer getId() {

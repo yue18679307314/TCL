@@ -1,5 +1,6 @@
 package com.kuyu.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.exception.ParamException;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -610,15 +612,21 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
-    public ResultVo selectByName(/*String name, LoginUserInfo userInfo*/) throws Exception {
-        String token = "QTAyNERBNDkwMzEyRTgwRTkwOENDRDc5MEVBOTFFOURDNTEyNUY4ODMwRjIyQjM3QTVBNzEyQjk4MEUzNThFOQ";
-        String userId ="panwj";
-        String name = "李国栋";
-        String param = "token="+token+"&userId="+userId+"&param="+name;
+    public ResultVo selectByName(String name, LoginUserInfo userInfo) throws Exception {
+        String token = ("QTAyNERBNDkwMzEyRTgwRTkwOENDRDc5MEVBOTFFOURDNTEyNUY4ODMwRjIyQjM3QTVBNzEyQjk4MEUzNThFOQ==");
+//        String userId = ("panwj");
+//        String name = ("李国栋");
+        String param = "token="+token+"&userId="+userInfo.getEmployeeModel().getItcode()+"&param="+ URLEncoder.encode(name,"utf-8");
         log.info("准备调用查询用户接口,参数为:{}",param);
         String message = HttpRequest.sendGet(tpmUrl, param);
         log.info("调用询用户接口结束，返回的数据为：{}",message);
-        return ResultVo.getDataWithSuccess(message);
+        MemberVo memberVo = JSON.parseObject(message, MemberVo.class);
+        if("0".equals(memberVo.getErrcode())){
+            List<UserVo> list = memberVo.getResult();
+            return ResultVo.getDataWithSuccess(list);
+        }
+        return ResultVo.getDataWithSuccess(null);
+
     }
 
     @Override
