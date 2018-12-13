@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kuyu.mapper.pcms.PcmsMaterialSourceMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsMaterialSource">
-    <result column="mrid" jdbcType="INTEGER" property="mrid" />
+    <id column="mrid" jdbcType="INTEGER" property="mrid" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
     <result column="resuest_id" jdbcType="VARCHAR" property="resuestId" />
     <result column="mrtype" jdbcType="INTEGER" property="mrtype" />
     <result column="mrcode" jdbcType="INTEGER" property="mrcode" />
@@ -81,8 +82,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    mrid, resuest_id, mrtype, mrcode, vendor_id, mrname, cost, specifications, unit, 
-    unit_price, number, min_range, max_range, range_price, comparison_price, status, 
+    mrid, activity_id, resuest_id, mrtype, mrcode, vendor_id, mrname, cost, specifications, 
+    unit, unit_price, number, min_range, max_range, range_price, comparison_price, status, 
     note, update_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialSourceExample" resultMap="BaseResultMap">
@@ -99,6 +100,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pcms_material_source
+    where mrid = #{mrid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from pcms_material_source
+    where mrid = #{mrid,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialSourceExample">
     delete from pcms_material_source
     <if test="_parameter != null">
@@ -106,26 +117,29 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsMaterialSource">
-    insert into pcms_material_source (mrid, resuest_id, mrtype, 
-      mrcode, vendor_id, mrname, 
-      cost, specifications, unit, 
-      unit_price, number, min_range, 
-      max_range, range_price, comparison_price, 
-      status, note, update_time, 
-      create_time)
-    values (#{mrid,jdbcType=INTEGER}, #{resuestId,jdbcType=VARCHAR}, #{mrtype,jdbcType=INTEGER}, 
-      #{mrcode,jdbcType=INTEGER}, #{vendorId,jdbcType=VARCHAR}, #{mrname,jdbcType=VARCHAR}, 
-      #{cost,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
-      #{unitPrice,jdbcType=DOUBLE}, #{number,jdbcType=INTEGER}, #{minRange,jdbcType=INTEGER}, 
-      #{maxRange,jdbcType=INTEGER}, #{rangePrice,jdbcType=VARCHAR}, #{comparisonPrice,jdbcType=DOUBLE}, 
-      #{status,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into pcms_material_source (mrid, activity_id, resuest_id, 
+      mrtype, mrcode, vendor_id, 
+      mrname, cost, specifications, 
+      unit, unit_price, number, 
+      min_range, max_range, range_price, 
+      comparison_price, status, note, 
+      update_time, create_time)
+    values (#{mrid,jdbcType=INTEGER}, #{activityId,jdbcType=VARCHAR}, #{resuestId,jdbcType=VARCHAR}, 
+      #{mrtype,jdbcType=INTEGER}, #{mrcode,jdbcType=INTEGER}, #{vendorId,jdbcType=VARCHAR}, 
+      #{mrname,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DOUBLE}, #{number,jdbcType=INTEGER}, 
+      #{minRange,jdbcType=INTEGER}, #{maxRange,jdbcType=INTEGER}, #{rangePrice,jdbcType=VARCHAR}, 
+      #{comparisonPrice,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsMaterialSource">
     insert into pcms_material_source
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="mrid != null">
         mrid,
+      </if>
+      <if test="activityId != null">
+        activity_id,
       </if>
       <if test="resuestId != null">
         resuest_id,
@@ -185,6 +199,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="mrid != null">
         #{mrid,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=VARCHAR},
       </if>
       <if test="resuestId != null">
         #{resuestId,jdbcType=VARCHAR},
@@ -254,6 +271,9 @@
       <if test="record.mrid != null">
         mrid = #{record.mrid,jdbcType=INTEGER},
       </if>
+      <if test="record.activityId != null">
+        activity_id = #{record.activityId,jdbcType=VARCHAR},
+      </if>
       <if test="record.resuestId != null">
         resuest_id = #{record.resuestId,jdbcType=VARCHAR},
       </if>
@@ -316,6 +336,7 @@
   <update id="updateByExample" parameterType="map">
     update pcms_material_source
     set mrid = #{record.mrid,jdbcType=INTEGER},
+      activity_id = #{record.activityId,jdbcType=VARCHAR},
       resuest_id = #{record.resuestId,jdbcType=VARCHAR},
       mrtype = #{record.mrtype,jdbcType=INTEGER},
       mrcode = #{record.mrcode,jdbcType=INTEGER},
@@ -338,24 +359,111 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsMaterialSource">
+    update pcms_material_source
+    <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=VARCHAR},
+      </if>
+      <if test="resuestId != null">
+        resuest_id = #{resuestId,jdbcType=VARCHAR},
+      </if>
+      <if test="mrtype != null">
+        mrtype = #{mrtype,jdbcType=INTEGER},
+      </if>
+      <if test="mrcode != null">
+        mrcode = #{mrcode,jdbcType=INTEGER},
+      </if>
+      <if test="vendorId != null">
+        vendor_id = #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="mrname != null">
+        mrname = #{mrname,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null">
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null">
+        unit_price = #{unitPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="minRange != null">
+        min_range = #{minRange,jdbcType=INTEGER},
+      </if>
+      <if test="maxRange != null">
+        max_range = #{maxRange,jdbcType=INTEGER},
+      </if>
+      <if test="rangePrice != null">
+        range_price = #{rangePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="comparisonPrice != null">
+        comparison_price = #{comparisonPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where mrid = #{mrid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsMaterialSource">
+    update pcms_material_source
+    set activity_id = #{activityId,jdbcType=VARCHAR},
+      resuest_id = #{resuestId,jdbcType=VARCHAR},
+      mrtype = #{mrtype,jdbcType=INTEGER},
+      mrcode = #{mrcode,jdbcType=INTEGER},
+      vendor_id = #{vendorId,jdbcType=VARCHAR},
+      mrname = #{mrname,jdbcType=VARCHAR},
+      cost = #{cost,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      unit_price = #{unitPrice,jdbcType=DOUBLE},
+      number = #{number,jdbcType=INTEGER},
+      min_range = #{minRange,jdbcType=INTEGER},
+      max_range = #{maxRange,jdbcType=INTEGER},
+      range_price = #{rangePrice,jdbcType=VARCHAR},
+      comparison_price = #{comparisonPrice,jdbcType=DOUBLE},
+      status = #{status,jdbcType=INTEGER},
+      note = #{note,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where mrid = #{mrid,jdbcType=INTEGER}
+  </update>
   
   <!-- ============================================================================================== -->
 <select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.MaterialResult">
 	SELECT
-	b.mrid,
-	b.mrname,
-	b.cost,
-	b.specifications,
-	b.number,
-	b.unit,
-	b.comparison_price,
-	b.number*b.comparison_price AS sumPrice,
-	b.note
-FROM
-	pcms_item_relation a
-LEFT JOIN pcms_material_source b ON a.relation_id = b.mrid
-WHERE
-	a.itid = #{itid}
+		b.mrid,
+		b.mrname,
+		b.cost,
+		b.specifications,
+		b.number,
+		b.unit,
+		b.comparison_price,
+		b.number*b.unit_price AS sumPrice,
+		b.note,
+		b.unit_price AS unitPrice
+	FROM
+		pcms_item a
+	LEFT JOIN pcms_material_source b ON a.detail_id=b.activity_id
+	WHERE
+		a.itid = #{itid}
 </select>
   
 </mapper>

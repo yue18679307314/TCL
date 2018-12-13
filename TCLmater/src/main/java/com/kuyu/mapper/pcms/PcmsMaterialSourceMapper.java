@@ -12,15 +12,23 @@ public interface PcmsMaterialSourceMapper {
 
     int deleteByExample(PcmsMaterialSourceExample example);
 
+    int deleteByPrimaryKey(Integer mrid);
+
     int insert(PcmsMaterialSource record);
 
     int insertSelective(PcmsMaterialSource record);
 
     List<PcmsMaterialSource> selectByExample(PcmsMaterialSourceExample example);
 
+    PcmsMaterialSource selectByPrimaryKey(Integer mrid);
+
     int updateByExampleSelective(@Param("record") PcmsMaterialSource record, @Param("example") PcmsMaterialSourceExample example);
 
     int updateByExample(@Param("record") PcmsMaterialSource record, @Param("example") PcmsMaterialSourceExample example);
+
+    int updateByPrimaryKeySelective(PcmsMaterialSource record);
+
+    int updateByPrimaryKey(PcmsMaterialSource record);
 
 	List<MaterialResult> selectByItid(Integer itid);
 }

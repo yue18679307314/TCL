@@ -101,6 +101,13 @@ public class ActivityOriginalModelVo{
     @JsonProperty("ACTIVITY_MEMO")
     @ApiModelProperty(value = "备注（申请人填写）",position = -35)
     private String note;
+    
+    /**
+     * 供应商
+     */
+    @JsonProperty("ACTIVITY_VENDOR")
+    @ApiModelProperty(value = "供应商",position = -34)
+    private String vendorId;
 
     public String getProjectId(){
         return projectId;
@@ -213,4 +220,14 @@ public class ActivityOriginalModelVo{
     public void setNote(String note){
         this.note = note;
     }
+
+	public String getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(String vendorId) {
+		this.vendorId = vendorId;
+	}
+    
+    
 }

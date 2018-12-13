@@ -460,7 +460,7 @@
 			a.request_id AS requestId,
 			c.REQUEST_TITLE AS requestTitle,
 			a.item_number AS itemNumber,
-			d.DETAIL_ACCOUNT AS detailAccount,
+			IFNULL(d.DETAIL_ACCOUNT,f.fee_detail_type) AS detailAccount,
 			a.item_price AS itemPrice,
 			e.person_name AS requestUserName,
 			c.REQUEST_DEPT AS deptName,
@@ -473,6 +473,7 @@
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 	  LEFT JOIN pcms_project_deatil d ON a.detail_id=d.DETAIL_ID
 		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
+		LEFT JOIN tpm_activity_original f ON f.project_id=a.detail_id
 		WHERE 1=1 
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
@@ -503,7 +504,8 @@
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 		LEFT JOIN pcms_project_deatil d ON a.detail_id=d.DETAIL_ID
-		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
+		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER 
+		LEFT JOIN tpm_activity_original f ON f.project_id=a.detail_id
 		WHERE 1=1 
 <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
@@ -564,11 +566,11 @@
 			b.vendor_id as vendor_id,
 			a.request_id AS requestId,
 			c.REQUEST_TITLE AS requestTitle,
-			f.DETAIL_ACCOUNT AS detailAccount,
+			IFNULL(f.DETAIL_ACCOUNT,h.fee_detail_type) AS detailAccount,
 			c.finance_user_name AS financeUserName,
 			c.REQUEST_COMPANY_CODE AS requestCompanyCode,
 			j.person_name AS requestUserName,
-			f.DETAIL_SUBJECT AS detailSubject,
+			IFNULL(f.DETAIL_SUBJECT,k.org_name) AS detailSubject,
 			c.REQUEST_DEPT AS requestDept,
 			c.REQUEST_CREATE_TIME AS requestCreateTime,
 			c.REQUEST_END_TIME AS requestEndTime,
@@ -588,6 +590,8 @@
 		LEFT JOIN pcms_shop e ON e.REQUEST_ID=c.REQUEST_ID
 		LEFT JOIN pcms_project_deatil f ON a.detail_id=f.DETAIL_ID
 		LEFT JOIN tpm_employee j ON c.REQUEST_USER=j.person_code 
-		where a.itid=#{itid}
+		LEFT JOIN tpm_activity_original h ON a.detail_id=h.project_id
+		LEFT JOIN tpm_dept k ON h.dept=k.org_code
+		WHERE a.itid=#{itid}
   </select>
 </mapper>

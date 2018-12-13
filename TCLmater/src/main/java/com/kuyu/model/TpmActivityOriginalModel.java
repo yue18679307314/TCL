@@ -109,7 +109,12 @@ public class TpmActivityOriginalModel extends Model<TpmActivityOriginalModel> {
 	@ApiModelProperty(value = "备注（申请人填写）",position = -35)
 	private String note;
 
-
+	/**
+     * 供应商id
+     */
+	@TableField("vendor_id")
+	@ApiModelProperty(value = "供应商id",position = -34)
+	private String vendorId;
 
 	public String getRequest_id() {
 		return request_id;
@@ -238,4 +243,13 @@ public class TpmActivityOriginalModel extends Model<TpmActivityOriginalModel> {
 	protected Serializable pkVal() {
 		return this.projectId;
 	}
+
+	public String getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(String vendorId) {
+		this.vendorId = vendorId;
+	}
+	
 }

@@ -2,13 +2,18 @@ package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
+import com.kuyu.exception.ParamException;
+import com.kuyu.model.pcms.PcmsSupplierCompanyModel;
 import com.kuyu.model.pcms.PcmsSupplierInvoiceModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.service.PcmsSupplierCompanyService;
 import com.kuyu.service.PcmsSupplierService;
+import com.kuyu.util.DateUtils;
+import com.kuyu.util.HttpUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.FinancialResultVo;
 import com.kuyu.vo.PcmsSupplierVo;
+import com.kuyu.vo.PsmsCompanyVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import io.swagger.annotations.Api;
@@ -19,7 +24,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zyl on 2018/11/14

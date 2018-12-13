@@ -5,6 +5,8 @@ import java.util.Date;
 public class PcmsMaterial {
     private Integer mrid;
 
+    private String activityId;
+
     private String resuestId;
 
     private Integer mrtype;
@@ -47,6 +49,14 @@ public class PcmsMaterial {
 
     public void setMrid(Integer mrid) {
         this.mrid = mrid;
+    }
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId == null ? null : activityId.trim();
     }
 
     public String getResuestId() {

@@ -489,44 +489,122 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 
 
 
+//	@Override
+//	public void importProjectMaterialDetail(ProjectDetialModelVo vo) {
+//		PcmsProjectVo projectvo=new PcmsProjectVo();
+//		String requestId=vo.getRequestId();
+//		projectvo.setRequestId(requestId);
+//		projectvo.setRequestTitle(vo.getRequestTitle());
+//		projectvo.setRequestCompanyCode(vo.getRequestCompanyCode());
+//		projectvo.setType("3");
+//		projectvo.setRequestCreateTime(vo.getRequestCreateTime());
+//		projectvo.setRequestEndTime(vo.getRequestEndTime());
+//		projectvo.setREQUEST_USER(vo.getRequestUser());
+//		
+//		
+//		List<PcmsMaterial> materialList=new ArrayList<>();
+//		
+//		List<TpmActivityOriginalModelVo> ActivityOriginalList=vo.getActivityOriginalList();
+//		for (TpmActivityOriginalModelVo allList : ActivityOriginalList) {
+//			List<OtherFeeOriginalModelVo> meList=allList.getOtherFeeOriginalModelList();
+//			for (OtherFeeOriginalModelVo material : meList) {
+//				PcmsMaterial info=new PcmsMaterial();
+//				info.setResuestId(requestId);
+//				info.setVendorId(material.getActivityVendor());
+//				info.setMrname(material.getMaterialCategory());
+//				info.setCost(allList.getFeeDetailType());
+//				info.setSpecifications(material.getSpecifications());
+//				info.setUnit(material.getUnit());
+//				info.setNumber(material.getAmount().intValue());
+//				info.setUnitPrice(material.getUnitPrice());
+//				
+//				materialList.add(info);
+//			}
+//		}
+//		projectvo.setMaterialList(materialList);
+//		
+//		//导入物料单
+//		this.importProjectDetail(projectvo);
+//	}
+
 	@Override
 	public void importProjectMaterialDetail(ProjectDetialModelVo vo) {
-		PcmsProjectVo projectvo=new PcmsProjectVo();
+		
+		Date createTime=new Date();
+		
+		
+		//数据转换
+		PcmsProjectVo2 projectvo=new PcmsProjectVo2();
 		String requestId=vo.getRequestId();
-		projectvo.setRequestId(requestId);
-		projectvo.setRequestTitle(vo.getRequestTitle());
-		projectvo.setRequestCompanyCode(vo.getRequestCompanyCode());
-		projectvo.setType("3");
-		projectvo.setRequestCreateTime(vo.getRequestCreateTime());
-		projectvo.setRequestEndTime(vo.getRequestEndTime());
-		projectvo.setREQUEST_USER(vo.getRequestUser());
+//		projectvo.setRequestId(requestId);
+//		projectvo.setRequestTitle(vo.getRequestTitle());
+//		projectvo.setRequestUser(vo.getRequestUser());
+//		projectvo.setRequestCreateTime(vo.getRequestCreateTime());
+//		projectvo.setRequestEndTime(vo.getRequestEndTime());
+//		projectvo.setRequestTelphone(vo.getRequestTelphone());
+//		projectvo.setRequestEmail(vo.getRequestEmail());
+//		projectvo.setRequestDept(vo.getRequestDept());
+//		projectvo.setRequestInfo(vo.getRequestInfo());
+//		projectvo.setRequestCompanyCode(vo.getRequestCompanyCode());
+		BeanUtils.copyProperties(vo, projectvo);
 		
+		//获取外层数据
+		PcmsProject project=new PcmsProject();
+		BeanUtils.copyProperties(projectvo, project);
+		String requestDept=projectvo.getRequestDept();
 		
-		List<PcmsMaterial> materialList=new ArrayList<>();
+		//写入外层数据
+		project.setRequestJson(JSON.toJSONString(projectvo));
+		project.setCreatTime(createTime);
+		project.setStatus(1);//未拆单
+		pcmsProjectMapper.insertSelective(project);
+		
 		
 		List<TpmActivityOriginalModelVo> ActivityOriginalList=vo.getActivityOriginalList();
 		for (TpmActivityOriginalModelVo allList : ActivityOriginalList) {
+			String activityId=allList.getProjectId();
+			String vendorId=allList.getVendorId();
 			List<OtherFeeOriginalModelVo> meList=allList.getOtherFeeOriginalModelList();
 			for (OtherFeeOriginalModelVo material : meList) {
 				PcmsMaterial info=new PcmsMaterial();
 				info.setResuestId(requestId);
-				info.setVendorId(material.getActivityVendor());
+				info.setVendorId(vendorId);
 				info.setMrname(material.getMaterialCategory());
 				info.setCost(allList.getFeeDetailType());
 				info.setSpecifications(material.getSpecifications());
 				info.setUnit(material.getUnit());
 				info.setNumber(material.getAmount().intValue());
 				info.setUnitPrice(material.getUnitPrice());
+				info.setActivityId(activityId);
+				pcmsMaterialMapper.insertSelective(info);
 				
-				materialList.add(info);
+				
+				//复制数据
+            	PcmsMaterialSource soure=new PcmsMaterialSource();
+            	BeanUtils.copyProperties(info, soure);
+            	pcmsMaterialSourceMapper.insertSelective(soure);
 			}
+			
+			PcmsItem item=new PcmsItem();
+			item.setDetailId(activityId);
+			item.setRequestCompanyCode(projectvo.getRequestCompanyCode());
+			item.setDeptCode(requestDept);
+			item.setItemNumber(PcmsProjectUtil.creatItemNumber());
+			item.setVendorId(vendorId);
+			item.setRequestId(requestId);
+			item.setItemPrice(Double.valueOf(allList.getTotalFee()));
+			item.setTitle(projectvo.getRequestTitle());
+			item.setItType(3);
+			item.setStatus(0);
+			item.setCreateTime(createTime);
+			
+			pcmsItemMapper.insertSelective(item);
+			
 		}
-		projectvo.setMaterialList(materialList);
 		
 		//导入物料单
-		this.importProjectDetail(projectvo);
+//		this.importProjectDetail(projectvo);
 	}
-
 
 
 
