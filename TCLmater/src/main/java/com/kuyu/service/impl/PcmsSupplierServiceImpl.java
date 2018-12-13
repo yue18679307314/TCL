@@ -1,15 +1,11 @@
 package com.kuyu.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.DocumentException;
 import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.PcmsInvoiceImageMapper;
-import com.kuyu.mapper.pcms.PcmsSupplierCompanyMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierInvoiceMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMapper;
 import com.kuyu.model.LoginUserInfo;
@@ -25,21 +21,6 @@ import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsSupplierModelVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.CellRangeAddress;
-import org.apache.poi.ss.formula.functions.T;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -49,11 +30,17 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.CellRangeAddress;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.*;
 
 /**
  * Created by pc on 2018/11/14
