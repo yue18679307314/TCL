@@ -49,6 +49,13 @@ public class TpmActivityModel extends Model<TpmActivityModel> {
 	@TableField("project_id")
 	@ApiModelProperty(value = "立项申请单活动id",position = -48)
 	private String projectId;
+	/**
+     * 供应商id
+	 * TpmActivityOriginalModel
+     */
+	@TableField("vendor_id")
+	@ApiModelProperty(value = "供应商id",position = -48)
+	private String vendorId;
     /**
      * 申请日期
 	 * TpmProjectModel
@@ -367,4 +374,17 @@ public class TpmActivityModel extends Model<TpmActivityModel> {
 	protected Serializable pkVal() {
 		return this.activityUuid;
 	}
+
+	public String getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(String vendorId) {
+		this.vendorId = vendorId;
+	}
+	
+	
+	
 }
+
+

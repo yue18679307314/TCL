@@ -3,6 +3,7 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsMaterialMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsMaterial">
     <id column="mrid" jdbcType="INTEGER" property="mrid" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
     <result column="resuest_id" jdbcType="VARCHAR" property="resuestId" />
     <result column="mrtype" jdbcType="INTEGER" property="mrtype" />
     <result column="mrcode" jdbcType="INTEGER" property="mrcode" />
@@ -81,8 +82,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    mrid, resuest_id, mrtype, mrcode, vendor_id, mrname, cost, specifications, unit, 
-    unit_price, number, min_range, max_range, range_price, comparison_price, status, 
+    mrid, activity_id, resuest_id, mrtype, mrcode, vendor_id, mrname, cost, specifications, 
+    unit, unit_price, number, min_range, max_range, range_price, comparison_price, status, 
     note, update_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsMaterialExample" resultMap="BaseResultMap">
@@ -116,26 +117,29 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsMaterial">
-    insert into pcms_material (mrid, resuest_id, mrtype, 
-      mrcode, vendor_id, mrname, 
-      cost, specifications, unit, 
-      unit_price, number, min_range, 
-      max_range, range_price, comparison_price, 
-      status, note, update_time, 
-      create_time)
-    values (#{mrid,jdbcType=INTEGER}, #{resuestId,jdbcType=VARCHAR}, #{mrtype,jdbcType=INTEGER}, 
-      #{mrcode,jdbcType=INTEGER}, #{vendorId,jdbcType=VARCHAR}, #{mrname,jdbcType=VARCHAR}, 
-      #{cost,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
-      #{unitPrice,jdbcType=DOUBLE}, #{number,jdbcType=INTEGER}, #{minRange,jdbcType=INTEGER}, 
-      #{maxRange,jdbcType=INTEGER}, #{rangePrice,jdbcType=VARCHAR}, #{comparisonPrice,jdbcType=DOUBLE}, 
-      #{status,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into pcms_material (mrid, activity_id, resuest_id, 
+      mrtype, mrcode, vendor_id, 
+      mrname, cost, specifications, 
+      unit, unit_price, number, 
+      min_range, max_range, range_price, 
+      comparison_price, status, note, 
+      update_time, create_time)
+    values (#{mrid,jdbcType=INTEGER}, #{activityId,jdbcType=VARCHAR}, #{resuestId,jdbcType=VARCHAR}, 
+      #{mrtype,jdbcType=INTEGER}, #{mrcode,jdbcType=INTEGER}, #{vendorId,jdbcType=VARCHAR}, 
+      #{mrname,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{unitPrice,jdbcType=DOUBLE}, #{number,jdbcType=INTEGER}, 
+      #{minRange,jdbcType=INTEGER}, #{maxRange,jdbcType=INTEGER}, #{rangePrice,jdbcType=VARCHAR}, 
+      #{comparisonPrice,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, #{note,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsMaterial">
     insert into pcms_material
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="mrid != null">
         mrid,
+      </if>
+      <if test="activityId != null">
+        activity_id,
       </if>
       <if test="resuestId != null">
         resuest_id,
@@ -195,6 +199,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="mrid != null">
         #{mrid,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=VARCHAR},
       </if>
       <if test="resuestId != null">
         #{resuestId,jdbcType=VARCHAR},
@@ -264,6 +271,9 @@
       <if test="record.mrid != null">
         mrid = #{record.mrid,jdbcType=INTEGER},
       </if>
+      <if test="record.activityId != null">
+        activity_id = #{record.activityId,jdbcType=VARCHAR},
+      </if>
       <if test="record.resuestId != null">
         resuest_id = #{record.resuestId,jdbcType=VARCHAR},
       </if>
@@ -326,6 +336,7 @@
   <update id="updateByExample" parameterType="map">
     update pcms_material
     set mrid = #{record.mrid,jdbcType=INTEGER},
+      activity_id = #{record.activityId,jdbcType=VARCHAR},
       resuest_id = #{record.resuestId,jdbcType=VARCHAR},
       mrtype = #{record.mrtype,jdbcType=INTEGER},
       mrcode = #{record.mrcode,jdbcType=INTEGER},
@@ -351,6 +362,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsMaterial">
     update pcms_material
     <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=VARCHAR},
+      </if>
       <if test="resuestId != null">
         resuest_id = #{resuestId,jdbcType=VARCHAR},
       </if>
@@ -410,7 +424,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsMaterial">
     update pcms_material
-    set resuest_id = #{resuestId,jdbcType=VARCHAR},
+    set activity_id = #{activityId,jdbcType=VARCHAR},
+      resuest_id = #{resuestId,jdbcType=VARCHAR},
       mrtype = #{mrtype,jdbcType=INTEGER},
       mrcode = #{mrcode,jdbcType=INTEGER},
       vendor_id = #{vendorId,jdbcType=VARCHAR},
@@ -430,7 +445,7 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where mrid = #{mrid,jdbcType=INTEGER}
   </update>
- 
+  
 
   
 <!-- ============================================================================================== -->
@@ -447,8 +462,8 @@
 		b.note,
 		b.unit_price AS unitPrice
 	FROM
-		pcms_item_relation a
-	LEFT JOIN pcms_material b ON a.relation_id = b.mrid
+		pcms_item a
+	LEFT JOIN pcms_material b ON a.detail_id=b.activity_id
 	WHERE
 		a.itid = #{itid}
 </select>

@@ -9,6 +9,7 @@ import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.service.PcmsSupplierCompanyService;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.util.DateUtils;
+import com.kuyu.util.HttpUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.FinancialResultVo;
 import com.kuyu.vo.PcmsSupplierVo;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zyl on 2018/11/14
@@ -223,4 +226,25 @@ public class PcmsSupplierController extends BaseController {
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 
+    
+    
+    /**
+     * 同步供应商信息
+     *@author XUCHAO
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "同步供应商信息", notes = "同步供应商信息")
+    @RequestMapping(value = "/importSupplier", method = { RequestMethod.POST })
+    public FinancialResultVo importSupplier() throws Exception {
+    	Map<String, String> paramsMap=new HashMap<>();
+    	String url="";
+       HttpUtils.post(url, paramsMap);
+    	
+    	
+    	
+        return FinancialResultVo.get(FinancialResultVo.SUCCESS);
+    }
+    
 }

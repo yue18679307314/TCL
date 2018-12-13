@@ -4,6 +4,7 @@
 
 	<sql id="Base_Column_List">
 		project_id,
+		vendor_id,
 		request_id,
 		project_name,
 		fee_detail_type,
