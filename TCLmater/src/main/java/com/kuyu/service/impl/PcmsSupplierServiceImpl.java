@@ -258,7 +258,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
          */
         // 第三步：构造list集合，往里面丢数据
         List<NameValuePair> list = new ArrayList<NameValuePair>();
-        BasicNameValuePair basicNameValuePair = new BasicNameValuePair("synDate", "2018-11-09");
+        BasicNameValuePair basicNameValuePair = new BasicNameValuePair("synDate", "2018-06-28");
         list.add(basicNameValuePair);
         // 第二步：我们发现Entity是一个接口，所以只能找实现类，发现实现类又需要一个集合，集合的泛型是NameValuePair类型
         UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list);
@@ -273,11 +273,9 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         CloseableHttpResponse response = client.execute(httpPost);
         HttpEntity entity = response.getEntity();
         String str = EntityUtils.toString(entity, "UTF-8");
-        System.out.println(str);
         // 关闭
         response.close();
         String str1 = str.toLowerCase();
-        System.out.println(str1);
         List<PcmsSupplierVo> supplierList = (List<PcmsSupplierVo>)JSONArray.parseArray(str1, PcmsSupplierVo.class);
         for (PcmsSupplierVo supplier : supplierList) {
             PcmsSupplierModel pcmsSupplierModel = baseMapper.getPcmsSupplier(supplier);
