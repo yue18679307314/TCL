@@ -23,7 +23,7 @@ public class PcmsSupplierVo implements Serializable {
     @ApiModelProperty("供应商名称")
     private String vendor_name;
 
-    private List<PsmsCompanyVo> list;
+//    private List<PsmsCompanyVo> list;
 
     /**公司代码*/
     @ApiModelProperty("公司代码")
@@ -47,7 +47,7 @@ public class PcmsSupplierVo implements Serializable {
 
     /**同步回来的创建时间*/
     @ApiModelProperty("创建时间")
-    private String create_date;
+    private String create_time;
 
     public String getVendor_id() {
         return vendor_id;
@@ -105,19 +105,19 @@ public class PcmsSupplierVo implements Serializable {
         this.type = type;
     }
 
-    public String getCreate_date() {
-        return create_date;
+    public String getCreate_time() {
+        return create_time;
     }
 
-    public void setCreate_date(String create_date) {
-        this.create_date = create_date;
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 
-    public List<PsmsCompanyVo> getList() {
+/*    public List<PsmsCompanyVo> getList() {
         return list;
     }
 
     public void setList(List<PsmsCompanyVo> list) {
         this.list = list;
-    }
+    }*/
 }

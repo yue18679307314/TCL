@@ -2,17 +2,13 @@ package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
-import com.kuyu.exception.ParamException;
-import com.kuyu.model.pcms.PcmsSupplierCompanyModel;
 import com.kuyu.model.pcms.PcmsSupplierInvoiceModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.service.PcmsSupplierCompanyService;
 import com.kuyu.service.PcmsSupplierService;
-import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.FinancialResultVo;
 import com.kuyu.vo.PcmsSupplierVo;
-import com.kuyu.vo.PsmsCompanyVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import io.swagger.annotations.Api;
@@ -23,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,7 +76,7 @@ public class PcmsSupplierController extends BaseController {
     @ApiParam(name = "PcmsSupplierVo", value = "供应商信息实体类参数")
     @RequestMapping(value = "/doPcmsSupplier", method = { RequestMethod.POST })
     public FinancialResultVo doPcmsSupplier(@RequestBody List<PcmsSupplierVo> supplierList) throws Exception {
-        if(supplierList == null || supplierList.size()==0){
+        /*if(supplierList == null || supplierList.size()==0){
             throw new ParamException("数据为空");
         }
         for (PcmsSupplierVo supplier : supplierList) {
@@ -110,7 +105,7 @@ public class PcmsSupplierController extends BaseController {
                 }
                 pcmsSupplierService.insertPcmsSupplier(supplier);
             }
-        }
+        }*/
         return FinancialResultVo.get(FinancialResultVo.SUCCESS);
     }
 
@@ -123,38 +118,9 @@ public class PcmsSupplierController extends BaseController {
      * @throws Exception
      */
     @ApiOperation(value = "供应商信息操作", notes = "根据供应商编号查询供应商信息，如果查到则更新，否则新增", response = PcmsSupplierModel.class)
-    @ApiParam(name = "PcmsSupplierVo", value = "供应商信息实体类参数")
-    @RequestMapping(value = "/getPcmsSupplier", method = { RequestMethod.POST })
-    public FinancialResultVo getPcmsSupplier() throws Exception {
-        List<PcmsSupplierVo> supplierList = new ArrayList<>();
-        for (PcmsSupplierVo supplier : supplierList) {
-            PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
-            if(pcmsSupplierModel != null){
-                pcmsSupplierService.updatePcmsSupplier(supplier);
-                List<PsmsCompanyVo> list = supplier.getList();
-                for(PsmsCompanyVo psmsCompanyVo : list){
-                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
-                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                    PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
-                    if(pcmsSupplierCompany == null){
-                        pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
-                        pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
-                    }
-                }
-            }else{
-                List<PsmsCompanyVo> list = supplier.getList();
-                for(PsmsCompanyVo psmsCompanyVo : list){
-                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
-                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                    pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
-                    pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
-                }
-                pcmsSupplierService.insertPcmsSupplier(supplier);
-            }
-        }
-        return FinancialResultVo.get(FinancialResultVo.SUCCESS);
+    @RequestMapping(value = "/getPcmsSupplier", method = {RequestMethod.GET})
+    public ResultVo getPcmsSupplier(@RequestParam(required = true) String synDate) throws Exception {
+        return pcmsSupplierService.synch(synDate);
     }
 
 
