@@ -34,6 +34,6 @@ public interface PcmsSupplierService extends IService<PcmsSupplierModel> {
     public ResultVo insertSupplierInvoice(PcmsSupplierInvoiceModel pcmsSupplierInvoiceModel) throws Exception;
 
     /**同步或者更新供应商*/
-    public ResultVo synch(String synDate)throws Exception;
+    public void synch(String synDate)throws Exception;
 
 }

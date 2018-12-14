@@ -102,7 +102,7 @@ public class PcmsMarketController extends BaseController {
     @ApiOperation(value = "根据姓名查询员工",response = UserVo.class)
     @GetMapping("/selectByName")
     public ResultVo selectByName(@RequestParam(value = "name") String name)throws Exception{
-        return receiptService.selectByName(name,getLoginUserInfo());
+        return receiptService.selectByName(name,getUserInfo());
     }
 
     /**
@@ -163,7 +163,7 @@ public class PcmsMarketController extends BaseController {
     @ApiOperation(value = "转办管理",response = TransferVo.class)
     @GetMapping("/selectTransfer")
     public ResultVo selectTransfer(TransferQuery query)throws Exception{
-        return receiptService.selectTransfer(query,getLoginUserInfo());
+        return receiptService.selectTransfer(query/*,getUserInfo()*/);
     }
 
     /**

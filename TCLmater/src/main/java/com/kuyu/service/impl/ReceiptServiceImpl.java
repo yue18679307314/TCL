@@ -564,6 +564,12 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         pcmsRejectLogModel.setType(2);
         pcmsRejectLogModel.setOperator(/*userInfo.getEmployeeModel().getPerson_name()*/"555");
         pcmsRejectLogModel.setContext(pcmsRejectLogModel.getContext());
+        PcmsItemLog pcmsItemLog = new PcmsItemLog();
+        pcmsItemLog.setItid(pcmsRejectLogModel.getItid());
+        pcmsItemLog.setNote(pcmsRejectLogModel.getContext());
+        pcmsItemLog.setStatus(4);
+        pcmsItemLog.setCreateTime(new Date());
+        pcmsItemLogMapper.insert(pcmsItemLog);
         pcmsRejectLogMapper.insert(pcmsRejectLogModel);
         pcmsItemMapper.updateByPrimaryKey(pcmsItem);
         return ResultVo.get(ResultVo.SUCCESS);
@@ -616,8 +622,18 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Override
     public ResultVo selectPendingMaterialByItid(Integer itid) throws Exception {
+
         List<PcmsPendingMaterialModel> list = pcmsPendingMaterialMapper.selectPendingMaterialByItid(itid);
-        return ResultVo.getDataWithSuccess(list);
+        List<PcmsPendingMaterialModel> list1 = new ArrayList<>();
+        if(list.size()>0){
+            for(PcmsPendingMaterialModel pendingMaterialVo : list){
+                /**待验收物料图片信息*/
+                List<PcmsMaterialImgModel> pcmsMaterialImg = pcmsMaterialImgMapper.selectById(pendingMaterialVo.getId());
+                pendingMaterialVo.setImgList(pcmsMaterialImg);
+                list1.add(pendingMaterialVo);
+            }
+        }
+        return ResultVo.getDataWithSuccess(list1);
     }
 
     @Override
@@ -629,6 +645,9 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         log.info("准备调用查询用户接口,参数为:{}",param);
         String message = HttpRequest.sendGet(tpmUrl, param);
         log.info("调用询用户接口结束，返回的数据为：{}",message);
+        if("".equals(message)){
+            return ResultVo.getDataWithSuccess(null);
+        }
         MemberVo memberVo = JSON.parseObject(message, MemberVo.class);
         if("0".equals(memberVo.getErrcode())){
             List<UserVo> list = memberVo.getResult();
@@ -665,8 +684,8 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
-    public ResultVo selectTransfer(TransferQuery query,LoginUserInfo userInfo) throws Exception {
-        query.setPerson_name(userInfo.getEmployeeModel().getPerson_name());
+    public ResultVo selectTransfer(TransferQuery query/*,LoginUserInfo userInfo*/) throws Exception {
+//        query.setPerson_name(userInfo.getEmployeeModel().getPerson_name());
         query = (TransferQuery) CheckParamUtils.trimWithObjectField(query);
         Page<TransferVo> page = new Page<>(query.getCurrent(),query.getSize());
         List<TransferVo> transferList = pcmsTransferMapper.selectByState(query,page);

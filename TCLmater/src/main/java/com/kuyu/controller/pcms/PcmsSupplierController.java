@@ -72,7 +72,8 @@ public class PcmsSupplierController extends BaseController {
     @ApiOperation(value = "供应商信息操作", notes = "根据供应商编号查询供应商信息，如果查到则更新，否则新增", response = PcmsSupplierModel.class)
     @RequestMapping(value = "/getPcmsSupplier", method = {RequestMethod.GET})
     public ResultVo getPcmsSupplier(@RequestParam(required = true) String synDate) throws Exception {
-        return pcmsSupplierService.synch(synDate);
+        pcmsSupplierService.synch(synDate);
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 
     /**

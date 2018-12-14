@@ -156,6 +156,7 @@
 				AND te.person_code =
 				#{params.person_code,jdbcType=VARCHAR}
 			</if>
+			and t.del_flag = 'n' and t.del_comp='n'
 		</where>
 		ORDER BY t.create_time DESC
 	</select>

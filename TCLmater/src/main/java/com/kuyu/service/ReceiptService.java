@@ -81,7 +81,7 @@ public interface ReceiptService extends IService<ReceiptModel> {
     ResultVo addTransfer(PcmsTransferModel pcmsTransferModel)throws Exception;
 
     /**转办管理*/
-    ResultVo selectTransfer(TransferQuery query,LoginUserInfo userInfo)throws Exception;
+    ResultVo selectTransfer(TransferQuery query/*,LoginUserInfo userInfo*/)throws Exception;
 
     /**反馈*/
     ResultVo addFeedback(FeedbackQuery feedbackQuery)throws Exception;

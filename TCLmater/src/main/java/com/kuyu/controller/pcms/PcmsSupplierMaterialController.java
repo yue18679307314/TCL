@@ -100,7 +100,7 @@ public class PcmsSupplierMaterialController extends BaseController {
     @ApiOperation(value = "市场人员查询供应商物料信息",response = PcmsSupplierMaterialModel.class)
     @PostMapping("/queryBySupplierMaterialList")
     public ResultVo queryBySupplierMaterialList(@RequestBody SupplierMaterialResultVo supplierMaterialResultVo) throws Exception {
-        return pcmsSupplierMaterialService.queryBySupplierMaterialList(supplierMaterialResultVo,getUserInfo());
+        return pcmsSupplierMaterialService.queryBySupplierMaterialList(supplierMaterialResultVo/*,getUserInfo()*/);
     }
 
     /**

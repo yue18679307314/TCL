@@ -248,7 +248,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     }
 
     @Override
-    public ResultVo synch(String synDate) throws Exception {
+    public void synch(String synDate) throws Exception {
         // 获取默认的请求客户端
         CloseableHttpClient client = HttpClients.createDefault();
         // 通过HttpPost来发送post请求
@@ -258,7 +258,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
          */
         // 第三步：构造list集合，往里面丢数据
         List<NameValuePair> list = new ArrayList<NameValuePair>();
-        BasicNameValuePair basicNameValuePair = new BasicNameValuePair("synDate", "2018-06-28");
+        BasicNameValuePair basicNameValuePair = new BasicNameValuePair("synDate", synDate);
         list.add(basicNameValuePair);
         // 第二步：我们发现Entity是一个接口，所以只能找实现类，发现实现类又需要一个集合，集合的泛型是NameValuePair类型
         UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list);
@@ -290,7 +290,6 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
             pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
             pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
         }
-        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 
     public void createBankInfoXls(List<PcmsSupplierModelVo> supplierList, String url)
