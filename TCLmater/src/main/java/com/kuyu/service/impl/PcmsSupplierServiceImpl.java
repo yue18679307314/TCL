@@ -1,5 +1,6 @@
 package com.kuyu.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.itextpdf.text.DocumentException;
@@ -20,6 +21,15 @@ import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsSupplierModelVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by pc on 2018/11/14
@@ -74,9 +81,12 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     @Autowired
     private WeixinUserInfoService weixinUserInfoService;
 
+    @Resource
+    private PcmsSupplierCompanyService pcmsSupplierCompanyService;
+
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
-        if (StringUtil.isNotNull(pcmsSupplierVo.getCreate_date())
+        if (StringUtil.isNotNull(pcmsSupplierVo.getCreate_time())
                 && StringUtil.isNotNull(pcmsSupplierVo.getDel_comp())
                 && StringUtil.isNotNull(pcmsSupplierVo.getDel_flag())
                 && StringUtil.isNotNull(pcmsSupplierVo.getType())
@@ -235,6 +245,52 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
             pcmsMaterialImgModel.insert(pcmsInvoiceImageModel);
         }
         return ResultVo.get(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public ResultVo synch(String synDate) throws Exception {
+        // 获取默认的请求客户端
+        CloseableHttpClient client = HttpClients.createDefault();
+        // 通过HttpPost来发送post请求
+        HttpPost httpPost = new HttpPost("http://10.126.124.28:7001/promotionFee/synVendor.do");
+        /*
+         * post带参数开始
+         */
+        // 第三步：构造list集合，往里面丢数据
+        List<NameValuePair> list = new ArrayList<NameValuePair>();
+        BasicNameValuePair basicNameValuePair = new BasicNameValuePair("synDate", "2018-06-28");
+        list.add(basicNameValuePair);
+        // 第二步：我们发现Entity是一个接口，所以只能找实现类，发现实现类又需要一个集合，集合的泛型是NameValuePair类型
+        UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list);
+        // 第一步：通过setEntity 将我们的entity对象传递过去
+        httpPost.setEntity(formEntity);
+        /*
+         * post带参数结束
+         */
+        // HttpEntity
+        // 是一个中间的桥梁，在httpClient里面，是连接我们的请求与响应的一个中间桥梁，所有的请求参数都是通过HttpEntity携带过去的
+        // 通过client来执行请求，获取一个响应结果
+        CloseableHttpResponse response = client.execute(httpPost);
+        HttpEntity entity = response.getEntity();
+        String str = EntityUtils.toString(entity, "UTF-8");
+        // 关闭
+        response.close();
+        String str1 = str.toLowerCase();
+        List<PcmsSupplierVo> supplierList = (List<PcmsSupplierVo>)JSONArray.parseArray(str1, PcmsSupplierVo.class);
+        for (PcmsSupplierVo supplier : supplierList) {
+            PcmsSupplierModel pcmsSupplierModel = baseMapper.getPcmsSupplier(supplier);
+            if(pcmsSupplierModel != null){
+                baseMapper.updatePcmsSupplier(supplier);
+            }else{
+                baseMapper.insertPcmsSupplier(supplier);
+            }
+            PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+            pcmsSupplierCompanyModel.setCompany(supplier.getCompany());
+            pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
+            pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
+            pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
+        }
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 
     public void createBankInfoXls(List<PcmsSupplierModelVo> supplierList, String url)

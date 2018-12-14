@@ -2,18 +2,12 @@ package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
-import com.kuyu.exception.ParamException;
-import com.kuyu.model.pcms.PcmsSupplierCompanyModel;
 import com.kuyu.model.pcms.PcmsSupplierInvoiceModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
 import com.kuyu.service.PcmsSupplierCompanyService;
 import com.kuyu.service.PcmsSupplierService;
-import com.kuyu.util.DateUtils;
-import com.kuyu.util.HttpUtils;
 import com.kuyu.util.StringUtil;
-import com.kuyu.vo.FinancialResultVo;
 import com.kuyu.vo.PcmsSupplierVo;
-import com.kuyu.vo.PsmsCompanyVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import io.swagger.annotations.Api;
@@ -24,10 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zyl on 2018/11/14
@@ -72,7 +62,6 @@ public class PcmsSupplierController extends BaseController {
         return resultVo;
     }
 
-
     /**
      * 同步应商信息，如果查到则更新，否则新增
      *
@@ -81,86 +70,10 @@ public class PcmsSupplierController extends BaseController {
      * @throws Exception
      */
     @ApiOperation(value = "供应商信息操作", notes = "根据供应商编号查询供应商信息，如果查到则更新，否则新增", response = PcmsSupplierModel.class)
-    @ApiParam(name = "PcmsSupplierVo", value = "供应商信息实体类参数")
-    @RequestMapping(value = "/doPcmsSupplier", method = { RequestMethod.POST })
-    public FinancialResultVo doPcmsSupplier(@RequestBody List<PcmsSupplierVo> supplierList) throws Exception {
-        if(supplierList == null || supplierList.size()==0){
-            throw new ParamException("数据为空");
-        }
-        for (PcmsSupplierVo supplier : supplierList) {
-            PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
-            if(pcmsSupplierModel != null){
-                pcmsSupplierService.updatePcmsSupplier(supplier);
-                List<PsmsCompanyVo> list = supplier.getList();
-                for(PsmsCompanyVo psmsCompanyVo : list){
-                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
-                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                    PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
-                    if(pcmsSupplierCompany == null){
-                        pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
-                        pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
-                    }
-                }
-            }else{
-                List<PsmsCompanyVo> list = supplier.getList();
-                for(PsmsCompanyVo psmsCompanyVo : list){
-                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
-                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                    pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
-                    pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
-                }
-                pcmsSupplierService.insertPcmsSupplier(supplier);
-            }
-        }
-        return FinancialResultVo.get(FinancialResultVo.SUCCESS);
+    @RequestMapping(value = "/getPcmsSupplier", method = {RequestMethod.GET})
+    public ResultVo getPcmsSupplier(@RequestParam(required = true) String synDate) throws Exception {
+        return pcmsSupplierService.synch(synDate);
     }
-
-
-    /**
-     * 同步应商信息，如果查到则更新，否则新增
-     *
-     * @param
-     * @return
-     * @throws Exception
-     */
-    @ApiOperation(value = "供应商信息操作", notes = "根据供应商编号查询供应商信息，如果查到则更新，否则新增", response = PcmsSupplierModel.class)
-    @ApiParam(name = "PcmsSupplierVo", value = "供应商信息实体类参数")
-    @RequestMapping(value = "/getPcmsSupplier", method = { RequestMethod.POST })
-    public FinancialResultVo getPcmsSupplier() throws Exception {
-        List<PcmsSupplierVo> supplierList = new ArrayList<>();
-        for (PcmsSupplierVo supplier : supplierList) {
-            PcmsSupplierModel pcmsSupplierModel = pcmsSupplierService.getPcmsSupplier(supplier);
-            if(pcmsSupplierModel != null){
-                pcmsSupplierService.updatePcmsSupplier(supplier);
-                List<PsmsCompanyVo> list = supplier.getList();
-                for(PsmsCompanyVo psmsCompanyVo : list){
-                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
-                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                    PcmsSupplierCompanyModel pcmsSupplierCompany = pcmsSupplierCompanyService.selectByVendorIdAndCompany(pcmsSupplierCompanyModel);
-                    if(pcmsSupplierCompany == null){
-                        pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
-                        pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
-                    }
-                }
-            }else{
-                List<PsmsCompanyVo> list = supplier.getList();
-                for(PsmsCompanyVo psmsCompanyVo : list){
-                    PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
-                    pcmsSupplierCompanyModel.setCompany(psmsCompanyVo.getCompany());
-                    pcmsSupplierCompanyModel.setVendor_id(supplier.getVendor_id());
-                    pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
-                    pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
-                }
-                pcmsSupplierService.insertPcmsSupplier(supplier);
-            }
-        }
-        return FinancialResultVo.get(FinancialResultVo.SUCCESS);
-    }
-
-
 
     /**
      * 更新供应商信息
@@ -188,7 +101,6 @@ public class PcmsSupplierController extends BaseController {
     public ResultVo findPcmsSupplierListByPage(@RequestBody PcmsSupplierQuery query) throws Exception {
         return pcmsSupplierService.findPcmsSupplierListByPage(getUserInfo(),query);
     }
-
 
     /**
      * 导出供应商excel
@@ -226,25 +138,4 @@ public class PcmsSupplierController extends BaseController {
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 
-    
-    
-    /**
-     * 同步供应商信息
-     *@author XUCHAO
-     * @param
-     * @return
-     * @throws Exception
-     */
-    @ApiOperation(value = "同步供应商信息", notes = "同步供应商信息")
-    @RequestMapping(value = "/importSupplier", method = { RequestMethod.POST })
-    public FinancialResultVo importSupplier() throws Exception {
-    	Map<String, String> paramsMap=new HashMap<>();
-    	String url="";
-       HttpUtils.post(url, paramsMap);
-    	
-    	
-    	
-        return FinancialResultVo.get(FinancialResultVo.SUCCESS);
-    }
-    
 }

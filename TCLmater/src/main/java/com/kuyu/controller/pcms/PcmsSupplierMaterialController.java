@@ -2,7 +2,6 @@ package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
-import com.kuyu.model.pcms.PcmsMaterialVersionModel;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsSupplierMaterialService;
 import com.kuyu.service.PcmsSupplierService;
@@ -119,32 +118,5 @@ public class PcmsSupplierMaterialController extends BaseController {
         }
         return ResultVo.getData(ResultVo.SUCCESS, file);
     }
-
-    /**
-     * 确定导入
-     * @param vendor_id
-     * @return
-     * @throws Exception
-     */
-    @ApiOperation(value = "确定导入")
-    @GetMapping("/confirmSupplierMaterial")
-    public ResultVo confirmSupplierMaterial(@RequestParam(value = "vendor_id") String vendor_id)throws Exception{
-        return pcmsSupplierMaterialService.confirmSupplierMaterial(vendor_id,getUserInfo());
-    }
-
-    /**
-     * 放弃导入
-     * @param vendor_id
-     * @param url
-     * @return
-     * @throws Exception
-     */
-    @ApiOperation(value = "放弃导入",response = PcmsMaterialVersionModel.class)
-    @GetMapping("/giveUpSupplierMaterial")
-    public ResultVo giveUpSupplierMaterial(@RequestParam(value = "vendor_id") String vendor_id,@RequestParam(value = "url") String url)throws Exception{
-        return pcmsSupplierMaterialService.giveUpSupplierMaterial(vendor_id,url,getUserInfo());
-    }
-
-
 
 }

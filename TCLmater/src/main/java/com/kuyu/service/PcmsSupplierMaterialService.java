@@ -4,12 +4,9 @@ import com.baomidou.mybatisplus.service.IService;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.vo.ResultVo;
-import com.kuyu.vo.pcms.PcmsVendorIdVo;
 import com.kuyu.vo.pcms.SupplierMaterialResultVo;
 import com.kuyu.vo.pcms.SupplierMaterialVo;
 import com.kuyu.vo.query.SupplierMaterialQuery;
-
-import java.util.List;
 
 public interface PcmsSupplierMaterialService extends IService<PcmsSupplierMaterialModel> {
 
@@ -32,9 +29,4 @@ public interface PcmsSupplierMaterialService extends IService<PcmsSupplierMateri
     /**导出物料*/
     String getSupplierMaterialUrl(String vendor_id, LoginUserInfo userInfo) throws Exception;
 
-    /**确定导入*/
-    ResultVo confirmSupplierMaterial(String vendor_id, LoginUserInfo userInfo)throws Exception;
-
-    /**放弃导入*/
-    ResultVo giveUpSupplierMaterial(String vendor_id, String url,LoginUserInfo userInfo)throws Exception;
 }

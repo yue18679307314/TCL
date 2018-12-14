@@ -78,6 +78,8 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     @Resource
     private PcmsTovoidItemMapper pcmsTovoidItemMapper;
 
+    @Resource
+    private PcmsMaterialMapper pcmsMaterialMapper;
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
         if(null == query.getOpenid() || "".equals(query.getOpenid())){
@@ -533,10 +535,17 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         if(null != pcmsTovoidItemVo){
             receiptDetailVo.setPcmsTovoidItemVo(pcmsTovoidItemVo);
         }
-        /**广告物料*/
-        List<MaterialResult> materialResultList = baseMapper.getMaterialResultInfo(itid);
-        if(materialResultList.size()>0){
-            receiptDetailVo.setMaterialResultList(materialResultList);
+
+        if(receiptDetailVo.getType() == 2){
+            /**表示其他终端*/
+            List<PcmsOthertmVo> listPcmsOthertmVo = baseMapper.getPcmsOthertmInfo(itid);
+            receiptDetailVo.setPcmsOthertmVoList(listPcmsOthertmVo);
+        }else{
+            /**广告物料*/
+            List<MaterialResult> materialResultList = pcmsMaterialMapper.selectByItid(itid);
+            if(materialResultList.size()>0){
+                receiptDetailVo.setMaterialResultList(materialResultList);
+            }
         }
         return ResultVo.getDataWithSuccess(receiptDetailVo);
     }
