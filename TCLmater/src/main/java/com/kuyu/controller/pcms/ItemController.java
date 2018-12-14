@@ -1,31 +1,19 @@
 package com.kuyu.controller.pcms;
-import java.io.File;
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
-import com.kuyu.model.LoginUserInfo;
-import com.kuyu.model.TpmEmployeeModel;
-import com.kuyu.model.pcms.PcmsMaterial;
-import com.kuyu.model.pcms.PcmsOthertm;
-import com.kuyu.model.pcms.PcmsShowcase;
 import com.kuyu.service.PcmsItemService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
-import com.kuyu.vo.pcms.PcmsProjectVo;
-
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 @AOP_Controller_LOG
 @RequestMapping("/item")
