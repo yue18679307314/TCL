@@ -146,11 +146,11 @@
 		LEFT JOIN tpm_dept tm ON te.org_code = tm.org_code
 		LEFT JOIN pcms_supplier t ON t.vendor_id = f.vendor_id
 		<where>
-			<if test="params.request_company !=null and params.request_company !=''">
+			<!--<if test="params.request_company !=null and params.request_company !=''">
 				AND tm.org_name_parent LIKE '%${params.request_company}%'
-			</if>
+			</if>-->
 			<if test="params.vendor_name !=null and params.vendor_name !=''">
-				OR t.vendor_name LIKE '%${params.vendor_name}%'
+			    t.vendor_name LIKE '%${params.vendor_name}%'
 			</if>
 			<if test="params.person_code !=null and params.person_code !=''">
 				AND te.person_code =
