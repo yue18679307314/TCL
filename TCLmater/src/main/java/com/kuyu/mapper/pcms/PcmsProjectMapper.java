@@ -1,7 +1,14 @@
 package com.kuyu.mapper.pcms;
 
+import com.kuyu.model.TpmActivityOriginalModel;
 import com.kuyu.model.pcms.PcmsProject;
 import com.kuyu.model.pcms.PcmsProjectExample;
+import com.kuyu.model.pcms.PcmsShop;
+import com.kuyu.vo.pcms.ActivityOriginalVo;
+import com.kuyu.vo.pcms.PcmsProjectVo;
+import com.kuyu.vo.pcms.PcmsProjectVo2;
+import com.kuyu.vo.pcms.ProjectDetailVo;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,4 +40,12 @@ public interface PcmsProjectMapper {
     int updateByPrimaryKeyWithBLOBs(PcmsProject record);
 
     int updateByPrimaryKey(PcmsProject record);
+
+	PcmsProjectVo2 getProjectDeatil(String requestId);
+
+	List<ProjectDetailVo> getDetailList(String requestId);
+
+	List<ActivityOriginalVo> getActivitylList(String requestId);
+
+	List<PcmsShop> getShopList(String requestId);
 }

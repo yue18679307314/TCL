@@ -1,11 +1,17 @@
 package com.kuyu.model.pcms;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PcmsShowcase {
-    private Integer scid;
+public class PcmsShowcase implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Integer scid;
 
     @JsonProperty("DETAIL_ID")
     private String detailId;

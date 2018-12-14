@@ -1,12 +1,20 @@
 package com.kuyu.vo.pcms;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kuyu.model.TpmActivityOriginalModel;
 import com.kuyu.model.pcms.PcmsShop;
 
-public class PcmsProjectVo2 {
+public class PcmsProjectVo2 implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	//申请单编号
 	@JsonProperty("REQUEST_ID")
 	private String requestId;
@@ -65,11 +73,17 @@ public class PcmsProjectVo2 {
 	
 	//事项申请明细区
 	@JsonProperty("DETAIL_LIST")
-	private List<ProjectDetailVo> DETAIL_LIST;
+	private List<ProjectDetailVo> detailList;
 	
 	//门店信息
 	@JsonProperty("SHOP_LIST")
 	private List<PcmsShop> shopList;
+	
+	//广告物料-活动单
+	private List<ActivityOriginalVo> activityList;
+	
+	//立项单类型 1门头展台  2物料
+	private String type;
 
 	public String getRequestId() {
 		return requestId;
@@ -183,12 +197,12 @@ public class PcmsProjectVo2 {
 		this.exchange = exchange;
 	}
 
-	public List<ProjectDetailVo> getDETAIL_LIST() {
-		return DETAIL_LIST;
+	public List<ProjectDetailVo> getDetailList() {
+		return detailList;
 	}
 
-	public void setDETAIL_LIST(List<ProjectDetailVo> dETAIL_LIST) {
-		DETAIL_LIST = dETAIL_LIST;
+	public void setDetailList(List<ProjectDetailVo> detailList) {
+		this.detailList = detailList;
 	}
 
 	public List<PcmsShop> getShopList() {
@@ -198,5 +212,23 @@ public class PcmsProjectVo2 {
 	public void setShopList(List<PcmsShop> shopList) {
 		this.shopList = shopList;
 	}
+
+	public List<ActivityOriginalVo> getActivityList() {
+		return activityList;
+	}
+
+	public void setActivityList(List<ActivityOriginalVo> activityList) {
+		this.activityList = activityList;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	
 	
 }

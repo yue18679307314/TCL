@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -21,9 +22,14 @@ import java.io.Serializable;
 @ApiModel("立项单活动元数据")
 @TableName("tpm_activity_original")
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class TpmActivityOriginalModel extends Model<TpmActivityOriginalModel> {
+public class TpmActivityOriginalModel extends Model<TpmActivityOriginalModel> implements Serializable{
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * 活动id
      */
 	@TableId("project_id")

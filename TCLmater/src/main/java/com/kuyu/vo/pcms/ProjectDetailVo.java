@@ -1,14 +1,24 @@
 package com.kuyu.vo.pcms;
 
+import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
 import com.kuyu.model.pcms.PcmsOthertm;
 import com.kuyu.model.pcms.PcmsOutdoors;
 import com.kuyu.model.pcms.PcmsShowcase;
 
+@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })
+public class ProjectDetailVo implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-public class ProjectDetailVo {
 	
 	@JsonProperty("DETAIL_CHANNEL")
 	private String detailChannel;

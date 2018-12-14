@@ -1,9 +1,16 @@
 package com.kuyu.model.pcms;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PcmsOutdoors {
+public class PcmsOutdoors implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@JsonProperty("DETAIL_ID")
     private String detailId;
 

@@ -10,11 +10,11 @@ import com.kuyu.vo.project.ProjectDetialModelVo;
 
 public interface PcmsProjectService {
 
-	String importProjectDetail(PcmsProjectVo projectvo);
+//	String importProjectDetail(PcmsProjectVo projectvo);
 
 	String importProjectDetail2(PcmsProjectVo2 projectvo);
 	
-	PcmsProjectVo getProjectDeatil(String requestId);
+	PcmsProjectVo2 getProjectDeatil(String requestId);
 
 	List<RequestUserVo> getRequestNameList(String orgCode,String searchKey);
 

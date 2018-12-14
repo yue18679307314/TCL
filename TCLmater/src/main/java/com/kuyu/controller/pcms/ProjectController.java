@@ -76,9 +76,9 @@ public class ProjectController {
     @ApiOperation(value = "查看原始立项单")
     @RequestMapping(value = "/detail",produces = "application/json;charset=UTF-8")
     public ResultVo detail(String requestId)throws Exception{
-    	PcmsProjectVo result= pcmsProjectService.getProjectDeatil(requestId);
+    	PcmsProjectVo2 result= pcmsProjectService.getProjectDeatil(requestId);
     		
-    		return ResultVo.getData(ResultVo.SUCCESS, result);
+    	return ResultVo.getData(ResultVo.SUCCESS, result);
     }
 	
     

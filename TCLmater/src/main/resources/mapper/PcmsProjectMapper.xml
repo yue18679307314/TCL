@@ -609,8 +609,8 @@
   
   
   <!-- ====================================生成sql结束============================================= -->
-  <select id="getProjectDeatil" parameterType="string" resultType="com.kuyu.vo.pcms.PcmsProjectVo">
-  	SELECT
+  <select id="getProjectDeatil" parameterType="string" resultType="com.kuyu.vo.pcms.PcmsProjectVo2">
+  	<!--  SELECT
 	a.REQUEST_ID AS requestId,
 	a.REQUEST_TITLE AS requestTitle,
 	a.TYPE,
@@ -635,8 +635,199 @@ FROM
 	pcms_project a
 LEFT JOIN pcms_shop b ON a.SHOP_CRM_CODE=b.SHOP_CRM_CODE
 WHERE
+	a.REQUEST_ID = #{requestId}-->
+	SELECT
+	a.REQUEST_ID AS requestId,
+	a.REQUEST_TITLE AS requestTitle,
+	a.REQUEST_COMPANY_CODE AS requestCompanyCode,
+	a.REQUEST_DEPT AS requestDept,
+	a.REQUEST_USER AS requestUser,
+	a.CREATE_USER  AS createUser,
+	a.REQUEST_TELPHONE AS requestTelphone,
+	a.REQUEST_EMAIL AS requestEmail,
+	a.REQUEST_INFO AS requestInfo,
+	a.REQUEST_CREATE_TIME AS requestCreateTime,
+	a.REQUEST_END_TIME AS requestEndTime,
+	a.TYPE AS type
+FROM
+	pcms_project a
+WHERE
 	a.REQUEST_ID = #{requestId}
   </select>
   
   
+  
+   <resultMap id="projectDetail" type="com.kuyu.vo.pcms.ProjectDetailVo">
+        <result property="detailChannel" column="detailChannel"/>
+        <result property="detailCost" column="detailCost"/>
+        <result property="detailWbs" column="detailWbs"/>
+        <result property="detailVendor" column="detailVendor"/>
+        <result property="detailSubject" column="detailSubject"/>
+        <result property="detailAccount" column="detailAccount"/>
+        <result property="detailId" column="detailId"/>
+        <result property="detailAmount" column="detailAmount"/>
+        <result property="detailStandard" column="detailStandard"/>
+        <result property="detailTask" column="detailTask"/>
+        <result property="detailMemo" column="detailMemo"/>
+        <collection  property="CHILDREN3_LIST" column="detailId" ofType="com.kuyu.model.pcms.PcmsOthertm"
+                    javaType="java.util.ArrayList" select="getList3"/>
+        <collection  property="CHILDREN1_LIST" column="detailId" ofType="com.kuyu.model.pcms.PcmsShowcase"
+                    javaType="java.util.ArrayList" select="getList1"/>
+   </resultMap>
+  <select id="getDetailList" parameterType="string" resultMap="projectDetail">
+  	SELECT
+	a.DETAIL_CHANNEL AS detailChannel,
+	a.DETAIL_COST AS detailCost,
+	a.DETAIL_WBS AS detailWbs,
+	a.DETAIL_VENDOR AS detailVendor,
+	a.DETAIL_SUBJECT AS detailSubject,
+	a.DETAIL_ACCOUNT AS detailAccount,
+	a.DETAIL_ID AS detailId,
+	a.DETAIL_AMOUNT AS detailAmount,
+	a.DETAIL_STANDARD AS detailStandard,
+	a.DETAIL_TASK AS detailTask,
+	a.DETAIL_MEMO AS detailMemo
+FROM
+	pcms_project_deatil a
+WHERE
+	REQUEST_ID = #{requestId}
+  </select>
+   <select id="getList3" parameterType="string" resultType="com.kuyu.model.pcms.PcmsOthertm">
+  	SELECT
+a.detail_id AS detailId,
+a.request_id AS requestId,
+a.vendor_id AS vendorId,
+a.mrname3,
+a.cost,
+a.unit,
+a.note,
+a.comparison_price AS comparisonPrice,
+a.specifications3,
+a.CHILDREN3_DETAIL AS children3Detail,
+a.CHILDREN3_VENDOR AS children3Vendor,
+a.CHILDREN3_BUILDTIME AS children3Buildtime,
+a.CHILDREN3_COUNT AS children3Count,
+a.CHILDREN3_PRICE AS children3Price,
+a.CHILDREN3_AMOUNT AS children3Amount,
+a.create_time AS createTime,
+a.otid
+FROM
+pcms_othertm_source AS a
+WHERE
+a.detail_id =#{detailId}
+  </select>
+   
+  <select id="getList1" parameterType="string" resultType="com.kuyu.model.pcms.PcmsShowcase">
+  SELECT
+a.detail_id AS detailId,
+a.resuest_id AS resuestId,
+a.vendor_id AS vendorId,
+a.CHILDREN1_TASK AS children1Task,
+a.CHILDREN1_LAST_BUILDTIME AS children1LastBuildtime,
+a.CHILDREN1_TYPE AS children1Type,
+a.CHILDREN1_REASON AS children1Reason,
+a.CHILDREN1_AREA AS children1Area,
+a.CHILDREN1_LINEAR AS children1Linear,
+a.CHILDREN1_BUILDTIME AS children1Buildtime,
+a.CHILDREN1_VENDOR AS children1Vendor,
+a.CHILDREN1_INNER AS children1Inner,
+a.CHILDREN1_OUTER AS children1Outer,
+a.CHILDREN1_AMOUNT AS children1Amount,
+a.create_time AS createTime,
+a.scid
+FROM
+pcms_showcase_source AS a
+WHERE
+a.detail_id =#{detailId}
+  </select>
+  
+  
+  
+  <resultMap id="projectActivity" type="com.kuyu.vo.pcms.ActivityOriginalVo">
+        <result property="projectId" column="project_id"/>
+        <result property="requestId" column="request_id"/>
+        <result property="vendorId" column="vendor_id"/>
+         <result property="vendorName" column="vendor_name"/>
+        <result property="projectName" column="project_name"/>
+        <result property="feeDetailType" column="fee_detail_type"/>
+        <result property="dept" column="dept"/>
+        <result property="deptName" column="deptName"/>
+        <result property="city" column="city"/>
+        <result property="costCenter" column="cost_center"/>
+        <result property="wbs" column="wbs"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="totalFee" column="total_fee"/>
+        <result property="projectedSalesNo" column="projected_sales_no"/>
+        <result property="projectedSalesMoney" column="projected_sales_money"/>
+        <result property="estimatedCostRate" column="estimated_cost_rate"/>
+        <result property="note" column="note"/>
+        <collection  property="maList" column="projectId" ofType="com.kuyu.vo.pcms.MaterialResult"
+                    javaType="java.util.ArrayList" select="getMaList"/>
+   </resultMap>
+  
+  <select id="getActivitylList" parameterType="string" resultMap="projectActivity">
+		  	SELECT
+		a.project_id,
+		a.vendor_id,
+		b.vendor_name,
+		a.request_id,
+		a.project_name,
+		a.fee_detail_type,
+		a.dept,
+		c.org_name AS deptName,
+		a.city,
+		a.cost_center,
+		a.wbs,
+		a.order_no,
+		a.total_fee,
+		a.projected_sales_no,
+		a.projected_sales_money,
+		a.estimated_cost_rate,
+		a.note
+		FROM
+		tpm_activity_original AS a
+		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+		LEFT JOIN tpm_dept c ON a.dept=c.org_code
+		WHERE
+		a.request_id = #{requestId}
+  </select>
+  <select id="getMaList" parameterType="string" resultType="com.kuyu.vo.pcms.MaterialResult">
+		  	SELECT
+		a.mrid,
+		a.mrtype,
+		a.mrcode,
+		a.mrname,
+		a.cost,
+		a.specifications,
+		a.unit,
+		a.unit_price AS unitPrice,
+		a.number,
+		a.comparison_price AS comparisonPrice,
+		a.`status`,
+		a.note
+		FROM
+		pcms_material_source AS a
+		WHERE activity_id=#{projectId}
+  </select>
+  
+  <select id="getShopList" parameterType="string" resultType="com.kuyu.model.pcms.PcmsShop">
+		  	SELECT
+		a.sid,
+		a.REQUEST_ID AS requestId,
+		a.SHOP_CRM_CODE AS shopCrmCode,
+		a.SHOP_NAME AS shopName,
+		a.SHOP_LEVEL AS shopLevel,
+		a.SHOP_BRANCH AS shopBranch,
+		a.SHOP_CUSTOMER AS shopCustomer,
+		a.SHOP_CHANNEL AS shopChannel,
+		a.SHOP_PROVINCE AS shopProvince,
+		a.SHOP_CITY AS shopCity,
+		a.SHOP_COUNTY AS shopCounty,
+		a.DETAIL_TASK AS detailTask,
+		a.SHOP_SALES_AMOUNT AS shopSalesAmount
+		FROM
+		pcms_shop AS a
+		WHERE
+		a.REQUEST_ID = #{requestId}
+  </select>
 </mapper>

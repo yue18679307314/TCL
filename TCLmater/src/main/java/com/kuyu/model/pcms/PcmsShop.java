@@ -1,11 +1,19 @@
 package com.kuyu.model.pcms;
 
+import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PcmsShop {
-    private Integer sid;
+@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })
+public class PcmsShop implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Integer sid;
 
     private String requestId;
 
