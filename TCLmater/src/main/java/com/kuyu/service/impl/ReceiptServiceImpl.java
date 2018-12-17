@@ -710,7 +710,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             }
         }
         PcmsTransferModel pcmsTransferModel = pcmsTransferMapper.selectById(feedbackQuery.getTransfer_id());
-        PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectById(pcmsTransferModel.getPending_id());
+        PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectId(pcmsTransferModel.getPending_id());
         pcmsPendingMaterialModel.setState(2);
         pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel);
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
@@ -726,6 +726,23 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         }
         transferDetailVo.setListFeedbackVo(listFeedbackVo);
         return ResultVo.getDataWithSuccess(transferDetailVo);
+    }
+
+    @Override
+    public ResultVo selectTransferDetail(Integer id) throws Exception {
+        List<Transfer> list = pcmsTransferMapper.queryDetailByPendingId(id);
+        PendingVo pendingVo = new PendingVo();
+        for(Transfer transfer : list){
+            TransferDetailVo transferDetailVo = pcmsTransferMapper.selectFeedbackDetail(transfer.getId());
+            List<FeedbackVo> listFeedbackVo = pcmsFeedbackMapper.selectByTransferId(transferDetailVo.getId());
+            for(FeedbackVo feedbackVo : listFeedbackVo){
+                List<FeedbackImageVo> list1 = pcmsFeedbackImgMapper.selectByFeedbackId(feedbackVo.getId());
+                feedbackVo.setList(list1);
+            }
+            transferDetailVo.setListFeedbackVo(listFeedbackVo);
+            pendingVo.setTransferDetailVo(transferDetailVo);
+        }
+        return ResultVo.getDataWithSuccess(pendingVo);
     }
 
 }

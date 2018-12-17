@@ -179,7 +179,7 @@ public class PcmsMarketController extends BaseController {
     }
 
     /**
-     * 反馈详情
+     * APP反馈详情
      * @param id
      * @return
      * @throws Exception
@@ -188,6 +188,18 @@ public class PcmsMarketController extends BaseController {
     @GetMapping("/selectFeedbackDetail")
     public ResultVo selectFeedbackDetail(@RequestParam(value = "id") Integer id)throws Exception{
         return receiptService.selectFeedbackDetail(id);
+    }
+
+    /**
+     * 转办详情
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "转办详情",response = TransferDetailVo.class)
+    @GetMapping("/selectTransferDetail")
+    public ResultVo selectTransferDetail(@RequestParam(value = "id") Integer id)throws Exception{
+        return receiptService.selectTransferDetail(id);
     }
 
 }

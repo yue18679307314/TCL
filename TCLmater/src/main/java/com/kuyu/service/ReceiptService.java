@@ -88,6 +88,8 @@ public interface ReceiptService extends IService<ReceiptModel> {
 
     /**反馈详情*/
     ResultVo selectFeedbackDetail(Integer id)throws Exception;
+    /**转办详情*/
+    ResultVo selectTransferDetail(Integer id)throws Exception;
 
 
 

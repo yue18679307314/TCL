@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface PcmsFeedbackMapper extends BaseMapper<PcmsFeedbackModel> {
 
-    PcmsFeedbackModel insertFeedback(PcmsFeedbackModel pcmsFeedbackModel);
+    int insertFeedback(PcmsFeedbackModel pcmsFeedbackModel);
 
     List<FeedbackVo> selectByTransferId(@Param("id") Integer id);
 }
