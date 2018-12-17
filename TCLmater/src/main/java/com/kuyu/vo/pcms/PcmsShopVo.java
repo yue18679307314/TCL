@@ -35,6 +35,8 @@ public class PcmsShopVo {
     @ApiModelProperty("门店销售任务")
     private String detail_task;
 
+    private String shop_sales_amount;
+
 
     public String getShop_name() {
         return shop_name;
@@ -106,5 +108,13 @@ public class PcmsShopVo {
 
     public void setDetail_task(String detail_task) {
         this.detail_task = detail_task;
+    }
+
+    public String getShop_sales_amount() {
+        return shop_sales_amount;
+    }
+
+    public void setShop_sales_amount(String shop_sales_amount) {
+        this.shop_sales_amount = shop_sales_amount;
     }
 }

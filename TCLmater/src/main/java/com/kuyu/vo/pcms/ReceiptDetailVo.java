@@ -42,6 +42,8 @@ public class ReceiptDetailVo {
     @ApiModelProperty("申请人/负责人")
     private String request_user_name;
 
+    private String create_user;
+
     @ApiModelProperty("申请标题")
     private String request_title;
 
@@ -282,5 +284,13 @@ public class ReceiptDetailVo {
 
     public void setPcmsTovoidItemVo(PcmsTovoidItemVo pcmsTovoidItemVo) {
         this.pcmsTovoidItemVo = pcmsTovoidItemVo;
+    }
+
+    public String getCreate_user() {
+        return create_user;
+    }
+
+    public void setCreate_user(String create_user) {
+        this.create_user = create_user;
     }
 }

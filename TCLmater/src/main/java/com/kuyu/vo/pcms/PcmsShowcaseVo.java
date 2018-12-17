@@ -103,4 +103,12 @@ public class PcmsShowcaseVo {
     public void setChildren1_outer(String children1_outer) {
         this.children1_outer = children1_outer;
     }
+
+    public String getChildren1_task() {
+        return children1_task;
+    }
+
+    public void setChildren1_task(String children1_task) {
+        this.children1_task = children1_task;
+    }
 }

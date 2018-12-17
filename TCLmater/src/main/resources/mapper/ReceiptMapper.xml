@@ -50,6 +50,7 @@
 
     <select id="getPcmsShopInfo" resultType="com.kuyu.vo.pcms.PcmsShopVo">
         SELECT
+        ps.SHOP_SALES_AMOUNT as shop_sales_amount,
         ps.SHOP_NAME AS shop_name,
         ps.SHOP_PROVINCE AS shop_province,
         ps.SHOP_CITY AS shop_city,
@@ -180,12 +181,14 @@
         ps.vendor_name AS vendor_name,
         ps.vendor_id AS vendor_id,
         pt.REQUEST_END_TIME AS end_time,
+        te.person_name AS create_user,
         pt.REQUEST_ID AS request_id
         FROM pcms_item p
         LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
         LEFT JOIN pcms_supplier ps ON p.vendor_id = ps.vendor_id
         LEFT JOIN pcms_project_deatil d ON p.detail_id = d.DETAIL_ID
         LEFT JOIN tpm_employee e ON e.person_code = pt.REQUEST_USER
+        LEFT JOIN tpm_employee te ON te.person_code = pt.CREATE_USER
         LEFT JOIN tpm_activity_original f ON f.project_id = p.detail_id
         <where>
             p.itid = #{itid,jdbcType=INTEGER}
