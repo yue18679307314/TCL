@@ -689,7 +689,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				PcmsItem item=new PcmsItem();
 				item.setDetailId(detailId);
 				item.setRequestCompanyCode(projectvo.getRequestCompanyCode());
-				item.setDeptCode(requestDept.substring(requestDept.indexOf("(")+1, requestDept.indexOf(")")));
+				item.setDeptCode(requestDept);
 				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 				item.setVendorId(vendorId);
 				item.setRequestId(requestId);
