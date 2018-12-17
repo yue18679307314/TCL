@@ -29,6 +29,8 @@ public class PcmsShowcaseVo {
     @ApiModelProperty(" 标外费用")
     private String children1_outer;
 
+    private String children1_task;
+
 
     public Integer getScid() {
         return scid;

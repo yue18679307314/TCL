@@ -9,7 +9,6 @@ import com.kuyu.mapper.pcms.PcmsInvoiceImageMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierInvoiceMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMapper;
 import com.kuyu.model.LoginUserInfo;
-import com.kuyu.model.TpmOptLogsModel;
 import com.kuyu.model.WeixinUserInfo;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.*;
@@ -200,7 +199,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         String file = pcmsSupplierPath + "/"+ path;
         List<PcmsSupplierModelVo> supplierList = baseMapper.getPcmsSupplierForIds(userInfo.getEmployeeModel().getCompany());
         if(supplierList != null && supplierList.size() > 0) {
-            String personName = userInfo.getEmployeeModel().getPerson_name();
+            /*String personName = userInfo.getEmployeeModel().getPerson_name();
             String personCode = userInfo.getEmployeeModel().getPerson_code();
             for (PcmsSupplierModelVo tubim : supplierList) {
                 TpmOptLogsModel tolm = new TpmOptLogsModel();
@@ -211,7 +210,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
                 String content = "供应商" + tubim.getVendor_name() +"的信息已下载";
                 tolm.setContent(content);
                 tpmOptLogsService.insertAllColumn(tolm);
-            }
+            }*/
             if("xls".equals(pdfOrxls)) {
                 file += ".xls";
                 createBankInfoXls(supplierList,file);
