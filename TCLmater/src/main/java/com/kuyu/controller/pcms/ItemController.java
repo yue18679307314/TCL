@@ -7,8 +7,14 @@ import com.kuyu.service.PcmsItemService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
+import com.kuyu.vo.pcms.SettlementVo;
+
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -100,23 +106,23 @@ public class ItemController extends BaseController{
 		return pcmsItemService.changeItemStatus(itid,status,getLoginUserInfo(),reason);
 	}
 	
-	/**
-	 * 批量结算
-	 * @param request
-	 * @return
-	 */
-	@ApiOperation("更改立项单状态")
-	@RequestMapping(value = "/settlement", produces = "application/json;charset=utf-8")
-	public @ResponseBody ResultVo settlement(HttpServletRequest request,
-			@RequestParam(value = "itid")String itids) {
-			String itid[] =itids.split(",");
-			for (String id : itid) {
-//				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,null);
-				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,getLoginUserInfo(),null);
-			}
-		
-		return ResultVo.get(ResultVo.SUCCESS);
-	}
+//	/**
+//	 * 批量结算
+//	 * @param request
+//	 * @return
+//	 */
+//	@ApiOperation("更改立项单状态")
+//	@RequestMapping(value = "/settlement", produces = "application/json;charset=utf-8")
+//	public @ResponseBody ResultVo settlement(HttpServletRequest request,
+//			@RequestParam(value = "itid")String itids) {
+//			String itid[] =itids.split(",");
+//			for (String id : itid) {
+////				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,null);
+//				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,getLoginUserInfo(),null);
+//			}
+//		
+//		return ResultVo.get(ResultVo.SUCCESS);
+//	}
 
 //	/**
 //	 * 导入物料单
@@ -154,6 +160,25 @@ public class ItemController extends BaseController{
 //		return ResultVo.get(ResultVo.FILE_IS_NULL);
 //	}
 	
-	
+	/**
+	 * 结算
+	 * @param request
+	 * @return
+	 */
+	@ApiOperation("结算")   
+	@PostMapping(value = "/settlement", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo settlement(HttpServletRequest request,
+			@ApiParam(value = "结算", required = true) @RequestBody SettlementVo settVo) {
+			
+		String itid[] =settVo.getItids().split(",");
+			for (String id : itid) {
+				pcmsItemService.settlement(id,settVo);
+			}
+		//结算逻辑处理
+		//TODO
+			
+			
+		return ResultVo.get(ResultVo.SUCCESS);
+	}
 	
 }

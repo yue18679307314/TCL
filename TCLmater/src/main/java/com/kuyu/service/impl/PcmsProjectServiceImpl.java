@@ -1,20 +1,15 @@
 package com.kuyu.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.PcmsItemMapper;
-import com.kuyu.mapper.pcms.PcmsItemRelationMapper;
 import com.kuyu.mapper.pcms.PcmsMaterialMapper;
 import com.kuyu.mapper.pcms.PcmsMaterialSourceMapper;
 import com.kuyu.mapper.pcms.PcmsOthertmMapper;
@@ -25,18 +20,11 @@ import com.kuyu.mapper.pcms.PcmsProjectMapper;
 import com.kuyu.mapper.pcms.PcmsShopMapper;
 import com.kuyu.mapper.pcms.PcmsShowcaseMapper;
 import com.kuyu.mapper.pcms.PcmsShowcaseSourceMapper;
-import com.kuyu.model.TpmActivityModel;
-import com.kuyu.model.TpmActivityOriginalModel;
 import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.PcmsItem;
-import com.kuyu.model.pcms.PcmsItemLog;
-import com.kuyu.model.pcms.PcmsItemRelation;
-import com.kuyu.model.pcms.PcmsItemRelationExample;
 import com.kuyu.model.pcms.PcmsMaterial;
-import com.kuyu.model.pcms.PcmsMaterialExample;
 import com.kuyu.model.pcms.PcmsMaterialSource;
 import com.kuyu.model.pcms.PcmsOthertm;
-import com.kuyu.model.pcms.PcmsOthertmExample;
 import com.kuyu.model.pcms.PcmsOthertmSource;
 import com.kuyu.model.pcms.PcmsOutdoors;
 import com.kuyu.model.pcms.PcmsProject;
@@ -44,7 +32,6 @@ import com.kuyu.model.pcms.PcmsProjectDeatil;
 import com.kuyu.model.pcms.PcmsProjectExample;
 import com.kuyu.model.pcms.PcmsShop;
 import com.kuyu.model.pcms.PcmsShowcase;
-import com.kuyu.model.pcms.PcmsShowcaseExample;
 import com.kuyu.model.pcms.PcmsShowcaseSource;
 import com.kuyu.service.PcmsProjectService;
 import com.kuyu.util.PcmsProjectUtil;
@@ -52,7 +39,6 @@ import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ActivityOriginalVo;
-import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.ProjectDetailVo;
 import com.kuyu.vo.pcms.RequestUserVo;
@@ -61,6 +47,7 @@ import com.kuyu.vo.project.ProjectDetialModelVo;
 import com.kuyu.vo.project.TpmActivityOriginalModelVo;
 
 @Service
+@Transactional
 public class PcmsProjectServiceImpl implements PcmsProjectService{
 
 	@Autowired
@@ -80,9 +67,6 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 	
 	@Autowired
 	private PcmsItemMapper pcmsItemMapper;
-	
-	@Autowired
-	private PcmsItemRelationMapper pcmsItemRelationMapper;
 	
 	@Autowired
 	private PcmsShowcaseSourceMapper pcmsShowcaseSourceMapper;

@@ -5,16 +5,18 @@ import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsItemService;
+import com.kuyu.util.PcmsProjectUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
 
 @Service
-//@Transactional
+@Transactional
 public class PcmsItemServiceImpl implements PcmsItemService{
 
 	@Resource
@@ -220,6 +222,19 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			return ResultVo.get(ResultVo.SUCCESS);
 		}
 		return ResultVo.get(ResultVo.FAIL);
+	}
+
+
+
+	@Override
+	public int settlement(String id, SettlementVo settVo) {
+		// TODO Auto-generated method stub
+		//结算单编号
+		String settNumber=PcmsProjectUtil.creatItemNumber();
+		
+		//
+		
+		return 0;
 	}
 
 }

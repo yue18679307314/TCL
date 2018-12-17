@@ -19,7 +19,7 @@ public class PcmsProjectUtil {
         // 0 代表前面补充0     
         // 4 代表长度为4     
         // d 代表参数为正数型
-        return "LX"+machineId + String.format("%04d", hashCodeV);
+        return "JS"+machineId + String.format("%04d", hashCodeV);
 	}
 	
 	public static void main(String[] args) {
