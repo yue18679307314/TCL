@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.PcmsItemMapper;
@@ -531,6 +532,9 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			String activityId=allList.getProjectId();
 			String vendorId=allList.getVendorId();
 			List<OtherFeeOriginalModelVo> meList=allList.getOtherFeeOriginalModelList();
+//			if (!CollectionUtils.isNotEmpty(meList)) {
+//				return ;
+//			}
 			for (OtherFeeOriginalModelVo material : meList) {
 				PcmsMaterial info=new PcmsMaterial();
 				info.setResuestId(requestId);
@@ -674,7 +678,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				item.setDetailId(detailId);
 				item.setRequestCompanyCode(projectvo.getRequestCompanyCode());
 				item.setDeptCode(requestDept);
-				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
+//				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 				item.setVendorId(vendorId);
 				item.setRequestId(requestId);
 				item.setItemPrice(Double.valueOf(detail.getDetailAmount()));

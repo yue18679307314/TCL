@@ -570,6 +570,7 @@
 			c.finance_user_name AS financeUserName,
 			c.REQUEST_COMPANY_CODE AS requestCompanyCode,
 			j.person_name AS requestUserName,
+			l.person_name AS createUser,
 			IFNULL(f.DETAIL_SUBJECT,k.org_name) AS detailSubject,
 			c.REQUEST_DEPT AS requestDept,
 			c.REQUEST_CREATE_TIME AS requestCreateTime,
@@ -592,6 +593,7 @@
 		LEFT JOIN tpm_employee j ON c.REQUEST_USER=j.person_code 
 		LEFT JOIN tpm_activity_original h ON a.detail_id=h.project_id
 		LEFT JOIN tpm_dept k ON h.dept=k.org_code
+		LEFT JOIN tpm_employee l ON l.person_code=c.CREATE_USER
 		WHERE a.itid=#{itid}
   </select>
 </mapper>

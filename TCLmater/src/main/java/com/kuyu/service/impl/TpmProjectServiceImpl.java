@@ -183,13 +183,14 @@ public class TpmProjectServiceImpl extends ServiceImpl<TpmProjectMapper, TpmProj
 						tpmOtherFeeOriginalModel.insert();
 						log.info("立项子表2插入成功！！");
 					}
+					
+					//处理临促物料  2018-11-10
+					pcmsProjectService.importProjectMaterialDetail(vo);//导入临促物料信息
 				}
 			}
 
 		}
 
-		//处理临促物料  2018-11-10
-		pcmsProjectService.importProjectMaterialDetail(vo);//导入临促物料信息
 		
 		
 		
