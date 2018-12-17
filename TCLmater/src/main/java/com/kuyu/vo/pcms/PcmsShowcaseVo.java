@@ -29,6 +29,7 @@ public class PcmsShowcaseVo {
     @ApiModelProperty(" 标外费用")
     private String children1_outer;
 
+    @ApiModelProperty(" 彩电当年销售任务")
     private String children1_task;
 
 

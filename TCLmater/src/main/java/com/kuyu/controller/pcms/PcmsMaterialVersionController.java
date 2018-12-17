@@ -10,6 +10,7 @@ import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.UploadExcelVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,20 +71,23 @@ public class PcmsMaterialVersionController extends BaseController {
 
     /**
      * 确定导入
-     * @param vendor_id
+     * @param uploadExcelVo
      * @return
      * @throws Exception
      */
     @ApiOperation(value = "确定导入",response = PcmsSupplierMaterialModel.class)
-    @RequestMapping(value = "/confirmSupplierMaterial", method = RequestMethod.GET)
-    public ResultVo confirmSupplierMaterial(@RequestParam(value = "vendor_id") String vendor_id,@RequestParam(value = "url") String url)throws Exception{
+    @PostMapping("/confirmSupplierMaterial")
+    public ResultVo confirmSupplierMaterial(@RequestBody UploadExcelVo uploadExcelVo)throws Exception{
         try{
+            String vendor_id = uploadExcelVo.getVendor_id();
             String s = vendor_id.replace("&quot;","\"");
             String st = s.replace("&lt;","<");
             ObjectMapper mapper = new ObjectMapper();
             List<PcmsSupplierMaterialModel> beanList = mapper.readValue(st, new TypeReference<List<PcmsSupplierMaterialModel>>() {});
             return pcmsMaterialVersionService.confirmSupplierMaterial(beanList,getUserInfo());
         }catch (Exception e){
+            String vendor_id = uploadExcelVo.getVendor_id();
+            String url =  uploadExcelVo.getUrl();
             pcmsMaterialVersionService.giveUpSupplierMaterial(vendor_id,url,getUserInfo());
             throw new ParamException("导入失败");
         }

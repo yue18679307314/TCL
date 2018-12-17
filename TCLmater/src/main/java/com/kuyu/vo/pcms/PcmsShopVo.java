@@ -35,6 +35,7 @@ public class PcmsShopVo {
     @ApiModelProperty("门店销售任务")
     private String detail_task;
 
+    @ApiModelProperty("彩电上年销售额（单位：万元）")
     private String shop_sales_amount;
 
 

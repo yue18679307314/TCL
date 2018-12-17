@@ -1,38 +1,11 @@
 package com.kuyu.service.impl;
 
-import java.util.Date;
-import java.util.List;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.mapper.TpmEmployeeMapper;
-import com.kuyu.mapper.pcms.PcmsItemMapper;
-import com.kuyu.mapper.pcms.PcmsMaterialMapper;
-import com.kuyu.mapper.pcms.PcmsMaterialSourceMapper;
-import com.kuyu.mapper.pcms.PcmsOthertmMapper;
-import com.kuyu.mapper.pcms.PcmsOthertmSourceMapper;
-import com.kuyu.mapper.pcms.PcmsOutdoorsMapper;
-import com.kuyu.mapper.pcms.PcmsProjectDeatilMapper;
-import com.kuyu.mapper.pcms.PcmsProjectMapper;
-import com.kuyu.mapper.pcms.PcmsShopMapper;
-import com.kuyu.mapper.pcms.PcmsShowcaseMapper;
-import com.kuyu.mapper.pcms.PcmsShowcaseSourceMapper;
+import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.TpmEmployeeModel;
-import com.kuyu.model.pcms.PcmsItem;
-import com.kuyu.model.pcms.PcmsMaterial;
-import com.kuyu.model.pcms.PcmsMaterialSource;
-import com.kuyu.model.pcms.PcmsOthertm;
-import com.kuyu.model.pcms.PcmsOthertmSource;
-import com.kuyu.model.pcms.PcmsOutdoors;
-import com.kuyu.model.pcms.PcmsProject;
-import com.kuyu.model.pcms.PcmsProjectDeatil;
-import com.kuyu.model.pcms.PcmsProjectExample;
-import com.kuyu.model.pcms.PcmsShop;
-import com.kuyu.model.pcms.PcmsShowcase;
-import com.kuyu.model.pcms.PcmsShowcaseSource;
+import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsProjectService;
 import com.kuyu.util.PcmsProjectUtil;
 import com.kuyu.util.ResultVoUtils;
@@ -45,6 +18,13 @@ import com.kuyu.vo.pcms.RequestUserVo;
 import com.kuyu.vo.project.OtherFeeOriginalModelVo;
 import com.kuyu.vo.project.ProjectDetialModelVo;
 import com.kuyu.vo.project.TpmActivityOriginalModelVo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -437,17 +417,15 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 
 	@Override
 	public ResultVo changeRequestName(String requestId,String personCode) {
-		TpmEmployeeModel emp=tpmEmployeeMapper.getTpmEmployeebyPersonCode(personCode);
-		
+		TpmEmployeeModel emp=tpmEmployeeMapper.getTpmEmployeeByItcode(personCode);
 		PcmsProject record=new PcmsProject();
-		record.setRequestUserName(emp.getPerson_name());
+		record.setRequestUserName(emp.getPerson_code());
 		PcmsProjectExample example=new PcmsProjectExample();
 		example.createCriteria().andRequestIdEqualTo(requestId);
 		int i=pcmsProjectMapper.updateByExampleSelective(record, example);
 		if (i==1){
 			return ResultVo.get(ResultVo.SUCCESS);
 		}
-		
 		 return ResultVo.get(ResultVo.FAIL);
 	}
 

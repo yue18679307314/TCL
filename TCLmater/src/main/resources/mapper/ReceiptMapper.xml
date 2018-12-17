@@ -165,7 +165,7 @@
         FROM pcms_item p
         LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
         LEFT JOIN pcms_supplier ps ON p.vendor_id = ps.vendor_id*/
-        SELECT p.item_number AS item_number,
+        /*SELECT p.item_number AS item_number,
         pt.REQUEST_DEPT AS request_dept,
         e.person_name AS request_user_name,
         pt.REQUEST_TITLE AS request_title,
@@ -189,7 +189,34 @@
         LEFT JOIN pcms_project_deatil d ON p.detail_id = d.DETAIL_ID
         LEFT JOIN tpm_employee e ON e.person_code = pt.REQUEST_USER
         LEFT JOIN tpm_employee te ON te.person_code = pt.CREATE_USER
+        LEFT JOIN tpm_activity_original f ON f.project_id = p.detail_id*/
+        SELECT
+        p.item_number AS item_number,
+        tpdt.org_name AS request_dept,
+        e.person_name AS request_user_name,
+        pt.REQUEST_TITLE AS request_title,
+        p.itid AS itid, p.item_price AS item_price,
+        p.status AS STATUS, p.it_type AS TYPE,
+        pt.REQUEST_COMPANY_CODE AS request_company_code,
+        pt.REQUEST_CREATE_TIME AS create_time,
+        p.dispatch_time AS dispatch_time, p.dispatch AS dispatch,
+        IFNULL(d.DETAIL_ACCOUNT,f.fee_detail_type) AS subclass,
+        IFNULL(tdt.org_name,tpdt.org_name) AS detail_subject,
+        ps.vendor_name AS vendor_name, ps.vendor_id AS vendor_id,
+        pt.REQUEST_END_TIME AS end_time,
+        te.person_name AS create_user,
+        pt.REQUEST_ID AS request_id
+        FROM pcms_item p
+        LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
+        LEFT JOIN pcms_supplier ps ON p.vendor_id = ps.vendor_id
+        LEFT JOIN pcms_project_deatil d ON p.detail_id = d.DETAIL_ID
+        LEFT JOIN tpm_employee e ON e.person_code = pt.REQUEST_USER
+        LEFT JOIN tpm_employee te ON te.person_code = pt.CREATE_USER
+        LEFT JOIN tpm_employee tem ON d.DETAIL_SUBJECT = tem.person_code
+        LEFT JOIN tpm_dept td ON td.org_code = tem.org_code
+        LEFT JOIN tpm_dept tpdt ON d.DETAIL_SUBJECT = tpdt.org_code
         LEFT JOIN tpm_activity_original f ON f.project_id = p.detail_id
+        LEFT JOIN tpm_dept tdt ON f.dept = tdt.org_code
         <where>
             p.itid = #{itid,jdbcType=INTEGER}
         </where>

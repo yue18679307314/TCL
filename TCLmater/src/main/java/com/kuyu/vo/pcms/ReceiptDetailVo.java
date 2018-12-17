@@ -42,7 +42,11 @@ public class ReceiptDetailVo {
     @ApiModelProperty("申请人/负责人")
     private String request_user_name;
 
+    @ApiModelProperty("填单人")
     private String create_user;
+
+    @ApiModelProperty("预算部门")
+    private String detail_subject;
 
     @ApiModelProperty("申请标题")
     private String request_title;
@@ -292,5 +296,13 @@ public class ReceiptDetailVo {
 
     public void setCreate_user(String create_user) {
         this.create_user = create_user;
+    }
+
+    public String getDetail_subject() {
+        return detail_subject;
+    }
+
+    public void setDetail_subject(String detail_subject) {
+        this.detail_subject = detail_subject;
     }
 }
