@@ -28,6 +28,8 @@ public class ItemDetail {
 	
 	private String requestUserName; //申请人
 	
+	private String createUser; //填单人
+	
 	private String detailSubject; //预算部门
 	
 	private String requestDept;  //申请部门
@@ -288,4 +290,14 @@ public class ItemDetail {
 	public void setVendor_id(String vendor_id) {
 		this.vendor_id = vendor_id;
 	}
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+	
+	
 }
