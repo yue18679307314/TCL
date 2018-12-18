@@ -15,4 +15,6 @@ public interface PcmsFeedbackMapper extends BaseMapper<PcmsFeedbackModel> {
     int insertFeedback(PcmsFeedbackModel pcmsFeedbackModel);
 
     List<FeedbackVo> selectByTransferId(@Param("id") Integer id);
+
+    List<FeedbackVo> selectByPendingId(@Param("id") Integer id);
 }

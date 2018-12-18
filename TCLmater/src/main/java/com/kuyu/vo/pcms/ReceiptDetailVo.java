@@ -88,7 +88,7 @@ public class ReceiptDetailVo {
     private List<PcmsRejectLogVo> pcmsRejectLogList;
 
     @ApiModelProperty("转办信息")
-    private List<List<Transfer>> pcmsTransferVoList;
+    private List<Transfer> pcmsTransferVoList;
 
     public Integer getItid() {
         return itid;
@@ -274,14 +274,6 @@ public class ReceiptDetailVo {
         this.pcmsRejectLogList = pcmsRejectLogList;
     }
 
-    public List<List<Transfer>> getPcmsTransferVoList() {
-        return pcmsTransferVoList;
-    }
-
-    public void setPcmsTransferVoList(List<List<Transfer>> pcmsTransferVoList) {
-        this.pcmsTransferVoList = pcmsTransferVoList;
-    }
-
     public PcmsTovoidItemVo getPcmsTovoidItemVo() {
         return pcmsTovoidItemVo;
     }
@@ -304,5 +296,13 @@ public class ReceiptDetailVo {
 
     public void setDetail_subject(String detail_subject) {
         this.detail_subject = detail_subject;
+    }
+
+    public List<Transfer> getPcmsTransferVoList() {
+        return pcmsTransferVoList;
+    }
+
+    public void setPcmsTransferVoList(List<Transfer> pcmsTransferVoList) {
+        this.pcmsTransferVoList = pcmsTransferVoList;
     }
 }

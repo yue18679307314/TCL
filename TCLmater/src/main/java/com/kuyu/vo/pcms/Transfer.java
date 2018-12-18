@@ -3,6 +3,7 @@ package com.kuyu.vo.pcms;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by pc on 2018/12/12
@@ -21,6 +22,8 @@ public class Transfer {
     private Date create_time;
     @ApiModelProperty("任务说明")
     private String context;
+
+    private List<FeedbackVo> listFeedbackVo;
 
     public Integer getId() {
         return id;
@@ -68,5 +71,13 @@ public class Transfer {
 
     public void setContext(String context) {
         this.context = context;
+    }
+
+    public List<FeedbackVo> getListFeedbackVo() {
+        return listFeedbackVo;
+    }
+
+    public void setListFeedbackVo(List<FeedbackVo> listFeedbackVo) {
+        this.listFeedbackVo = listFeedbackVo;
     }
 }

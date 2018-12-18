@@ -42,6 +42,9 @@ public class PendingMaterialVo {
 
     private Double all_price;
 
+
+    private Integer state;
+
     private List<PcmsMaterialImgVo> pcmsMaterialImgVoList;
 
     public Integer getId() {
@@ -130,5 +133,13 @@ public class PendingMaterialVo {
 
     public void setPcmsMaterialImgVoList(List<PcmsMaterialImgVo> pcmsMaterialImgVoList) {
         this.pcmsMaterialImgVoList = pcmsMaterialImgVoList;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }
