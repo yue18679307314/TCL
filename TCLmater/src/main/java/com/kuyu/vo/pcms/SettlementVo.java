@@ -24,7 +24,7 @@ public class SettlementVo implements Serializable{
 	private String requestDepart;
 	
 	@JsonProperty("DETAIL_LIST")
-	private List<SettlementDeatil> detailList;
+	private List<SettlementDetail> detailList;
 
 	@JsonProperty("PAYMENT_LIST")
 	private List<SettlementPayment> paymentList;
@@ -53,11 +53,11 @@ public class SettlementVo implements Serializable{
 		this.requestDepart = requestDepart;
 	}
 
-	public List<SettlementDeatil> getDetailList() {
+	public List<SettlementDetail> getDetailList() {
 		return detailList;
 	}
 
-	public void setDetailList(List<SettlementDeatil> detailList) {
+	public void setDetailList(List<SettlementDetail> detailList) {
 		this.detailList = detailList;
 	}
 

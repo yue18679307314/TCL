@@ -5,6 +5,10 @@ public class ItemResult {
 	
 	private Integer itid;
 	
+	private String companyCode;
+	
+	private String vendorId;
+	
 	private String vendorName;
 	
 	private String requestId;
@@ -17,7 +21,11 @@ public class ItemResult {
 	
 	private Double itemPrice;
 	
+	private String requestUser;
+	
 	private String requestUserName;
+	
+	private String dept;
 	
 	private String deptName;
 	
@@ -27,6 +35,39 @@ public class ItemResult {
 
 	private String projectType;
 	
+	
+	public String getRequestUser() {
+		return requestUser;
+	}
+
+	public void setRequestUser(String requestUser) {
+		this.requestUser = requestUser;
+	}
+
+	public String getCompanyCode() {
+		return companyCode;
+	}
+
+	public void setCompanyCode(String companyCode) {
+		this.companyCode = companyCode;
+	}
+
+	public String getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(String vendorId) {
+		this.vendorId = vendorId;
+	}
+
+	public String getDept() {
+		return dept;
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
 	public String getProjectType() {
 		return projectType;
 	}

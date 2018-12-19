@@ -1,12 +1,30 @@
 package com.kuyu.mapper.pcms;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.kuyu.model.pcms.PcmsSettlementModel;
+import com.kuyu.model.pcms.PcmsSettlement;
+import com.kuyu.model.pcms.PcmsSettlementExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
-/**
- * Created by pc on 2018/12/8
- */
-public interface PcmsSettlementMapper extends BaseMapper<PcmsSettlementModel> {
+public interface PcmsSettlementMapper {
+    int countByExample(PcmsSettlementExample example);
 
-    PcmsSettlementModel insertSettlement(PcmsSettlementModel pcmsSettlementModel);
+    int deleteByExample(PcmsSettlementExample example);
+
+    int deleteByPrimaryKey(Integer seid);
+
+    int insert(PcmsSettlement record);
+
+    int insertSelective(PcmsSettlement record);
+
+    List<PcmsSettlement> selectByExample(PcmsSettlementExample example);
+
+    PcmsSettlement selectByPrimaryKey(Integer seid);
+
+    int updateByExampleSelective(@Param("record") PcmsSettlement record, @Param("example") PcmsSettlementExample example);
+
+    int updateByExample(@Param("record") PcmsSettlement record, @Param("example") PcmsSettlementExample example);
+
+    int updateByPrimaryKeySelective(PcmsSettlement record);
+
+    int updateByPrimaryKey(PcmsSettlement record);
 }

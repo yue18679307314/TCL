@@ -535,7 +535,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			
 			PcmsItem item=new PcmsItem();
 			item.setDetailId(activityId);
-			item.setRequestCompanyCode(projectvo.getRequestCompanyCode());
+			item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 			item.setDeptCode(requestDept);
 			item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 			item.setVendorId(vendorId);
@@ -654,7 +654,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			if(itemType!=4){
 				PcmsItem item=new PcmsItem();
 				item.setDetailId(detailId);
-				item.setRequestCompanyCode(projectvo.getRequestCompanyCode());
+				item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 				item.setDeptCode(requestDept);
 //				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 				item.setVendorId(vendorId);

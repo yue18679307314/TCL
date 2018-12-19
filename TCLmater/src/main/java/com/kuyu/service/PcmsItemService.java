@@ -1,12 +1,18 @@
 package com.kuyu.service;
 
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import org.apache.http.client.ClientProtocolException;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsMaterial;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
+import com.kuyu.vo.pcms.SettlementRequest;
 import com.kuyu.vo.pcms.SettlementVo;
 
 public interface PcmsItemService  {
@@ -23,7 +29,7 @@ public interface PcmsItemService  {
 //	ResultVo changeItemStatus(Integer itid,Integer status,String reason);
 	ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context);
 
-	int settlement(String id, SettlementVo settVo);
+	int settlement(SettlementRequest settVo) throws UnsupportedEncodingException, ClientProtocolException, IOException;
 
 	
 
