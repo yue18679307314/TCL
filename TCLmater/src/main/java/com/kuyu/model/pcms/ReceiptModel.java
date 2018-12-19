@@ -41,7 +41,7 @@ public class ReceiptModel implements Serializable {
     private String request_company_code;
 
     @ApiModelProperty("申请时间")
-    private Date create_time;
+    private String create_time;
 
     @ApiModelProperty("类型")
     private String type;
@@ -105,11 +105,11 @@ public class ReceiptModel implements Serializable {
         this.request_company_code = request_company_code;
     }
 
-    public Date getCreate_time() {
+    public String getCreate_time() {
         return create_time;
     }
 
-    public void setCreate_time(Date create_time) {
+    public void setCreate_time(String create_time) {
         this.create_time = create_time;
     }
 

@@ -4,17 +4,18 @@
     <select id="findReceiptList" resultType="com.kuyu.model.pcms.ReceiptModel">
         SELECT p.item_number AS item_number,
         pt.REQUEST_DEPT AS request_dept,
-        pt.request_user_name AS request_user_name,
+        te.person_name AS request_user_name,
         pt.REQUEST_TITLE AS request_title,
         p.itid AS itid,
         p.item_price AS item_price,
         p.status AS status,
         pt.TYPE as type,
         pt.REQUEST_COMPANY_CODE AS request_company_code,
-        p.create_time AS create_time
+        pt.REQUEST_CREATE_TIME AS create_time
         FROM pcms_supplier_user t
         LEFT JOIN pcms_item p ON t.vendor_id = p.vendor_id
         LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
+        LEFT JOIN tpm_employee te ON te.person_code= pt.CREATE_USER
         <where>
             <if test="params.openid !=null and params.openid !=''">
                 t.openid =
