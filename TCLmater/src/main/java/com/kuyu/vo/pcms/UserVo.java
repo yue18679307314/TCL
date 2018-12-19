@@ -28,6 +28,9 @@ public class UserVo {
     @ApiModelProperty("用户姓名")
     private String userName;
 
+    @ApiModelProperty("用户编码")
+    private String employeeNumber;
+
     public String getBranchId() {
         return branchId;
     }
@@ -82,5 +85,13 @@ public class UserVo {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getEmployeeNumber() {
+        return employeeNumber;
+    }
+
+    public void setEmployeeNumber(String employeeNumber) {
+        this.employeeNumber = employeeNumber;
     }
 }

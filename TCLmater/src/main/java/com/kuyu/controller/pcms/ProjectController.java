@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -105,9 +106,8 @@ public class ProjectController {
      */
     @ApiOperation(value = "改变负责人")
     @RequestMapping(value = "/changeRequestName",produces = "application/json;charset=UTF-8")
-    public ResultVo changeRequestName(String requestId,String personCode)throws Exception{
-    	ResultVo result= pcmsProjectService.changeRequestName(requestId,personCode);
-    		
+    public ResultVo changeRequestName(String requestId,String personCode,String personName,String userId)throws Exception{
+    	ResultVo result= pcmsProjectService.changeRequestName(requestId,personCode,personName,userId);
     	return result;
     }
 }

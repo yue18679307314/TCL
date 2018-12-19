@@ -22,4 +22,19 @@
 			pf.transfer_id = #{id,jdbcType=INTEGER}
 		</where>
 	</select>
+
+	<select id="selectByPendingId" resultType="com.kuyu.vo.pcms.FeedbackVo">
+		SELECT
+		pf.id,
+		pf.context,
+		pf.create_time,
+		pf.transfer_id,
+		pf.number
+		FROM pcms_pending_material ppm
+		LEFT JOIN pcms_transfer pt  ON pt.pending_id = ppm.id
+		LEFT JOIN pcms_feedback pf ON pf.transfer_id = pt.id
+		<where>
+			ppm.id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
 </mapper>

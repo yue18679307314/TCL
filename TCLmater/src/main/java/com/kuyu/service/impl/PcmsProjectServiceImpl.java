@@ -1,7 +1,6 @@
 package com.kuyu.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
@@ -417,10 +416,22 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 
 
 	@Override
-	public ResultVo changeRequestName(String requestId,String personCode) {
-		TpmEmployeeModel emp=tpmEmployeeMapper.getTpmEmployeeByItcode(personCode);
+	public ResultVo changeRequestName(String requestId,String personCode,String personName,String userId) {
+		TpmEmployeeModel tpmEmployeeModel = new TpmEmployeeModel();
+		tpmEmployeeModel.setPerson_code(personCode);
+		TpmEmployeeModel emp=tpmEmployeeMapper.getTpmEmployee(tpmEmployeeModel);
+		if(null == emp){
+			TpmEmployeeModel tmp = new TpmEmployeeModel();
+			tmp.setUuid(StringUtil.getUUID());
+			tmp.setPerson_code(personCode);
+			tmp.setItcode(userId);
+			tmp.setOrg_code("1111");
+			tmp.setOrg_name("1111");
+			tmp.setPerson_name(personName);
+			tpmEmployeeMapper.insert(tmp);
+		}
 		PcmsProject record=new PcmsProject();
-		record.setRequestUserName(emp.getPerson_code());
+		record.setRequestUser(personCode);
 		PcmsProjectExample example=new PcmsProjectExample();
 		example.createCriteria().andRequestIdEqualTo(requestId);
 		int i=pcmsProjectMapper.updateByExampleSelective(record, example);

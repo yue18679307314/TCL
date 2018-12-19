@@ -63,7 +63,7 @@
         <where>
             t.itid = #{itid,jdbcType=INTEGER}
         </where>
-        ORDER BY t.status DESC
+        ORDER BY t.create_time DESC
     </select>
 
     <select id="queryDetailByPendingId" resultType="com.kuyu.vo.pcms.Transfer">

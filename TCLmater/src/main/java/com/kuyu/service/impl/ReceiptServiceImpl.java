@@ -507,8 +507,8 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         }
         /**待验收物料信息*/
         List<PendingMaterialVo> pendingMaterialVoList =  new ArrayList<>();
-        List<List<Transfer>> pcmsTransferVoList = new ArrayList<>();
         List<PendingMaterialVo> list =  pcmsPendingMaterialMapper.queryByItid(itid);
+        List<Transfer> pcmsTransferVoList = new ArrayList<>();
         if(list.size()>0){
             for(PendingMaterialVo pendingMaterialVo : list){
                 /**待验收物料图片信息*/
@@ -516,9 +516,15 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
                 pendingMaterialVo.setPcmsMaterialImgVoList(pcmsMaterialImg);
                 pendingMaterialVoList.add(pendingMaterialVo);
                 /**转办信息*/
-                List<Transfer> pcmsTransferVoList1 = pcmsTransferMapper.queryDetailByPendingId(pendingMaterialVo.getId());
-                if(pcmsTransferVoList1.size()>0){
-                    pcmsTransferVoList.add(pcmsTransferVoList1);
+                pcmsTransferVoList = pcmsTransferMapper.queryDetailByPendingId(pendingMaterialVo.getId());
+                for(Transfer transfer : pcmsTransferVoList){
+                    TransferDetailVo transferDetailVo = pcmsTransferMapper.selectFeedbackDetail(transfer.getId());
+                    List<FeedbackVo> listFeedbackVo = pcmsFeedbackMapper.selectByTransferId(transferDetailVo.getId());
+                    for(FeedbackVo feedbackVo : listFeedbackVo){
+                        List<FeedbackImageVo> list1 = pcmsFeedbackImgMapper.selectByFeedbackId(feedbackVo.getId());
+                        feedbackVo.setList(list1);
+                    }
+                    transfer.setListFeedbackVo(listFeedbackVo);
                 }
             }
             receiptDetailVo.setPcmsPendingMaterialList(pendingMaterialVoList);
@@ -731,7 +737,6 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     @Override
     public ResultVo selectTransferDetail(Integer id) throws Exception {
         List<Transfer> list = pcmsTransferMapper.queryDetailByPendingId(id);
-        PendingVo pendingVo = new PendingVo();
         for(Transfer transfer : list){
             TransferDetailVo transferDetailVo = pcmsTransferMapper.selectFeedbackDetail(transfer.getId());
             List<FeedbackVo> listFeedbackVo = pcmsFeedbackMapper.selectByTransferId(transferDetailVo.getId());
@@ -739,10 +744,9 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
                 List<FeedbackImageVo> list1 = pcmsFeedbackImgMapper.selectByFeedbackId(feedbackVo.getId());
                 feedbackVo.setList(list1);
             }
-            transferDetailVo.setListFeedbackVo(listFeedbackVo);
-            pendingVo.setTransferDetailVo(transferDetailVo);
+            transfer.setListFeedbackVo(listFeedbackVo);
         }
-        return ResultVo.getDataWithSuccess(pendingVo);
+        return ResultVo.getDataWithSuccess(list);
     }
 
 }
