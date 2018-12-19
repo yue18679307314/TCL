@@ -2,7 +2,7 @@ package com.kuyu.vo.pcms;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SettlementDeatil {
+public class SettlementDetail {
 
 	@JsonProperty("DETAIL_ID")
 	private String detailId;
