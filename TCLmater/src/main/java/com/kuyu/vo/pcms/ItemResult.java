@@ -11,6 +11,8 @@ public class ItemResult {
 	
 	private String vendorName;
 	
+	private String taxNumber;
+	
 	private String requestId;
 	
 	private String requestTitle;
@@ -164,5 +166,14 @@ public class ItemResult {
 		this.status = status;
 	}
 
+	public String getTaxNumber() {
+		return taxNumber;
+	}
+
+	public void setTaxNumber(String taxNumber) {
+		this.taxNumber = taxNumber;
+	}
+	
+	
 	
 }	

@@ -42,6 +42,9 @@ public class SettlementController extends BaseController{
 	public @ResponseBody ResultVo start(HttpServletRequest request,
 			@ApiParam(value = "结算", required = true)@RequestBody SettlementRequest param) throws ClientProtocolException, IOException {
 		
+//		LoginUserInfo user=getUserInfo();
+		
+		
 		pcmsItemService.settlement(param);
 			
 		return ResultVo.get(ResultVo.SUCCESS);

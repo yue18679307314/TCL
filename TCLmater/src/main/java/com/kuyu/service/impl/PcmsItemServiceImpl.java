@@ -254,10 +254,10 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 	@Override
-	public int settlement(SettlementRequest settVo) throws ClientProtocolException, IOException {
+	public ResultVo settlement(SettlementRequest settVo) throws ClientProtocolException, IOException {
 		
 		//结算单编号
-		String settNumber=PcmsProjectUtil.creatItemNumber();
+		String settNumber=PcmsProjectUtil.creatSettNumber();
 		
 		List<SettlementDetailRequest> settlementDetail=settVo.getItemList();
 		
@@ -325,6 +325,10 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			pcmsSettlementItemMapper.insertSelective(settIt);
 			
 			
+			item.setStatus(5);
+			item.setUpdateTime(new Date());
+//			int i=pcmsItemMapper.updateByExampleSelective(itemUp, example);
+			pcmsItemMapper.updateByPrimaryKeySelective(item);
 		}
 		
 				
@@ -352,26 +356,17 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		// HttpEntity
 		// 是一个中间的桥梁，在httpClient里面，是连接我们的请求与响应的一个中间桥梁，所有的请求参数都是通过HttpEntity携带过去的
 		// 通过client来执行请求，获取一个响应结果
-		CloseableHttpResponse response = client.execute(httpPost);
-		HttpEntity entity = response.getEntity();
-		String str = EntityUtils.toString(entity, "UTF-8");
-		System.out.println(str);
-		// 关闭
-		response.close();
+//		CloseableHttpResponse response = client.execute(httpPost);
+//		HttpEntity entity = response.getEntity();
+//		String str = EntityUtils.toString(entity, "UTF-8");
+//		System.out.println(str);
+//		// 关闭
+//		response.close();
 		
 		
+	
+		return ResultVo.get(ResultVo.SUCCESS);
 		
-		
-		//更新立项单状态
-		PcmsItemExample example=new PcmsItemExample();
-//		example.createCriteria().andItidEqualTo(itid);
-		PcmsItem item=new PcmsItem();
-//		item.setStatus(status);
-		item.setUpdateTime(new Date());
-		int i=pcmsItemMapper.updateByExampleSelective(item, example);
-		
-		
-		return i;
 	}
 
 	

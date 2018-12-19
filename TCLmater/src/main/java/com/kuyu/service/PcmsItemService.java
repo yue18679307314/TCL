@@ -29,7 +29,7 @@ public interface PcmsItemService  {
 //	ResultVo changeItemStatus(Integer itid,Integer status,String reason);
 	ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context);
 
-	int settlement(SettlementRequest settVo) throws UnsupportedEncodingException, ClientProtocolException, IOException;
+	ResultVo settlement(SettlementRequest settVo) throws UnsupportedEncodingException, ClientProtocolException, IOException;
 
 	
 
