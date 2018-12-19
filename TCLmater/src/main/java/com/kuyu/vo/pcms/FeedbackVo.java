@@ -24,6 +24,9 @@ public class FeedbackVo {
     @ApiModelProperty("数量")
     private Integer number;
 
+    @ApiModelProperty("转办人")
+    private String person_name;
+
     private List<FeedbackImageVo> list;
 
     public Date getCreate_time() {
@@ -72,5 +75,13 @@ public class FeedbackVo {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getPerson_name() {
+        return person_name;
+    }
+
+    public void setPerson_name(String person_name) {
+        this.person_name = person_name;
     }
 }

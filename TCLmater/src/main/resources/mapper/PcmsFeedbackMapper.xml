@@ -16,8 +16,10 @@
 		pf.context,
 		pf.create_time,
 		pf.transfer_id,
+		pt.person_name,
 		pf.number
 		FROM pcms_feedback pf
+		left join pcms_transfer pt on pf.transfer_id = pt.id
 		<where>
 			pf.transfer_id = #{id,jdbcType=INTEGER}
 		</where>

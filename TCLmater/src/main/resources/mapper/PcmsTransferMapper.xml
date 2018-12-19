@@ -7,16 +7,17 @@
         pt.id AS id,
         pt.context AS context,
         ppm.state AS state,
-        ppm.category as category,
-        ppm.specifications as specifications,
+        ppm.category AS category,
+        ppm.specifications AS specifications,
         ps.vendor_name AS vendor_name,
         pt.create_time AS create_time,
-        pp.request_user_name AS request_user_name
+        te.person_name AS request_user_name
         FROM pcms_transfer pt
         LEFT JOIN pcms_pending_material ppm ON pt.pending_id = ppm.id
         LEFT JOIN pcms_item pit ON ppm.itid = pit.itid
         LEFT JOIN pcms_supplier ps ON pit.vendor_id = ps.vendor_id
         LEFT JOIN pcms_project pp ON pp.REQUEST_ID = pit.request_id
+        LEFT JOIN tpm_employee te ON te.person_code= pp.CREATE_USER
         <where>
             <if test="params.vendor_name !=null and params.vendor_name !=''">
                 AND ps.vendor_name LIKE '%${params.vendor_name}%'
@@ -39,12 +40,14 @@
         ppm.category as category,
         ppm.specifications as specifications,
         ps.vendor_name AS vendor_name,
-        pp.request_user_name AS request_user_name
+        pt.person_name as person_name,
+        te.person_name AS request_user_name
         FROM pcms_transfer pt
         LEFT JOIN pcms_pending_material ppm ON pt.pending_id = ppm.id
         LEFT JOIN pcms_item pit ON ppm.itid = pit.itid
         LEFT JOIN pcms_supplier ps ON pit.vendor_id = ps.vendor_id
         LEFT JOIN pcms_project pp ON pp.REQUEST_ID = pit.request_id
+        LEFT JOIN tpm_employee te ON te.person_code= pp.CREATE_USER
         <where>
              pt.id = #{id,jdbcType=INTEGER}
         </where>

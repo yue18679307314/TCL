@@ -676,6 +676,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Override
     public ResultVo addTransfer(PcmsTransferModel pcmsTransferModel) throws Exception {
+        pcmsTransferModel.setCreate_time(new Date());
         pcmsTransferMapper.insert(pcmsTransferModel);
         PcmsPendingMaterialModel pcmsPendingMaterialModel = pcmsPendingMaterialMapper.selectId(pcmsTransferModel.getPending_id());
         pcmsPendingMaterialModel.setState(1);

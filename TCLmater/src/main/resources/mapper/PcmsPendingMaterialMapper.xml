@@ -44,7 +44,7 @@
         FROM pcms_pending_material t
         <where>
             <if test="itid != null and itid != ''">
-                t.itid = #{itid} and t.state=0
+                t.itid = #{itid} /*and t.state=0*/
             </if>
         </where>
     </select>

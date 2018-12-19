@@ -25,6 +25,7 @@ public class TransferVo {
     @ApiModelProperty("规格")
     private String specifications;
 
+
     public String getContext() {
         return context;
     }
