@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.*;
@@ -388,7 +389,6 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list,"UTF-8");
 		// 第一步：通过setEntity 将我们的entity对象传递过去
 		httpPost.setEntity(formEntity);
-		System.out.println(param.toString());
 		/*
 		* post带参数结束
 		*/
@@ -398,9 +398,6 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		CloseableHttpResponse response = client.execute(httpPost);
 		HttpEntity entity = response.getEntity();
 		String str = EntityUtils.toString(entity, "UTF-8");
-		System.out.println(str);
-		
-		
 		// 关闭
 		response.close();
 		
@@ -408,8 +405,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		if(result.get("RET_CODE").equals("9999")){
 			return ResultVo.get(ResultVo.SUCCESS);
 		}else{
-			return new ResultVo(result.get("RET_CODE").toString(), 
-					result.get("RET_MSG").toString());
+			throw new ParamException(result.get("RET_MSG").toString());
 		}
 	
 	}
