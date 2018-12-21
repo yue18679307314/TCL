@@ -316,7 +316,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			
 			
 			Integer taxType=settlement.getInvoiceType();
-			String taxTypeStr="NONE";
+			String taxTypeStr="PTFP";
 			switch (taxType) {
 			case 2:
 				taxTypeStr="PTFP";
@@ -335,7 +335,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			detail.put("DETAIL_INVOUCETYPE", taxTypeStr);
 			detail.put("DETAIL_INVOUCETNUM", settlement.getTaxNumber());
 			detail.put("DETAIL_MONEY", settlement.getDetailMoney());
-			detail.put("DETAIL_ISLAST", settlement.getIsLast());
+			detail.put("DETAIL_ISLAST", settlement.getIsLast()==1?"是":"否");
 			detail.put("DETAIL_MEMO", /*settlement.getDetailMemo()*/"5555555555");
 			detailList.add(detail);
 			param.put("DETAIL_LIST", detailList);
@@ -373,7 +373,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		JSONObject payment=new JSONObject();
 				
 		payment.put("PAYMENT_VENDORCODE", vendorId);
-		payment.put("ACCOUNT_NAME", supp.getOpening_bank());
+		payment.put("ACCOUNT_NAME", supp.getVendor_name());
 		payment.put("ACCOUNT_VALUE", supp.getOpening_account());
 		payment.put("PAYMENT_CURRENCY", settVo.getApplyMoney());
 		payment.put("PAYMENT_METHOD", settVo.getType()==1?"电汇":"挂账不付款");
@@ -387,6 +387,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list,"UTF-8");
 		// 第一步：通过setEntity 将我们的entity对象传递过去
 		httpPost.setEntity(formEntity);
+		System.out.println(param.toString());
 		/*
 		* post带参数结束
 		*/
