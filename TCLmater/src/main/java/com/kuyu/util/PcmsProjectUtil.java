@@ -2,6 +2,9 @@ package com.kuyu.util;
 
 import java.util.UUID;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 //pcms模块工具类
 public class PcmsProjectUtil {
 
@@ -53,12 +56,17 @@ public class PcmsProjectUtil {
 	public static void main(String[] args) {
 //		System.out.println(PcmsProjectUtil.creatItemNumber());
 		
-		String test="惠州TCL电器(uytw)销售有限公司(7601)";
-		int i="惠州TCL电器(uytw)销售有限公司(7601)".lastIndexOf("(");
-		System.out.println(i);
-		String aaa=test.substring(i+1,test.lastIndexOf(")"));
+//		String test="惠州TCL电器(uytw)销售有限公司(7601)";
+//		int i="惠州TCL电器(uytw)销售有限公司(7601)".lastIndexOf("(");
+//		System.out.println(i);
+//		String aaa=test.substring(i+1,test.lastIndexOf(")"));
+//		
+//		System.out.println(aaa);
 		
-		System.out.println(aaa);
+		String text="{\"RET_CODE\":\"9999\",\"RET_MSG\":\"\"}";
+		JSONObject aaa=JSON.parseObject(text);
+//		aaa.get("RET_CODE");
+		System.out.println(aaa.get("RET_CODE"));
 		
 	}
 	

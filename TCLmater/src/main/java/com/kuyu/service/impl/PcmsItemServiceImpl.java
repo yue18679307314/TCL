@@ -1,5 +1,6 @@
 package com.kuyu.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -398,13 +399,19 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		HttpEntity entity = response.getEntity();
 		String str = EntityUtils.toString(entity, "UTF-8");
 		System.out.println(str);
+		
+		
 		// 关闭
 		response.close();
 		
-		
+		JSONObject result=JSON.parseObject(str);
+		if(result.get("RET_CODE").equals("9999")){
+			return ResultVo.get(ResultVo.SUCCESS);
+		}else{
+			return new ResultVo(result.get("RET_CODE").toString(), 
+					result.get("RET_MSG").toString());
+		}
 	
-		return ResultVo.get(ResultVo.SUCCESS);
-		
 	}
 
 	
