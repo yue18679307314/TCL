@@ -496,6 +496,7 @@
 		OR a.request_id LIKE #{searchKey}
 		OR e.person_name LIKE #{searchKey}
 		OR c.REQUEST_DEPT LIKE #{searchKey}
+        OR b.vendor_id LIKE #{searchKey}
 		)
   </if>
   ORDER BY c.creat_time DESC 
