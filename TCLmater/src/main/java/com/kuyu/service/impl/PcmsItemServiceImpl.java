@@ -1,6 +1,5 @@
 package com.kuyu.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -21,17 +20,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -39,6 +35,9 @@ import java.util.*;
 @Service
 @Transactional
 public class PcmsItemServiceImpl implements PcmsItemService{
+	
+	@Value("${settlement.url}")
+    private String settlementUrl;
 
 	@Resource
 	private PcmsProjectMapper pcmsProjectMapper;
@@ -84,6 +83,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	
 	@Resource
 	private PcmsSettlementItemMapper pcmsSettlementItemMapper;
+	
+	@Resource
+	private PcmsSupplierMapper pcmsSupplierMapper;
 	
 	
 	@Override
@@ -259,6 +261,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		//结算单编号
 		String settNumber=PcmsProjectUtil.creatSettNumber();
 		
+		//获取供应商信息
+		String vendorId=settVo.getVendorId();
+		PcmsSupplierModel supp=pcmsSupplierMapper.selectById(vendorId);
+		
+		//获取详细结算信息
 		List<SettlementDetailRequest> settlementDetail=settVo.getItemList();
 		
 		//写入结算单信息
@@ -270,7 +277,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		sett.setDept(settVo.getDept());
 		sett.setApplicationNotes(settVo.getApplyNote());
 		sett.setPayType(settVo.getType());
-//		sett.setSumMoney(sumMoney);
+		sett.setSumMoney(settVo.getApplyMoney());
+		sett.setTaxNumber(settVo.getTaxNumber());
 		sett.setStatus(1);
 		sett.setCreateTime(new Date());
 		pcmsSettlementMapper.insertSelective(sett);
@@ -280,7 +288,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		// 获取默认的请求客户端
 		CloseableHttpClient client = HttpClients.createDefault();
 		// 通过HttpPost来发送post请求
-		HttpPost httpPost = new HttpPost("http://localhost:9000/e7cctest/promotionFee/importReimburseBill.do");
+//		HttpPost httpPost = new HttpPost("http://localhost:9000/e7cctest/promotionFee/importReimburseBill.do");
+		HttpPost httpPost=new HttpPost(settlementUrl);
+		
 		
 		/*
 		* post带参数开始
@@ -290,27 +300,43 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		JSONObject param=new JSONObject();
 		param.put("REQUEST_TITLE", settVo.getApplyTitle());
 		param.put("COMPANY_CODE", settVo.getCompanyCode());
-		param.put("CURRENCY_TYPE", "币种");
+		param.put("CURRENCY_TYPE", "CNY");
 		param.put("REQUEST_USER", settVo.getRequestUser());
 		param.put("REQUEST_DEPART", settVo.getDept());
 		param.put("REQUEST_MEMO", settVo.getApplyNote());
 				
 				
 		JSONArray detailList=new JSONArray();
+		
 		for (SettlementDetailRequest settlement : settlementDetail) {
 			
 			Integer itid=settlement.getItid();
 			
 			PcmsItem item=pcmsItemMapper.selectByPrimaryKey(itid);
 			
+			
+			Integer taxType=settlement.getInvoiceType();
+			String taxTypeStr="NONE";
+			switch (taxType) {
+			case 2:
+				taxTypeStr="PTFP";
+				break;
+			case 3:
+				taxTypeStr="PTFP01";
+				break;
+			case 4:
+				taxTypeStr="ZZSZYFP";
+				break;
+			}
+			
 			JSONObject detail=new JSONObject();
 			detail.put("DETAIL_BILL", item.getRequestId());
 			detail.put("DETAIL_ID", item.getDetailId());
-			detail.put("DETAIL_INVOUCETYPE", "");
-			detail.put("DETAIL_INVOUCETNUM", "12000.00");
-			detail.put("DETAIL_MONEY", "测试摘要2");
-			detail.put("DETAIL_ISLAST", "测试摘要2");
-			detail.put("DETAIL_MEMO", "测试摘要2");		
+			detail.put("DETAIL_INVOUCETYPE", taxTypeStr);
+			detail.put("DETAIL_INVOUCETNUM", settlement.getTaxNumber());
+			detail.put("DETAIL_MONEY", settlement.getDetailMoney());
+			detail.put("DETAIL_ISLAST", settlement.getIsLast());
+			detail.put("DETAIL_MEMO", settlement.getDetailMemo());		
 			detailList.add(detail);
 			param.put("DETAIL_LIST", detailList);
 			
@@ -319,27 +345,38 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			PcmsSettlementItem settIt=new PcmsSettlementItem();
 			settIt.setItid(itid);
 			settIt.setSedetailId(item.getDetailId());
-//			settIt.setSedetailMoney(sedetailMoney);
-//			settIt.setSedetailMemo(sedetailMemo);
-//			settIt.setTaxType(taxType);
+			settIt.setSedetailMoney(settlement.getDetailMoney());
+			settIt.setSedetailMemo(settlement.getDetailMemo());
+			settIt.setTaxType(taxTypeStr);
+			settIt.setIsLast(settlement.getIsLast());
+			settIt.setTaxRate(settlement.getTaxRate()+"%");
+			settIt.setCreateTime(new Date());
 			pcmsSettlementItemMapper.insertSelective(settIt);
 			
 			
 			item.setStatus(5);
 			item.setUpdateTime(new Date());
-//			int i=pcmsItemMapper.updateByExampleSelective(itemUp, example);
 			pcmsItemMapper.updateByPrimaryKeySelective(item);
+			
+			
+			//增加日志
+			PcmsItemLog itlog=new PcmsItemLog();
+			itlog.setItid(itid);
+			itlog.setStatus(5);
+			itlog.setNote("结算中...");
+			itlog.setCreateTime(new Date());
+		    pcmsItemLogMapper.insertSelective(itlog);
 		}
 		
 				
 		JSONArray paymentList=new JSONArray();
 		JSONObject payment=new JSONObject();
 				
-		payment.put("PAYMENT_VENDORCODE", "0000105361");
-		payment.put("ACCOUNT_NAME", "北京歌华有线电视网络股份有限公司");
-		payment.put("ACCOUNT_VALUE", "0200053709022514851");
-		payment.put("PAYMENT_CURRENCY", "12000.00");
-		payment.put("PAYMENT_METHOD", "电汇");
+		payment.put("PAYMENT_VENDORCODE", vendorId);
+		payment.put("ACCOUNT_NAME", supp.getVendor_name());
+		payment.put("ACCOUNT_VALUE", supp.getOpening_account());
+		payment.put("PAYMENT_CURRENCY", settVo.getApplyMoney());
+		payment.put("PAYMENT_METHOD", settVo.getType()==1?"电汇":"挂账不付款");
 		paymentList.add(payment);
 		param.put("PAYMENT_LIST", paymentList);
 				
@@ -356,12 +393,12 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		// HttpEntity
 		// 是一个中间的桥梁，在httpClient里面，是连接我们的请求与响应的一个中间桥梁，所有的请求参数都是通过HttpEntity携带过去的
 		// 通过client来执行请求，获取一个响应结果
-//		CloseableHttpResponse response = client.execute(httpPost);
-//		HttpEntity entity = response.getEntity();
-//		String str = EntityUtils.toString(entity, "UTF-8");
-//		System.out.println(str);
-//		// 关闭
-//		response.close();
+		CloseableHttpResponse response = client.execute(httpPost);
+		HttpEntity entity = response.getEntity();
+		String str = EntityUtils.toString(entity, "UTF-8");
+		System.out.println(str);
+		// 关闭
+		response.close();
 		
 		
 	
@@ -427,6 +464,20 @@ public class PcmsItemServiceImpl implements PcmsItemService{
             }
         }
         return result;
-    }    
+    }
+
+
+
+	@Override
+	public int settlementStatus(String settlementNumber) {
+		
+		PcmsSettlement record=new PcmsSettlement();
+		record.setStatus(2);
+		
+		PcmsSettlementExample example=new PcmsSettlementExample();
+		example.createCriteria().andSettNumberEqualTo(settlementNumber);
+		int i=pcmsSettlementMapper.updateByExampleSelective(record, example);
+		return i;
+	}    
 
 }

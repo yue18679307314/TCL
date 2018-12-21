@@ -19,9 +19,13 @@ public class PcmsSettlement {
 
     private Integer payType;
 
+    private String taxNumber;
+
     private String sumMoney;
 
     private Integer status;
+
+    private Date updateTime;
 
     private Date createTime;
 
@@ -89,6 +93,14 @@ public class PcmsSettlement {
         this.payType = payType;
     }
 
+    public String getTaxNumber() {
+        return taxNumber;
+    }
+
+    public void setTaxNumber(String taxNumber) {
+        this.taxNumber = taxNumber == null ? null : taxNumber.trim();
+    }
+
     public String getSumMoney() {
         return sumMoney;
     }
@@ -103,6 +115,14 @@ public class PcmsSettlement {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public Date getCreateTime() {

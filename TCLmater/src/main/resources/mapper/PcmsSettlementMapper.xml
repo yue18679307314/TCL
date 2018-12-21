@@ -10,8 +10,10 @@
     <result column="dept" jdbcType="VARCHAR" property="dept" />
     <result column="application_notes" jdbcType="VARCHAR" property="applicationNotes" />
     <result column="pay_type" jdbcType="INTEGER" property="payType" />
+    <result column="tax_number" jdbcType="VARCHAR" property="taxNumber" />
     <result column="sum_money" jdbcType="VARCHAR" property="sumMoney" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     seid, sett_number, application_title, company_code, request_user, dept, application_notes, 
-    pay_type, sum_money, status, create_time
+    pay_type, tax_number, sum_money, status, update_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementExample" resultMap="BaseResultMap">
     select
@@ -109,12 +111,14 @@
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsSettlement">
     insert into pcms_settlement (seid, sett_number, application_title, 
       company_code, request_user, dept, 
-      application_notes, pay_type, sum_money, 
-      status, create_time)
+      application_notes, pay_type, tax_number, 
+      sum_money, status, update_time, 
+      create_time)
     values (#{seid,jdbcType=INTEGER}, #{settNumber,jdbcType=VARCHAR}, #{applicationTitle,jdbcType=VARCHAR}, 
       #{companyCode,jdbcType=VARCHAR}, #{requestUser,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}, 
-      #{applicationNotes,jdbcType=VARCHAR}, #{payType,jdbcType=INTEGER}, #{sumMoney,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+      #{applicationNotes,jdbcType=VARCHAR}, #{payType,jdbcType=INTEGER}, #{taxNumber,jdbcType=VARCHAR}, 
+      #{sumMoney,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsSettlement">
     insert into pcms_settlement
@@ -143,11 +147,17 @@
       <if test="payType != null">
         pay_type,
       </if>
+      <if test="taxNumber != null">
+        tax_number,
+      </if>
       <if test="sumMoney != null">
         sum_money,
       </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="updateTime != null">
+        update_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -178,11 +188,17 @@
       <if test="payType != null">
         #{payType,jdbcType=INTEGER},
       </if>
+      <if test="taxNumber != null">
+        #{taxNumber,jdbcType=VARCHAR},
+      </if>
       <if test="sumMoney != null">
         #{sumMoney,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -222,11 +238,17 @@
       <if test="record.payType != null">
         pay_type = #{record.payType,jdbcType=INTEGER},
       </if>
+      <if test="record.taxNumber != null">
+        tax_number = #{record.taxNumber,jdbcType=VARCHAR},
+      </if>
       <if test="record.sumMoney != null">
         sum_money = #{record.sumMoney,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -246,8 +268,10 @@
       dept = #{record.dept,jdbcType=VARCHAR},
       application_notes = #{record.applicationNotes,jdbcType=VARCHAR},
       pay_type = #{record.payType,jdbcType=INTEGER},
+      tax_number = #{record.taxNumber,jdbcType=VARCHAR},
       sum_money = #{record.sumMoney,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -277,11 +301,17 @@
       <if test="payType != null">
         pay_type = #{payType,jdbcType=INTEGER},
       </if>
+      <if test="taxNumber != null">
+        tax_number = #{taxNumber,jdbcType=VARCHAR},
+      </if>
       <if test="sumMoney != null">
         sum_money = #{sumMoney,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -298,12 +328,14 @@
       dept = #{dept,jdbcType=VARCHAR},
       application_notes = #{applicationNotes,jdbcType=VARCHAR},
       pay_type = #{payType,jdbcType=INTEGER},
+      tax_number = #{taxNumber,jdbcType=VARCHAR},
       sum_money = #{sumMoney,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where seid = #{seid,jdbcType=INTEGER}
   </update>
-
+  
 
 
 </mapper>

@@ -19,7 +19,27 @@ public class SettlementRequest {
 	
 	private String vendorId; //供应商编码
 	
+	private String taxNumber; //税号
+	
+	private String applyMoney; //付款金额
+	
 	private List<SettlementDetailRequest> itemList; //结算详细
+	
+	public String getApplyMoney() {
+		return applyMoney;
+	}
+
+	public void setApplyMoney(String applyMoney) {
+		this.applyMoney = applyMoney;
+	}
+
+	public String getTaxNumber() {
+		return taxNumber;
+	}
+
+	public void setTaxNumber(String taxNumber) {
+		this.taxNumber = taxNumber;
+	}
 
 	public String getVendorId() {
 		return vendorId;

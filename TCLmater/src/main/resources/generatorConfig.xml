@@ -46,14 +46,7 @@
             <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR"/>
         </table>
         
-        <table schema="gp" tableName="pcms_settlement_item" domainObjectName="PcmsSettlementItem">
-            <property name="useActualColumnNames" value="false"/>
-            <!--<generatedKey column="ID" sqlStatement="DB2" identity="true"/>-->
-            <columnOverride column="DATE_FIELD" property="startDate"/>
-            <ignoreColumn column="FRED"/>
-            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR"/>
-        </table>
-       
+        
  
  		
  

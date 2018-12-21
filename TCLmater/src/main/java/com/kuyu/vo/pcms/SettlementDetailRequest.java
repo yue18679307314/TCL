@@ -8,6 +8,8 @@ public class SettlementDetailRequest {
 	
 	private String detailMoney;
 	
+	private String detailMemo;
+	
 	private String  taxRate; 
 	
 	private String  taxAmount;
@@ -17,6 +19,17 @@ public class SettlementDetailRequest {
 	private String taxNumber;
 	
 	private String image;
+
+	
+	
+	
+	public String getDetailMemo() {
+		return detailMemo;
+	}
+
+	public void setDetailMemo(String detailMemo) {
+		this.detailMemo = detailMemo;
+	}
 
 	public Integer getItid() {
 		return itid;

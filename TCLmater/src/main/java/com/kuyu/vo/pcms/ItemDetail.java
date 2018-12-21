@@ -64,6 +64,18 @@ public class ItemDetail {
 	
 	private List<ShowcaseResult> scList;
 	
+	private List<SettlementResult> selttList; //结算信息
+	
+	
+	
+	public List<SettlementResult> getSelttList() {
+		return selttList;
+	}
+
+	public void setSelttList(List<SettlementResult> selttList) {
+		this.selttList = selttList;
+	}
+
 	public List<PcmsItemLog> getItemLog() {
 		return itemLog;
 	}

@@ -112,60 +112,51 @@ public class ItemController extends BaseController{
 		return pcmsItemService.changeItemStatus(itid,status,getLoginUserInfo(),reason);
 	}
 	
-//	/**
-//	 * 批量结算
-//	 * @param request
-//	 * @return
-//	 */
-//	@ApiOperation("更改立项单状态")
-//	@RequestMapping(value = "/settlement", produces = "application/json;charset=utf-8")
-//	public @ResponseBody ResultVo settlement(HttpServletRequest request,
-//			@RequestParam(value = "itid")String itids) {
-//			String itid[] =itids.split(",");
-//			for (String id : itid) {
-////				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,null);
-//				pcmsItemService.changeItemStatus(Integer.valueOf(id),5,getLoginUserInfo(),null);
-//			}
-//		
-//		return ResultVo.get(ResultVo.SUCCESS);
-//	}
 
-//	/**
-//	 * 导入物料单
-//	 * @param request
-//	 * @return
-//	 * @throws IOException 
-//	 * @throws IllegalStateException 
-//	 */
-//	@ApiOperation("导入物料单")
-//	@RequestMapping(value = "/importExcel")
-//	public @ResponseBody ResultVo importExcel(@RequestParam MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
-//		
-//		String abd="test";
-//		
-//		System.out.println("system:=============="+abd);
-//		
-//		
-//		if(!file.isEmpty()){
-//            String filePath = file.getOriginalFilename();
-//            //windows
-//            String savePath = request.getSession().getServletContext().getRealPath(filePath);
-//
-//            //linux
-//            //String savePath = "/home/odcuser/webapps/file";
-//
-//            File targetFile = new File(savePath);
-//
-//            if(!targetFile.exists()){
-//                targetFile.mkdirs();
-//            }
-//            file.transferTo(targetFile);
-//            return ResultVo.get(ResultVo.SUCCESS);
-//        }
-//
-//		return ResultVo.get(ResultVo.FILE_IS_NULL);
-//	}
+
+	
+	/**
+	 * 立项单结算
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 */
+	@ApiOperation("结算")   
+	@PostMapping(value = "/settlement", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo settlement(HttpServletRequest request,
+			@ApiParam(value = "结算", required = true)@RequestBody SettlementRequest param) throws ClientProtocolException, IOException {
+		
+//		LoginUserInfo user=getUserInfo();
+		
+		
+		pcmsItemService.settlement(param);
+			
+		return ResultVo.get(ResultVo.SUCCESS);
+	}
 	
 	
+	/**
+	 * 更改结算单状态
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 */
+	@ApiOperation("更改结算单状态")   
+	@RequestMapping(value = "/settlementStatus", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo settlementStatus(HttpServletRequest request,
+			@ApiParam(value = "更改结算单状态", required = true) String settlementNumber) throws ClientProtocolException, IOException {
+		
+//		LoginUserInfo user=getUserInfo();
+		
+		
+		int i=pcmsItemService.settlementStatus(settlementNumber);
+		if(i==1){
+			return ResultVo.get(ResultVo.SUCCESS);
+		}
+		
+		return ResultVo.get(ResultVo.FAIL);
+	}
 	
 }

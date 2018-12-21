@@ -31,6 +31,8 @@ public interface PcmsItemService  {
 
 	ResultVo settlement(SettlementRequest settVo) throws UnsupportedEncodingException, ClientProtocolException, IOException;
 
+	int settlementStatus(String settlementNumber);
+
 	
 
 }

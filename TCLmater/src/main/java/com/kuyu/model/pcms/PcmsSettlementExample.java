@@ -645,6 +645,76 @@ public class PcmsSettlementExample {
             return (Criteria) this;
         }
 
+        public Criteria andTaxNumberIsNull() {
+            addCriterion("tax_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberIsNotNull() {
+            addCriterion("tax_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberEqualTo(String value) {
+            addCriterion("tax_number =", value, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberNotEqualTo(String value) {
+            addCriterion("tax_number <>", value, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberGreaterThan(String value) {
+            addCriterion("tax_number >", value, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("tax_number >=", value, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberLessThan(String value) {
+            addCriterion("tax_number <", value, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberLessThanOrEqualTo(String value) {
+            addCriterion("tax_number <=", value, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberLike(String value) {
+            addCriterion("tax_number like", value, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberNotLike(String value) {
+            addCriterion("tax_number not like", value, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberIn(List<String> values) {
+            addCriterion("tax_number in", values, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberNotIn(List<String> values) {
+            addCriterion("tax_number not in", values, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberBetween(String value1, String value2) {
+            addCriterion("tax_number between", value1, value2, "taxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaxNumberNotBetween(String value1, String value2) {
+            addCriterion("tax_number not between", value1, value2, "taxNumber");
+            return (Criteria) this;
+        }
+
         public Criteria andSumMoneyIsNull() {
             addCriterion("sum_money is null");
             return (Criteria) this;
@@ -772,6 +842,66 @@ public class PcmsSettlementExample {
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIsNull() {
+            addCriterion("update_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIsNotNull() {
+            addCriterion("update_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeEqualTo(Date value) {
+            addCriterion("update_time =", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotEqualTo(Date value) {
+            addCriterion("update_time <>", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThan(Date value) {
+            addCriterion("update_time >", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("update_time >=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThan(Date value) {
+            addCriterion("update_time <", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("update_time <=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIn(List<Date> values) {
+            addCriterion("update_time in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotIn(List<Date> values) {
+            addCriterion("update_time not in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("update_time between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
 
