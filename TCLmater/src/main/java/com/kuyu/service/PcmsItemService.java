@@ -33,6 +33,8 @@ public interface PcmsItemService  {
 
 	int settlementStatus(String settlementNumber);
 
+	void updateItemStatusBystatus(String synDate);
+
 	
 
 }

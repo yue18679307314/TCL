@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
@@ -482,6 +483,36 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		example.createCriteria().andSettNumberEqualTo(settlementNumber);
 		int i=pcmsSettlementMapper.updateByExampleSelective(record, example);
 		return i;
-	}    
+	}
 
+
+
+	@Override
+	public void updateItemStatusBystatus(String synDate) {
+		//查询今天到期的立项单
+		List<PcmsProject> projectList= pcmsProjectMapper.selectByEndTime(synDate);
+		if(CollectionUtils.isNotEmpty(projectList)){
+			for (PcmsProject project : projectList) {
+				PcmsItemExample example=new PcmsItemExample();
+				example.createCriteria().andRequestIdEqualTo(project.getRequestId());
+				//将结算中以前的状态，都置为过期状态
+				List<Integer> values=new ArrayList<>();
+				values.add(0);
+				values.add(1);
+				values.add(2);
+				values.add(3);
+				values.add(4);
+				example.createCriteria().andStatusIn(values);
+				
+				PcmsItem record=new PcmsItem();
+				record.setStatus(-2);
+				record.setUpdateTime(new Date());
+				pcmsItemMapper.updateByExampleSelective(record, example);
+				
+			}
+		}    
+	}
+	
+	
+	
 }

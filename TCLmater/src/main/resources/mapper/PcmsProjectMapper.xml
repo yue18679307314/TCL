@@ -830,4 +830,17 @@ a.detail_id =#{detailId}
 		WHERE
 		a.REQUEST_ID = #{requestId}
   </select>
+  
+  <select id="selectByEndTime" parameterType="string" resultMap="BaseResultMap">
+  	SELECT
+	*
+FROM
+	pcms_project
+WHERE
+	DATE_FORMAT(
+		REQUEST_END_TIME,
+		'%Y-%m-%d'
+	) = #{synDate}
+  </select>
+  
 </mapper>

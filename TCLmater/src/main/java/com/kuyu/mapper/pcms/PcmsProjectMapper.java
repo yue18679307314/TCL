@@ -48,4 +48,6 @@ public interface PcmsProjectMapper {
 	List<ActivityOriginalVo> getActivitylList(String requestId);
 
 	List<PcmsShop> getShopList(String requestId);
+
+	List<PcmsProject> selectByEndTime(String synDate);
 }
