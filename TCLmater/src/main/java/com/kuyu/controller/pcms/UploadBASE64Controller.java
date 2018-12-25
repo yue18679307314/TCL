@@ -8,10 +8,7 @@ import com.kuyu.vo.ResultVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -36,8 +33,8 @@ public class UploadBASE64Controller {
     private String fileUrl;
 
     @ApiOperation(value = "上传",response = ResultVo.class)
-    @GetMapping("/upload")
-    public ResultVo uploadBase(@RequestParam(value = "fileStr",required=false)String fileStr) throws Exception {
+    @PostMapping("/upload")
+    public ResultVo uploadBase(@RequestBody String fileStr) throws Exception {
         fileStr = fileStr.replace(" ", "+");
         MultipartFile file = BASE64DecodedMultipartFile.base64ToMultipart(fileStr);
         ResultVo resultVo = new ResultVo("0", "success");
