@@ -404,6 +404,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		
 		JSONObject result=JSON.parseObject(str);
 		if(result.get("RET_CODE").equals("9999")){
+			result.get("PAYMENT_BILL_NO");
+			
+			
 			return ResultVo.get(ResultVo.SUCCESS);
 		}else{
 			throw new ParamException(result.get("RET_MSG").toString());
@@ -511,6 +514,22 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				
 			}
 		}    
+	}
+
+
+
+	@Override
+	public int createPayment(PaymentRequest payment) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	@Override
+	public int createPaymentDetail(PaymentRequest payment) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	

@@ -25,6 +25,8 @@ public class PcmsSettlement {
 
     private Integer status;
 
+    private String fccsBill;
+
     private Date updateTime;
 
     private Date createTime;
@@ -115,6 +117,14 @@ public class PcmsSettlement {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getFccsBill() {
+        return fccsBill;
+    }
+
+    public void setFccsBill(String fccsBill) {
+        this.fccsBill = fccsBill == null ? null : fccsBill.trim();
     }
 
     public Date getUpdateTime() {

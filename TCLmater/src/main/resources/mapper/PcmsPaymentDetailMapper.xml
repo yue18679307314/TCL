@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kuyu.mapper.pcms.PcmsPaymentDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsPaymentDetail" >
+    <id column="pmdid" property="pmdid" jdbcType="INTEGER" />
+    <result column="fssc_bill" property="fsscBill" jdbcType="VARCHAR" />
+    <result column="financial_num" property="financialNum" jdbcType="VARCHAR" />
+    <result column="financial_money" property="financialMoney" jdbcType="VARCHAR" />
+    <result column="financial_status" property="financialStatus" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    pmdid, fssc_bill, financial_num, financial_money, financial_status, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsPaymentDetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pcms_payment_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pcms_payment_detail
+    where pmdid = #{pmdid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pcms_payment_detail
+    where pmdid = #{pmdid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsPaymentDetailExample" >
+    delete from pcms_payment_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsPaymentDetail" >
+    insert into pcms_payment_detail (pmdid, fssc_bill, financial_num, 
+      financial_money, financial_status, create_time
+      )
+    values (#{pmdid,jdbcType=INTEGER}, #{fsscBill,jdbcType=VARCHAR}, #{financialNum,jdbcType=VARCHAR}, 
+      #{financialMoney,jdbcType=VARCHAR}, #{financialStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsPaymentDetail" >
+    insert into pcms_payment_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pmdid != null" >
+        pmdid,
+      </if>
+      <if test="fsscBill != null" >
+        fssc_bill,
+      </if>
+      <if test="financialNum != null" >
+        financial_num,
+      </if>
+      <if test="financialMoney != null" >
+        financial_money,
+      </if>
+      <if test="financialStatus != null" >
+        financial_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pmdid != null" >
+        #{pmdid,jdbcType=INTEGER},
+      </if>
+      <if test="fsscBill != null" >
+        #{fsscBill,jdbcType=VARCHAR},
+      </if>
+      <if test="financialNum != null" >
+        #{financialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="financialMoney != null" >
+        #{financialMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="financialStatus != null" >
+        #{financialStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsPaymentDetailExample" resultType="java.lang.Integer" >
+    select count(*) from pcms_payment_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pcms_payment_detail
+    <set >
+      <if test="record.pmdid != null" >
+        pmdid = #{record.pmdid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fsscBill != null" >
+        fssc_bill = #{record.fsscBill,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financialNum != null" >
+        financial_num = #{record.financialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financialMoney != null" >
+        financial_money = #{record.financialMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financialStatus != null" >
+        financial_status = #{record.financialStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pcms_payment_detail
+    set pmdid = #{record.pmdid,jdbcType=INTEGER},
+      fssc_bill = #{record.fsscBill,jdbcType=VARCHAR},
+      financial_num = #{record.financialNum,jdbcType=VARCHAR},
+      financial_money = #{record.financialMoney,jdbcType=VARCHAR},
+      financial_status = #{record.financialStatus,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsPaymentDetail" >
+    update pcms_payment_detail
+    <set >
+      <if test="fsscBill != null" >
+        fssc_bill = #{fsscBill,jdbcType=VARCHAR},
+      </if>
+      <if test="financialNum != null" >
+        financial_num = #{financialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="financialMoney != null" >
+        financial_money = #{financialMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="financialStatus != null" >
+        financial_status = #{financialStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where pmdid = #{pmdid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsPaymentDetail" >
+    update pcms_payment_detail
+    set fssc_bill = #{fsscBill,jdbcType=VARCHAR},
+      financial_num = #{financialNum,jdbcType=VARCHAR},
+      financial_money = #{financialMoney,jdbcType=VARCHAR},
+      financial_status = #{financialStatus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where pmdid = #{pmdid,jdbcType=INTEGER}
+  </update>
+</mapper>

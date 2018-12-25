@@ -845,6 +845,76 @@ public class PcmsSettlementExample {
             return (Criteria) this;
         }
 
+        public Criteria andFccsBillIsNull() {
+            addCriterion("fccs_bill is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillIsNotNull() {
+            addCriterion("fccs_bill is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillEqualTo(String value) {
+            addCriterion("fccs_bill =", value, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillNotEqualTo(String value) {
+            addCriterion("fccs_bill <>", value, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillGreaterThan(String value) {
+            addCriterion("fccs_bill >", value, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillGreaterThanOrEqualTo(String value) {
+            addCriterion("fccs_bill >=", value, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillLessThan(String value) {
+            addCriterion("fccs_bill <", value, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillLessThanOrEqualTo(String value) {
+            addCriterion("fccs_bill <=", value, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillLike(String value) {
+            addCriterion("fccs_bill like", value, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillNotLike(String value) {
+            addCriterion("fccs_bill not like", value, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillIn(List<String> values) {
+            addCriterion("fccs_bill in", values, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillNotIn(List<String> values) {
+            addCriterion("fccs_bill not in", values, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillBetween(String value1, String value2) {
+            addCriterion("fccs_bill between", value1, value2, "fccsBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFccsBillNotBetween(String value1, String value2) {
+            addCriterion("fccs_bill not between", value1, value2, "fccsBill");
+            return (Criteria) this;
+        }
+
         public Criteria andUpdateTimeIsNull() {
             addCriterion("update_time is null");
             return (Criteria) this;

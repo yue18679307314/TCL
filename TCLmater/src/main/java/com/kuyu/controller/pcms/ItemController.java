@@ -8,6 +8,7 @@ import com.kuyu.service.PcmsItemService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
+import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.SettlementRequest;
 import com.kuyu.vo.pcms.SettlementVo;
 
@@ -148,9 +149,6 @@ public class ItemController extends BaseController{
 	public @ResponseBody ResultVo settlementStatus(HttpServletRequest request,
 			@ApiParam(value = "更改结算单状态", required = true) String settlementNumber) throws ClientProtocolException, IOException {
 		
-//		LoginUserInfo user=getUserInfo();
-		
-		
 		int i=pcmsItemService.settlementStatus(settlementNumber);
 		if(i==1){
 			return ResultVo.get(ResultVo.SUCCESS);
@@ -159,4 +157,42 @@ public class ItemController extends BaseController{
 		return ResultVo.get(ResultVo.FAIL);
 	}
 	
+	
+	/**
+	 * 生成付款单
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 */
+	@ApiOperation("生成付款单")   
+	@PostMapping(value = "/createPayment", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo createPayment(HttpServletRequest request,
+			@ApiParam(value = "生成付款单", required = true) @RequestBody PaymentRequest payment)  {
+		
+		int i=pcmsItemService.createPayment(payment);
+		if(i==1){
+			return ResultVo.get(ResultVo.SUCCESS);
+		}
+		return ResultVo.get(ResultVo.FAIL);
+	}
+	
+	/**
+	 * 生成付款子单
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 */
+	@ApiOperation("生成付款单子单")   
+	@PostMapping(value = "/createPaymentDetail", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo createPaymentDetail(HttpServletRequest request,
+			@ApiParam(value = "生成付款子单", required = true) @RequestBody PaymentRequest payment)  {
+		
+		int i=pcmsItemService.createPaymentDetail(payment);
+		if(i==1){
+			return ResultVo.get(ResultVo.SUCCESS);
+		}
+		return ResultVo.get(ResultVo.FAIL);
+	}
 }

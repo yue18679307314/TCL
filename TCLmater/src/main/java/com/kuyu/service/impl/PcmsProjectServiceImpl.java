@@ -1,6 +1,7 @@
 package com.kuyu.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
@@ -513,7 +514,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		project.setCreatTime(createTime);
 		project.setType("2");
 		project.setStatus(1);//未拆单
-		pcmsProjectMapper.insertSelective(project);
+//		pcmsProjectMapper.insertSelective(project);
 		
 		
 		List<TpmActivityOriginalModelVo> ActivityOriginalList=vo.getActivityOriginalList();
@@ -521,9 +522,9 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			String activityId=allList.getProjectId();
 			String vendorId=allList.getVendorId();
 			List<OtherFeeOriginalModelVo> meList=allList.getOtherFeeOriginalModelList();
-//			if (!CollectionUtils.isNotEmpty(meList)) {
-//				return ;
-//			}
+			if (!CollectionUtils.isNotEmpty(meList)) {
+				continue ;
+			}
 			for (OtherFeeOriginalModelVo material : meList) {
 				PcmsMaterial info=new PcmsMaterial();
 				info.setResuestId(requestId);
@@ -560,9 +561,8 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			pcmsItemMapper.insertSelective(item);
 			
 		}
-		
-		//导入物料单
-//		this.importProjectDetail(projectvo);
+		pcmsProjectMapper.insertSelective(project);
+
 	}
 
 

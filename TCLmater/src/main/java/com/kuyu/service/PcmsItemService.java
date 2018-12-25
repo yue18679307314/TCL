@@ -12,6 +12,7 @@ import com.kuyu.model.pcms.PcmsMaterial;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
+import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.SettlementRequest;
 import com.kuyu.vo.pcms.SettlementVo;
 
@@ -34,6 +35,10 @@ public interface PcmsItemService  {
 	int settlementStatus(String settlementNumber);
 
 	void updateItemStatusBystatus(String synDate);
+
+	int createPayment(PaymentRequest payment);
+
+	int createPaymentDetail(PaymentRequest payment);
 
 	
 
