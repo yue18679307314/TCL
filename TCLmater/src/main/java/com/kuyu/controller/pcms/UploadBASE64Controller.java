@@ -36,7 +36,7 @@ public class UploadBASE64Controller {
     private String fileUrl;
 
     @ApiOperation(value = "上传",response = ResultVo.class)
-    @GetMapping("/upload")
+    @PostMapping("/upload")
     public ResultVo uploadBase(@RequestParam(value = "fileStr",required=false)String fileStr) throws Exception {
         fileStr = fileStr.replace(" ", "+");
         MultipartFile file = BASE64DecodedMultipartFile.base64ToMultipart(fileStr);
