@@ -667,7 +667,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				item.setDetailId(detailId);
 				item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 				item.setDeptCode(requestDept);
-//				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
+				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 				item.setVendorId(vendorId);
 				item.setRequestId(requestId);
 				item.setItemPrice(Double.valueOf(detail.getDetailAmount()));

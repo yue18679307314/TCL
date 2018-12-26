@@ -40,6 +40,8 @@ public interface PcmsItemService  {
 
 	int createPaymentDetail(PaymentRequest payment);
 
+	ResultVo queryPaymentDetail(String fsscBill) throws UnsupportedEncodingException, IOException;
+
 	
 
 }

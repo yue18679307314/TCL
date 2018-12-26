@@ -1,38 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.kuyu.mapper.pcms.PcmsSettlementItemMapper" >
-  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsSettlementItem" >
-    <id column="setid" property="setid" jdbcType="INTEGER" />
-    <result column="itid" property="itid" jdbcType="INTEGER" />
-    <result column="sedetail_id" property="sedetailId" jdbcType="VARCHAR" />
-    <result column="sedetail_money" property="sedetailMoney" jdbcType="VARCHAR" />
-    <result column="sedetail_memo" property="sedetailMemo" jdbcType="VARCHAR" />
-    <result column="tax_type" property="taxType" jdbcType="VARCHAR" />
-    <result column="tax_number" property="taxNumber" jdbcType="VARCHAR" />
-    <result column="tax_rate" property="taxRate" jdbcType="VARCHAR" />
-    <result column="is_last" property="isLast" jdbcType="INTEGER" />
-    <result column="settlement_id" property="settlementId" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsSettlementItemMapper">
+  <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsSettlementItem">
+    <id column="setid" jdbcType="INTEGER" property="setid" />
+    <result column="itid" jdbcType="INTEGER" property="itid" />
+    <result column="sedetail_id" jdbcType="VARCHAR" property="sedetailId" />
+    <result column="sedetail_money" jdbcType="VARCHAR" property="sedetailMoney" />
+    <result column="sedetail_memo" jdbcType="VARCHAR" property="sedetailMemo" />
+    <result column="tax_type" jdbcType="VARCHAR" property="taxType" />
+    <result column="tax_number" jdbcType="VARCHAR" property="taxNumber" />
+    <result column="tax_rate" jdbcType="VARCHAR" property="taxRate" />
+    <result column="is_last" jdbcType="INTEGER" property="isLast" />
+    <result column="settlement_number" jdbcType="VARCHAR" property="settlementNumber" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -43,25 +43,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -72,171 +72,171 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     setid, itid, sedetail_id, sedetail_money, sedetail_memo, tax_type, tax_number, tax_rate, 
-    is_last, settlement_id, create_time
+    is_last, settlement_number, create_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kuyu.model.pcms.PcmsSettlementItemExample" >
+  <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementItemExample" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from pcms_settlement_item
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from pcms_settlement_item
     where setid = #{setid,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from pcms_settlement_item
     where setid = #{setid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementItemExample" >
+  <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementItemExample">
     delete from pcms_settlement_item
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsSettlementItem" >
+  <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsSettlementItem">
     insert into pcms_settlement_item (setid, itid, sedetail_id, 
       sedetail_money, sedetail_memo, tax_type, 
       tax_number, tax_rate, is_last, 
-      settlement_id, create_time)
+      settlement_number, create_time)
     values (#{setid,jdbcType=INTEGER}, #{itid,jdbcType=INTEGER}, #{sedetailId,jdbcType=VARCHAR}, 
       #{sedetailMoney,jdbcType=VARCHAR}, #{sedetailMemo,jdbcType=VARCHAR}, #{taxType,jdbcType=VARCHAR}, 
       #{taxNumber,jdbcType=VARCHAR}, #{taxRate,jdbcType=VARCHAR}, #{isLast,jdbcType=INTEGER}, 
-      #{settlementId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+      #{settlementNumber,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsSettlementItem" >
+  <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsSettlementItem">
     insert into pcms_settlement_item
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="setid != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="setid != null">
         setid,
       </if>
-      <if test="itid != null" >
+      <if test="itid != null">
         itid,
       </if>
-      <if test="sedetailId != null" >
+      <if test="sedetailId != null">
         sedetail_id,
       </if>
-      <if test="sedetailMoney != null" >
+      <if test="sedetailMoney != null">
         sedetail_money,
       </if>
-      <if test="sedetailMemo != null" >
+      <if test="sedetailMemo != null">
         sedetail_memo,
       </if>
-      <if test="taxType != null" >
+      <if test="taxType != null">
         tax_type,
       </if>
-      <if test="taxNumber != null" >
+      <if test="taxNumber != null">
         tax_number,
       </if>
-      <if test="taxRate != null" >
+      <if test="taxRate != null">
         tax_rate,
       </if>
-      <if test="isLast != null" >
+      <if test="isLast != null">
         is_last,
       </if>
-      <if test="settlementId != null" >
-        settlement_id,
+      <if test="settlementNumber != null">
+        settlement_number,
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time,
       </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="setid != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="setid != null">
         #{setid,jdbcType=INTEGER},
       </if>
-      <if test="itid != null" >
+      <if test="itid != null">
         #{itid,jdbcType=INTEGER},
       </if>
-      <if test="sedetailId != null" >
+      <if test="sedetailId != null">
         #{sedetailId,jdbcType=VARCHAR},
       </if>
-      <if test="sedetailMoney != null" >
+      <if test="sedetailMoney != null">
         #{sedetailMoney,jdbcType=VARCHAR},
       </if>
-      <if test="sedetailMemo != null" >
+      <if test="sedetailMemo != null">
         #{sedetailMemo,jdbcType=VARCHAR},
       </if>
-      <if test="taxType != null" >
+      <if test="taxType != null">
         #{taxType,jdbcType=VARCHAR},
       </if>
-      <if test="taxNumber != null" >
+      <if test="taxNumber != null">
         #{taxNumber,jdbcType=VARCHAR},
       </if>
-      <if test="taxRate != null" >
+      <if test="taxRate != null">
         #{taxRate,jdbcType=VARCHAR},
       </if>
-      <if test="isLast != null" >
+      <if test="isLast != null">
         #{isLast,jdbcType=INTEGER},
       </if>
-      <if test="settlementId != null" >
-        #{settlementId,jdbcType=INTEGER},
+      <if test="settlementNumber != null">
+        #{settlementNumber,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementItemExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementItemExample" resultType="java.lang.Integer">
     select count(*) from pcms_settlement_item
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update pcms_settlement_item
-    <set >
-      <if test="record.setid != null" >
+    <set>
+      <if test="record.setid != null">
         setid = #{record.setid,jdbcType=INTEGER},
       </if>
-      <if test="record.itid != null" >
+      <if test="record.itid != null">
         itid = #{record.itid,jdbcType=INTEGER},
       </if>
-      <if test="record.sedetailId != null" >
+      <if test="record.sedetailId != null">
         sedetail_id = #{record.sedetailId,jdbcType=VARCHAR},
       </if>
-      <if test="record.sedetailMoney != null" >
+      <if test="record.sedetailMoney != null">
         sedetail_money = #{record.sedetailMoney,jdbcType=VARCHAR},
       </if>
-      <if test="record.sedetailMemo != null" >
+      <if test="record.sedetailMemo != null">
         sedetail_memo = #{record.sedetailMemo,jdbcType=VARCHAR},
       </if>
-      <if test="record.taxType != null" >
+      <if test="record.taxType != null">
         tax_type = #{record.taxType,jdbcType=VARCHAR},
       </if>
-      <if test="record.taxNumber != null" >
+      <if test="record.taxNumber != null">
         tax_number = #{record.taxNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.taxRate != null" >
+      <if test="record.taxRate != null">
         tax_rate = #{record.taxRate,jdbcType=VARCHAR},
       </if>
-      <if test="record.isLast != null" >
+      <if test="record.isLast != null">
         is_last = #{record.isLast,jdbcType=INTEGER},
       </if>
-      <if test="record.settlementId != null" >
-        settlement_id = #{record.settlementId,jdbcType=INTEGER},
+      <if test="record.settlementNumber != null">
+        settlement_number = #{record.settlementNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null" >
+      <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update pcms_settlement_item
     set setid = #{record.setid,jdbcType=INTEGER},
       itid = #{record.itid,jdbcType=INTEGER},
@@ -247,49 +247,49 @@
       tax_number = #{record.taxNumber,jdbcType=VARCHAR},
       tax_rate = #{record.taxRate,jdbcType=VARCHAR},
       is_last = #{record.isLast,jdbcType=INTEGER},
-      settlement_id = #{record.settlementId,jdbcType=INTEGER},
+      settlement_number = #{record.settlementNumber,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsSettlementItem" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsSettlementItem">
     update pcms_settlement_item
-    <set >
-      <if test="itid != null" >
+    <set>
+      <if test="itid != null">
         itid = #{itid,jdbcType=INTEGER},
       </if>
-      <if test="sedetailId != null" >
+      <if test="sedetailId != null">
         sedetail_id = #{sedetailId,jdbcType=VARCHAR},
       </if>
-      <if test="sedetailMoney != null" >
+      <if test="sedetailMoney != null">
         sedetail_money = #{sedetailMoney,jdbcType=VARCHAR},
       </if>
-      <if test="sedetailMemo != null" >
+      <if test="sedetailMemo != null">
         sedetail_memo = #{sedetailMemo,jdbcType=VARCHAR},
       </if>
-      <if test="taxType != null" >
+      <if test="taxType != null">
         tax_type = #{taxType,jdbcType=VARCHAR},
       </if>
-      <if test="taxNumber != null" >
+      <if test="taxNumber != null">
         tax_number = #{taxNumber,jdbcType=VARCHAR},
       </if>
-      <if test="taxRate != null" >
+      <if test="taxRate != null">
         tax_rate = #{taxRate,jdbcType=VARCHAR},
       </if>
-      <if test="isLast != null" >
+      <if test="isLast != null">
         is_last = #{isLast,jdbcType=INTEGER},
       </if>
-      <if test="settlementId != null" >
-        settlement_id = #{settlementId,jdbcType=INTEGER},
+      <if test="settlementNumber != null">
+        settlement_number = #{settlementNumber,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where setid = #{setid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsSettlementItem" >
+  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsSettlementItem">
     update pcms_settlement_item
     set itid = #{itid,jdbcType=INTEGER},
       sedetail_id = #{sedetailId,jdbcType=VARCHAR},
@@ -299,8 +299,29 @@
       tax_number = #{taxNumber,jdbcType=VARCHAR},
       tax_rate = #{taxRate,jdbcType=VARCHAR},
       is_last = #{isLast,jdbcType=INTEGER},
-      settlement_id = #{settlementId,jdbcType=INTEGER},
+      settlement_number = #{settlementNumber,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where setid = #{setid,jdbcType=INTEGER}
   </update>
+  
+ <!-- =========================================自定义SQL==================================================== --> 
+ 
+ <select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.SettlementResult">
+ 	SELECT
+	a.setid,
+	a.settlement_number AS settNumber,
+	b.item_number AS itemNumber,
+	a.sedetail_memo AS sedetailMemo,
+	a.tax_type AS taxType,
+	a.tax_number AS taxNumber,
+	a.is_last AS isLast,
+	a.sedetail_money AS sedetailMoney
+FROM
+	pcms_settlement_item a
+LEFT JOIN pcms_item b ON a.itid = b.itid
+WHERE
+	a.itid = #{itid}
+ </select>
+ 
+  
 </mapper>

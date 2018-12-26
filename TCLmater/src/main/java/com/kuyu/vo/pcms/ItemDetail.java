@@ -64,16 +64,16 @@ public class ItemDetail {
 	
 	private List<ShowcaseResult> scList;
 	
-	private List<SettlementResult> selttList; //结算信息
+	private List<SettlementResult> settList; //结算信息
 	
 	
-	
-	public List<SettlementResult> getSelttList() {
-		return selttList;
+
+	public List<SettlementResult> getSettList() {
+		return settList;
 	}
 
-	public void setSelttList(List<SettlementResult> selttList) {
-		this.selttList = selttList;
+	public void setSettList(List<SettlementResult> settList) {
+		this.settList = settList;
 	}
 
 	public List<PcmsItemLog> getItemLog() {

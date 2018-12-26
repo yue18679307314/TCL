@@ -21,7 +21,7 @@ public class PcmsSettlementItem {
 
     private Integer isLast;
 
-    private Integer settlementId;
+    private String settlementNumber;
 
     private Date createTime;
 
@@ -97,12 +97,12 @@ public class PcmsSettlementItem {
         this.isLast = isLast;
     }
 
-    public Integer getSettlementId() {
-        return settlementId;
+    public String getSettlementNumber() {
+        return settlementNumber;
     }
 
-    public void setSettlementId(Integer settlementId) {
-        this.settlementId = settlementId;
+    public void setSettlementNumber(String settlementNumber) {
+        this.settlementNumber = settlementNumber == null ? null : settlementNumber.trim();
     }
 
     public Date getCreateTime() {

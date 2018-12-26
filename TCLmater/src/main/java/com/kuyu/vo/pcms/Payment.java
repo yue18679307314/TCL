@@ -25,7 +25,7 @@ public class Payment {
 	@JsonProperty("PAY_AMOUNT")
 	private String payAmount;
 	
-	@JsonProperty("PAY_ STANDARD")
+	@JsonProperty("PAY_STANDARD")
 	private String payStandard;
 	
 	@JsonProperty("BILL_EXPIRE_DATE")

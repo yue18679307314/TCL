@@ -1,9 +1,9 @@
 package com.kuyu.util;
 
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 //pcms模块工具类
 public class PcmsProjectUtil {
@@ -13,32 +13,39 @@ public class PcmsProjectUtil {
 	 * 生成立项单编号
 
 	 */
-	public synchronized static String creatItemNumber(){
-		int machineId = 1;//最大支持1-9个集群机器部署
-        int hashCodeV = UUID.randomUUID().toString().hashCode();
-        if(hashCodeV < 0) {//有可能是负数
-            hashCodeV = - hashCodeV;
-        }
-        // 0 代表前面补充0     
-        // 4 代表长度为4     
-        // d 代表参数为正数型
-        return "LX"+machineId + String.format("%04d", hashCodeV);
+	public  static String creatItemNumber(){
+//		int machineId = 1;//最大支持1-9个集群机器部署
+//        int hashCodeV = UUID.randomUUID().toString().hashCode();
+//        if(hashCodeV < 0) {//有可能是负数
+//            hashCodeV = - hashCodeV;
+//        }
+//        // 0 代表前面补充0     
+//        // 4 代表长度为4     
+//        // d 代表参数为正数型
+//        return "LX"+machineId + String.format("%04d", hashCodeV);
+		 SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+	        String newDate=sdf.format(new Date());
+	        String result="";
+	        Random random=new Random();
+	        for(int i=0;i<3;i++){
+	            result+=random.nextInt(10);
+	        }
+	        return "LX"+newDate+result;
 	}
 	
 	/**
 	 * 生成结算单编号
 
 	 */
-	public synchronized static String creatSettNumber(){
-		int machineId = 1;//最大支持1-9个集群机器部署
-        int hashCodeV = UUID.randomUUID().toString().hashCode();
-        if(hashCodeV < 0) {//有可能是负数
-            hashCodeV = - hashCodeV;
-        }
-        // 0 代表前面补充0     
-        // 4 代表长度为4     
-        // d 代表参数为正数型
-        return "JS"+machineId + String.format("%04d", hashCodeV);
+	public static String creatSettNumber(){
+		 SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+	        String newDate=sdf.format(new Date());
+	        String result="";
+	        Random random=new Random();
+	        for(int i=0;i<3;i++){
+	            result+=random.nextInt(10);
+	        }
+	        return "JS"+newDate+result;
 	}
 	
 	
@@ -63,10 +70,10 @@ public class PcmsProjectUtil {
 //		
 //		System.out.println(aaa);
 		
-		String text="{\"RET_CODE\":\"9999\",\"RET_MSG\":\"\"}";
-		JSONObject aaa=JSON.parseObject(text);
-//		aaa.get("RET_CODE");
-		System.out.println(aaa.get("RET_CODE"));
+//		String text="{\"RET_CODE\":\"9999\",\"RET_MSG\":\"\"}";
+//		JSONObject aaa=JSON.parseObject(text);
+////		aaa.get("RET_CODE");
+//		System.out.println(aaa.get("RET_CODE"));
 		
 	}
 	

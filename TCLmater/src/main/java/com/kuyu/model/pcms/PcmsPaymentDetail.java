@@ -13,6 +13,8 @@ public class PcmsPaymentDetail {
 
     private String financialStatus;
 
+    private String financialTime;
+
     private Date createTime;
 
     public Integer getPmdid() {
@@ -53,6 +55,14 @@ public class PcmsPaymentDetail {
 
     public void setFinancialStatus(String financialStatus) {
         this.financialStatus = financialStatus == null ? null : financialStatus.trim();
+    }
+
+    public String getFinancialTime() {
+        return financialTime;
+    }
+
+    public void setFinancialTime(String financialTime) {
+        this.financialTime = financialTime == null ? null : financialTime.trim();
     }
 
     public Date getCreateTime() {

@@ -2,6 +2,8 @@ package com.kuyu.vo.pcms;
 
 public class SettlementResult {
 
+	private Integer setid;
+	
 	private String settNumber;
 	
 	private String itemNumber;
@@ -13,6 +15,26 @@ public class SettlementResult {
 	private String taxNumber;
 	
 	private String isLast;
+	
+	private String sedetailMoney;
+	
+	
+
+	public Integer getSetid() {
+		return setid;
+	}
+
+	public void setSetid(Integer setid) {
+		this.setid = setid;
+	}
+
+	public String getSedetailMoney() {
+		return sedetailMoney;
+	}
+
+	public void setSedetailMoney(String sedetailMoney) {
+		this.sedetailMoney = sedetailMoney;
+	}
 
 	public String getSettNumber() {
 		return settNumber;

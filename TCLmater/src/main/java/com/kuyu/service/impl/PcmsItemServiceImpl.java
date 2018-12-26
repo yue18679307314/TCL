@@ -11,6 +11,7 @@ import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsItemService;
 import com.kuyu.util.PcmsProjectUtil;
+import com.kuyu.util.ResultVoUtils;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.*;
 import org.apache.http.HttpEntity;
@@ -31,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -89,6 +91,12 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	
 	@Resource
 	private PcmsSupplierMapper pcmsSupplierMapper;
+	
+	@Resource
+	private PcmsPaymentMapper pcmsPaymentMapper;
+	
+	@Resource
+	private PcmsPaymentDetailMapper pcmsPaymentDetailMapper;
 	
 	
 	@Override
@@ -187,6 +195,13 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				result.setMrList(mrList);
 			}
 		}
+		
+		Integer status=result.getStatus();
+		if(status==5||status==6||status==7){
+			List<SettlementResult> settList=pcmsSettlementItemMapper.selectByItid(itid);
+			result.setSettList(settList);
+		}
+		
 		return result;
 	}
 
@@ -284,7 +299,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		sett.setTaxNumber(settVo.getTaxNumber());
 		sett.setStatus(1);
 		sett.setCreateTime(new Date());
-		pcmsSettlementMapper.insertSelective(sett);
+//		pcmsSettlementMapper.insertSelective(sett);
 		
 		
 		
@@ -353,6 +368,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			settIt.setTaxType(taxTypeStr);
 			settIt.setIsLast(settlement.getIsLast());
 			settIt.setTaxRate(settlement.getTaxRate()+"%");
+			settIt.setSettlementNumber(settNumber);
 			settIt.setCreateTime(new Date());
 			pcmsSettlementItemMapper.insertSelective(settIt);
 			
@@ -362,13 +378,6 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			pcmsItemMapper.updateByPrimaryKeySelective(item);
 			
 			
-			//增加日志
-			PcmsItemLog itlog=new PcmsItemLog();
-			itlog.setItid(itid);
-			itlog.setStatus(5);
-			itlog.setNote("结算中...");
-			itlog.setCreateTime(new Date());
-		    pcmsItemLogMapper.insertSelective(itlog);
 		}
 		
 				
@@ -404,10 +413,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		
 		JSONObject result=JSON.parseObject(str);
 		if(result.get("RET_CODE").equals("9999")){
-			result.get("PAYMENT_BILL_NO");
-			
-			
+			String paymentNo=result.get("PAYMENT_BILL_NO").toString();
+			sett.setFccsBill(paymentNo);
+			pcmsSettlementMapper.insertSelective(sett);
 			return ResultVo.get(ResultVo.SUCCESS);
+			
 		}else{
 			throw new ParamException(result.get("RET_MSG").toString());
 		}
@@ -520,7 +530,28 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 	@Override
 	public int createPayment(PaymentRequest payment) {
-		// TODO Auto-generated method stub
+		String fsscBill=payment.getFsscBill();
+		List<Payment> paymentList=payment.getPaymentList();
+		PcmsPayment info=new PcmsPayment(); 
+		info.setFsscBill(fsscBill);
+		if(CollectionUtils.isNotEmpty(paymentList)&&paymentList.size()==1){
+			for (Payment pay : paymentList) {
+				info.setVendorId(pay.getVendorId());
+				info.setAccountNumber(pay.getAccountNumber());
+				info.setAccountName(pay.getAccountName());
+				info.setPayeeName(pay.getPayeeName());
+				info.setPaymentType(pay.getPaymentType());
+				info.setRecommentDate(pay.getRecommentDate());
+				info.setPayAmount(pay.getPayAmount());
+				info.setPayStandard(pay.getPayStandard());
+				info.setBillExpireDate(pay.getBillExpireDate());
+				info.setBankAccountNumber(pay.getBankAccountNumber());
+				info.setCreateTime(new Date());
+				
+				return pcmsPaymentMapper.insertSelective(info);
+			}
+		}
+		
 		return 0;
 	}
 
@@ -528,10 +559,70 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 	@Override
 	public int createPaymentDetail(PaymentRequest payment) {
-		// TODO Auto-generated method stub
+		String fsscBill=payment.getFsscBill();
+		List<Financial> financialList=payment.getFinancialList();
+		if(CollectionUtils.isNotEmpty(financialList)){
+			for (Financial fin : financialList) {
+				PcmsPaymentDetail payDetail=new PcmsPaymentDetail();
+				payDetail.setFsscBill(fsscBill);
+				payDetail.setFinancialNum(fin.getFinancialNum());
+				payDetail.setFinancialMoney(fin.getFinancialMoney());
+				payDetail.setFinancialStatus(fin.getFinancialStatus());
+				payDetail.setFinancialTime(fin.getFinancialTime());
+				payDetail.setCreateTime(new Date());
+				
+				pcmsPaymentDetailMapper.insertSelective(payDetail);
+			}
+			return 1;
+		}
+		
 		return 0;
 	}
-	
+
+
+
+	@Override
+	public ResultVo queryPaymentDetail(String fsscBill) throws IOException {
+		
+		// 获取默认的请求客户端
+		CloseableHttpClient client = HttpClients.createDefault();
+		// 通过HttpPost来发送post请求
+		HttpPost httpPost=new HttpPost("共享未提供");
+		
+		/*
+		* post带参数开始
+		*/
+		// 第三步：构造list集合，往里面丢数据
+				
+		JSONObject param=new JSONObject();
+		param.put("FSSC_BILL", fsscBill);
+		
+				
+		List<NameValuePair> list = new ArrayList<NameValuePair>();
+		BasicNameValuePair basicNameValuePair = new BasicNameValuePair("requestParams", param.toString());
+		list.add(basicNameValuePair);
+		// 第二步：我们发现Entity是一个接口，所以只能找实现类，发现实现类又需要一个集合，集合的泛型是NameValuePair类型
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list,"UTF-8");
+		// 第一步：通过setEntity 将我们的entity对象传递过去
+		httpPost.setEntity(formEntity);
+		/*
+		* post带参数结束
+		*/
+		// HttpEntity
+		// 是一个中间的桥梁，在httpClient里面，是连接我们的请求与响应的一个中间桥梁，所有的请求参数都是通过HttpEntity携带过去的
+		// 通过client来执行请求，获取一个响应结果
+		CloseableHttpResponse response = client.execute(httpPost);
+		HttpEntity entity = response.getEntity();
+		String str = EntityUtils.toString(entity, "UTF-8");
+		// 关闭
+		response.close();
+		
+		JSONObject result=JSON.parseObject(str);
+		
+		System.out.println(result);
+		
+		return  ResultVo.getData("0000",result);
+	}
 	
 	
 }

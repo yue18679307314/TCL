@@ -454,7 +454,7 @@
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 		WHERE 1=1 -->
-		SELECT
+	SELECT
 			a.itid,
 			a.request_company_code AS companyCode,
 			a.vendor_id AS vendorId,
@@ -462,7 +462,7 @@
 			b.duty_paragrap AS taxNumber,
 			a.request_id AS requestId,
 			c.REQUEST_TITLE AS requestTitle,
-			a.item_number AS itemNumber,
+			l.settlement_number AS itemNumber,
 			IFNULL(d.DETAIL_ACCOUNT,f.fee_detail_type) AS detailAccount,
 			a.item_price AS itemPrice,
 			c.REQUEST_USER AS requestUser,
@@ -480,6 +480,7 @@
 		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
 		LEFT JOIN tpm_activity_original f ON f.project_id=a.detail_id
 		LEFT JOIN tpm_dept k ON c.REQUEST_DEPT=k.org_code
+		LEFT JOIN pcms_settlement_item l ON l.itid=a.itid 
 		WHERE 1=1 
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
@@ -514,6 +515,7 @@
 		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
 		LEFT JOIN tpm_activity_original f ON f.project_id=a.detail_id
 		LEFT JOIN tpm_dept k ON c.REQUEST_DEPT=k.org_code
+		LEFT JOIN pcms_settlement_item l ON l.itid=a.itid 
 		WHERE 1=1 
 <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}

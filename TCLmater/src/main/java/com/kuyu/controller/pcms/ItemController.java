@@ -195,4 +195,19 @@ public class ItemController extends BaseController{
 		}
 		return ResultVo.get(ResultVo.FAIL);
 	}
+	
+	
+	/**
+	 * 向共享查询付款子单
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 */
+	@ApiOperation("向共享查询付款子单")   
+	@RequestMapping(value = "/queryPaymentDetail", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo queryPaymentDetail(HttpServletRequest request,
+			@ApiParam(value = "向共享查询付款子单", required = true) String fsscBill) throws IOException  {
+		
+		return pcmsItemService.queryPaymentDetail(fsscBill);
+	}
 }

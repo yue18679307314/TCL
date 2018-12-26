@@ -445,6 +445,76 @@ public class PcmsPaymentDetailExample {
             return (Criteria) this;
         }
 
+        public Criteria andFinancialTimeIsNull() {
+            addCriterion("financial_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeIsNotNull() {
+            addCriterion("financial_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeEqualTo(String value) {
+            addCriterion("financial_time =", value, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeNotEqualTo(String value) {
+            addCriterion("financial_time <>", value, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeGreaterThan(String value) {
+            addCriterion("financial_time >", value, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("financial_time >=", value, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeLessThan(String value) {
+            addCriterion("financial_time <", value, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeLessThanOrEqualTo(String value) {
+            addCriterion("financial_time <=", value, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeLike(String value) {
+            addCriterion("financial_time like", value, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeNotLike(String value) {
+            addCriterion("financial_time not like", value, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeIn(List<String> values) {
+            addCriterion("financial_time in", values, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeNotIn(List<String> values) {
+            addCriterion("financial_time not in", values, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeBetween(String value1, String value2) {
+            addCriterion("financial_time between", value1, value2, "financialTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialTimeNotBetween(String value1, String value2) {
+            addCriterion("financial_time not between", value1, value2, "financialTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
