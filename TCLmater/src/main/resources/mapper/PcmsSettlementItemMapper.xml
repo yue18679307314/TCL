@@ -314,7 +314,7 @@
 	b.item_number AS itemNumber,
 	a.sedetail_memo AS sedetailMemo,
 	a.tax_type AS taxType,
-	a.tax_number AS taxNumber,
+	a.invoice_number AS invoiceNumber,
 	a.is_last AS isLast,
 	a.sedetail_money AS sedetailMoney
 FROM

@@ -71,6 +71,9 @@ public interface ReceiptService extends IService<ReceiptModel> {
     /**根据姓名查询员工*/
     ResultVo selectByName(String name,LoginUserInfo userInfo)throws Exception;
 
+    /**根据姓名查询员工*/
+    ResultVo selectName(String name,String user)throws Exception;
+
     /**日志信息*/
     ResultVo selectItemLog(Integer itid)throws Exception;
 

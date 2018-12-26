@@ -674,6 +674,27 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
+    public ResultVo selectName(String name, String user) throws Exception {
+        String token = ("QTAyNERBNDkwMzEyRTgwRTkwOENDRDc5MEVBOTFFOURDNTEyNUY4ODMwRjIyQjM3QTVBNzEyQjk4MEUzNThFOQ==");
+//        String userId = ("panwj");
+//        String name = ("李国栋");
+        String param = "token="+token+"&userId="+user+"&param="+ URLEncoder.encode(name,"utf-8");
+        log.info("准备调用查询用户接口,参数为:{}",param);
+        String message = HttpRequest.sendGet(tpmUrl, param);
+        log.info("调用询用户接口结束，返回的数据为：{}",message);
+        if("".equals(message)){
+            return ResultVo.getDataWithSuccess(null);
+        }
+        MemberVo memberVo = JSON.parseObject(message, MemberVo.class);
+        if("0".equals(memberVo.getErrcode())){
+            List<UserVo> list = memberVo.getResult();
+            return ResultVo.getDataWithSuccess(list);
+        }
+        return ResultVo.getDataWithSuccess(null);
+
+    }
+
+    @Override
     public ResultVo selectItemLog(Integer itid) throws Exception {
         List<PcmsItemLog> list = pcmsTransferMapper.selectItemLog(itid);
         return ResultVo.getDataWithSuccess(list);

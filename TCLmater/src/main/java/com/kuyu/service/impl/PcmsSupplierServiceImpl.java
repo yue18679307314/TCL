@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.itextpdf.text.DocumentException;
 import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.PcmsInvoiceImageMapper;
+import com.kuyu.mapper.pcms.PcmsSettlementMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierInvoiceMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMapper;
 import com.kuyu.model.LoginUserInfo;
@@ -18,6 +19,7 @@ import com.kuyu.util.StringUtil;
 import com.kuyu.vo.PcmsSupplierListVo;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.PcmsSettlementVo;
 import com.kuyu.vo.pcms.PcmsSupplierModelVo;
 import com.kuyu.vo.query.PcmsSupplierQuery;
 import org.apache.http.HttpEntity;
@@ -83,6 +85,9 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     @Resource
     private PcmsSupplierCompanyService pcmsSupplierCompanyService;
 
+    @Resource
+    private PcmsSettlementMapper pcmsSettlementMapper;
+
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
         if (StringUtil.isNotNull(pcmsSupplierVo.getCreate_time())
@@ -119,6 +124,11 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         if(null == pcmsSupplierModel1){
             throw new ParamException("公司名称或法人或手机号码不正确");
         }
+        PcmsSettlementVo pcmsSettlementVo = pcmsSettlementMapper.selectByVendorId(pcmsSupplierModel1.getVendor_id());
+        if(pcmsSettlementVo != null){
+            throw new ParamException("该供应商已绑定");
+        }
+
 /*        PcmsUserModel pcmsUserModel1 = pcmsUserService.selectPcmsUserModel(pcmsUserModel);
         if(null != pcmsUserModel1){
             throw new ParamException("公司名称不能为空");

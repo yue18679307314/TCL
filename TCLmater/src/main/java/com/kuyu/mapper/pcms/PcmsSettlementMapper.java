@@ -3,6 +3,8 @@ package com.kuyu.mapper.pcms;
 import com.kuyu.model.pcms.PcmsSettlement;
 import com.kuyu.model.pcms.PcmsSettlementExample;
 import java.util.List;
+
+import com.kuyu.vo.pcms.PcmsSettlementVo;
 import org.apache.ibatis.annotations.Param;
 
 public interface PcmsSettlementMapper {
@@ -27,4 +29,11 @@ public interface PcmsSettlementMapper {
     int updateByPrimaryKeySelective(PcmsSettlement record);
 
     int updateByPrimaryKey(PcmsSettlement record);
+
+    List<PcmsSettlementVo> selectByTime();
+
+    List<PcmsSettlementVo> selectPaymentByVendorId(@Param("vendor_id") String vendor_id);
+
+
+    PcmsSettlementVo selectByVendorId(@Param("vendor_id") String vendor_id);
 }

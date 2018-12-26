@@ -7,4 +7,6 @@ import com.kuyu.model.pcms.PcmsReconciliationModel;
  * Created by pc on 2018/12/26
  */
 public interface PcmsReconciliationMapper extends BaseMapper<PcmsReconciliationModel> {
+    /**插入对账信息*/
+    int insertReconciliation(PcmsReconciliationModel pcmsReconciliationModel);
 }
