@@ -3,7 +3,9 @@ package com.kuyu.service.impl;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.mapper.pcms.PcmsReconciliationMapper;
 import com.kuyu.mapper.pcms.PcmsSettlementMapper;
+import com.kuyu.model.pcms.PcmsReconciliationDetailModel;
 import com.kuyu.model.pcms.PcmsReconciliationModel;
+import com.kuyu.service.PcmsReconciliationDetailService;
 import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.util.DateUtils;
 import com.kuyu.vo.pcms.PcmsSettlementVo;
@@ -26,6 +28,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     private PcmsSettlementMapper pcmsSettlementMapper;
     @Resource
     private PcmsReconciliationMapper pcmsReconciliationMapper;
+    @Resource
+    private PcmsReconciliationDetailService pcmsReconciliationDetailService;
     @Override
     public void selectByTime() {
         List<PcmsSettlementVo> list = pcmsSettlementMapper.selectByTime();
@@ -39,6 +43,10 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                 pcmsReconciliationModel.setCreate_time(DateUtils.getPreviousMonthFirstDay());
                 pcmsReconciliationModel.setMonth(getLastMonth());
                 pcmsReconciliationMapper.insertReconciliation(pcmsReconciliationModel);
+                PcmsReconciliationDetailModel pcmsReconciliationDetail = new PcmsReconciliationDetailModel();
+                pcmsReconciliationDetail.setPcms_reconciliation_id(pcmsReconciliationModel.getId());
+                pcmsReconciliationDetail.setPmid(pcmsSettlementVo1.getPmid());
+                pcmsReconciliationDetailService.insert(pcmsReconciliationDetail);
             });
         });
     }
@@ -49,6 +57,5 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         String lastMonth = dft.format(cal.getTime());
         return lastMonth;
     }
-
 
 }
