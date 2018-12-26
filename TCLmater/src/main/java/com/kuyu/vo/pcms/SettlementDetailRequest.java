@@ -16,7 +16,7 @@ public class SettlementDetailRequest {
 	
 	private Integer	isLast;
 	
-	private String taxNumber;
+	private String taxNumber;//发票号
 	
 	private String image;
 

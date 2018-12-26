@@ -354,7 +354,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			detail.put("DETAIL_INVOUCETNUM", settlement.getTaxNumber());
 			detail.put("DETAIL_MONEY", settlement.getDetailMoney());
 			detail.put("DETAIL_ISLAST", settlement.getIsLast()==1?"是":"否");
-			detail.put("DETAIL_MEMO", /*settlement.getDetailMemo()*/"5555555555");
+			detail.put("DETAIL_MEMO", settlement.getDetailMemo());
 			detailList.add(detail);
 			param.put("DETAIL_LIST", detailList);
 			
