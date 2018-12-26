@@ -2,9 +2,12 @@ package com.kuyu.controller.pcms;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.annotation.AOP_Controller_LOG;
+import com.kuyu.common.CommonConstants;
 import com.kuyu.controller.BaseController;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.service.PcmsItemService;
+import com.kuyu.util.ResultVoUtils;
+import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
@@ -131,9 +134,8 @@ public class ItemController extends BaseController{
 //		LoginUserInfo user=getUserInfo();
 		
 		
-		pcmsItemService.settlement(param);
+		return pcmsItemService.settlement(param);
 			
-		return ResultVo.get(ResultVo.SUCCESS);
 	}
 	
 	
@@ -146,15 +148,14 @@ public class ItemController extends BaseController{
 	 */
 	@ApiOperation("更改结算单状态")   
 	@RequestMapping(value = "/settlementStatus", produces = "application/json;charset=utf-8")
-	public @ResponseBody ResultVo settlementStatus(HttpServletRequest request,
+	public @ResponseBody String settlementStatus(HttpServletRequest request,
 			@ApiParam(value = "更改结算单状态", required = true) String settlementNumber) throws ClientProtocolException, IOException {
 		
 		int i=pcmsItemService.settlementStatus(settlementNumber);
 		if(i==1){
-			return ResultVo.get(ResultVo.SUCCESS);
+			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
 		}
-		
-		return ResultVo.get(ResultVo.FAIL);
+		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_ERROR_CODE, ""));
 	}
 	
 	
@@ -167,14 +168,14 @@ public class ItemController extends BaseController{
 	 */
 	@ApiOperation("生成付款单")   
 	@PostMapping(value = "/createPayment", produces = "application/json;charset=utf-8")
-	public @ResponseBody ResultVo createPayment(HttpServletRequest request,
+	public @ResponseBody String createPayment(HttpServletRequest request,
 			@ApiParam(value = "生成付款单", required = true) @RequestBody PaymentRequest payment)  {
 		
 		int i=pcmsItemService.createPayment(payment);
 		if(i==1){
-			return ResultVo.get(ResultVo.SUCCESS);
+			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
 		}
-		return ResultVo.get(ResultVo.FAIL);
+		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_ERROR_CODE, ""));
 	}
 	
 	/**
@@ -186,14 +187,14 @@ public class ItemController extends BaseController{
 	 */
 	@ApiOperation("生成付款单子单")   
 	@PostMapping(value = "/createPaymentDetail", produces = "application/json;charset=utf-8")
-	public @ResponseBody ResultVo createPaymentDetail(HttpServletRequest request,
+	public @ResponseBody String createPaymentDetail(HttpServletRequest request,
 			@ApiParam(value = "生成付款子单", required = true) @RequestBody PaymentRequest payment)  {
 		
 		int i=pcmsItemService.createPaymentDetail(payment);
 		if(i==1){
-			return ResultVo.get(ResultVo.SUCCESS);
+			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
 		}
-		return ResultVo.get(ResultVo.FAIL);
+		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_ERROR_CODE, ""));
 	}
 	
 	

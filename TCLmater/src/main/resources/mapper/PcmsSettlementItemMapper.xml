@@ -8,7 +8,7 @@
     <result column="sedetail_money" jdbcType="VARCHAR" property="sedetailMoney" />
     <result column="sedetail_memo" jdbcType="VARCHAR" property="sedetailMemo" />
     <result column="tax_type" jdbcType="VARCHAR" property="taxType" />
-    <result column="tax_number" jdbcType="VARCHAR" property="taxNumber" />
+    <result column="invoice_number" jdbcType="VARCHAR" property="invoiceNumber" />
     <result column="tax_rate" jdbcType="VARCHAR" property="taxRate" />
     <result column="is_last" jdbcType="INTEGER" property="isLast" />
     <result column="settlement_number" jdbcType="VARCHAR" property="settlementNumber" />
@@ -73,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    setid, itid, sedetail_id, sedetail_money, sedetail_memo, tax_type, tax_number, tax_rate, 
-    is_last, settlement_number, create_time
+    setid, itid, sedetail_id, sedetail_money, sedetail_memo, tax_type, invoice_number, 
+    tax_rate, is_last, settlement_number, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementItemExample" resultMap="BaseResultMap">
     select
@@ -109,11 +109,11 @@
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsSettlementItem">
     insert into pcms_settlement_item (setid, itid, sedetail_id, 
       sedetail_money, sedetail_memo, tax_type, 
-      tax_number, tax_rate, is_last, 
+      invoice_number, tax_rate, is_last, 
       settlement_number, create_time)
     values (#{setid,jdbcType=INTEGER}, #{itid,jdbcType=INTEGER}, #{sedetailId,jdbcType=VARCHAR}, 
       #{sedetailMoney,jdbcType=VARCHAR}, #{sedetailMemo,jdbcType=VARCHAR}, #{taxType,jdbcType=VARCHAR}, 
-      #{taxNumber,jdbcType=VARCHAR}, #{taxRate,jdbcType=VARCHAR}, #{isLast,jdbcType=INTEGER}, 
+      #{invoiceNumber,jdbcType=VARCHAR}, #{taxRate,jdbcType=VARCHAR}, #{isLast,jdbcType=INTEGER}, 
       #{settlementNumber,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsSettlementItem">
@@ -137,8 +137,8 @@
       <if test="taxType != null">
         tax_type,
       </if>
-      <if test="taxNumber != null">
-        tax_number,
+      <if test="invoiceNumber != null">
+        invoice_number,
       </if>
       <if test="taxRate != null">
         tax_rate,
@@ -172,8 +172,8 @@
       <if test="taxType != null">
         #{taxType,jdbcType=VARCHAR},
       </if>
-      <if test="taxNumber != null">
-        #{taxNumber,jdbcType=VARCHAR},
+      <if test="invoiceNumber != null">
+        #{invoiceNumber,jdbcType=VARCHAR},
       </if>
       <if test="taxRate != null">
         #{taxRate,jdbcType=VARCHAR},
@@ -216,8 +216,8 @@
       <if test="record.taxType != null">
         tax_type = #{record.taxType,jdbcType=VARCHAR},
       </if>
-      <if test="record.taxNumber != null">
-        tax_number = #{record.taxNumber,jdbcType=VARCHAR},
+      <if test="record.invoiceNumber != null">
+        invoice_number = #{record.invoiceNumber,jdbcType=VARCHAR},
       </if>
       <if test="record.taxRate != null">
         tax_rate = #{record.taxRate,jdbcType=VARCHAR},
@@ -244,7 +244,7 @@
       sedetail_money = #{record.sedetailMoney,jdbcType=VARCHAR},
       sedetail_memo = #{record.sedetailMemo,jdbcType=VARCHAR},
       tax_type = #{record.taxType,jdbcType=VARCHAR},
-      tax_number = #{record.taxNumber,jdbcType=VARCHAR},
+      invoice_number = #{record.invoiceNumber,jdbcType=VARCHAR},
       tax_rate = #{record.taxRate,jdbcType=VARCHAR},
       is_last = #{record.isLast,jdbcType=INTEGER},
       settlement_number = #{record.settlementNumber,jdbcType=VARCHAR},
@@ -271,8 +271,8 @@
       <if test="taxType != null">
         tax_type = #{taxType,jdbcType=VARCHAR},
       </if>
-      <if test="taxNumber != null">
-        tax_number = #{taxNumber,jdbcType=VARCHAR},
+      <if test="invoiceNumber != null">
+        invoice_number = #{invoiceNumber,jdbcType=VARCHAR},
       </if>
       <if test="taxRate != null">
         tax_rate = #{taxRate,jdbcType=VARCHAR},
@@ -296,13 +296,14 @@
       sedetail_money = #{sedetailMoney,jdbcType=VARCHAR},
       sedetail_memo = #{sedetailMemo,jdbcType=VARCHAR},
       tax_type = #{taxType,jdbcType=VARCHAR},
-      tax_number = #{taxNumber,jdbcType=VARCHAR},
+      invoice_number = #{invoiceNumber,jdbcType=VARCHAR},
       tax_rate = #{taxRate,jdbcType=VARCHAR},
       is_last = #{isLast,jdbcType=INTEGER},
       settlement_number = #{settlementNumber,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where setid = #{setid,jdbcType=INTEGER}
   </update>
+ 
   
  <!-- =========================================自定义SQL==================================================== --> 
  

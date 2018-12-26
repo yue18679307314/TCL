@@ -16,20 +16,9 @@ public class SettlementDetailRequest {
 	
 	private Integer	isLast;
 	
-	private String taxNumber;//发票号
+	private String invoiceNumber;//发票号
 	
 	private String image;
-
-	
-	
-	
-	public String getDetailMemo() {
-		return detailMemo;
-	}
-
-	public void setDetailMemo(String detailMemo) {
-		this.detailMemo = detailMemo;
-	}
 
 	public Integer getItid() {
 		return itid;
@@ -53,6 +42,14 @@ public class SettlementDetailRequest {
 
 	public void setDetailMoney(String detailMoney) {
 		this.detailMoney = detailMoney;
+	}
+
+	public String getDetailMemo() {
+		return detailMemo;
+	}
+
+	public void setDetailMemo(String detailMemo) {
+		this.detailMemo = detailMemo;
 	}
 
 	public String getTaxRate() {
@@ -79,12 +76,12 @@ public class SettlementDetailRequest {
 		this.isLast = isLast;
 	}
 
-	public String getTaxNumber() {
-		return taxNumber;
+	public String getInvoiceNumber() {
+		return invoiceNumber;
 	}
 
-	public void setTaxNumber(String taxNumber) {
-		this.taxNumber = taxNumber;
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
 	}
 
 	public String getImage() {
@@ -95,5 +92,8 @@ public class SettlementDetailRequest {
 		this.image = image;
 	}
 
+	
+	
+	
 	
 }

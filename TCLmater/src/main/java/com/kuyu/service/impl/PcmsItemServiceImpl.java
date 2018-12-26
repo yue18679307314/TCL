@@ -351,7 +351,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			detail.put("DETAIL_BILL", item.getRequestId());
 			detail.put("DETAIL_ID", item.getDetailId());
 			detail.put("DETAIL_INVOUCETYPE", taxTypeStr);
-			detail.put("DETAIL_INVOUCETNUM", settlement.getTaxNumber());
+			detail.put("DETAIL_INVOUCETNUM", settlement.getInvoiceNumber());
 			detail.put("DETAIL_MONEY", settlement.getDetailMoney());
 			detail.put("DETAIL_ISLAST", settlement.getIsLast()==1?"是":"否");
 			detail.put("DETAIL_MEMO", settlement.getDetailMemo());
@@ -367,6 +367,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			settIt.setSedetailMemo(settlement.getDetailMemo());
 			settIt.setTaxType(taxTypeStr);
 			settIt.setIsLast(settlement.getIsLast());
+			settIt.setInvoiceNumber(settlement.getInvoiceNumber());
 			settIt.setTaxRate(settlement.getTaxRate()+"%");
 			settIt.setSettlementNumber(settNumber);
 			settIt.setCreateTime(new Date());

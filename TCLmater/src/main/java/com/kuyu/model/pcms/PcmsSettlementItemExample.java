@@ -505,73 +505,73 @@ public class PcmsSettlementItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberIsNull() {
-            addCriterion("tax_number is null");
+        public Criteria andInvoiceNumberIsNull() {
+            addCriterion("invoice_number is null");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberIsNotNull() {
-            addCriterion("tax_number is not null");
+        public Criteria andInvoiceNumberIsNotNull() {
+            addCriterion("invoice_number is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberEqualTo(String value) {
-            addCriterion("tax_number =", value, "taxNumber");
+        public Criteria andInvoiceNumberEqualTo(String value) {
+            addCriterion("invoice_number =", value, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberNotEqualTo(String value) {
-            addCriterion("tax_number <>", value, "taxNumber");
+        public Criteria andInvoiceNumberNotEqualTo(String value) {
+            addCriterion("invoice_number <>", value, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberGreaterThan(String value) {
-            addCriterion("tax_number >", value, "taxNumber");
+        public Criteria andInvoiceNumberGreaterThan(String value) {
+            addCriterion("invoice_number >", value, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberGreaterThanOrEqualTo(String value) {
-            addCriterion("tax_number >=", value, "taxNumber");
+        public Criteria andInvoiceNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("invoice_number >=", value, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberLessThan(String value) {
-            addCriterion("tax_number <", value, "taxNumber");
+        public Criteria andInvoiceNumberLessThan(String value) {
+            addCriterion("invoice_number <", value, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberLessThanOrEqualTo(String value) {
-            addCriterion("tax_number <=", value, "taxNumber");
+        public Criteria andInvoiceNumberLessThanOrEqualTo(String value) {
+            addCriterion("invoice_number <=", value, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberLike(String value) {
-            addCriterion("tax_number like", value, "taxNumber");
+        public Criteria andInvoiceNumberLike(String value) {
+            addCriterion("invoice_number like", value, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberNotLike(String value) {
-            addCriterion("tax_number not like", value, "taxNumber");
+        public Criteria andInvoiceNumberNotLike(String value) {
+            addCriterion("invoice_number not like", value, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberIn(List<String> values) {
-            addCriterion("tax_number in", values, "taxNumber");
+        public Criteria andInvoiceNumberIn(List<String> values) {
+            addCriterion("invoice_number in", values, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberNotIn(List<String> values) {
-            addCriterion("tax_number not in", values, "taxNumber");
+        public Criteria andInvoiceNumberNotIn(List<String> values) {
+            addCriterion("invoice_number not in", values, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberBetween(String value1, String value2) {
-            addCriterion("tax_number between", value1, value2, "taxNumber");
+        public Criteria andInvoiceNumberBetween(String value1, String value2) {
+            addCriterion("invoice_number between", value1, value2, "invoiceNumber");
             return (Criteria) this;
         }
 
-        public Criteria andTaxNumberNotBetween(String value1, String value2) {
-            addCriterion("tax_number not between", value1, value2, "taxNumber");
+        public Criteria andInvoiceNumberNotBetween(String value1, String value2) {
+            addCriterion("invoice_number not between", value1, value2, "invoiceNumber");
             return (Criteria) this;
         }
 

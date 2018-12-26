@@ -15,7 +15,7 @@ public class PcmsSettlementItem {
 
     private String taxType;
 
-    private String taxNumber;
+    private String invoiceNumber;
 
     private String taxRate;
 
@@ -73,12 +73,12 @@ public class PcmsSettlementItem {
         this.taxType = taxType == null ? null : taxType.trim();
     }
 
-    public String getTaxNumber() {
-        return taxNumber;
+    public String getInvoiceNumber() {
+        return invoiceNumber;
     }
 
-    public void setTaxNumber(String taxNumber) {
-        this.taxNumber = taxNumber == null ? null : taxNumber.trim();
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber == null ? null : invoiceNumber.trim();
     }
 
     public String getTaxRate() {
