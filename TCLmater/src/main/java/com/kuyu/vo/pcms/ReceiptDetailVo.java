@@ -76,7 +76,7 @@ public class ReceiptDetailVo {
     private List<MaterialResult> materialResultList;
 
     @ApiModelProperty("展台信息")
-    private PcmsShowcaseVo pcmsShowcaseVo;
+    private List<PcmsShowcaseVo> pcmsShowcaseVo;
 
     @ApiModelProperty("其他终端信息")
     private List<PcmsOthertmVo> pcmsOthertmVoList;
@@ -89,6 +89,9 @@ public class ReceiptDetailVo {
 
     @ApiModelProperty("转办信息")
     private List<Transfer> pcmsTransferVoList;
+
+    @ApiModelProperty("发票信息")
+    private List<SettlementResult> settList;
 
     public Integer getItid() {
         return itid;
@@ -178,11 +181,11 @@ public class ReceiptDetailVo {
         this.pcmsShopVo = pcmsShopVo;
     }
 
-    public PcmsShowcaseVo getPcmsShowcaseVo() {
+    public List<PcmsShowcaseVo> getPcmsShowcaseVo() {
         return pcmsShowcaseVo;
     }
 
-    public void setPcmsShowcaseVo(PcmsShowcaseVo pcmsShowcaseVo) {
+    public void setPcmsShowcaseVo(List<PcmsShowcaseVo> pcmsShowcaseVo) {
         this.pcmsShowcaseVo = pcmsShowcaseVo;
     }
 
@@ -304,5 +307,13 @@ public class ReceiptDetailVo {
 
     public void setPcmsTransferVoList(List<Transfer> pcmsTransferVoList) {
         this.pcmsTransferVoList = pcmsTransferVoList;
+    }
+
+    public List<SettlementResult> getSettList() {
+        return settList;
+    }
+
+    public void setSettList(List<SettlementResult> settList) {
+        this.settList = settList;
     }
 }

@@ -21,7 +21,7 @@ public interface ReceiptMapper extends BaseMapper<ReceiptModel> {
     /**门店信息*/
     PcmsShopVo getPcmsShopInfo(@Param("itid") Integer itid);
     /**展台信息*/
-    PcmsShowcaseVo getPcmsShowcaseInfo(@Param("itid") Integer itid);
+    List<PcmsShowcaseVo> getPcmsShowcaseInfo(@Param("itid") Integer itid);
     /**其他终端信息*/
     List<PcmsOthertmVo> getPcmsOthertmInfo(@Param("itid") Integer itid);
     /**广告物料信息*/
