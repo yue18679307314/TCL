@@ -351,6 +351,65 @@
     where seid = #{seid,jdbcType=INTEGER}
   </update>
  
-
+ <!-- ==========================================自定义SQL===================================================== -->
+<resultMap id="SettlementDetailMap" type="com.kuyu.vo.pcms.SettlementDetailResult">
+ 	<result column="seid" jdbcType="INTEGER" property="seid" />
+ 	<result column="sett_number" jdbcType="VARCHAR" property="settlementNumber" />
+    <result column="application_title" jdbcType="VARCHAR" property="applyTitle" />
+    <result column="application_notes" jdbcType="VARCHAR" property="applyNote" />
+    <result column="request_user" jdbcType="VARCHAR" property="requestUser" />
+    <result column="person_name" jdbcType="VARCHAR" property="requestUserName" />
+    <result column="account_number" jdbcType="VARCHAR" property="openingAccount" />
+    <result column="payee_name" jdbcType="VARCHAR" property="openingBank" />
+    <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
+    <result column="vendor_name" jdbcType="VARCHAR" property="vendorName" />
+    <result column="pay_type" jdbcType="INTEGER" property="type" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="sum_money" jdbcType="VARCHAR" property="applyMoney" />
+    <collection property="itemList" ofType="com.kuyu.vo.pcms.SettlementItemResult" javaType="java.util.ArrayList" 
+    select="getSettlementItemResult" column="settlementNumber"/>
+</resultMap> 
+ <select id="getSettlementDetail" parameterType="string" resultMap="SettlementDetailMap">
+ 	SELECT
+	a.seid,
+	a.sett_number,
+	a.application_title,
+	a.application_notes,
+	a.request_user,
+	b.person_name,
+	c.account_number,
+	c.payee_name,
+	c.vendor_id,
+	d.vendor_name,
+	a.pay_type,
+	a.company_code,
+	a.sum_money
+FROM
+	pcms_settlement a
+LEFT JOIN tpm_employee b ON a.request_user=b.person_code
+LEFT JOIN pcms_payment c ON c.fssc_bill=a.fccs_bill
+LEFT JOIN pcms_supplier d on c.vendor_id=d.vendor_id
+WHERE a.sett_number=#{settNumber}
+ </select>
+ 
+ <select id="getSettlementItemResult" parameterType="string" resultType="com.kuyu.vo.pcms.SettlementItemResult">
+SELECT
+	a.setid,
+	a.itid,
+	b.item_number  AS itemNumber,
+	a.sedetail_memo AS sedetailMemo,
+	c.DETAIL_ACCOUNT AS detailAccount,
+	c.DETAIL_COST AS detailCost,
+	c.DETAIL_CHANNEL AS detailChannel,
+	a.tax_type AS taxType,
+	a.invoice_number AS invoiceNumber,
+	a.sedetail_money AS sedetailMoney,
+	a.is_last AS isLast
+FROM
+	pcms_settlement_item a
+LEFT JOIN pcms_item b ON a.itid=b.itid 
+LEFT JOIN pcms_project_deatil c ON b.detail_id=c.DETAIL_ID
+WHERE a.settlement_number=#{settNumber}
+ </select>
 
 </mapper>

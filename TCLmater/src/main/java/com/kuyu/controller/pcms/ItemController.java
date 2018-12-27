@@ -211,4 +211,51 @@ public class ItemController extends BaseController{
 		
 		return pcmsItemService.queryPaymentDetail(fsscBill);
 	}
+	
+	
+	/**
+	 * 结算单详情
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 */
+	@ApiOperation("结算单详情")   
+	@RequestMapping(value = "/settlementDetail", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo settlementDetail(HttpServletRequest request,
+			@ApiParam(value = "结算单详情", required = true) String settNumber)    {
+		
+		return pcmsItemService.settlementDetail(settNumber);
+	}
+	
+	
+	/**
+	 * 付款单列表
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 */
+	@ApiOperation("结算单详情")   
+	@RequestMapping(value = "/paymentList", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo paymentList(HttpServletRequest request,
+			@ApiParam(value = "付款单列表", required = true) String settNumber)    {
+		return pcmsItemService.paymentList();
+	}
+	
+	
+	/**
+	 * 付款单详情
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 */
+	@ApiOperation("付款单详情")   
+	@RequestMapping(value = "/paymentDetail", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo paymentDetail(HttpServletRequest request,
+			@ApiParam(value = "付款单详情", required = true) String settNumber)    {
+		//TODO
+		return pcmsItemService.settlementDetail(settNumber);
+	}
+	
+	
+	
 }

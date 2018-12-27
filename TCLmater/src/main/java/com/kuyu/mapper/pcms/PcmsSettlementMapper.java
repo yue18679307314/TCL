@@ -2,6 +2,8 @@ package com.kuyu.mapper.pcms;
 
 import com.kuyu.model.pcms.PcmsSettlement;
 import com.kuyu.model.pcms.PcmsSettlementExample;
+import com.kuyu.vo.pcms.SettlementDetailResult;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +29,6 @@ public interface PcmsSettlementMapper {
     int updateByPrimaryKeySelective(PcmsSettlement record);
 
     int updateByPrimaryKey(PcmsSettlement record);
+
+	SettlementDetailResult getSettlementDetail(String settNumber);
 }

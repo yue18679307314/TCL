@@ -43,7 +43,10 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	
 	@Value("${settlement.url}")
     private String settlementUrl;
-
+	
+	@Value("${queryPaymentDetail.url}")
+    private String queryPaymentDetailUrl;
+	
 	@Resource
 	private PcmsProjectMapper pcmsProjectMapper;
 	
@@ -588,7 +591,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		// 获取默认的请求客户端
 		CloseableHttpClient client = HttpClients.createDefault();
 		// 通过HttpPost来发送post请求
-		HttpPost httpPost=new HttpPost("共享未提供");
+		HttpPost httpPost=new HttpPost(queryPaymentDetailUrl);
 		
 		/*
 		* post带参数开始
@@ -623,6 +626,64 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		System.out.println(result);
 		
 		return  ResultVo.getData("0000",result);
+		
+		/*
+		##################调用
+
+		public static void main(String[] args) throws Exception {
+				// 获取默认的请求客户端
+				CloseableHttpClient client = HttpClients.createDefault();
+				// 通过HttpPost来发送post请求
+				HttpPost httpPost = new HttpPost("http://localhost:9000/e7cctest/promotionFee/getBillPayStatus.do");
+				JSONObject param=new JSONObject();
+				param.put("FSSC_BILL", "M4301812260041");
+				
+				List<NameValuePair> list = new ArrayList<NameValuePair>();
+				BasicNameValuePair basicNameValuePair = new BasicNameValuePair("requestParams", param.toString());
+				list.add(basicNameValuePair);
+				// 第二步：我们发现Entity是一个接口，所以只能找实现类，发现实现类又需要一个集合，集合的泛型是NameValuePair类型
+				UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list,"UTF-8");
+				// 第一步：通过setEntity 将我们的entity对象传递过去
+				httpPost.setEntity(formEntity);
+				
+				CloseableHttpResponse response = client.execute(httpPost);
+				HttpEntity entity = response.getEntity();
+				String str = EntityUtils.toString(entity, "UTF-8");
+				System.out.println(str);
+				// 关闭
+				response.close();
+			}
+
+
+
+		#############查询json结果
+
+		{"RET_CODE":"9999","RET_MSG":"","FINANCIAL_RESULT":{"FSSC_BILL":"M4301812260041","FINANCIAL_LIST":[{"FINANCIAL_NUM":"1","FINANCIAL_MONEY":"1000","FINANCIAL_STATUS":"8","FINANCIAL_TIME":"2018-12-26 15:01:59"}]}}
+
+		*/
+		
+		
+	}
+
+
+
+	@Override
+	public ResultVo settlementDetail(String settNumber) {
+		
+		SettlementDetailResult result=pcmsSettlementMapper.getSettlementDetail(settNumber);
+		
+		return  ResultVo.getData("0000",result);
+	}
+
+
+
+	@Override
+	public ResultVo paymentList() {
+//		PaymentResult
+		
+		
+		
+		return null;
 	}
 	
 	

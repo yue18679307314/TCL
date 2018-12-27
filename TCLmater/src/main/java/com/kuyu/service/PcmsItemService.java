@@ -42,6 +42,10 @@ public interface PcmsItemService  {
 
 	ResultVo queryPaymentDetail(String fsscBill) throws UnsupportedEncodingException, IOException;
 
+	ResultVo settlementDetail(String settNumber);
+
+	ResultVo paymentList();
+
 	
 
 }
