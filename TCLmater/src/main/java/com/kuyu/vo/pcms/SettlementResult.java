@@ -12,7 +12,7 @@ public class SettlementResult {
 	
 	private String taxType;
 	
-	private String taxNumber;
+	private String invoiceNumber;
 	
 	private String isLast;
 	
@@ -68,12 +68,12 @@ public class SettlementResult {
 		this.taxType = taxType;
 	}
 
-	public String getTaxNumber() {
-		return taxNumber;
+	public String getInvoiceNumber() {
+		return invoiceNumber;
 	}
 
-	public void setTaxNumber(String taxNumber) {
-		this.taxNumber = taxNumber;
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
 	}
 
 	public String getIsLast() {

@@ -412,4 +412,26 @@ LEFT JOIN pcms_project_deatil c ON b.detail_id=c.DETAIL_ID
 WHERE a.settlement_number=#{settNumber}
  </select>
 
+  <!-- =========================================自定义SQL==================================================== -->
+
+  <!-- 根据供应商统计上月的对账信息 -->
+  <select id="selectByTime" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">
+    SELECT t.pmid,
+    t.vendor_id,
+    ps.vendor_name
+    FROM pcms_payment t
+    LEFT JOIN pcms_supplier ps ON ps.vendor_id = t.vendor_id
+    WHERE DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') GROUP BY t.vendor_id
+  </select>
+  <!-- 根据供应商ID查询上个月的付款信息 -->
+  <select id="selectPaymentByVendorId" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">
+    SELECT t.pmid
+    FROM pcms_payment t
+    WHERE DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') and t.vendor_id = #{vendor_id,jdbcType=VARCHAR}
+  </select>
+
+  <!-- 根据供应商ID查询上个月的付款信息 -->
+  <select id="selectByVendorId" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">
+    SELECT t.`vendor_id` FROM `pcms_supplier_user` t WHERE t.vendor_id = = #{vendor_id,jdbcType=VARCHAR}
+  </select>
 </mapper>
