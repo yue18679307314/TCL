@@ -1,7 +1,6 @@
 package com.kuyu.model.pcms;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PcmsPaymentDetailExample {
@@ -103,66 +102,6 @@ public class PcmsPaymentDetailExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        public Criteria andPmdidIsNull() {
-            addCriterion("pmdid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidIsNotNull() {
-            addCriterion("pmdid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidEqualTo(Integer value) {
-            addCriterion("pmdid =", value, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidNotEqualTo(Integer value) {
-            addCriterion("pmdid <>", value, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidGreaterThan(Integer value) {
-            addCriterion("pmdid >", value, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("pmdid >=", value, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidLessThan(Integer value) {
-            addCriterion("pmdid <", value, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidLessThanOrEqualTo(Integer value) {
-            addCriterion("pmdid <=", value, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidIn(List<Integer> values) {
-            addCriterion("pmdid in", values, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidNotIn(List<Integer> values) {
-            addCriterion("pmdid not in", values, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidBetween(Integer value1, Integer value2) {
-            addCriterion("pmdid between", value1, value2, "pmdid");
-            return (Criteria) this;
-        }
-
-        public Criteria andPmdidNotBetween(Integer value1, Integer value2) {
-            addCriterion("pmdid not between", value1, value2, "pmdid");
-            return (Criteria) this;
         }
 
         public Criteria andFsscBillIsNull() {
@@ -512,66 +451,6 @@ public class PcmsPaymentDetailExample {
 
         public Criteria andFinancialTimeNotBetween(String value1, String value2) {
             addCriterion("financial_time not between", value1, value2, "financialTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeIsNull() {
-            addCriterion("create_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeIsNotNull() {
-            addCriterion("create_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeEqualTo(Date value) {
-            addCriterion("create_time =", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeNotEqualTo(Date value) {
-            addCriterion("create_time <>", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeGreaterThan(Date value) {
-            addCriterion("create_time >", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("create_time >=", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeLessThan(Date value) {
-            addCriterion("create_time <", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("create_time <=", value, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeIn(List<Date> values) {
-            addCriterion("create_time in", values, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeNotIn(List<Date> values) {
-            addCriterion("create_time not in", values, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeBetween(Date value1, Date value2) {
-            addCriterion("create_time between", value1, value2, "createTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
     }

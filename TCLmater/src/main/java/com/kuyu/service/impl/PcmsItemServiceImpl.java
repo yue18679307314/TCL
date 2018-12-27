@@ -277,7 +277,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 	@Override
-	public ResultVo settlement(SettlementRequest settVo) throws ClientProtocolException, IOException {
+	public ResultVo settlement(SettlementRequest settVo) {
 		
 		//结算单编号
 		String settNumber=PcmsProjectUtil.creatSettNumber();
@@ -400,31 +400,40 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		BasicNameValuePair basicNameValuePair = new BasicNameValuePair("requestParams", param.toString());
 		list.add(basicNameValuePair);
 		// 第二步：我们发现Entity是一个接口，所以只能找实现类，发现实现类又需要一个集合，集合的泛型是NameValuePair类型
-		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list,"UTF-8");
-		// 第一步：通过setEntity 将我们的entity对象传递过去
-		httpPost.setEntity(formEntity);
+		try {
+			UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list,"UTF-8");
+			// 第一步：通过setEntity 将我们的entity对象传递过去
+			httpPost.setEntity(formEntity);
+		} catch (UnsupportedEncodingException e1) {
+			throw new ParamException("结算参数错误");
+		}
 		/*
 		* post带参数结束
 		*/
 		// HttpEntity
 		// 是一个中间的桥梁，在httpClient里面，是连接我们的请求与响应的一个中间桥梁，所有的请求参数都是通过HttpEntity携带过去的
 		// 通过client来执行请求，获取一个响应结果
-		CloseableHttpResponse response = client.execute(httpPost);
-		HttpEntity entity = response.getEntity();
-		String str = EntityUtils.toString(entity, "UTF-8");
-		// 关闭
-		response.close();
 		
-		JSONObject result=JSON.parseObject(str);
-		if(result.get("RET_CODE").equals("9999")){
-			String paymentNo=result.get("PAYMENT_BILL_NO").toString();
-			sett.setFccsBill(paymentNo);
-			pcmsSettlementMapper.insertSelective(sett);
-			return ResultVo.get(ResultVo.SUCCESS);
-			
-		}else{
-			throw new ParamException(result.get("RET_MSG").toString());
+		try {
+			CloseableHttpResponse response = client.execute(httpPost);
+			HttpEntity entity = response.getEntity();
+			String str = EntityUtils.toString(entity, "UTF-8");
+			// 关闭
+			response.close();
+			JSONObject result=JSON.parseObject(str);
+			if(result.get("RET_CODE").equals("9999")){
+				String paymentNo=result.get("PAYMENT_BILL_NO").toString();
+				sett.setFccsBill(paymentNo);
+				pcmsSettlementMapper.insertSelective(sett);
+				return ResultVo.get(ResultVo.SUCCESS);
+				
+			}else{
+				throw new ParamException(result.get("RET_MSG").toString());
+			}
+		} catch (Exception e) {
+			throw new ParamException("连接共享失败！！！");
 		}
+		
 	
 	}
 
@@ -564,6 +573,13 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public int createPaymentDetail(PaymentRequest payment) {
 		String fsscBill=payment.getFsscBill();
+		
+		//先删除
+		PcmsPaymentDetailExample example =new PcmsPaymentDetailExample();
+		example.createCriteria().andFsscBillEqualTo(fsscBill);
+		pcmsPaymentDetailMapper.deleteByExample(example);
+		
+		
 		List<Financial> financialList=payment.getFinancialList();
 		if(CollectionUtils.isNotEmpty(financialList)){
 			for (Financial fin : financialList) {
@@ -573,7 +589,6 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				payDetail.setFinancialMoney(fin.getFinancialMoney());
 				payDetail.setFinancialStatus(fin.getFinancialStatus());
 				payDetail.setFinancialTime(fin.getFinancialTime());
-				payDetail.setCreateTime(new Date());
 				
 				pcmsPaymentDetailMapper.insertSelective(payDetail);
 			}
@@ -668,22 +683,30 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 	@Override
-	public ResultVo settlementDetail(String settNumber) {
+	public SettlementDetailResult settlementDetail(String settNumber) {
 		
 		SettlementDetailResult result=pcmsSettlementMapper.getSettlementDetail(settNumber);
-		
-		return  ResultVo.getData("0000",result);
+		return  result;
 	}
 
 
 
 	@Override
-	public ResultVo paymentList() {
-//		PaymentResult
+	public List<PaymentResult> paymentList() {
+		List<PaymentResult> payList=pcmsPaymentMapper.getPaymentList();
 		
-		
-		
-		return null;
+		return payList;
+	}
+
+
+
+	@Override
+	public List<PcmsPaymentDetail> paymentDetail(String fsscBill) {
+		PcmsPaymentDetailExample example =new PcmsPaymentDetailExample();
+		example.createCriteria().andFsscBillEqualTo(fsscBill);
+		pcmsPaymentDetailMapper.selectByExample(example);
+		List<PcmsPaymentDetail> payDetailList=pcmsPaymentDetailMapper.selectByExample(example);
+		return payDetailList;
 	}
 	
 	

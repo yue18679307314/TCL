@@ -1,7 +1,10 @@
 package com.kuyu.mapper.pcms;
 
 import com.kuyu.model.pcms.PcmsPayment;
+import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.model.pcms.PcmsPaymentExample;
+import com.kuyu.vo.pcms.PaymentResult;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +30,8 @@ public interface PcmsPaymentMapper {
     int updateByPrimaryKeySelective(PcmsPayment record);
 
     int updateByPrimaryKey(PcmsPayment record);
+
+	List<PaymentResult> getPaymentList();
+
+	
 }

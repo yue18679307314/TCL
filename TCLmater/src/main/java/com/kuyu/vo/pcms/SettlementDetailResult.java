@@ -2,6 +2,9 @@ package com.kuyu.vo.pcms;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SettlementDetailResult {
 	
 	private Integer seid;  //结算单id

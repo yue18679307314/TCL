@@ -5,6 +5,7 @@ import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.controller.BaseController;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.service.PcmsItemService;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
@@ -12,6 +13,8 @@ import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemResult;
 import com.kuyu.vo.pcms.PaymentRequest;
+import com.kuyu.vo.pcms.PaymentResult;
+import com.kuyu.vo.pcms.SettlementDetailResult;
 import com.kuyu.vo.pcms.SettlementRequest;
 import com.kuyu.vo.pcms.SettlementVo;
 
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -123,13 +127,12 @@ public class ItemController extends BaseController{
 	 * 立项单结算
 	 * @param request
 	 * @return
-	 * @throws IOException 
-	 * @throws ClientProtocolException 
+	 * @throws UnsupportedEncodingException 
 	 */
 	@ApiOperation("结算")   
 	@PostMapping(value = "/settlement", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo settlement(HttpServletRequest request,
-			@ApiParam(value = "结算", required = true)@RequestBody SettlementRequest param) throws ClientProtocolException, IOException {
+			@ApiParam(value = "结算", required = true)@RequestBody SettlementRequest param)  {
 		
 //		LoginUserInfo user=getUserInfo();
 		
@@ -224,7 +227,9 @@ public class ItemController extends BaseController{
 	public @ResponseBody ResultVo settlementDetail(HttpServletRequest request,
 			@ApiParam(value = "结算单详情", required = true) String settNumber)    {
 		
-		return pcmsItemService.settlementDetail(settNumber);
+		SettlementDetailResult result=pcmsItemService.settlementDetail(settNumber);
+		
+		return ResultVo.getData(ResultVo.SUCCESS, result);
 	}
 	
 	
@@ -234,11 +239,13 @@ public class ItemController extends BaseController{
 	 * @return
 	 * @throws IOException 
 	 */
-	@ApiOperation("结算单详情")   
+	@ApiOperation("付款单列表")   
 	@RequestMapping(value = "/paymentList", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo paymentList(HttpServletRequest request,
-			@ApiParam(value = "付款单列表", required = true) String settNumber)    {
-		return pcmsItemService.paymentList();
+			@ApiParam(value = "付款单列表", required = true) String settNumber){
+		
+		List<PaymentResult> payList=pcmsItemService.paymentList();
+	return ResultVo.getData(ResultVo.SUCCESS, payList);
 	}
 	
 	
@@ -251,9 +258,9 @@ public class ItemController extends BaseController{
 	@ApiOperation("付款单详情")   
 	@RequestMapping(value = "/paymentDetail", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo paymentDetail(HttpServletRequest request,
-			@ApiParam(value = "付款单详情", required = true) String settNumber)    {
-		//TODO
-		return pcmsItemService.settlementDetail(settNumber);
+			@ApiParam(value = "付款单详情", required = true) String fsscBill)    {
+		List<PcmsPaymentDetail> result= pcmsItemService.paymentDetail(fsscBill);
+		return ResultVo.getData(ResultVo.SUCCESS, result);
 	}
 	
 	

@@ -10,21 +10,13 @@ public interface PcmsPaymentDetailMapper {
 
     int deleteByExample(PcmsPaymentDetailExample example);
 
-    int deleteByPrimaryKey(Integer pmdid);
-
     int insert(PcmsPaymentDetail record);
 
     int insertSelective(PcmsPaymentDetail record);
 
     List<PcmsPaymentDetail> selectByExample(PcmsPaymentDetailExample example);
 
-    PcmsPaymentDetail selectByPrimaryKey(Integer pmdid);
-
     int updateByExampleSelective(@Param("record") PcmsPaymentDetail record, @Param("example") PcmsPaymentDetailExample example);
 
     int updateByExample(@Param("record") PcmsPaymentDetail record, @Param("example") PcmsPaymentDetailExample example);
-
-    int updateByPrimaryKeySelective(PcmsPaymentDetail record);
-
-    int updateByPrimaryKey(PcmsPaymentDetail record);
 }

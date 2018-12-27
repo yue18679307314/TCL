@@ -351,4 +351,24 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where pmid = #{pmid,jdbcType=INTEGER}
   </update>
+  
+  <!-- ==============================自定义SQL=================================== -->
+  <select id="getPaymentList" resultType="com.kuyu.vo.pcms.PaymentResult">
+  	SELECT
+	a.pmid,
+	a.fssc_bill AS fsscBill,
+	a.vendor_id AS vendorId,
+	b.vendor_name AS vendorName,
+	a.payment_type AS paymentType,
+	a.pay_amount AS payAmount,
+	a.account_name AS accountName,
+	a.account_number AS accountNumber,
+	a.payee_name AS payeeName
+FROM
+	pcms_payment a 
+LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+  </select>
+  
+   
+  
 </mapper>

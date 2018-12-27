@@ -2,13 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kuyu.mapper.pcms.PcmsPaymentDetailMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsPaymentDetail">
-    <id column="pmdid" jdbcType="INTEGER" property="pmdid" />
     <result column="fssc_bill" jdbcType="VARCHAR" property="fsscBill" />
     <result column="financial_num" jdbcType="VARCHAR" property="financialNum" />
     <result column="financial_money" jdbcType="VARCHAR" property="financialMoney" />
     <result column="financial_status" jdbcType="VARCHAR" property="financialStatus" />
     <result column="financial_time" jdbcType="VARCHAR" property="financialTime" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,8 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    pmdid, fssc_bill, financial_num, financial_money, financial_status, financial_time, 
-    create_time
+    fssc_bill, financial_num, financial_money, financial_status, financial_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsPaymentDetailExample" resultMap="BaseResultMap">
     select
@@ -86,16 +83,6 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from pcms_payment_detail
-    where pmdid = #{pmdid,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from pcms_payment_detail
-    where pmdid = #{pmdid,jdbcType=INTEGER}
-  </delete>
   <delete id="deleteByExample" parameterType="com.kuyu.model.pcms.PcmsPaymentDetailExample">
     delete from pcms_payment_detail
     <if test="_parameter != null">
@@ -103,19 +90,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsPaymentDetail">
-    insert into pcms_payment_detail (pmdid, fssc_bill, financial_num, 
-      financial_money, financial_status, financial_time, 
-      create_time)
-    values (#{pmdid,jdbcType=INTEGER}, #{fsscBill,jdbcType=VARCHAR}, #{financialNum,jdbcType=VARCHAR}, 
-      #{financialMoney,jdbcType=VARCHAR}, #{financialStatus,jdbcType=VARCHAR}, #{financialTime,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into pcms_payment_detail (fssc_bill, financial_num, financial_money, 
+      financial_status, financial_time)
+    values (#{fsscBill,jdbcType=VARCHAR}, #{financialNum,jdbcType=VARCHAR}, #{financialMoney,jdbcType=VARCHAR}, 
+      #{financialStatus,jdbcType=VARCHAR}, #{financialTime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsPaymentDetail">
     insert into pcms_payment_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="pmdid != null">
-        pmdid,
-      </if>
       <if test="fsscBill != null">
         fssc_bill,
       </if>
@@ -131,14 +113,8 @@
       <if test="financialTime != null">
         financial_time,
       </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="pmdid != null">
-        #{pmdid,jdbcType=INTEGER},
-      </if>
       <if test="fsscBill != null">
         #{fsscBill,jdbcType=VARCHAR},
       </if>
@@ -154,9 +130,6 @@
       <if test="financialTime != null">
         #{financialTime,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.kuyu.model.pcms.PcmsPaymentDetailExample" resultType="java.lang.Integer">
@@ -168,9 +141,6 @@
   <update id="updateByExampleSelective" parameterType="map">
     update pcms_payment_detail
     <set>
-      <if test="record.pmdid != null">
-        pmdid = #{record.pmdid,jdbcType=INTEGER},
-      </if>
       <if test="record.fsscBill != null">
         fssc_bill = #{record.fsscBill,jdbcType=VARCHAR},
       </if>
@@ -186,9 +156,6 @@
       <if test="record.financialTime != null">
         financial_time = #{record.financialTime,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -196,50 +163,15 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update pcms_payment_detail
-    set pmdid = #{record.pmdid,jdbcType=INTEGER},
-      fssc_bill = #{record.fsscBill,jdbcType=VARCHAR},
+    set fssc_bill = #{record.fsscBill,jdbcType=VARCHAR},
       financial_num = #{record.financialNum,jdbcType=VARCHAR},
       financial_money = #{record.financialMoney,jdbcType=VARCHAR},
       financial_status = #{record.financialStatus,jdbcType=VARCHAR},
-      financial_time = #{record.financialTime,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      financial_time = #{record.financialTime,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsPaymentDetail">
-    update pcms_payment_detail
-    <set>
-      <if test="fsscBill != null">
-        fssc_bill = #{fsscBill,jdbcType=VARCHAR},
-      </if>
-      <if test="financialNum != null">
-        financial_num = #{financialNum,jdbcType=VARCHAR},
-      </if>
-      <if test="financialMoney != null">
-        financial_money = #{financialMoney,jdbcType=VARCHAR},
-      </if>
-      <if test="financialStatus != null">
-        financial_status = #{financialStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="financialTime != null">
-        financial_time = #{financialTime,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where pmdid = #{pmdid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsPaymentDetail">
-    update pcms_payment_detail
-    set fssc_bill = #{fsscBill,jdbcType=VARCHAR},
-      financial_num = #{financialNum,jdbcType=VARCHAR},
-      financial_money = #{financialMoney,jdbcType=VARCHAR},
-      financial_status = #{financialStatus,jdbcType=VARCHAR},
-      financial_time = #{financialTime,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
-    where pmdid = #{pmdid,jdbcType=INTEGER}
-  </update>
+ 
  
 </mapper>

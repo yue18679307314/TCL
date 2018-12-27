@@ -1,10 +1,6 @@
 package com.kuyu.model.pcms;
 
-import java.util.Date;
-
 public class PcmsPaymentDetail {
-    private Integer pmdid;
-
     private String fsscBill;
 
     private String financialNum;
@@ -14,16 +10,6 @@ public class PcmsPaymentDetail {
     private String financialStatus;
 
     private String financialTime;
-
-    private Date createTime;
-
-    public Integer getPmdid() {
-        return pmdid;
-    }
-
-    public void setPmdid(Integer pmdid) {
-        this.pmdid = pmdid;
-    }
 
     public String getFsscBill() {
         return fsscBill;
@@ -63,13 +49,5 @@ public class PcmsPaymentDetail {
 
     public void setFinancialTime(String financialTime) {
         this.financialTime = financialTime == null ? null : financialTime.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 }
