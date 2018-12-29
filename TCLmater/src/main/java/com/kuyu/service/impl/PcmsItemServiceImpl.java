@@ -775,9 +775,15 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		for (PaymentResult a : payList) {
 			String fsscBill=a.getFsscBill();
 			PaymentResult moneyInfo=pcmsPaymentMapper.getDetailMoney(fsscBill);
-			a.setAlreadyAmount(moneyInfo.getAlreadyAmount());
-			a.setStopAmount(moneyInfo.getStopAmount());
-			a.setFailAmount(moneyInfo.getFailAmount());
+			if(moneyInfo!=null){
+				a.setAlreadyAmount(moneyInfo.getAlreadyAmount());
+				a.setStopAmount(moneyInfo.getStopAmount());
+				a.setFailAmount(moneyInfo.getFailAmount());
+			}else{
+				a.setAlreadyAmount("0");
+				a.setStopAmount("0");
+				a.setFailAmount("0");
+			}
 		}
 		
 		return payList;
@@ -799,15 +805,19 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public int itemEnd(ItemEndRequest itemEnd) {
 		if(itemEnd.getStatus().equals("已完结")){
+			
+			//剩余可结算金额
+			String availableMoney=itemEnd.getAvailableMoney();
+			
 			String detailId=itemEnd.getFsscBillDetail();
 			PcmsItemExample example=new PcmsItemExample();
 			example.createCriteria().andDetailIdEqualTo(detailId);
 			
 			PcmsItem record=new PcmsItem();
 			record.setStatus(7);
-			pcmsItemMapper.updateByExampleSelective(record, example);
+			record.setSubclass(availableMoney);
+			return pcmsItemMapper.updateByExampleSelective(record, example);
 			
-			return 1;
 		}
 		
 		return 0;
@@ -848,7 +858,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				pcmsItemLogMapper.insertSelective(itlog);
 				
 			}
-			return 1;
+			sett.setStatus(-3);
+			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+			
 		}
 		if(status.equals("已唤醒")){
 			System.out.println("单号:"+itemEnd.getFsscBill()+",状态:"+itemEnd.getStatus());
@@ -879,11 +891,10 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				pcmsItemLogMapper.insertSelective(itlog);
 				
 			}
+			sett.setStatus(8);
+			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
 			
-			
-			return 1;
 		}
-		
 		
 		return 0;
 	}

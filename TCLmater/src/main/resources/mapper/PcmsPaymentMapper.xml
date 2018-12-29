@@ -354,7 +354,7 @@
   
   <!-- ==============================自定义SQL=================================== -->
   <select id="getPaymentList" resultType="com.kuyu.vo.pcms.PaymentResult">
-  	SELECT
+  SELECT
 	a.pmid,
 	a.fssc_bill AS fsscBill,
 	a.vendor_id AS vendorId,
@@ -363,10 +363,13 @@
 	a.pay_amount AS payAmount,
 	a.account_name AS accountName,
 	a.account_number AS accountNumber,
-	a.payee_name AS payeeName
+	a.payee_name AS payeeName,
+	c.`status` AS payStatus
 FROM
 	pcms_payment a 
 LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+LEFT JOIN pcms_settlement c ON a.fssc_bill=c.fccs_bill
+WHERE c.`status`!=1
   </select>
   
    <select id="getDetailMoney" parameterType="string" resultType="com.kuyu.vo.pcms.PaymentResult">
