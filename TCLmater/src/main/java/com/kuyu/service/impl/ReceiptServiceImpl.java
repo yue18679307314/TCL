@@ -548,8 +548,10 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         if(receiptDetailVo.getType() == 2){
             /**表示其他终端*/
             List<PcmsOthertmVo> listPcmsOthertmVo = baseMapper.getPcmsOthertmInfo(itid);
-            receiptDetailVo.setPcmsOthertmVoList(listPcmsOthertmVo);
-        }else{
+            if(listPcmsOthertmVo != null){
+                receiptDetailVo.setPcmsOthertmVoList(listPcmsOthertmVo);
+            }
+        }else if(receiptDetailVo.getType() == 3){
             /**广告物料*/
             List<MaterialResult> materialResultList = pcmsMaterialMapper.selectByItid(itid);
             if(materialResultList.size()>0){

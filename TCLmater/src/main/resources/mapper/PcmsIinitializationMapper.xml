@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsIinitializationMapper">
+
+    <select id="selectByCompany" resultType="com.kuyu.model.pcms.PcmsIinitializationModel">
+        SELECT
+        pr.initial_balance,
+        pr.balance,
+        pr.company,
+        pr.vendor_id,
+        pr.month,
+        pr.id
+        FROM pcms_initialization pr
+        <where>
+            <if test="company !=null and company !=''">
+                and pr.company = #{company}
+            </if>
+            <if test="vendor_id !=null and vendor_id !=''">
+                and pr.vendor_id = #{vendor_id}
+            </if>
+            <if test="month !=null and month !=''">
+                and pr.month = #{month}
+            </if>
+        </where>
+    </select>
+</mapper>

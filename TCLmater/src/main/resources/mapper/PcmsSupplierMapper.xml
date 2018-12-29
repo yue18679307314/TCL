@@ -180,4 +180,15 @@
 			</if>
 		</where>
 	</select>
+
+
+	<select id="select" resultType="com.kuyu.vo.PcmsSupplierListVo">
+		SELECT
+		ps.vendo_id,
+		ps.vendor_name
+		FROM `pcms_supplier` ps
+			LEFT JOIN `pcms_supplier_company` psc ON ps.`vendor_id` = psc.`vendor_id`
+			WHERE ps.`del_flag`='n' AND ps.`del_comp`='n'
+		ORDER BY t.create_time DESC
+	</select>
 </mapper>

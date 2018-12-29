@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.PcmsPtatisticsMapper">
+
+    <select id="selectByReconciliationId" resultType="com.kuyu.model.pcms.PcmsPtatisticsModel">
+        SELECT
+        pr.vendor_id,
+        pr.pcms_reconciliation_id,
+        pr.type,
+        pr.remark,
+        pr.update_time,
+        pr.create_time,
+        pr.person_name,
+        pr.mobile,
+        pr.id
+        FROM pcms_statistics pr
+        <where>
+            <if test="id !=null and id !=''">
+                pr.pcms_reconciliation_id = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>

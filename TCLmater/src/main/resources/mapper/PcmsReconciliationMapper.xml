@@ -22,13 +22,80 @@
 		LEFT JOIN pcms_supplier_company psc ON psc.vendor_id = t.vendor_id
 		<where>
 			<if test="params.vendor_name !=null and params.vendor_name !=''">
-				t.vendor_name LIKE '%${params.vendor_name}%'
+				and t.vendor_name LIKE '%${params.vendor_name}%'
 			</if>
 			<if test="params.state !=null and params.state !=''">
-				t.state = #{params.state}
+				and t.state = #{params.state}
 			</if>
 			<if test="params.start_time !=null and params.start_time !=''">
 				AND DATE_FORMAT(t.create_time,'%Y-%m-%d') BETWEEN #{params.start_time} AND #{params.end_time}
+			</if>
+				and psc.company = #{params.company}
+		</where>
+	</select>
+
+
+	<select id="selectCurrentDetail" resultType="com.kuyu.vo.pcms.CurrentDetailModelVo">
+		SELECT
+		pp.fssc_bill,
+		pp.pay_amount AS increase_amount,
+		pr.id AS pcms_reconciliation_id,
+		ppd1.financial_time AS create_date,
+		(SELECT SUM(ppd.`financial_money`) FROM pcms_payment_detail ppd WHERE ppd.fssc_bill = pp.fssc_bill AND
+		(ppd.financial_status = 8 AND DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m'))) AS pay_amount,
+		pp.`recomment_date` AS pr_time
+		FROM pcms_reconciliation pr
+		LEFT JOIN pcms_payment pp ON pp.vendor_id = pr.vendor_id
+		LEFT JOIN pcms_payment_detail ppd1 ON ppd1.fssc_bill = pp.fssc_bill
+		<where>
+			<if test="id !=null and id !=''">
+				pr.id = #{id}
+			</if>
+		</where>
+		GROUP BY pp.fssc_bill
+	</select>
+
+	<select id="selectCurrent" resultType="com.kuyu.vo.pcms.CurrentDetailModelVo">
+		SELECT
+		pr.fssc_bill,
+		pr.increase_amount as increase_amount,
+		pr.pay_amount as pay_amount,
+		pr.id
+		FROM pcms_current_detail pr
+		<where>
+			<if test="id !=null and id !=''">
+				pr.pcms_reconciliation_id = #{id}
+			</if>
+		</where>
+		ORDER BY 'pr.create_time'
+	</select>
+
+	<select id="selectByFssc" resultType="com.kuyu.vo.pcms.PcmsPaymentDetailVo">
+		SELECT
+		ppd.financial_time as financialTime
+		FROM pcms_payment_detail ppd
+		<where>
+		  <if test="fsscBill !=null and fsscBill !=''">
+			ppd.fssc_bill=#{fsscBill,jdbcType=VARCHAR}
+		  </if>
+			AND ppd.financial_status = 8
+			OR DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+		</where>
+		ORDER BY ppd.financial_time DESC LIMIT 0,1
+	</select>
+
+	<select id="selectByReconciliationId" resultType="com.kuyu.vo.pcms.ReconciliationVo">
+		SELECT
+		pr.id AS pcms_reconciliation_id,
+		pr.month,
+		pr.vendor_name,
+		pcd.increase_amount,
+		pcd.pay_amount
+		FROM pcms_reconciliation pr
+		LEFT JOIN pcms_current_detail pcd ON pr.id = pcd.pcms_reconciliation_id
+		<where>
+			<if test="id !=null and id !=''">
+				pr.id = =#{id,jdbcType=INTEGER}
 			</if>
 		</where>
 	</select>
