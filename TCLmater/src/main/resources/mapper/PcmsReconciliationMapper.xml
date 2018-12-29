@@ -9,4 +9,28 @@
 		(#{vendor_id},#{vendor_name},#{month},#{state},#{reconciliation_id},#{create_time})
 	</insert>
 
+	<select id="findListPage" resultType="com.kuyu.vo.ReconciliationVo">
+		SELECT
+		t.id,
+		t.vendor_id,
+		t.vendor_name,
+		t.month,
+		t.state,
+		t.create_time
+		FROM
+		pcms_reconciliation t
+		LEFT JOIN pcms_supplier_company psc ON psc.vendor_id = t.vendor_id
+		<where>
+			<if test="params.vendor_name !=null and params.vendor_name !=''">
+				t.vendor_name LIKE '%${params.vendor_name}%'
+			</if>
+			<if test="params.state !=null and params.state !=''">
+				t.state = #{params.state}
+			</if>
+			<if test="params.start_time !=null and params.start_time !=''">
+				AND DATE_FORMAT(t.create_time,'%Y-%m-%d') BETWEEN #{params.start_time} AND #{params.end_time}
+			</if>
+		</where>
+	</select>
+
 </mapper>

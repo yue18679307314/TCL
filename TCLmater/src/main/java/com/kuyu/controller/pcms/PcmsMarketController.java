@@ -111,7 +111,7 @@ public class PcmsMarketController extends BaseController {
      * @throws Exception
      */
     @ApiOperation(value = "根据姓名查询员工",response = UserVo.class)
-    @GetMapping("/selectByName1")
+    @GetMapping("/selectName")
     public ResultVo selectName(@RequestParam(value = "name") String name,@RequestParam(value = "user") String user)throws Exception{
         return receiptService.selectName(name,user);
     }

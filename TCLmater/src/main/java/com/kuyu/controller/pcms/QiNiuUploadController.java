@@ -6,6 +6,7 @@ import com.kuyu.vo.ResultVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,9 +28,10 @@ public class QiNiuUploadController {
     @Resource
     private PcmsQiNiuService pcmsQiNiuService;
 
-    @RequestMapping(value = "uploadFile")
+//    @RequestMapping(value = "uploadFile")
     @ApiOperation("上传视频")
     @ResponseBody
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     public ResultVo uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
         ResultVo resultVo = new ResultVo("0", "success");
         Map<String, Object> resultdata = new HashMap<String, Object>();

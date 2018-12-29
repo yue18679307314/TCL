@@ -418,16 +418,27 @@ WHERE a.settlement_number=#{settNumber}
   <select id="selectByTime" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">
     SELECT t.pmid,
     t.vendor_id,
+    t.fssc_bill,
     ps.vendor_name
     FROM pcms_payment t
     LEFT JOIN pcms_supplier ps ON ps.vendor_id = t.vendor_id
-    WHERE DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') GROUP BY t.vendor_id
+    LEFT JOIN pcms_payment_detail ppd ON ppd.fssc_bill = t.fssc_bill
+    LEFT JOIN pcms_supplier_company psc ON psc.vendor_id = ps.vendor_id
+    WHERE (DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+    OR DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') )
+--     AND psc.company='7601'
+    AND ppd.financial_status=8
+    GROUP BY t.vendor_id,psc.company
   </select>
   <!-- 根据供应商ID查询上个月的付款信息 -->
   <select id="selectPaymentByVendorId" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">
-    SELECT t.pmid
+    SELECT t.pmid,t.fssc_bill
     FROM pcms_payment t
-    WHERE DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') and t.vendor_id = #{vendor_id,jdbcType=VARCHAR}
+    LEFT JOIN pcms_payment_detail ppd ON ppd.fssc_bill = t.fssc_bill
+    WHERE (DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+    OR DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') )
+    and t.vendor_id = #{vendor_id,jdbcType=VARCHAR}
+    AND ppd.financial_status=8
   </select>
 
   <!-- 根据供应商ID查询上个月的付款信息 -->
