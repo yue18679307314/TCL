@@ -47,6 +47,21 @@ public class PcmsProjectUtil {
 	        }
 	        return "JS"+newDate+result;
 	}
+
+	/**
+	 * 生成对账编号
+	 * @return
+	 */
+	public static String creatReconciliationId(){
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+		String newDate=sdf.format(new Date());
+		String result="";
+		Random random=new Random();
+		for(int i=0;i<3;i++){
+			result+=random.nextInt(10);
+		}
+		return "DZ"+newDate+result;
+	}
 	
 	
 	/**

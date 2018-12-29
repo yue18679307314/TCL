@@ -25,17 +25,20 @@ public class PcmsPtatisticsModel extends Model<PcmsPtatisticsModel> {
     @ApiModelProperty("对账ID")
     private Integer pcms_reconciliation_id;
 
-    @ApiModelProperty("期初余额:")
-    private String initial_balance;
+    @ApiModelProperty("type")
+    private Integer type;
 
-    @ApiModelProperty("余额:")
-    private String balance;
+    @ApiModelProperty("备注:")
+    private String remark;
 
-    @ApiModelProperty("期末余额:")
-    private String ending_balance;
-
-    @ApiModelProperty("时间:")
+    @ApiModelProperty("创建时间:")
     private Date create_time;
+
+    @ApiModelProperty("更新时间:")
+    private Date update_time;
+
+    @ApiModelProperty("供应商ID:")
+    private String vendor_id;
 
     @ApiModelProperty("经办人:")
     private String person_name;
@@ -57,30 +60,6 @@ public class PcmsPtatisticsModel extends Model<PcmsPtatisticsModel> {
 
     public void setPcms_reconciliation_id(Integer pcms_reconciliation_id) {
         this.pcms_reconciliation_id = pcms_reconciliation_id;
-    }
-
-    public String getInitial_balance() {
-        return initial_balance;
-    }
-
-    public void setInitial_balance(String initial_balance) {
-        this.initial_balance = initial_balance;
-    }
-
-    public String getBalance() {
-        return balance;
-    }
-
-    public void setBalance(String balance) {
-        this.balance = balance;
-    }
-
-    public String getEnding_balance() {
-        return ending_balance;
-    }
-
-    public void setEnding_balance(String ending_balance) {
-        this.ending_balance = ending_balance;
     }
 
     public Date getCreate_time() {
@@ -105,6 +84,38 @@ public class PcmsPtatisticsModel extends Model<PcmsPtatisticsModel> {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Date getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(Date update_time) {
+        this.update_time = update_time;
+    }
+
+    public String getVendor_id() {
+        return vendor_id;
+    }
+
+    public void setVendor_id(String vendor_id) {
+        this.vendor_id = vendor_id;
     }
 
     @Override

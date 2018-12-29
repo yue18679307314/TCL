@@ -84,6 +84,20 @@
 		ORDER BY ppd.financial_time DESC LIMIT 0,1
 	</select>
 
-
+	<select id="selectByReconciliationId" resultType="com.kuyu.vo.pcms.ReconciliationVo">
+		SELECT
+		pr.id AS pcms_reconciliation_id,
+		pr.month,
+		pr.vendor_name,
+		pcd.increase_amount,
+		pcd.pay_amount
+		FROM pcms_reconciliation pr
+		LEFT JOIN pcms_current_detail pcd ON pr.id = pcd.pcms_reconciliation_id
+		<where>
+			<if test="id !=null and id !=''">
+				pr.id = =#{id,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
 
 </mapper>

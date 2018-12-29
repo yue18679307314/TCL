@@ -10,6 +10,7 @@ import com.kuyu.service.PcmsReconciliationDetailService;
 import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.DateUtils;
+import com.kuyu.util.PcmsProjectUtil;
 import com.kuyu.vo.ReconciliationVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.CurrentDetailModelVo;
@@ -25,6 +26,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,13 +41,11 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     @Resource
     private PcmsReconciliationMapper pcmsReconciliationMapper;
     @Resource
-    private PcmsReconciliationDetailService pcmsReconciliationDetailService;
-    @Resource
     private PcmsIinitializationMapper pcmsIinitializationMapper;
     @Resource
-    private PcmsPaymentDetailMapper pcmsPaymentDetailMapper;
-    @Resource
     private PcmsCurrentDetailMapper pcmsCurrentDetailMapper;
+    @Resource
+    private PcmsPtatisticsMapper pcmsPtatisticsMapper;
     @Override
     public void selectByTime() {
         //查询上个月的付款记录
@@ -145,6 +145,45 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             }
             return ResultVo.getData(ResultVo.SUCCESS,list);
         }
+    }
+    @Override
+    public ResultVo addCurrentDetail(PcmsCurrentDetailModel pcmsCurrentDetailModel) {
+        pcmsCurrentDetailMapper.insert(pcmsCurrentDetailModel);
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+    @Override
+    public ResultVo addIinitialization(PcmsIinitializationModel query, LoginUserInfo userInfo) {
+        query.setCompany(userInfo.getEmployeeModel().getCompany());
+        //更新对账表
+        PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(query.getPcms_reconciliation_id());
+        pcmsReconciliationModel.setReconciliation_id(PcmsProjectUtil.creatReconciliationId());
+        pcmsReconciliationMapper.updateById(pcmsReconciliationModel);
+        //新增统计表数据
+        pcmsIinitializationMapper.insert(query);
+        //新增管理操作记录
+        PcmsPtatisticsModel pcmsPtatisticsModel = new PcmsPtatisticsModel();
+        pcmsPtatisticsModel.setCreate_time(new Date());
+        pcmsPtatisticsModel.setPcms_reconciliation_id(pcmsReconciliationModel.getId());
+        pcmsPtatisticsModel.setVendor_id(pcmsReconciliationModel.getVendor_id());
+        //0表示未发送
+        pcmsPtatisticsModel.setType(0);
+        pcmsPtatisticsModel.setMobile(userInfo.getEmployeeModel().getMobile());
+        pcmsPtatisticsModel.setPerson_name(userInfo.getEmployeeModel().getPerson_name());
+        pcmsPtatisticsMapper.insert(pcmsPtatisticsModel);
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+    @Override
+    public ResultVo selectReconciliationList(List<PcmsReconciliationModel> beanList) {
+        List<ReconciliationVo> list = new ArrayList<ReconciliationVo>();
+        for(PcmsReconciliationModel pcmsReconciliationModel : beanList){
+            ReconciliationVo reconciliationVo = pcmsReconciliationMapper.selectByReconciliationId(pcmsReconciliationModel.getId());
+            PcmsPtatisticsModel pcmsPtatisticsModel = pcmsPtatisticsMapper.selectByReconciliationId(pcmsReconciliationModel.getId());
+            pcmsPtatisticsModel.setType(1);
+            pcmsPtatisticsMapper.updateById(pcmsPtatisticsModel);
+            //TODO 发送消息通知供应商
+            list.add(reconciliationVo);
+        }
+        return ResultVo.getData(ResultVo.SUCCESS,list);
     }
 
     public static String getLastMonth() {

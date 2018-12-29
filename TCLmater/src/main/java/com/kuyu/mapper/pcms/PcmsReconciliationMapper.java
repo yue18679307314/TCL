@@ -26,4 +26,6 @@ public interface PcmsReconciliationMapper extends BaseMapper<PcmsReconciliationM
     List<CurrentDetailModelVo> selectCurrent(@Param("id") Integer id);
 
     PcmsPaymentDetailVo selectByFssc(@Param("fsscBill") String fsscBill);
+
+    ReconciliationVo selectByReconciliationId(@Param("id") Integer id);
 }

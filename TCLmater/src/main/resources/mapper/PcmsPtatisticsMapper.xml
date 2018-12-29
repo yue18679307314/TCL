@@ -4,10 +4,11 @@
 
     <select id="selectByReconciliationId" resultType="com.kuyu.model.pcms.PcmsPtatisticsModel">
         SELECT
+        pr.vendor_id,
         pr.pcms_reconciliation_id,
-        pr.initial_balance,
-        pr.balance,
-        pr.ending_balance,
+        pr.type,
+        pr.remark,
+        pr.update_time,
         pr.create_time,
         pr.person_name,
         pr.mobile,

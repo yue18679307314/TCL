@@ -39,6 +39,14 @@ public class PcmsIinitializationModel extends Model<PcmsIinitializationModel> {
     @ApiModelProperty("月份:")
     private String month;
 
+    @ApiModelProperty("本期金额:")
+    private String pay_amount;
+
+    @ApiModelProperty("已付金额:")
+    private String financial_money;
+
+    private Integer pcms_reconciliation_id;
+
     public Integer getId() {
         return id;
     }
@@ -93,6 +101,30 @@ public class PcmsIinitializationModel extends Model<PcmsIinitializationModel> {
 
     public void setMonth(String month) {
         this.month = month;
+    }
+
+    public String getPay_amount() {
+        return pay_amount;
+    }
+
+    public void setPay_amount(String pay_amount) {
+        this.pay_amount = pay_amount;
+    }
+
+    public String getFinancial_money() {
+        return financial_money;
+    }
+
+    public void setFinancial_money(String financial_money) {
+        this.financial_money = financial_money;
+    }
+
+    public Integer getPcms_reconciliation_id() {
+        return pcms_reconciliation_id;
+    }
+
+    public void setPcms_reconciliation_id(Integer pcms_reconciliation_id) {
+        this.pcms_reconciliation_id = pcms_reconciliation_id;
     }
 
     @Override
