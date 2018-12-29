@@ -34,4 +34,6 @@ public interface PcmsSupplierMapper extends BaseMapper<PcmsSupplierModel> {
     /**查询供应商*/
     public PcmsSupplierModel getPcmsSupplierFor(PcmsSupplierModel pcmsSupplierModel);
 
+    List<PcmsSupplierListVo> select();
+
 }

@@ -19,4 +19,6 @@ public interface PcmsPaymentDetailMapper {
     int updateByExampleSelective(@Param("record") PcmsPaymentDetail record, @Param("example") PcmsPaymentDetailExample example);
 
     int updateByExample(@Param("record") PcmsPaymentDetail record, @Param("example") PcmsPaymentDetailExample example);
+
+
 }

@@ -416,19 +416,47 @@ WHERE a.settlement_number=#{settNumber}
 
   <!-- 根据供应商统计上月的对账信息 -->
   <select id="selectByTime" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">
-    SELECT t.pmid,
+    /*SELECT t.pmid,
     t.vendor_id,
-    t.fssc_bill,
+    psc.`company`,
     ps.vendor_name
     FROM pcms_payment t
     LEFT JOIN pcms_supplier ps ON ps.vendor_id = t.vendor_id
     LEFT JOIN pcms_payment_detail ppd ON ppd.fssc_bill = t.fssc_bill
     LEFT JOIN pcms_supplier_company psc ON psc.vendor_id = ps.vendor_id
-    WHERE (DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
-    OR DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m') )
---     AND psc.company='7601'
-    AND ppd.financial_status=8
+    LEFT JOIN pcms_initialization pitt ON pitt.vendor_id = psc.vendor_id AND psc.company = pitt.company
+    WHERE DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+    OR DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+	AND ppd.`financial_status`= 8 OR (DATE_FORMAT(pitt.month,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+	AND pitt.initial_balance != 0 OR pitt.balance != 0 OR pitt.pay_amount !=0 OR pitt.financial_money !=0)
+    GROUP BY t.vendor_id,psc.company*/
+        SELECT t.pmid,
+    t.vendor_id,
+    psc.`company`,
+    ps.vendor_name
+    FROM pcms_payment t
+    LEFT JOIN pcms_supplier ps ON ps.vendor_id = t.vendor_id
+    LEFT JOIN pcms_payment_detail ppd ON ppd.fssc_bill = t.fssc_bill
+    LEFT JOIN pcms_supplier_company psc ON psc.vendor_id = ps.vendor_id
+    -- left join pcms_initialization pitt on pitt.vendor_id = psc.vendor_id and psc.company = pitt.company
+    WHERE DATE_FORMAT(t.recomment_date,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+    OR DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+	AND ppd.`financial_status`= 8
+	-- or (DATE_FORMAT(pitt.month,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+	-- AND pitt.initial_balance != 0 or pitt.balance != 0 or pitt.pay_amount !=0 or pitt.financial_money !=0)
     GROUP BY t.vendor_id,psc.company
+    UNION
+    SELECT
+    t.pmid,
+    pitt.vendor_id,
+    psc.`company`,
+    ps.vendor_name FROM
+    pcms_initialization pitt
+    LEFT JOIN pcms_supplier_company psc ON pitt.vendor_id = psc.vendor_id AND psc.company = pitt.company
+    LEFT JOIN pcms_supplier ps ON ps.vendor_id = psc.vendor_id
+    LEFT JOIN pcms_payment t ON t.`vendor_id` = pitt.vendor_id
+    WHERE (DATE_FORMAT(pitt.month,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+	AND pitt.initial_balance != 0 OR pitt.balance != 0 OR pitt.pay_amount !=0 OR pitt.financial_money !=0) GROUP BY pitt.vendor_id,pitt.company
   </select>
   <!-- 根据供应商ID查询上个月的付款信息 -->
   <select id="selectPaymentByVendorId" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">

@@ -33,4 +33,10 @@ public class ReconciliationController extends BaseController {
     public ResultVo findReconciliationList(@RequestBody ReconciliationQuery query) throws Exception {
         return pcmsReconciliationService.findReconciliationList(/*getUserInfo(),*/query);
     }
+
+    @ApiOperation(value = "列表",response = PcmsUserItemModel.class)
+    @GetMapping("/getReconciliation")
+    public ResultVo getReconciliation(@RequestParam(value = "id") Integer id) throws Exception{
+        return pcmsReconciliationService.selectCurrentDetail(id);
+    }
 }

@@ -16,4 +16,6 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
 
     ResultVo findReconciliationList(/*LoginUserInfo userInfo,*/ ReconciliationQuery query)throws Exception;
 
+    ResultVo selectCurrentDetail(Integer id/*,LoginUserInfo userInfo*/);
+
 }
