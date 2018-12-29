@@ -290,7 +290,7 @@ public class ItemController extends BaseController{
 	@ApiOperation("报销单终止或者唤醒")   
 	@PostMapping(value = "/payEndOrTranslate", produces = "application/json;charset=utf-8")
 	public @ResponseBody String payEndOrTranslate(HttpServletRequest request,
-			@ApiParam(value = "报销单终止或者唤醒", required = true) ItemEndRequest itemEnd)    {
+			@ApiParam(value = "报销单终止或者唤醒", required = true)@RequestBody ItemEndRequest itemEnd)    {
 		int i=pcmsItemService.payEndOrTranslate(itemEnd);
 		if(i==1){
 			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
@@ -308,7 +308,7 @@ public class ItemController extends BaseController{
 	@ApiOperation("申请单完结")   
 	@PostMapping(value = "/itemEnd", produces = "application/json;charset=utf-8")
 	public @ResponseBody String itemEnd(HttpServletRequest request,
-			@ApiParam(value = "申请单完结", required = true) ItemEndRequest itemEnd)    {
+			@ApiParam(value = "申请单完结", required = true)@RequestBody ItemEndRequest itemEnd)    {
 		int i= pcmsItemService.itemEnd(itemEnd);
 		if(i==1){
 			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));

@@ -835,7 +835,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				itExample.createCriteria().andItidEqualTo(itid);
 				
 				PcmsItem record=new PcmsItem();
-				record.setStatus(-2);
+				record.setStatus(-3);
 				record.setUpdateTime(createTime);
 				pcmsItemMapper.updateByExampleSelective(record, itExample);
 				
@@ -843,7 +843,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				PcmsItemLog itlog=new PcmsItemLog();
 				itlog.setCreateTime(createTime);
 				itlog.setItid(itid);
-				itlog.setStatus(-1);
+				itlog.setStatus(-3);
 				itlog.setNote(reson);
 				pcmsItemLogMapper.insertSelective(itlog);
 				
@@ -851,8 +851,35 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			return 1;
 		}
 		if(status.equals("已唤醒")){
-			//TODO
 			System.out.println("单号:"+itemEnd.getFsscBill()+",状态:"+itemEnd.getStatus());
+			
+			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+			PcmsSettlementItemExample example=new PcmsSettlementItemExample();
+			example.createCriteria().andSettlementNumberEqualTo(sett.getSettNumber());
+			List<PcmsSettlementItem> settList=pcmsSettlementItemMapper.selectByExample(example);
+			for (PcmsSettlementItem settIt : settList) {
+				Integer itid=settIt.getItid();
+				Date createTime=new Date();
+				
+				//更新立项单状态
+				PcmsItemExample itExample=new PcmsItemExample();
+				itExample.createCriteria().andItidEqualTo(itid);
+				
+				PcmsItem record=new PcmsItem();
+				record.setStatus(8);
+				record.setUpdateTime(createTime);
+				pcmsItemMapper.updateByExampleSelective(record, itExample);
+				
+				//增加日志
+				PcmsItemLog itlog=new PcmsItemLog();
+				itlog.setCreateTime(createTime);
+				itlog.setItid(itid);
+				itlog.setStatus(8);
+				itlog.setNote("已唤醒");
+				pcmsItemLogMapper.insertSelective(itlog);
+				
+			}
+			
 			
 			return 1;
 		}
