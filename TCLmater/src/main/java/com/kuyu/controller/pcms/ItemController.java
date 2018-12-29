@@ -4,13 +4,16 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.controller.BaseController;
+import com.kuyu.exception.ParamException;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.service.PcmsItemService;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
+import com.kuyu.vo.pcms.ItemEndRequest;
 import com.kuyu.vo.pcms.ItemResult;
 import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.PaymentResult;
@@ -57,7 +60,8 @@ public class ItemController extends BaseController{
 			@RequestParam(value = "size",required=false)Integer size,
 			@RequestParam(value = "approvalStatrTime",required=false)String approvalStatrTime,
 			@RequestParam(value = "approvalEndTime",required=false)String approvalEndTime,
-			@RequestParam(value = "status",required=false)Integer status) throws Exception {
+			@RequestParam(value = "status",required=false)Integer status,
+			@RequestParam(value = "employeenumber",required=false)String employeenumber) throws Exception {
 		
 		if(current==null||current<=0){
 			current=1;
@@ -66,21 +70,33 @@ public class ItemController extends BaseController{
 			 size=10;
 		}
 		
-//		LoginUserInfo user=getUserInfo();
-
+		LoginUserInfo user=null;
+		
+		//app端获取用户登录信息
+		if(employeenumber!=null&&!employeenumber.equals("")){
+			 user=pcmsItemService.getUserInfo(employeenumber);
+		}else{
+		//PC端获取用户登录信息	
+			 user=getUserInfo();
+		}
+		
+		//如果获取不到用户登录信息
+		if(user==null){
+			throw new ParamException(ResultVo.getByEnumCode(CommonConstants.NOT_LOGIN_CODE));
+		}
+		
 		
 		
 		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务;
-//		String userType=user.getUserType();
-		String userType="1";
+		String userRole=user.getUserRole();
 		//分公司代码和部门代码
-//		TpmEmployeeModel emp=user.getEmployeeModel();
-//		String companyCode=emp.getCompany();
-//		String deptCode=emp.getOrg_code();
-		String companyCode="";
-		String deptCode="";
+		TpmEmployeeModel emp=user.getEmployeeModel();
+		String companyCode=emp.getCompany();
+		String deptCode=emp.getOrg_code();
+		String personCode=emp.getPerson_code();
 		
-		Page<ItemResult> result =pcmsItemService.getItemListByParam(searchKey,current,size,companyCode,userType,deptCode,approvalStatrTime,approvalEndTime,status);
+		Page<ItemResult> result =pcmsItemService.getItemListByParam(searchKey,current,size,
+				companyCode,userRole,deptCode,approvalStatrTime,approvalEndTime,status,personCode);
 		
 		return ResultVo.getData(ResultVo.SUCCESS, result); 
 	}
@@ -210,9 +226,11 @@ public class ItemController extends BaseController{
 	@ApiOperation("向共享查询付款子单")   
 	@RequestMapping(value = "/queryPaymentDetail", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo queryPaymentDetail(HttpServletRequest request,
-			@ApiParam(value = "向共享查询付款子单", required = true) String fsscBill) throws IOException  {
+			@ApiParam(value = "向共享查询付款子单", required = true) String queryDate) throws IOException  {
+//		fsscBill
 		
-		return pcmsItemService.queryPaymentDetail(fsscBill);
+		
+		return pcmsItemService.queryPaymentDetail(queryDate);
 	}
 	
 	
@@ -263,6 +281,38 @@ public class ItemController extends BaseController{
 		return ResultVo.getData(ResultVo.SUCCESS, result);
 	}
 	
+	/**
+	 * 报销单终止(被共享驳回) 唤醒
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 */
+	@ApiOperation("报销单终止或者唤醒")   
+	@PostMapping(value = "/payEndOrTranslate", produces = "application/json;charset=utf-8")
+	public @ResponseBody String payEndOrTranslate(HttpServletRequest request,
+			@ApiParam(value = "报销单终止或者唤醒", required = true)@RequestBody ItemEndRequest itemEnd)    {
+		int i=pcmsItemService.payEndOrTranslate(itemEnd);
+		if(i==1){
+			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
+		}
+		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_ERROR_CODE, ""));
+	}
 	
 	
+	/**
+	 * 申请单完结
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 */
+	@ApiOperation("申请单完结")   
+	@PostMapping(value = "/itemEnd", produces = "application/json;charset=utf-8")
+	public @ResponseBody String itemEnd(HttpServletRequest request,
+			@ApiParam(value = "申请单完结", required = true)@RequestBody ItemEndRequest itemEnd)    {
+		int i= pcmsItemService.itemEnd(itemEnd);
+		if(i==1){
+			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
+		}
+		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_ERROR_CODE, ""));
+	}
 }

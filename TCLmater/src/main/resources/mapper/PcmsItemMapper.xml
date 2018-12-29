@@ -606,4 +606,8 @@
 		LEFT JOIN tpm_employee l ON l.person_code=c.CREATE_USER
 		WHERE a.itid=#{itid}
   </select>
+  
+  
+  
+  
 </mapper>

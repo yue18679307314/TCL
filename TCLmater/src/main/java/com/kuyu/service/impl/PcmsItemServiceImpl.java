@@ -3,13 +3,19 @@ package com.kuyu.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmBranchAdminModel;
+import com.kuyu.model.UserRoleInfoModel;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsItemService;
+import com.kuyu.service.TpmBranchAdminService;
+import com.kuyu.service.TpmEmployeeService;
+import com.kuyu.service.UserRoleInfoService;
 import com.kuyu.util.PcmsProjectUtil;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.vo.ResultVo;
@@ -24,6 +30,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,11 +108,55 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Resource
 	private PcmsPaymentDetailMapper pcmsPaymentDetailMapper;
 	
+	@Autowired
+	private UserRoleInfoService userRoleInfoService;
+	
+	@Autowired
+	private TpmBranchAdminService tpmBranchAdminService;
+	
+	@Autowired
+	private TpmEmployeeService employeeService;
+	
+	
+	@Override
+	public LoginUserInfo getUserInfo(String employeenumber) {
+		LoginUserInfo loginUserInfo=new LoginUserInfo();
+		
+		List<UserRoleInfoModel> userRoleInfoModelList = userRoleInfoService.selectByPersonCode(employeenumber);
+		List<TpmBranchAdminModel> tbamList = tpmBranchAdminService.selectList(new EntityWrapper<TpmBranchAdminModel>().eq("person_code",employeenumber));
+		if(userRoleInfoModelList!=null&&userRoleInfoModelList.size()>0){
+			if("1".equals(userRoleInfoModelList.get(0).getType())){
+				loginUserInfo.setUserRole("1");
+			}
+			if("2".equals(userRoleInfoModelList.get(0).getType())){
+				if(tbamList != null && tbamList.size() > 0){
+					loginUserInfo.setUserRole("6");
+				}else{
+					loginUserInfo.setUserRole("2");
+				}
+			}
+		}else {
+			if(tbamList != null && tbamList.size() > 0){
+				loginUserInfo.setUserRole("0");
+			}else{
+			loginUserInfo.setUserRole(null);
+			}
+		}
+		
+		try {
+			loginUserInfo.setEmployeeModel(employeeService.getTpmEmployeebyPersonCode(employeenumber));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return loginUserInfo;
+	}
+	
 	
 	@Override
 	public Page<ItemResult> getItemListByParam(String searchKey,Integer current,Integer size,
 			String companyCode,String userType,String deptCode,String approvalStatrTime,
-			String approvalEndTime,Integer status) {
+			String approvalEndTime,Integer status,String personCode) {
 		
 		Integer linimt=(current-1)*size;  
 		
@@ -115,7 +166,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			param.put("companyCode", companyCode);
 		}
 		param.put("deptCode", deptCode);
-		param.put("userType", userType);
+//		param.put("userType", userType);
 		if(searchKey!=null&&!searchKey.equals("")){
 			param.put("searchKey", "%"+searchKey+"%");
 		}
@@ -128,6 +179,15 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		if(status!=null){
 			param.put("status", status);
 		}
+		
+		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务;
+		if(userType==null||userType.equals("")){
+			param.put("personCode", personCode);	
+		}else if(userType.equals(1)){
+			
+		}
+		//TODO
+		
 		
 		//分页查询
 		Page<ItemResult> page=new Page<>(current, size);
@@ -579,10 +639,15 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		example.createCriteria().andFsscBillEqualTo(fsscBill);
 		pcmsPaymentDetailMapper.deleteByExample(example);
 		
+		//总金额
+//		Double sumMoney=0d;
 		
 		List<Financial> financialList=payment.getFinancialList();
 		if(CollectionUtils.isNotEmpty(financialList)){
 			for (Financial fin : financialList) {
+//				String status=fin.getFinancialStatus();
+//				String money=fin.getFinancialMoney();
+				
 				PcmsPaymentDetail payDetail=new PcmsPaymentDetail();
 				payDetail.setFsscBill(fsscBill);
 				payDetail.setFinancialNum(fin.getFinancialNum());
@@ -590,8 +655,16 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				payDetail.setFinancialStatus(fin.getFinancialStatus());
 				payDetail.setFinancialTime(fin.getFinancialTime());
 				
+//				//金额相加
+//				if(status.equals("8")){
+//					sumMoney+=Double.valueOf(money)+sumMoney;
+//				}
+				
 				pcmsPaymentDetailMapper.insertSelective(payDetail);
 			}
+			
+			
+			
 			return 1;
 		}
 		
@@ -601,7 +674,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 	@Override
-	public ResultVo queryPaymentDetail(String fsscBill) throws IOException {
+	public ResultVo queryPaymentDetail(String queryDate) throws IOException {
 		
 		// 获取默认的请求客户端
 		CloseableHttpClient client = HttpClients.createDefault();
@@ -614,7 +687,10 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		// 第三步：构造list集合，往里面丢数据
 				
 		JSONObject param=new JSONObject();
-		param.put("FSSC_BILL", fsscBill);
+//		param.put("FSSC_BILL", fsscBill);
+		param.put("FINANCIAL_DATE", queryDate);
+		param.put("FROM_INDEX", 1);
+		param.put("END_INDEX", 1000);
 		
 				
 		List<NameValuePair> list = new ArrayList<NameValuePair>();
@@ -695,6 +771,15 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	public List<PaymentResult> paymentList() {
 		List<PaymentResult> payList=pcmsPaymentMapper.getPaymentList();
 		
+		//统计已付金额、终止金额、失败金额
+		for (PaymentResult a : payList) {
+			String fsscBill=a.getFsscBill();
+			PaymentResult moneyInfo=pcmsPaymentMapper.getDetailMoney(fsscBill);
+			a.setAlreadyAmount(moneyInfo.getAlreadyAmount());
+			a.setStopAmount(moneyInfo.getStopAmount());
+			a.setFailAmount(moneyInfo.getFailAmount());
+		}
+		
 		return payList;
 	}
 
@@ -708,6 +793,100 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		List<PcmsPaymentDetail> payDetailList=pcmsPaymentDetailMapper.selectByExample(example);
 		return payDetailList;
 	}
-	
+
+
+
+	@Override
+	public int itemEnd(ItemEndRequest itemEnd) {
+		if(itemEnd.getStatus().equals("已完结")){
+			String detailId=itemEnd.getFsscBillDetail();
+			PcmsItemExample example=new PcmsItemExample();
+			example.createCriteria().andDetailIdEqualTo(detailId);
+			
+			PcmsItem record=new PcmsItem();
+			record.setStatus(7);
+			pcmsItemMapper.updateByExampleSelective(record, example);
+			
+			return 1;
+		}
+		
+		return 0;
+	}
+
+
+
+	@Override
+	public int payEndOrTranslate(ItemEndRequest itemEnd) {
+		String fsscBill=itemEnd.getFsscBill();
+		String status=itemEnd.getStatus();
+		if(status.equals("已终止")){
+			//终止原因
+			String reson=itemEnd.getReason();
+			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+			PcmsSettlementItemExample example=new PcmsSettlementItemExample();
+			example.createCriteria().andSettlementNumberEqualTo(sett.getSettNumber());
+			List<PcmsSettlementItem> settList=pcmsSettlementItemMapper.selectByExample(example);
+			for (PcmsSettlementItem settIt : settList) {
+				Integer itid=settIt.getItid();
+				Date createTime=new Date();
+				
+				//更新立项单状态
+				PcmsItemExample itExample=new PcmsItemExample();
+				itExample.createCriteria().andItidEqualTo(itid);
+				
+				PcmsItem record=new PcmsItem();
+				record.setStatus(-3);
+				record.setUpdateTime(createTime);
+				pcmsItemMapper.updateByExampleSelective(record, itExample);
+				
+				//增加日志
+				PcmsItemLog itlog=new PcmsItemLog();
+				itlog.setCreateTime(createTime);
+				itlog.setItid(itid);
+				itlog.setStatus(-3);
+				itlog.setNote(reson);
+				pcmsItemLogMapper.insertSelective(itlog);
+				
+			}
+			return 1;
+		}
+		if(status.equals("已唤醒")){
+			System.out.println("单号:"+itemEnd.getFsscBill()+",状态:"+itemEnd.getStatus());
+			
+			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+			PcmsSettlementItemExample example=new PcmsSettlementItemExample();
+			example.createCriteria().andSettlementNumberEqualTo(sett.getSettNumber());
+			List<PcmsSettlementItem> settList=pcmsSettlementItemMapper.selectByExample(example);
+			for (PcmsSettlementItem settIt : settList) {
+				Integer itid=settIt.getItid();
+				Date createTime=new Date();
+				
+				//更新立项单状态
+				PcmsItemExample itExample=new PcmsItemExample();
+				itExample.createCriteria().andItidEqualTo(itid);
+				
+				PcmsItem record=new PcmsItem();
+				record.setStatus(8);
+				record.setUpdateTime(createTime);
+				pcmsItemMapper.updateByExampleSelective(record, itExample);
+				
+				//增加日志
+				PcmsItemLog itlog=new PcmsItemLog();
+				itlog.setCreateTime(createTime);
+				itlog.setItid(itid);
+				itlog.setStatus(8);
+				itlog.setNote("已唤醒");
+				pcmsItemLogMapper.insertSelective(itlog);
+				
+			}
+			
+			
+			return 1;
+		}
+		
+		
+		return 0;
+	}
+
 	
 }

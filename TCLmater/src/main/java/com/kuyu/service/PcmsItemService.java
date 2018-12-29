@@ -13,6 +13,7 @@ import com.kuyu.model.pcms.PcmsMaterial;
 import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
+import com.kuyu.vo.pcms.ItemEndRequest;
 import com.kuyu.vo.pcms.ItemResult;
 import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.PaymentResult;
@@ -25,7 +26,7 @@ public interface PcmsItemService  {
 
 	Page<ItemResult> getItemListByParam(String searchKey,Integer current,Integer size, 
 			String companyCode,String userType,String deptCode,String approvalStatrTime,
-			String approvalEndTime,Integer status);
+			String approvalEndTime,Integer status, String personCode);
 
 	ItemDetail getItemDetailById(Integer itid,Integer type);
 
@@ -52,6 +53,10 @@ public interface PcmsItemService  {
 
 	List<PcmsPaymentDetail> paymentDetail(String fsscBill);
 
-	
+	int itemEnd(ItemEndRequest itemEnd);
+
+	int payEndOrTranslate(ItemEndRequest itemEnd);
+
+	LoginUserInfo getUserInfo(String employeenumber);
 
 }

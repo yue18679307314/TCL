@@ -1,5 +1,6 @@
 package com.kuyu.mapper.pcms;
 
+import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsItem;
 import com.kuyu.model.pcms.PcmsItemExample;
 import com.kuyu.vo.pcms.ItemDetail;
@@ -37,4 +38,5 @@ public interface PcmsItemMapper {
 	Integer getItemListCountByParam(HashMap<String, Object> param);
 
 	ItemDetail getItemItemDetailById(Integer itid);
+
 }

@@ -473,4 +473,17 @@ WHERE a.settlement_number=#{settNumber}
   <select id="selectByVendorId" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">
     SELECT t.`vendor_id` FROM `pcms_supplier_user` t WHERE t.vendor_id = = #{vendor_id,jdbcType=VARCHAR}
   </select>
+  
+  
+  <select id="selectByFsscBill" parameterType="string" resultMap="BaseResultMap">
+  	SELECT
+	*
+FROM
+	pcms_settlement
+WHERE
+	fccs_bill = #{fsscBill}
+  	
+  
+  </select>
+  
 </mapper>
