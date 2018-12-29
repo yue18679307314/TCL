@@ -1,6 +1,7 @@
 package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
+import com.kuyu.controller.BaseController;
 import com.kuyu.service.PcmsQiNiuService;
 import com.kuyu.vo.ResultVo;
 import io.swagger.annotations.Api;
@@ -10,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,16 +26,18 @@ import java.util.Map;
 @Api(tags = "上传视频")
 @AOP_Controller_LOG
 @RequestMapping("/qiNiuUpload")
-public class QiNiuUploadController {
+public class QiNiuUploadController extends BaseController {
 
     @Resource
     private PcmsQiNiuService pcmsQiNiuService;
 
 //    @RequestMapping(value = "uploadFile")
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     @ApiOperation("上传视频")
     @ResponseBody
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public ResultVo uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+    public ResultVo uploadFile(/*@RequestParam("file") MultipartFile file,*/ HttpServletRequest request) throws IOException {
+        List<MultipartFile> files = ((MultipartHttpServletRequest)request).getFiles("file");
+        MultipartFile file = files.get(0);
         ResultVo resultVo = new ResultVo("0", "success");
         Map<String, Object> resultdata = new HashMap<String, Object>();
         if (!file.isEmpty()) {
