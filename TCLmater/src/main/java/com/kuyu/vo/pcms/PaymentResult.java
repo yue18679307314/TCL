@@ -27,7 +27,7 @@ public class PaymentResult {
 	
 	private String stopAmount; //终止金额
 	
-	private String failAmount; //终止金额
+	private String failAmount; //失败金额
 	
 	private Integer status; //状态
 	

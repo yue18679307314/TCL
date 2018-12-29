@@ -33,5 +33,7 @@ public interface PcmsPaymentMapper {
 
 	List<PaymentResult> getPaymentList();
 
+	PaymentResult getDetailMoney(String fsscBill);
+
 	
 }

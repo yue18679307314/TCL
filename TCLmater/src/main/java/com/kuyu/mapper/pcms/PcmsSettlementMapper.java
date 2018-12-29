@@ -40,4 +40,6 @@ public interface PcmsSettlementMapper {
 
 
     PcmsSettlementVo selectByVendorId(@Param("vendor_id") String vendor_id);
+
+	PcmsSettlement selectByFsscBill(String fsscBill);
 }

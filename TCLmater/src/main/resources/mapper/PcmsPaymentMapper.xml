@@ -369,6 +369,35 @@ FROM
 LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
   </select>
   
+   <select id="getDetailMoney" parameterType="string" resultType="com.kuyu.vo.pcms.PaymentResult">
+   	SELECT
+	sum(
+		CASE
+		WHEN a.financial_status =8 THEN
+			a.financial_money
+		ELSE
+			0
+		END
+	) AS   alreadyAmount,
+	sum(
+		CASE
+		WHEN a.financial_status =-1 THEN
+				a.financial_money
+		ELSE
+			0
+		END
+	) AS stopAmount,
+	sum(
+		CASE
+		WHEN a.financial_status =9 THEN
+				a.financial_money
+		ELSE
+			0
+		END
+	) AS failAmount
+FROM
+pcms_payment_detail a WHERE a.fssc_bill=#{fsscBill}
    
+   </select>
   
 </mapper>
