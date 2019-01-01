@@ -34,7 +34,7 @@ public interface PcmsSettlementMapper {
 
 	SettlementDetailResult getSettlementDetail(String settNumber);
 	
-    List<PcmsSettlementVo> selectByTime();
+    List<PcmsSettlementVo> selectByTime(@Param("time") String time);
 
     List<PcmsSettlementVo> selectPaymentByVendorId(@Param("vendor_id") String vendor_id);
 

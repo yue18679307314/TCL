@@ -49,7 +49,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     @Override
     public void selectByTime() {
         //查询上个月的付款记录
-        List<PcmsSettlementVo> list = pcmsSettlementMapper.selectByTime();
+        List<PcmsSettlementVo> list = pcmsSettlementMapper.selectByTime(getLastTwoMonth());
         for(PcmsSettlementVo pcmsSettlementVo : list){
 //            List<PcmsSettlementVo> settlementVoList = pcmsSettlementMapper.selectPaymentByVendorId(pcmsSettlementVo.getVendor_id());
             PcmsReconciliationModel pcmsReconciliationModel = new PcmsReconciliationModel();
@@ -59,7 +59,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsReconciliationModel.setCreate_time(DateUtils.getPreviousMonthFirstDay());
             pcmsReconciliationModel.setMonth(getLastMonth());
             //生成对账记录
-            pcmsReconciliationMapper.insertReconciliation(pcmsReconciliationModel);
+//            pcmsReconciliationMapper.insertReconciliation(pcmsReconciliationModel);
             /*for(PcmsSettlementVo pcmsSettlementVo1 : settlementVoList){
                 PcmsReconciliationDetailModel pcmsReconciliationDetail = new PcmsReconciliationDetailModel();
                 pcmsReconciliationDetail.setPcms_reconciliation_id(pcmsReconciliationModel.getId());
@@ -68,6 +68,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                 pcmsReconciliationDetailService.insert(pcmsReconciliationDetail);
             }*/
         }
+        System.out.println(list.toArray());
     }
     @Override
     public ResultVo findReconciliationList(/*LoginUserInfo userInfo,*/ ReconciliationQuery query) throws Exception {
@@ -197,7 +198,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     public static String getLastTwoMonth() {
         Calendar cal = Calendar.getInstance();
         cal.add(cal.MONTH, -2);
-        SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM");
+        SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-01");
         String lastMonth = dft.format(cal.getTime());
         return lastMonth;
     }
