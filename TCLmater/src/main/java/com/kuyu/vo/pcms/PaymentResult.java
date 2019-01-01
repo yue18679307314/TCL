@@ -29,11 +29,10 @@ public class PaymentResult {
 	
 	private String failAmount; //失败金额
 	
-	private Integer status; //状态
+	private Integer payStatus; //状态
 	
 	private String updateTime; //更新时间
 
-	
 	
 	
 	public String getAccountNumber() {
@@ -132,12 +131,14 @@ public class PaymentResult {
 		this.failAmount = failAmount;
 	}
 
-	public Integer getStatus() {
-		return status;
+	
+
+	public Integer getPayStatus() {
+		return payStatus;
 	}
 
-	public void setStatus(Integer status) {
-		this.status = status;
+	public void setPayStatus(Integer payStatus) {
+		this.payStatus = payStatus;
 	}
 
 	public String getUpdateTime() {

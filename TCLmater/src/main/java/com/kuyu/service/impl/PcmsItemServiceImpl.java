@@ -283,15 +283,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	//0:未接单 1:已接单制作中 2待验收 3待结算 4已驳回 5结算中 6结算失败 7已结算 -1已作废
 	@Override
 //	public ResultVo changeItemStatus(Integer itid,Integer status,String reason) {
-	public ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context) {
+	public ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context,LoginUserInfo user) {
 		//TODO
 		//检测是否有权限操作
+		String role=user.getUserRole();
 		
-		
-		if(status==5){
-			//TODO
-			//通知共享系统处理结算
-		}
 		
 		 //增加立项单日志
 	    PcmsItemLog log=new PcmsItemLog();
@@ -775,9 +771,15 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		for (PaymentResult a : payList) {
 			String fsscBill=a.getFsscBill();
 			PaymentResult moneyInfo=pcmsPaymentMapper.getDetailMoney(fsscBill);
-			a.setAlreadyAmount(moneyInfo.getAlreadyAmount());
-			a.setStopAmount(moneyInfo.getStopAmount());
-			a.setFailAmount(moneyInfo.getFailAmount());
+			if(moneyInfo!=null){
+				a.setAlreadyAmount(moneyInfo.getAlreadyAmount());
+				a.setStopAmount(moneyInfo.getStopAmount());
+				a.setFailAmount(moneyInfo.getFailAmount());
+			}else{
+				a.setAlreadyAmount("0");
+				a.setStopAmount("0");
+				a.setFailAmount("0");
+			}
 		}
 		
 		return payList;
@@ -799,15 +801,19 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public int itemEnd(ItemEndRequest itemEnd) {
 		if(itemEnd.getStatus().equals("已完结")){
+			
+			//剩余可结算金额
+			String availableMoney=itemEnd.getAvailableMoney();
+			
 			String detailId=itemEnd.getFsscBillDetail();
 			PcmsItemExample example=new PcmsItemExample();
 			example.createCriteria().andDetailIdEqualTo(detailId);
 			
 			PcmsItem record=new PcmsItem();
 			record.setStatus(7);
-			pcmsItemMapper.updateByExampleSelective(record, example);
+			record.setSubclass(availableMoney);
+			return pcmsItemMapper.updateByExampleSelective(record, example);
 			
-			return 1;
 		}
 		
 		return 0;
@@ -848,7 +854,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				pcmsItemLogMapper.insertSelective(itlog);
 				
 			}
-			return 1;
+			sett.setStatus(-3);
+			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+			
 		}
 		if(status.equals("已唤醒")){
 			System.out.println("单号:"+itemEnd.getFsscBill()+",状态:"+itemEnd.getStatus());
@@ -879,13 +887,63 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				pcmsItemLogMapper.insertSelective(itlog);
 				
 			}
+			sett.setStatus(8);
+			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
 			
-			
-			return 1;
 		}
 		
-		
 		return 0;
+	}
+
+
+
+	@Override
+	public void checkPaymentDetail(String synDate, int i) throws ClientProtocolException, IOException {
+		// 获取默认的请求客户端
+		CloseableHttpClient client = HttpClients.createDefault();
+		// 通过HttpPost来发送post请求
+		HttpPost httpPost = new HttpPost(queryPaymentDetailUrl);
+
+		/*
+		 * post带参数开始
+		 */
+		// 第三步：构造list集合，往里面丢数据
+
+		JSONObject param = new JSONObject();
+		// param.put("FSSC_BILL", fsscBill);
+		param.put("FINANCIAL_DATE", synDate);
+		param.put("FROM_INDEX", 1);
+		param.put("END_INDEX", 1000);
+
+		List<NameValuePair> list = new ArrayList<NameValuePair>();
+		BasicNameValuePair basicNameValuePair = new BasicNameValuePair("requestParams", param.toString());
+		list.add(basicNameValuePair);
+		// 第二步：我们发现Entity是一个接口，所以只能找实现类，发现实现类又需要一个集合，集合的泛型是NameValuePair类型
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(list, "UTF-8");
+		// 第一步：通过setEntity 将我们的entity对象传递过去
+		httpPost.setEntity(formEntity);
+		/*
+		 * post带参数结束
+		 */
+		// HttpEntity
+		// 是一个中间的桥梁，在httpClient里面，是连接我们的请求与响应的一个中间桥梁，所有的请求参数都是通过HttpEntity携带过去的
+		// 通过client来执行请求，获取一个响应结果
+		CloseableHttpResponse response = client.execute(httpPost);
+		HttpEntity entity = response.getEntity();
+		String str = EntityUtils.toString(entity, "UTF-8");
+		// 关闭
+		response.close();
+
+		JSONObject result = JSON.parseObject(str);
+
+		PcmsPaymentCheck check = new PcmsPaymentCheck();
+		check.setCheckDate(synDate);
+		check.setCheckTime(new Date());
+		check.setCheckType(i);
+		check.setResultJson(str);
+
+		System.out.println(result);
+
 	}
 
 	

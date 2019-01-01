@@ -33,7 +33,7 @@ public interface PcmsItemService  {
 	int editMaterial(PcmsMaterial metarial);
 
 //	ResultVo changeItemStatus(Integer itid,Integer status,String reason);
-	ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context);
+	ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context, LoginUserInfo user);
 
 	ResultVo settlement(SettlementRequest settVo);
 
@@ -58,5 +58,7 @@ public interface PcmsItemService  {
 	int payEndOrTranslate(ItemEndRequest itemEnd);
 
 	LoginUserInfo getUserInfo(String employeenumber);
+
+	void checkPaymentDetail(String synDate, int i) throws ClientProtocolException, IOException;
 
 }

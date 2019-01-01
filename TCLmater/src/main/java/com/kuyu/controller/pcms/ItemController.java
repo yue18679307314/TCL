@@ -101,6 +101,7 @@ public class ItemController extends BaseController{
 		return ResultVo.getData(ResultVo.SUCCESS, result); 
 	}
 	
+	
 	/**
 	 * 获取立项单详情
 	 * type 0 查询原始立项单详情  type 1 查询待验收立项单详情
@@ -124,16 +125,34 @@ public class ItemController extends BaseController{
 	 * //0:未接单 1:已接单制作中 2待验收 3待结算 4已驳回 5结算中 6结算失败 7已结算 -1已作废
 	 * @param request
 	 * @return
+	 * @throws Exception 
 	 */
 	@ApiOperation("更改立项单状态")
 	@RequestMapping(value = "/statusItem", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo statusItem(HttpServletRequest request,
 			@RequestParam(value = "itid")Integer itid,
 			@RequestParam(value = "status")Integer status,
-			@RequestParam(value = "reason")String reason) {
+			@RequestParam(value = "reason")String reason,
+			@RequestParam(value = "employeenumber")String employeenumber) throws Exception {
+		
+		LoginUserInfo user=null;
+		
+		//app端获取用户登录信息
+		if(employeenumber!=null&&!employeenumber.equals("")){
+			 user=pcmsItemService.getUserInfo(employeenumber);
+		}else{
+		//PC端获取用户登录信息	
+			 user=getUserInfo();
+		}
+		
+		//如果获取不到用户登录信息
+		if(user==null){
+			throw new ParamException(ResultVo.getByEnumCode(CommonConstants.NOT_LOGIN_CODE));
+		}
+		
 											  
 //		return pcmsItemService.changeItemStatus(itid,status,reason);
-		return pcmsItemService.changeItemStatus(itid,status,getLoginUserInfo(),reason);
+		return pcmsItemService.changeItemStatus(itid,status,getLoginUserInfo(),reason,user);
 	}
 	
 
@@ -228,9 +247,9 @@ public class ItemController extends BaseController{
 	public @ResponseBody ResultVo queryPaymentDetail(HttpServletRequest request,
 			@ApiParam(value = "向共享查询付款子单", required = true) String queryDate) throws IOException  {
 //		fsscBill
+		pcmsItemService.checkPaymentDetail(queryDate,1);
 		
-		
-		return pcmsItemService.queryPaymentDetail(queryDate);
+		return ResultVo.get(ResultVo.SUCCESS);
 	}
 	
 	

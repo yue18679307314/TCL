@@ -16,6 +16,9 @@ public class ItemEndRequest {
 	@JsonProperty("STOP_REASON")
 	private String reason;
 
+	@JsonProperty("AVAILABLE_MONEY")
+	private String availableMoney;
+	
 	public String getFsscBillDetail() {
 		return fsscBillDetail;
 	}
@@ -46,6 +49,14 @@ public class ItemEndRequest {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public String getAvailableMoney() {
+		return availableMoney;
+	}
+
+	public void setAvailableMoney(String availableMoney) {
+		this.availableMoney = availableMoney;
 	}
 
 	
