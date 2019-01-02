@@ -24,10 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by pc on 2018/12/26
@@ -46,10 +43,12 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     private PcmsCurrentDetailMapper pcmsCurrentDetailMapper;
     @Resource
     private PcmsPtatisticsMapper pcmsPtatisticsMapper;
+    @Resource
+    private PcmsPaymentCheckMapper pcmsPaymentCheckMapper;
     @Override
     public void selectByTime() {
         //查询上个月的付款记录
-        List<PcmsSettlementVo> list = pcmsSettlementMapper.selectByTime(getLastTwoMonth());
+        List<PcmsSettlementVo> list = pcmsSettlementMapper.selectByTime(/*getLastTwoMonth()*/);
         for(PcmsSettlementVo pcmsSettlementVo : list){
 //            List<PcmsSettlementVo> settlementVoList = pcmsSettlementMapper.selectPaymentByVendorId(pcmsSettlementVo.getVendor_id());
             PcmsReconciliationModel pcmsReconciliationModel = new PcmsReconciliationModel();
@@ -59,7 +58,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsReconciliationModel.setCreate_time(DateUtils.getPreviousMonthFirstDay());
             pcmsReconciliationModel.setMonth(getLastMonth());
             //生成对账记录
-//            pcmsReconciliationMapper.insertReconciliation(pcmsReconciliationModel);
+            pcmsReconciliationMapper.insertReconciliation(pcmsReconciliationModel);
             /*for(PcmsSettlementVo pcmsSettlementVo1 : settlementVoList){
                 PcmsReconciliationDetailModel pcmsReconciliationDetail = new PcmsReconciliationDetailModel();
                 pcmsReconciliationDetail.setPcms_reconciliation_id(pcmsReconciliationModel.getId());
@@ -68,7 +67,6 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                 pcmsReconciliationDetailService.insert(pcmsReconciliationDetail);
             }*/
         }
-        System.out.println(list.toArray());
     }
     @Override
     public ResultVo findReconciliationList(/*LoginUserInfo userInfo,*/ ReconciliationQuery query) throws Exception {
@@ -87,14 +85,17 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             return ResultVo.getData(ResultVo.SUCCESS,list);
         }else{
             PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(id);
-            //TODO
             //判断是否每天同步了共享付款数据
-
+            int num = getMonthSum(getLastMonth());
+            int sum = pcmsPaymentCheckMapper.selectForMonthSum(getLastMonth());
+            if(num != sum){
+                throw new ParamException("请确认上个月是否都同步过共享的信息");
+            }
             //查看上个月统计的期初期末余额
             PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(/*userInfo.getEmployeeModel().getCompany()*/"7601",pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
             BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getInitial_balance());
 
-
+            //组装往来数据
             List<CurrentDetailModelVo> currentDetailModelVoList = pcmsReconciliationMapper.selectCurrentDetail(id);
             if(currentDetailModelVoList != null){
                 for(CurrentDetailModelVo currentDetailModelVo : currentDetailModelVoList){
@@ -178,13 +179,25 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         List<ReconciliationVo> list = new ArrayList<ReconciliationVo>();
         for(PcmsReconciliationModel pcmsReconciliationModel : beanList){
             ReconciliationVo reconciliationVo = pcmsReconciliationMapper.selectByReconciliationId(pcmsReconciliationModel.getId());
-            PcmsPtatisticsModel pcmsPtatisticsModel = pcmsPtatisticsMapper.selectByReconciliationId(pcmsReconciliationModel.getId());
+           /* PcmsPtatisticsModel pcmsPtatisticsModel = pcmsPtatisticsMapper.selectByReconciliationId(pcmsReconciliationModel.getId());
             pcmsPtatisticsModel.setType(1);
-            pcmsPtatisticsMapper.updateById(pcmsPtatisticsModel);
-            //TODO 发送消息通知供应商
+            pcmsPtatisticsMapper.updateById(pcmsPtatisticsModel);*/
             list.add(reconciliationVo);
         }
         return ResultVo.getData(ResultVo.SUCCESS,list);
+    }
+
+    @Override
+    public ResultVo sureReconciliation(List<ReconciliationVo> list) {
+        for(ReconciliationVo pcmsReconciliationModel : list){
+            //更新对账列表状态
+            PcmsReconciliationModel reconciliationModel = new PcmsReconciliationModel();
+            BeanUtils.copyProperties(pcmsReconciliationModel,reconciliationModel);
+            reconciliationModel.setState(1);
+            pcmsReconciliationMapper.updateById(reconciliationModel);
+            //TODO 发送消息通知供应商
+        }
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 
     public static String getLastMonth() {
@@ -201,6 +214,18 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-01");
         String lastMonth = dft.format(cal.getTime());
         return lastMonth;
+    }
+
+    public static int getMonthSum(String month){
+        Calendar   cal   =   new GregorianCalendar();
+        SimpleDateFormat oSdf = new SimpleDateFormat ("yyyy-MM");
+        try {
+            cal.setTime(oSdf.parse(month));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int num = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        return num;
     }
 
 }

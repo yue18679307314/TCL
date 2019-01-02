@@ -5,6 +5,7 @@ import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsCurrentDetailModel;
 import com.kuyu.model.pcms.PcmsIinitializationModel;
 import com.kuyu.model.pcms.PcmsReconciliationModel;
+import com.kuyu.vo.ReconciliationVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.query.ReconciliationQuery;
 
@@ -27,5 +28,7 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     ResultVo addIinitialization(PcmsIinitializationModel query,LoginUserInfo userInfo);
 
     ResultVo selectReconciliationList(List<PcmsReconciliationModel> beanList);
+
+    ResultVo sureReconciliation(List<ReconciliationVo> list);
 
 }

@@ -205,4 +205,12 @@
 		ORDER BY
 			a.check_date DESC
   </select>
+
+  <select id="selectForMonthSum" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM
+		`pcms_payment_check` t
+		WHERE
+		DATE_FORMAT('${month}','%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+  </select>
+
 </mapper>

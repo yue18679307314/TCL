@@ -11,13 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,9 +33,7 @@ public class QiNiuUploadController extends BaseController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     @ApiOperation("上传视频")
     @ResponseBody
-    public ResultVo uploadFile(/*@RequestParam("file") MultipartFile file,*/ HttpServletRequest request) throws IOException {
-        List<MultipartFile> files = ((MultipartHttpServletRequest)request).getFiles("file");
-        MultipartFile file = files.get(0);
+    public ResultVo uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
         ResultVo resultVo = new ResultVo("0", "success");
         Map<String, Object> resultdata = new HashMap<String, Object>();
         if (!file.isEmpty()) {
@@ -54,4 +50,12 @@ public class QiNiuUploadController extends BaseController {
             return ResultVo.get(ResultVo.FILE_TO_BIG);
         }
     }
+
+    @RequestMapping(value = "/uploadFile1", method = RequestMethod.GET)
+    @ApiOperation("获取token")
+    @ResponseBody
+    protected Map<String,String> doPost(){
+        return pcmsQiNiuService.getQiniuInfo();
+    }
+
 }

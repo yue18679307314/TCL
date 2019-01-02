@@ -70,12 +70,12 @@ public class ReconciliationController extends BaseController {
     }
 
     /**
-     * 新增统计数据
+     * 确定生成
      * @param query
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "新增统计数据",response = PcmsIinitializationModel.class)
+    @ApiOperation(value = "确定生成",response = PcmsIinitializationModel.class)
     @PostMapping("/addIinitialization")
     public ResultVo addIinitialization(@RequestBody PcmsIinitializationModel query) throws Exception {
         return pcmsReconciliationService.addIinitialization(query,getLoginUserInfo());
@@ -95,5 +95,22 @@ public class ReconciliationController extends BaseController {
         List<PcmsReconciliationModel> beanList = mapper.readValue(s, new TypeReference<List<PcmsReconciliationModel>>() {});
         return pcmsReconciliationService.selectReconciliationList(beanList);
     }
+
+    /**
+     * 确定发起对账
+     * @param reconciliationVo
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "确定发起对账",response = ReconciliationVo.class)
+    @GetMapping("/sureReconciliation")
+    public ResultVo sureReconciliation(@RequestParam(value = "reconciliationVo") String reconciliationVo)throws Exception{
+        String s = reconciliationVo.replace("&quot;","\"");
+        ObjectMapper mapper = new ObjectMapper();
+        List<ReconciliationVo> list = mapper.readValue(s, new TypeReference<List<ReconciliationVo>>() {});
+        return pcmsReconciliationService.sureReconciliation(list);
+    }
+
+
 
 }

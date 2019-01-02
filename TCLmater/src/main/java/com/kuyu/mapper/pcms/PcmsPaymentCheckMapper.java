@@ -25,4 +25,6 @@ public interface PcmsPaymentCheckMapper {
     int updateByExample(@Param("record") PcmsPaymentCheck record, @Param("example") PcmsPaymentCheckExample example);
 
 	List<PcmsPaymentCheck> payCheckList(String checkDate);
+
+    int selectForMonthSum(@Param("month") String month);
 }
