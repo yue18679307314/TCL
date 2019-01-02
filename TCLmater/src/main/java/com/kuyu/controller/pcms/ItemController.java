@@ -7,6 +7,7 @@ import com.kuyu.controller.BaseController;
 import com.kuyu.exception.ParamException;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmEmployeeModel;
+import com.kuyu.model.pcms.PcmsPaymentCheck;
 import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.service.PcmsItemService;
 import com.kuyu.util.ResultVoUtils;
@@ -333,5 +334,20 @@ public class ItemController extends BaseController{
 			return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
 		}
 		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_ERROR_CODE, ""));
+	}
+	
+	
+	/**
+	 * 已校验付款单日期列表
+	 * @param request
+	 * @return
+	 */
+	@ApiOperation("已校验付款单日期列表")   
+	@RequestMapping(value = "/payCheckList", produces = "application/json;charset=utf-8")
+	public @ResponseBody ResultVo payCheckList(HttpServletRequest request,String checkDate)    {
+		
+		//查询指定年月的日期列表，如果没有，则查本月
+		List<PcmsPaymentCheck> result= pcmsItemService.payCheckList(checkDate);
+		return ResultVo.getData(ResultVo.SUCCESS, result);
 	}
 }

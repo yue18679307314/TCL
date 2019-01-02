@@ -10,6 +10,7 @@ import org.apache.http.client.ClientProtocolException;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsMaterial;
+import com.kuyu.model.pcms.PcmsPaymentCheck;
 import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
@@ -60,5 +61,7 @@ public interface PcmsItemService  {
 	LoginUserInfo getUserInfo(String employeenumber);
 
 	void checkPaymentDetail(String synDate, int i) throws ClientProtocolException, IOException;
+
+	List<PcmsPaymentCheck> payCheckList(String checkDate);
 
 }

@@ -23,4 +23,6 @@ public interface PcmsPaymentCheckMapper {
     int updateByExampleWithBLOBs(@Param("record") PcmsPaymentCheck record, @Param("example") PcmsPaymentCheckExample example);
 
     int updateByExample(@Param("record") PcmsPaymentCheck record, @Param("example") PcmsPaymentCheckExample example);
+
+	List<PcmsPaymentCheck> payCheckList(String checkDate);
 }

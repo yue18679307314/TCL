@@ -471,7 +471,7 @@ WHERE a.settlement_number=#{settNumber}
 
   <!-- 根据供应商ID查询上个月的付款信息 -->
   <select id="selectByVendorId" resultType="com.kuyu.vo.pcms.PcmsSettlementVo">
-    SELECT t.`vendor_id` FROM `pcms_supplier_user` t WHERE t.vendor_id = = #{vendor_id,jdbcType=VARCHAR}
+    SELECT t.`vendor_id` FROM `pcms_supplier_user` t WHERE t.vendor_id = #{vendor_id,jdbcType=VARCHAR}
   </select>
   
   

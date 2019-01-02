@@ -117,6 +117,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Autowired
 	private TpmEmployeeService employeeService;
 	
+	@Autowired
+	private PcmsPaymentCheckMapper pcmsPaymentCheckMapper;
+	
 	
 	@Override
 	public LoginUserInfo getUserInfo(String employeenumber) {
@@ -944,6 +947,19 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 		System.out.println(result);
 
+	}
+
+
+	@Override
+	public List<PcmsPaymentCheck> payCheckList(String checkDate) {
+		
+		if(checkDate==null||checkDate.equals("")){
+			checkDate=PcmsProjectUtil.getCheckDate();
+		}else{
+			checkDate=checkDate+"%";
+		}
+		
+		return pcmsPaymentCheckMapper.payCheckList(checkDate);
 	}
 
 	

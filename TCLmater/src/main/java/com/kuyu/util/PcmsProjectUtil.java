@@ -1,6 +1,7 @@
 package com.kuyu.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -89,7 +90,16 @@ public class PcmsProjectUtil {
 //		JSONObject aaa=JSON.parseObject(text);
 ////		aaa.get("RET_CODE");
 //		System.out.println(aaa.get("RET_CODE"));
+		System.out.println(PcmsProjectUtil.getCheckDate());
 		
+	}
+
+	//获取本月
+	public static String getCheckDate() {
+		Date time=new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");  
+		
+		return sdf.format(time)+"%";
 	}
 	
 	
