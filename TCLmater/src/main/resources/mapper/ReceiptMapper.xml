@@ -194,7 +194,7 @@
         LEFT JOIN tpm_activity_original f ON f.project_id = p.detail_id*/
         SELECT
         p.item_number AS item_number,
-        tpdt.org_name AS request_dept,
+        IFNULL(tpdt.org_name,tdt.`org_name`) AS request_dept,
         e.person_name AS request_user_name,
         pt.REQUEST_TITLE AS request_title,
         p.itid AS itid, p.item_price AS item_price,
