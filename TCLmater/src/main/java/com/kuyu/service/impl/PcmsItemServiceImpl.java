@@ -490,6 +490,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				throw new ParamException(result.get("RET_MSG").toString());
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new ParamException("连接共享失败！！！");
 		}
 		
