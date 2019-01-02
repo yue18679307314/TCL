@@ -18,6 +18,8 @@ public class PcmsOthertmVo {
     private Double children3_price;
     @ApiModelProperty("总费用")
     private Double children3_amount;
+    @ApiModelProperty("费用细类")
+    private String cost;
 
     public String getMrname3() {
         return mrname3;
@@ -57,5 +59,13 @@ public class PcmsOthertmVo {
 
     public void setChildren3_amount(Double children3_amount) {
         this.children3_amount = children3_amount;
+    }
+
+    public String getCost() {
+        return cost;
+    }
+
+    public void setCost(String cost) {
+        this.cost = cost;
     }
 }

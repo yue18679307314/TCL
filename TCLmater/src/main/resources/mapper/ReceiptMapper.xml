@@ -91,10 +91,11 @@
 
     <select id="getPcmsOthertmInfo" resultType="com.kuyu.vo.pcms.PcmsOthertmVo">
         SELECT
-        op.mrname3 AS mrname3,
+        op.`CHILDREN3_DETAIL` AS mrname3,
         op.specifications3 AS specifications3,
         op.CHILDREN3_COUNT AS children3_count,
         op.CHILDREN3_PRICE AS children3_price,
+        "其他终端" AS cost,
         op.CHILDREN3_AMOUNT AS children3_amount
         FROM pcms_item p
         RIGHT JOIN pcms_othertm op ON op.detail_id = p.detail_id
