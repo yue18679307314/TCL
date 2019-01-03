@@ -366,6 +366,7 @@
     <result column="pay_type" jdbcType="INTEGER" property="type" />
     <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
     <result column="sum_money" jdbcType="VARCHAR" property="applyMoney" />
+    <result column="recomment_date" jdbcType="VARCHAR" property="recommentDate" />
     <collection property="itemList" ofType="com.kuyu.vo.pcms.SettlementItemResult" javaType="java.util.ArrayList" 
     select="getSettlementItemResult" column="sett_number"/>
 </resultMap> 

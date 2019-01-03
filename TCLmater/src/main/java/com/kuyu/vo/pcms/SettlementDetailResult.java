@@ -33,10 +33,17 @@ public class SettlementDetailResult {
 	
 	private String applyMoney; //付款金额
 	
+	private String recommentDate; //建议支付日期
+	
 	private List<SettlementItemResult> itemList; //结算详细
 	
-	
-	
+	public String getRecommentDate() {
+		return recommentDate;
+	}
+
+	public void setRecommentDate(String recommentDate) {
+		this.recommentDate = recommentDate;
+	}
 
 	public String getSettlementNumber() {
 		return settlementNumber;
