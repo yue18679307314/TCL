@@ -9,7 +9,12 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.kuyu.vo.pcms.PaymentRequest;
 
 
 //pcms模块工具类
@@ -96,7 +101,16 @@ public class PcmsProjectUtil {
 //		JSONObject aaa=JSON.parseObject(text);
 ////		aaa.get("RET_CODE");
 //		System.out.println(aaa.get("RET_CODE"));
-		System.out.println(PcmsProjectUtil.getCheckDate());
+		
+		String json="[{\"FSSC_BILL\":\"M4301812270107\",\"FINANCIAL_LIST\":[{\"FINANCIAL_NUM\":\"1\",\"FINANCIAL_MONEY\":\"1000\",\"FINANCIAL_TIME\":\"2018-12-27 15:40:27\",\"FINANCIAL_STATUS\":\"8\"}]},{\"FSSC_BILL\":\"M4301812270041\",\"FINANCIAL_LIST\":[{\"FINANCIAL_NUM\":\"1\",\"FINANCIAL_MONEY\":\"500\",\"FINANCIAL_TIME\":\"2018-12-27 11:28:03\",\"FINANCIAL_STATUS\":\"8\"}]}]";
+		
+		
+		
+		List<PaymentRequest> paymentRequest=JSON.parseArray(json, PaymentRequest.class);
+		
+//		PaymentRequest paymentRequest=JSONObject.parseObject(json, PaymentRequest.class);
+		
+		System.out.println(paymentRequest);
 		
 	}
 

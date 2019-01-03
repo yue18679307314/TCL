@@ -888,20 +888,17 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			
 			
 			String FINANCIAL_RESULT=result.get("FINANCIAL_RESULT").toString();
-			System.out.println("FINANCIAL_RESULT="+FINANCIAL_RESULT);
-			PaymentRequest paymentRequest=JSONObject.parseObject(FINANCIAL_RESULT, PaymentRequest.class);
-			int k =this.createPaymentDetail(paymentRequest);
-			
-			if(k==1){
-				PcmsPaymentCheck check = new PcmsPaymentCheck();
-				check.setCheckDate(synDate);
-				check.setCheckTime(new Date());
-				check.setCheckType(i);
-				check.setResultJson(str);
-				pcmsPaymentCheckMapper.insertSelective(check);
-			}else{
-				throw new ParamException("同步共享数据失败");
+			List<PaymentRequest> paymentDetailList=JSON.parseArray(FINANCIAL_RESULT, PaymentRequest.class);
+			for (PaymentRequest paymentDetail : paymentDetailList) {
+				this.createPaymentDetail(paymentDetail);
 			}
+			
+			PcmsPaymentCheck check = new PcmsPaymentCheck();
+			check.setCheckDate(synDate);
+			check.setCheckTime(new Date());
+			check.setCheckType(i);
+			check.setResultJson(str);
+			pcmsPaymentCheckMapper.insertSelective(check);
 			
 		}else{
 			throw new ParamException(result.get("RET_MSG").toString());
