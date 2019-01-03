@@ -757,7 +757,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			example.createCriteria().andDetailIdEqualTo(detailId);
 			
 			PcmsItem record=new PcmsItem();
-			record.setStatus(7);
+			record.setStatus(9);
 			record.setSubclass(availableMoney);
 			return pcmsItemMapper.updateByExampleSelective(record, example);
 			
@@ -882,14 +882,30 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		response.close();
 
 		JSONObject result = JSON.parseObject(str);
-
-		PcmsPaymentCheck check = new PcmsPaymentCheck();
-		check.setCheckDate(synDate);
-		check.setCheckTime(new Date());
-		check.setCheckType(i);
-		check.setResultJson(str);
-
 		System.out.println(result);
+		
+		if(result.get("RET_CODE").equals("9999")){
+			
+			
+			String FINANCIAL_RESULT=result.get("FINANCIAL_RESULT").toString();
+			System.out.println("FINANCIAL_RESULT="+FINANCIAL_RESULT);
+			PaymentRequest paymentRequest=JSONObject.parseObject(FINANCIAL_RESULT, PaymentRequest.class);
+			int k =this.createPaymentDetail(paymentRequest);
+			
+			if(k==1){
+				PcmsPaymentCheck check = new PcmsPaymentCheck();
+				check.setCheckDate(synDate);
+				check.setCheckTime(new Date());
+				check.setCheckType(i);
+				check.setResultJson(str);
+				pcmsPaymentCheckMapper.insertSelective(check);
+			}else{
+				throw new ParamException("同步共享数据失败");
+			}
+			
+		}else{
+			throw new ParamException(result.get("RET_MSG").toString());
+		}
 
 	}
 
