@@ -846,6 +846,15 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 	@Override
 	public void checkPaymentDetail(String synDate, int i) throws ClientProtocolException, IOException {
+		
+		PcmsPaymentCheckExample example=new PcmsPaymentCheckExample();
+		example.createCriteria().andCheckDateEqualTo(synDate);
+		int j=pcmsPaymentCheckMapper.countByExample(example);
+		if(j!=0){
+			throw new ParamException("该日期已经同步过数据，请勿重复同步！");
+		}
+		
+		
 		// 获取默认的请求客户端
 		CloseableHttpClient client = HttpClients.createDefault();
 		// 通过HttpPost来发送post请求
