@@ -39,4 +39,6 @@ public interface PcmsItemMapper {
 
 	ItemDetail getItemItemDetailById(Integer itid);
 
+	PcmsItem selectByDetailId(String detailId);
+
 }

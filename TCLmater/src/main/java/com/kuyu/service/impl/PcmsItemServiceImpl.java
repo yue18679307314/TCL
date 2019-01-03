@@ -753,13 +753,33 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			String availableMoney=itemEnd.getAvailableMoney();
 			
 			String detailId=itemEnd.getFsscBillDetail();
-			PcmsItemExample example=new PcmsItemExample();
-			example.createCriteria().andDetailIdEqualTo(detailId);
+		
+			PcmsItem item=pcmsItemMapper.selectByDetailId(detailId);
 			
-			PcmsItem record=new PcmsItem();
-			record.setStatus(9);
-			record.setSubclass(availableMoney);
-			return pcmsItemMapper.updateByExampleSelective(record, example);
+			if(availableMoney.equals("0")){
+				item.setStatus(9);
+				
+				//增加日志
+				PcmsItemLog itlog=new PcmsItemLog();
+				itlog.setCreateTime(new Date());
+				itlog.setItid(item.getItid());
+				itlog.setStatus(9);
+				itlog.setNote("已完结，剩余可用金额:"+availableMoney);
+				pcmsItemLogMapper.insertSelective(itlog);
+			}else{
+				item.setStatus(7);
+				
+				//增加日志
+				PcmsItemLog itlog=new PcmsItemLog();
+				itlog.setCreateTime(new Date());
+				itlog.setItid(item.getItid());
+				itlog.setStatus(9);
+				itlog.setNote("剩余可用金额:"+availableMoney+",可再次发起结算");
+				pcmsItemLogMapper.insertSelective(itlog);
+			}
+			
+			item.setSubclass(availableMoney);
+			return pcmsItemMapper.updateByPrimaryKeySelective(item);
 			
 		}
 		

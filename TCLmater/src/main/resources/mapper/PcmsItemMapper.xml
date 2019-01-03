@@ -607,7 +607,14 @@
 		WHERE a.itid=#{itid}
   </select>
   
-  
+  <select id="selectByDetailId" parameterType="string" resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			pcms_item
+		WHERE
+			detail_id = #{detailId}
+  </select>
   
   
 </mapper>
