@@ -568,7 +568,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			//更新状态为付款中
 			sett.setStatus(2);
 			sett.setUpdateTime(new Date());
-			pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
 		}
 		
 		return 0;
@@ -796,81 +796,104 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 
+//	@Override
+//	public int payEndOrTranslate(ItemEndRequest itemEnd) {
+//		String fsscBill=itemEnd.getFsscBill();
+//		String status=itemEnd.getStatus();
+//		if(status.equals("已终止")){
+//			//终止原因
+//			String reson=itemEnd.getReason();
+//			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+//			PcmsSettlementItemExample example=new PcmsSettlementItemExample();
+//			example.createCriteria().andSettlementNumberEqualTo(sett.getSettNumber());
+//			List<PcmsSettlementItem> settList=pcmsSettlementItemMapper.selectByExample(example);
+//			for (PcmsSettlementItem settIt : settList) {
+//				Integer itid=settIt.getItid();
+//				Date createTime=new Date();
+//				
+//				//更新立项单状态
+//				PcmsItemExample itExample=new PcmsItemExample();
+//				itExample.createCriteria().andItidEqualTo(itid);
+//				
+//				PcmsItem record=new PcmsItem();
+//				record.setStatus(-3);
+//				record.setUpdateTime(createTime);
+//				pcmsItemMapper.updateByExampleSelective(record, itExample);
+//				
+//				//增加日志
+//				PcmsItemLog itlog=new PcmsItemLog();
+//				itlog.setCreateTime(createTime);
+//				itlog.setItid(itid);
+//				itlog.setStatus(-3);
+//				itlog.setNote(reson);
+//				pcmsItemLogMapper.insertSelective(itlog);
+//				
+//			}
+//			sett.setStatus(-3);
+//			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+//			
+//		}
+//		if(status.equals("已唤醒")){
+//			System.out.println("单号:"+itemEnd.getFsscBill()+",状态:"+itemEnd.getStatus());
+//			
+//			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+//			PcmsSettlementItemExample example=new PcmsSettlementItemExample();
+//			example.createCriteria().andSettlementNumberEqualTo(sett.getSettNumber());
+//			List<PcmsSettlementItem> settList=pcmsSettlementItemMapper.selectByExample(example);
+//			for (PcmsSettlementItem settIt : settList) {
+//				Integer itid=settIt.getItid();
+//				Date createTime=new Date();
+//				
+//				//更新立项单状态
+//				PcmsItemExample itExample=new PcmsItemExample();
+//				itExample.createCriteria().andItidEqualTo(itid);
+//				
+//				PcmsItem record=new PcmsItem();
+//				record.setStatus(8);
+//				record.setUpdateTime(createTime);
+//				pcmsItemMapper.updateByExampleSelective(record, itExample);
+//				
+//				//增加日志
+//				PcmsItemLog itlog=new PcmsItemLog();
+//				itlog.setCreateTime(createTime);
+//				itlog.setItid(itid);
+//				itlog.setStatus(8);
+//				itlog.setNote("已唤醒");
+//				pcmsItemLogMapper.insertSelective(itlog);
+//				
+//			}
+//			sett.setStatus(8);
+//			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+//			
+//		}
+//		
+//		return 0;
+//	}
+
+
 	@Override
 	public int payEndOrTranslate(ItemEndRequest itemEnd) {
 		String fsscBill=itemEnd.getFsscBill();
 		String status=itemEnd.getStatus();
+		PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
 		if(status.equals("已终止")){
 			//终止原因
 			String reson=itemEnd.getReason();
-			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
-			PcmsSettlementItemExample example=new PcmsSettlementItemExample();
-			example.createCriteria().andSettlementNumberEqualTo(sett.getSettNumber());
-			List<PcmsSettlementItem> settList=pcmsSettlementItemMapper.selectByExample(example);
-			for (PcmsSettlementItem settIt : settList) {
-				Integer itid=settIt.getItid();
-				Date createTime=new Date();
-				
-				//更新立项单状态
-				PcmsItemExample itExample=new PcmsItemExample();
-				itExample.createCriteria().andItidEqualTo(itid);
-				
-				PcmsItem record=new PcmsItem();
-				record.setStatus(-3);
-				record.setUpdateTime(createTime);
-				pcmsItemMapper.updateByExampleSelective(record, itExample);
-				
-				//增加日志
-				PcmsItemLog itlog=new PcmsItemLog();
-				itlog.setCreateTime(createTime);
-				itlog.setItid(itid);
-				itlog.setStatus(-3);
-				itlog.setNote(reson);
-				pcmsItemLogMapper.insertSelective(itlog);
-				
-			}
+			
+			//更新状态
+//			sett.set
 			sett.setStatus(-3);
 			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
-			
 		}
 		if(status.equals("已唤醒")){
-			System.out.println("单号:"+itemEnd.getFsscBill()+",状态:"+itemEnd.getStatus());
-			
-			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
-			PcmsSettlementItemExample example=new PcmsSettlementItemExample();
-			example.createCriteria().andSettlementNumberEqualTo(sett.getSettNumber());
-			List<PcmsSettlementItem> settList=pcmsSettlementItemMapper.selectByExample(example);
-			for (PcmsSettlementItem settIt : settList) {
-				Integer itid=settIt.getItid();
-				Date createTime=new Date();
-				
-				//更新立项单状态
-				PcmsItemExample itExample=new PcmsItemExample();
-				itExample.createCriteria().andItidEqualTo(itid);
-				
-				PcmsItem record=new PcmsItem();
-				record.setStatus(8);
-				record.setUpdateTime(createTime);
-				pcmsItemMapper.updateByExampleSelective(record, itExample);
-				
-				//增加日志
-				PcmsItemLog itlog=new PcmsItemLog();
-				itlog.setCreateTime(createTime);
-				itlog.setItid(itid);
-				itlog.setStatus(8);
-				itlog.setNote("已唤醒");
-				pcmsItemLogMapper.insertSelective(itlog);
-				
-			}
 			sett.setStatus(8);
 			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
-			
 		}
-		
 		return 0;
 	}
-
-
+	
+	
+	
 
 	@Override
 	public void checkPaymentDetail(String synDate, int i) throws ClientProtocolException, IOException {
