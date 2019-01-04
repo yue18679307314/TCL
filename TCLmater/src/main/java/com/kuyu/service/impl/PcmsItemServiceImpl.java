@@ -578,64 +578,88 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 	@Override
 	public int createPaymentDetail(PaymentRequest payment) {
-		String fsscBill=payment.getFsscBill();
-		
-		//先删除
-		PcmsPaymentDetailExample example =new PcmsPaymentDetailExample();
-		example.createCriteria().andFsscBillEqualTo(fsscBill);
-		pcmsPaymentDetailMapper.deleteByExample(example);
-		
-		//写入传入的付款子单信息
-		List<Financial> financialList=payment.getFinancialList();
-		if(CollectionUtils.isNotEmpty(financialList)){
-			for (Financial fin : financialList) {
-				
-				PcmsPaymentDetail payDetail=new PcmsPaymentDetail();
-				payDetail.setFsscBill(fsscBill);
-				payDetail.setFinancialNum(fin.getFinancialNum());
-				payDetail.setFinancialMoney(fin.getFinancialMoney());
-				payDetail.setFinancialStatus(fin.getFinancialStatus());
-				payDetail.setFinancialTime(fin.getFinancialTime());
-				
-				pcmsPaymentDetailMapper.insertSelective(payDetail);
-			}
 			
-			//汇总信息
-			BigDecimal successMoney=new BigDecimal(0);
-			BigDecimal failMoney=new BigDecimal(0);
+		if(payment!=null){
 			
-			//根据单号查询所有的付款子单
-			List<PcmsPaymentDetail> detailList=pcmsPaymentDetailMapper.selectByExample(example);
-			for (PcmsPaymentDetail check : detailList) {
-				String financialMoney=check.getFinancialMoney();
-				String financialStatus=check.getFinancialStatus();
-				//根据子单状态统计成功的金额
-				if(financialStatus.equals("8")){
-					BigDecimal financialMoneyBig=new BigDecimal(financialMoney);
-					successMoney.add(financialMoneyBig);
+			String fsscBill=payment.getFsscBill();
+			//先删除
+			PcmsPaymentDetailExample example =new PcmsPaymentDetailExample();
+			example.createCriteria().andFsscBillEqualTo(fsscBill);
+			pcmsPaymentDetailMapper.deleteByExample(example);
+			
+			//写入传入的付款子单信息
+			List<Financial> financialList=payment.getFinancialList();
+			if(CollectionUtils.isNotEmpty(financialList)){
+				for (Financial fin : financialList) {
+					
+					PcmsPaymentDetail payDetail=new PcmsPaymentDetail();
+					payDetail.setFsscBill(fsscBill);
+					payDetail.setFinancialNum(fin.getFinancialNum());
+					payDetail.setFinancialMoney(fin.getFinancialMoney());
+					payDetail.setFinancialStatus(fin.getFinancialStatus());
+					payDetail.setFinancialTime(fin.getFinancialTime());
+					
+					pcmsPaymentDetailMapper.insertSelective(payDetail);
 				}
-				//根据子单状态统计终止的金额
-				if(financialStatus.equals("-1")){
-					BigDecimal failMoneyBig=new BigDecimal(financialMoney);
-					failMoney.add(failMoneyBig);
+				
+				//汇总信息
+				BigDecimal successMoney=new BigDecimal(0);
+				BigDecimal failMoney=new BigDecimal(0);
+				
+				//根据单号查询所有的付款子单
+				List<PcmsPaymentDetail> detailList=pcmsPaymentDetailMapper.selectByExample(example);
+				for (PcmsPaymentDetail check : detailList) {
+					String financialMoney=check.getFinancialMoney();
+					String financialStatus=check.getFinancialStatus();
+					//根据子单状态统计成功的金额
+					if(financialStatus.equals("8")){
+						BigDecimal financialMoneyBig=new BigDecimal(financialMoney);
+						successMoney=successMoney.add(financialMoneyBig);
+					}
+					//根据子单状态统计终止的金额
+					if(financialStatus.equals("-1")){
+						BigDecimal failMoneyBig=new BigDecimal(financialMoney);
+						failMoney=failMoney.add(failMoneyBig);
+					}
 				}
+				
+				//成功支付金额+终止支付金额=报销单金额,则此报销单完结   保留2位小数。
+				BigDecimal sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+				PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+				BigDecimal settMoney=new BigDecimal(sett.getSumMoney()).setScale(2,BigDecimal.ROUND_HALF_UP);
+				if(sumMoney.compareTo(settMoney)==0){
+					//更新状态为已完结
+					sett.setStatus(3);
+					sett.setUpdateTime(new Date());
+					pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+				}
+				
 			}
-			
-			//成功支付金额+终止支付金额=报销单金额,则此报销单完结   保留2位小数。
-			BigDecimal sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
-			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
-			if(sumMoney.toString().equals(sett.getSumMoney())){
-				//更新状态为已完结
-				sett.setStatus(3);
-				sett.setUpdateTime(new Date());
-				pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+			List<BillAvailable> availableList=payment.getAvailableList();
+			for (BillAvailable available : availableList) {
+				String detailId=available.getBillDetailId();
+				//剩余可结算金额
+				String availableMoney=available.getAvailableMoney();
+				
+				PcmsItem item=pcmsItemMapper.selectByDetailId(detailId);
+				if(availableMoney.equals("0")){
+					item.setStatus(5);
+					
+					PcmsItemLog log=new PcmsItemLog();
+					log.setItid(item.getItid());
+					log.setStatus(5);
+					log.setNote("已完结");
+					log.setCreateTime(new Date());
+					pcmsItemLogMapper.insertSelective(log);
+				}
+					item.setSubclass(availableMoney);
+					item.setUpdateTime(new Date());
+					pcmsItemMapper.updateByPrimaryKeySelective(item);
+				}
+				return 1;
 			}
-			
-			return 1;
+			return 0;
 		}
-		
-		return 0;
-	}
 
 
 

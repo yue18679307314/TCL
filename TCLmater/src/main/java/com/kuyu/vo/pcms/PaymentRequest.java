@@ -14,6 +14,9 @@ public class PaymentRequest {
 	
 	@JsonProperty("FINANCIAL_LIST")
 	private List<Financial> financialList;
+	
+	@JsonProperty("REQUEST_BILL_AVAILABLE")
+	private List<BillAvailable> availableList;
 
 	public String getFsscBill() {
 		return fsscBill;
@@ -38,6 +41,16 @@ public class PaymentRequest {
 	public void setFinancialList(List<Financial> financialList) {
 		this.financialList = financialList;
 	}
+
+	public List<BillAvailable> getAvailableList() {
+		return availableList;
+	}
+
+	public void setAvailableList(List<BillAvailable> availableList) {
+		this.availableList = availableList;
+	}
+
+	
 	
 	
 }
