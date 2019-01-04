@@ -26,7 +26,7 @@ public interface PcmsItemService  {
 
 
 	Page<ItemResult> getItemListByParam(String searchKey,Integer current,Integer size, 
-			String companyCode,String userType,String deptCode,String approvalStatrTime,
+			String companyCode,String userRole,String deptCode,String approvalStatrTime,
 			String approvalEndTime,Integer status, String personCode);
 
 	ItemDetail getItemDetailById(Integer itid,Integer type);

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -112,6 +113,12 @@ public class PcmsProjectUtil {
 		
 		System.out.println(paymentRequest);
 		
+		
+		BigDecimal successMoney=new BigDecimal(5.44);
+		BigDecimal failMoney=new BigDecimal(1.12);
+		String aaa=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP).toString();
+		System.out.println(aaa);
+		System.out.println(aaa.equals("6.56"));
 	}
 
 	//获取本月

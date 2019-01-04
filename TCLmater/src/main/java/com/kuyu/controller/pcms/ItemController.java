@@ -88,8 +88,13 @@ public class ItemController extends BaseController{
 		
 		
 		
-		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务;
+		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务; -1市场人员
 		String userRole=user.getUserRole();
+		
+		if(userRole==null||userRole.equals("")){
+			userRole="-1";
+		}
+		
 		//分公司代码和部门代码
 		TpmEmployeeModel emp=user.getEmployeeModel();
 		String companyCode=emp.getCompany();

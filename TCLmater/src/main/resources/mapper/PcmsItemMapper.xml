@@ -485,6 +485,9 @@
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
   </if>
+  <if test="userRole != null and '-1' eq userRole">
+        AND c.REQUEST_USER=#{personCode}
+  </if>
   <if test="status != null">
   		AND a.`status`=#{status}
   </if>	
@@ -517,8 +520,11 @@
 		LEFT JOIN tpm_dept k ON c.REQUEST_DEPT=k.org_code
 		LEFT JOIN pcms_settlement_item l ON l.itid=a.itid 
 		WHERE 1=1 
-<if test="companyCode != null">
+  <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
+  </if>
+  <if test="userRole != null and '-1' == userRole">
+        AND c.REQUEST_USER=#{personCode}
   </if>
   <if test="status != null">
   		AND a.`status`=#{status}

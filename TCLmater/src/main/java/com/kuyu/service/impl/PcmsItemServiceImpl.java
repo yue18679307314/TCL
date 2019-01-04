@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -158,7 +159,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	
 	@Override
 	public Page<ItemResult> getItemListByParam(String searchKey,Integer current,Integer size,
-			String companyCode,String userType,String deptCode,String approvalStatrTime,
+			String companyCode,String userRole,String deptCode,String approvalStatrTime,
 			String approvalEndTime,Integer status,String personCode) {
 		
 		Integer linimt=(current-1)*size;  
@@ -183,13 +184,10 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			param.put("status", status);
 		}
 		
-		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务;
-		if(userType==null||userType.equals("")){
-			param.put("personCode", personCode);	
-		}else if(userType.equals(1)){
+		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务; -1市场人员
+		param.put("userRole", userRole);
+		param.put("personCode", personCode);	
 			
-		}
-		//TODO
 		
 		
 		//分页查询
@@ -359,6 +357,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		sett.setPayType(settVo.getType());
 		sett.setSumMoney(settVo.getApplyMoney());
 		sett.setTaxNumber(settVo.getTaxNumber());
+		//结算中
 		sett.setStatus(1);
 		sett.setCreateTime(new Date());
 //		pcmsSettlementMapper.insertSelective(sett);
@@ -473,32 +472,31 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		// 是一个中间的桥梁，在httpClient里面，是连接我们的请求与响应的一个中间桥梁，所有的请求参数都是通过HttpEntity携带过去的
 		// 通过client来执行请求，获取一个响应结果
 		
-		try {
-			CloseableHttpResponse response = client.execute(httpPost);
-			HttpEntity entity = response.getEntity();
-			String str = EntityUtils.toString(entity, "UTF-8");
-			// 关闭
-			response.close();
-			JSONObject result=JSON.parseObject(str);
-			if(result.get("RET_CODE").equals("9999")){
-				String paymentNo=result.get("PAYMENT_BILL_NO").toString();
-				sett.setFccsBill(paymentNo);
-				pcmsSettlementMapper.insertSelective(sett);
-				return ResultVo.get(ResultVo.SUCCESS);
-				
-			}else{
-				throw new ParamException(result.get("RET_MSG").toString());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new ParamException("连接共享失败！！！");
-		}
 		
-	
+			try {
+				CloseableHttpResponse response = client.execute(httpPost);
+				HttpEntity entity = response.getEntity();
+				String str = EntityUtils.toString(entity, "UTF-8");
+				// 关闭
+				response.close();
+				JSONObject result=JSON.parseObject(str);
+				if(result.get("RET_CODE").equals("9999")){
+					String paymentNo=result.get("PAYMENT_BILL_NO").toString();
+					sett.setFccsBill(paymentNo);
+					pcmsSettlementMapper.insertSelective(sett);
+					return ResultVo.get(ResultVo.SUCCESS);
+					
+				}else{
+					throw new ParamException(result.get("RET_MSG").toString());
+				}
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+				throw new ParamException("连接共享失败！！！协议异常");
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new ParamException("连接共享失败！！！IO异常");
+			}
 	}
-
-	
-	
 
 
 
@@ -564,8 +562,13 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				info.setBankAccountNumber(pay.getBankAccountNumber());
 				info.setCreateTime(new Date());
 				
-				return pcmsPaymentMapper.insertSelective(info);
+				pcmsPaymentMapper.insertSelective(info);
 			}
+			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+			//更新状态为付款中
+			sett.setStatus(2);
+			sett.setUpdateTime(new Date());
+			pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
 		}
 		
 		return 0;
@@ -582,31 +585,45 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		example.createCriteria().andFsscBillEqualTo(fsscBill);
 		pcmsPaymentDetailMapper.deleteByExample(example);
 		
-		//总金额
-//		Double sumMoney=0d;
+		BigDecimal successMoney=new BigDecimal(0);
+		BigDecimal failMoney=new BigDecimal(0);
 		
 		List<Financial> financialList=payment.getFinancialList();
 		if(CollectionUtils.isNotEmpty(financialList)){
 			for (Financial fin : financialList) {
-//				String status=fin.getFinancialStatus();
-//				String money=fin.getFinancialMoney();
+				
+				String financialMoney=fin.getFinancialMoney();
+				String financialStatus=fin.getFinancialStatus();
+				//根据子单状态统计成功的金额
+				if(financialStatus.equals("8")){
+					BigDecimal financialMoneyBig=new BigDecimal(financialMoney);
+					successMoney.add(financialMoneyBig);
+				}
+				//根据子单状态统计终止的金额
+				if(financialStatus.equals("-1")){
+					BigDecimal failMoneyBig=new BigDecimal(financialMoney);
+					failMoney.add(failMoneyBig);
+				}
+				
 				
 				PcmsPaymentDetail payDetail=new PcmsPaymentDetail();
 				payDetail.setFsscBill(fsscBill);
 				payDetail.setFinancialNum(fin.getFinancialNum());
-				payDetail.setFinancialMoney(fin.getFinancialMoney());
-				payDetail.setFinancialStatus(fin.getFinancialStatus());
+				payDetail.setFinancialMoney(financialMoney);
+				payDetail.setFinancialStatus(financialStatus);
 				payDetail.setFinancialTime(fin.getFinancialTime());
-				
-//				//金额相加
-//				if(status.equals("8")){
-//					sumMoney+=Double.valueOf(money)+sumMoney;
-//				}
 				
 				pcmsPaymentDetailMapper.insertSelective(payDetail);
 			}
-			
-			
+			//成功支付金额+终止支付金额=报销单金额,则此报销单完结   保留2位小数。
+			BigDecimal sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+			if(sumMoney.toString().equals(sett.getSumMoney())){
+				//更新状态为已完结
+				sett.setStatus(3);
+				sett.setUpdateTime(new Date());
+				pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+			}
 			
 			return 1;
 		}
@@ -756,28 +773,19 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		
 			PcmsItem item=pcmsItemMapper.selectByDetailId(detailId);
 			
+			//增加日志
+			PcmsItemLog itlog=new PcmsItemLog();
+			itlog.setCreateTime(new Date());
+			itlog.setItid(item.getItid());
 			if(availableMoney.equals("0")){
-				item.setStatus(9);
-				
-				//增加日志
-				PcmsItemLog itlog=new PcmsItemLog();
-				itlog.setCreateTime(new Date());
-				itlog.setItid(item.getItid());
-				itlog.setStatus(9);
-				itlog.setNote("已完结，剩余可用金额:"+availableMoney);
-				pcmsItemLogMapper.insertSelective(itlog);
+				item.setStatus(6);
+				itlog.setStatus(6);
+				itlog.setNote("已完结");
 			}else{
-				item.setStatus(7);
-				
-				//增加日志
-				PcmsItemLog itlog=new PcmsItemLog();
-				itlog.setCreateTime(new Date());
-				itlog.setItid(item.getItid());
-				itlog.setStatus(9);
-				itlog.setNote("剩余可用金额:"+availableMoney+",可再次发起结算");
-				pcmsItemLogMapper.insertSelective(itlog);
+				itlog.setStatus(7);
+				itlog.setNote("余额变动,剩余可用金额:"+availableMoney+",可再次发起结算");
 			}
-			
+			pcmsItemLogMapper.insertSelective(itlog);
 			item.setSubclass(availableMoney);
 			return pcmsItemMapper.updateByPrimaryKeySelective(item);
 			
