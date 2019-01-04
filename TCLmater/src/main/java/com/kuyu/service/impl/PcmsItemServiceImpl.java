@@ -585,15 +585,30 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		example.createCriteria().andFsscBillEqualTo(fsscBill);
 		pcmsPaymentDetailMapper.deleteByExample(example);
 		
-		BigDecimal successMoney=new BigDecimal(0);
-		BigDecimal failMoney=new BigDecimal(0);
-		
+		//写入传入的付款子单信息
 		List<Financial> financialList=payment.getFinancialList();
 		if(CollectionUtils.isNotEmpty(financialList)){
 			for (Financial fin : financialList) {
 				
-				String financialMoney=fin.getFinancialMoney();
-				String financialStatus=fin.getFinancialStatus();
+				PcmsPaymentDetail payDetail=new PcmsPaymentDetail();
+				payDetail.setFsscBill(fsscBill);
+				payDetail.setFinancialNum(fin.getFinancialNum());
+				payDetail.setFinancialMoney(fin.getFinancialMoney());
+				payDetail.setFinancialStatus(fin.getFinancialStatus());
+				payDetail.setFinancialTime(fin.getFinancialTime());
+				
+				pcmsPaymentDetailMapper.insertSelective(payDetail);
+			}
+			
+			//汇总信息
+			BigDecimal successMoney=new BigDecimal(0);
+			BigDecimal failMoney=new BigDecimal(0);
+			
+			//根据单号查询所有的付款子单
+			List<PcmsPaymentDetail> detailList=pcmsPaymentDetailMapper.selectByExample(example);
+			for (PcmsPaymentDetail check : detailList) {
+				String financialMoney=check.getFinancialMoney();
+				String financialStatus=check.getFinancialStatus();
 				//根据子单状态统计成功的金额
 				if(financialStatus.equals("8")){
 					BigDecimal financialMoneyBig=new BigDecimal(financialMoney);
@@ -604,17 +619,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 					BigDecimal failMoneyBig=new BigDecimal(financialMoney);
 					failMoney.add(failMoneyBig);
 				}
-				
-				
-				PcmsPaymentDetail payDetail=new PcmsPaymentDetail();
-				payDetail.setFsscBill(fsscBill);
-				payDetail.setFinancialNum(fin.getFinancialNum());
-				payDetail.setFinancialMoney(financialMoney);
-				payDetail.setFinancialStatus(financialStatus);
-				payDetail.setFinancialTime(fin.getFinancialTime());
-				
-				pcmsPaymentDetailMapper.insertSelective(payDetail);
 			}
+			
 			//成功支付金额+终止支付金额=报销单金额,则此报销单完结   保留2位小数。
 			BigDecimal sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
 			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
