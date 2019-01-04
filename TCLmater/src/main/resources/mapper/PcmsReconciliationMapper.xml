@@ -4,9 +4,9 @@
 
     <insert id="insertReconciliation" parameterType="com.kuyu.model.pcms.PcmsReconciliationModel" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO
-		pcms_reconciliation(vendor_id,vendor_name,month,state,reconciliation_id,create_time)
+		pcms_reconciliation(vendor_id,vendor_name,month,state,reconciliation_id,create_time,company)
 		VALUES
-		(#{vendor_id},#{vendor_name},#{month},#{state},#{reconciliation_id},#{create_time})
+		(#{vendor_id},#{vendor_name},#{month},#{state},#{reconciliation_id},#{create_time},#{company})
 	</insert>
 
 	<select id="findListPage" resultType="com.kuyu.vo.ReconciliationVo">
@@ -16,6 +16,7 @@
 		t.vendor_name,
 		t.month,
 		t.state,
+		t.reconciliation_id,
 		t.create_time
 		FROM
 		pcms_reconciliation t
@@ -27,8 +28,11 @@
 			<if test="params.state !=null and params.state !=''">
 				and t.state = #{params.state}
 			</if>
-			<if test="params.start_time !=null and params.start_time !=''">
+<!--			<if test="params.start_time !=null and params.start_time !=''">
 				AND DATE_FORMAT(t.create_time,'%Y-%m-%d') BETWEEN #{params.start_time} AND #{params.end_time}
+			</if>-->
+			<if test="params.month !=null and params.month !=''">
+				AND t.month = #{params.month}
 			</if>
 				and psc.company = #{params.company}
 		</where>
@@ -60,6 +64,8 @@
 		pr.fssc_bill,
 		pr.increase_amount as increase_amount,
 		pr.pay_amount as pay_amount,
+		pr.create_date as create_date,
+		pr.balance as balance,
 		pr.id
 		FROM pcms_current_detail pr
 		<where>
@@ -84,18 +90,71 @@
 		ORDER BY ppd.financial_time DESC LIMIT 0,1
 	</select>
 
-	<select id="selectByReconciliationId" resultType="com.kuyu.vo.pcms.ReconciliationVo">
-		SELECT
-		pr.id AS pcms_reconciliation_id,
+	<select id="selectByReconciliationId" resultType="com.kuyu.vo.pcms.PcmsReconciliationVo">
+		SELECT   pr.id AS pcms_reconciliation_id,
 		pr.month,
 		pr.vendor_name,
-		pcd.increase_amount,
-		pcd.pay_amount
+		SUM(pcd.increase_amount) AS increase_amount,
+		SUM(pcd.pay_amount) AS  pay_amount
 		FROM pcms_reconciliation pr
 		LEFT JOIN pcms_current_detail pcd ON pr.id = pcd.pcms_reconciliation_id
 		<where>
 			<if test="id !=null and id !=''">
-				pr.id = =#{id,jdbcType=INTEGER}
+				pr.id = #{id,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectByState" resultType="com.kuyu.model.pcms.PcmsReconciliationModel">
+		SELECT
+		t.id,
+		t.vendor_id,
+		t.vendor_name,
+		t.month,
+		t.state,
+		t.create_time
+		FROM
+		pcms_reconciliation t
+		LEFT JOIN pcms_supplier_company psc ON psc.vendor_id = t.vendor_id
+		<where>
+			DATE_FORMAT(pr.create_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH),'%Y-%m')
+			AND pr.state=0
+		</where>
+	</select>
+
+	<select id="selectDetailList" resultType="com.kuyu.vo.pcms.DetailListVo">
+		SELECT
+		ptm.update_time AS create_time,
+		ps.sett_number AS sett_number,
+		pr.id AS pcms_reconciliation_id,
+		IFNULL(ptm.subclass,ptm.item_price) AS price,
+		(CASE WHEN ps.status = 1 THEN ps.status ELSE ptm.status END) AS state
+		FROM pcms_reconciliation pr
+		LEFT JOIN pcms_payment pp ON pp.vendor_id = pr.vendor_id
+		LEFT JOIN pcms_settlement ps ON ps.fccs_bill = pp.fssc_bill
+		LEFT JOIN pcms_settlement_item psi ON psi.settlement_number = ps.sett_number
+		LEFT JOIN pcms_item ptm ON ptm.itid = psi.itid
+		<where>
+			AND pr.id = #{id}
+		</where>
+		 and ptm.status = 3 OR ps.status = 1 GROUP BY ptm.itid
+	</select>
+
+
+	<select id="selectByMonth" resultType="com.kuyu.vo.ReconciliationVo">
+		SELECT
+		t.id,
+		t.vendor_id,
+		t.vendor_name,
+		t.month,
+		t.state,
+		t.reconciliation_id,
+		t.create_time
+		FROM
+		pcms_reconciliation t
+		<where>
+			<if test="month !=null and month !=''">
+				AND t.month = #{month}
 			</if>
 		</where>
 	</select>

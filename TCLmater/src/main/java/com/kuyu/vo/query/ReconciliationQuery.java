@@ -21,6 +21,8 @@ public class ReconciliationQuery extends BasePageQuery {
 
     private String company;
 
+    private String month;
+
     public String getVendor_name() {
         return vendor_name;
     }
@@ -58,5 +60,13 @@ public class ReconciliationQuery extends BasePageQuery {
 
     public void setStart_time(String start_time) {
         this.start_time = start_time;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
     }
 }

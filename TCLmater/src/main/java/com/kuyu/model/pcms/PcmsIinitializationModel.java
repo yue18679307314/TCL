@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by pc on 2018/12/28
@@ -46,6 +47,8 @@ public class PcmsIinitializationModel extends Model<PcmsIinitializationModel> {
     private String financial_money;
 
     private Integer pcms_reconciliation_id;
+
+    private Date create_time;
 
     public Integer getId() {
         return id;
@@ -125,6 +128,14 @@ public class PcmsIinitializationModel extends Model<PcmsIinitializationModel> {
 
     public void setPcms_reconciliation_id(Integer pcms_reconciliation_id) {
         this.pcms_reconciliation_id = pcms_reconciliation_id;
+    }
+
+    public Date getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(Date create_time) {
+        this.create_time = create_time;
     }
 
     @Override

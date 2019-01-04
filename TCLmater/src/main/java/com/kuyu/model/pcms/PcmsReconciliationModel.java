@@ -41,6 +41,8 @@ public class PcmsReconciliationModel extends Model<PcmsReconciliationModel> {
     @ApiModelProperty("创建时间")
     private Date create_time;
 
+    private String company;
+
 
     public Integer getId() {
         return id;
@@ -96,6 +98,14 @@ public class PcmsReconciliationModel extends Model<PcmsReconciliationModel> {
 
     public void setCreate_time(Date create_time) {
         this.create_time = create_time;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override

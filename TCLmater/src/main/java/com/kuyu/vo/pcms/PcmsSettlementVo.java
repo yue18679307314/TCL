@@ -15,6 +15,7 @@ public class PcmsSettlementVo {
     private String vendor_name;
     @ApiModelProperty("付款单单号")
     private String fssc_bill;
+    private String company;
 
     public Integer getPmid() {
         return pmid;
@@ -46,5 +47,13 @@ public class PcmsSettlementVo {
 
     public void setFssc_bill(String fssc_bill) {
         this.fssc_bill = fssc_bill;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 }

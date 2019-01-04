@@ -124,10 +124,10 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         if(null == pcmsSupplierModel1){
             throw new ParamException("公司名称或法人或手机号码不正确");
         }
-        PcmsSettlementVo pcmsSettlementVo = pcmsSettlementMapper.selectByVendorId(pcmsSupplierModel1.getVendor_id());
+/*        PcmsSettlementVo pcmsSettlementVo = pcmsSettlementMapper.selectByVendorId(pcmsSupplierModel1.getVendor_id());
         if(pcmsSettlementVo != null){
             throw new ParamException("该供应商已绑定");
-        }
+        }*/
 
 /*        PcmsUserModel pcmsUserModel1 = pcmsUserService.selectPcmsUserModel(pcmsUserModel);
         if(null != pcmsUserModel1){
@@ -140,10 +140,10 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         pcmsUserModel.setImg(weixinUserInfo.getHeadImgUrl());
         pcmsUserModel.setType(1);
         pcmsUserModel.setCreate_time(DateUtils.getLongDateStr());
-        PcmsUserModel pcmsUserModel1 =  pcmsUserService.selectPcmsUserModel(pcmsUserModel);
+/*        PcmsUserModel pcmsUserModel1 =  pcmsUserService.selectPcmsUserModel(pcmsUserModel);
         if(pcmsUserModel1 != null){
             throw new ParamException("该用户已绑定");
-        }
+        }*/
         pcmsUserService.insertPcmsUserModel(pcmsUserModel);
         PcmsSupplierUserModel pcmsSupplierUser = new PcmsSupplierUserModel();
         pcmsSupplierUser.setOpenid(pcmsUserModel.getOpenid());

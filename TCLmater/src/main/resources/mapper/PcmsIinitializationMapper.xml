@@ -23,4 +23,39 @@
             </if>
         </where>
     </select>
+
+
+    <select id="selectByReconciliationId" resultType="com.kuyu.model.pcms.PcmsIinitializationModel">
+        SELECT
+        pr.initial_balance,
+        pr.balance,
+        pr.company,
+        pr.vendor_id,
+        pr.month,
+        pr.id
+        FROM pcms_initialization pr
+        <where>
+            <if test="reconciliationId !=null and reconciliationId !=''">
+                and pr.pcms_reconciliation_id = #{reconciliationId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByMonth" resultType="com.kuyu.model.pcms.PcmsIinitializationModel">
+        SELECT
+        pr.initial_balance,
+        pr.balance,
+        pr.company,
+        pr.vendor_id,
+        pr.month,
+        pr.id
+        FROM pcms_initialization pr
+        <where>
+            <if test="month !=null and month !=''">
+                pr.month = month AND pr.balance = 0
+            </if>
+        </where>
+    </select>
+
+
 </mapper>

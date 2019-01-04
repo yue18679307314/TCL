@@ -46,6 +46,8 @@ public class PcmsPtatisticsModel extends Model<PcmsPtatisticsModel> {
     @ApiModelProperty("电话:")
     private String mobile;
 
+    @ApiModelProperty("金额:")
+    private String amount;
     public Integer getId() {
         return id;
     }
@@ -116,6 +118,14 @@ public class PcmsPtatisticsModel extends Model<PcmsPtatisticsModel> {
 
     public void setVendor_id(String vendor_id) {
         this.vendor_id = vendor_id;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     @Override

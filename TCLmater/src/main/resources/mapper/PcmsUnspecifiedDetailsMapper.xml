@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kuyu.mapper.pcms.UnspecifiedDetailsMapper">
+
+    <select id="selectByAllAndId" resultType="com.kuyu.vo.pcms.DetailListVo">
+        SELECT
+        t.create_time,
+        t.pcms_reconciliation_id,
+        t.state,
+        t.price,
+        t.sett_number
+        FROM pcms_unspecified_details t
+        <where>
+            <if test="pcms_reconciliation_id !=null and pcms_reconciliation_id !=''">
+                and t.pcms_reconciliation_id = #{pcms_reconciliation_id}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
