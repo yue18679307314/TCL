@@ -313,12 +313,13 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         accountStatementVo.setReconciliation_id(pcmsReconciliationModel.getReconciliation_id());
         accountStatementVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
         accountStatementVo.setInitial_balance(pcmsIinitializationModel.getBalance());
+        accountStatementVo.setState(pcmsReconciliationModel.getState());
         return ResultVo.getDataWithSuccess(accountStatementVo);
     }
     @Override
     public ResultVo confirmReconciliation(Integer id) {
         PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(id);
-        pcmsReconciliationModel.setState(4);
+        pcmsReconciliationModel.setState(3);
         pcmsReconciliationMapper.updateById(pcmsReconciliationModel);
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
@@ -358,11 +359,13 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         PcmsPtatisticsModel pcmsPtatisticsModel = pcmsPtatisticsMapper.selectByReconciliationId(Integer.valueOf(pcmsMessageModel.getOther_id()));
         if(replyMessageVo.getType() == 1){
             pcmsPtatisticsModel.setType(1);
+            pcmsPtatisticsModel.setUpdate_time(new Date());
             pcmsPtatisticsMapper.updateById(pcmsPtatisticsModel);
         }else if(replyMessageVo.getType() == 2){
             pcmsPtatisticsModel.setType(2);
             pcmsPtatisticsModel.setAmount(replyMessageVo.getPrice());
             pcmsPtatisticsModel.setRemark(replyMessageVo.getContext());
+            pcmsPtatisticsModel.setUpdate_time(new Date());
             pcmsPtatisticsMapper.updateById(pcmsPtatisticsModel);
         }
         PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(replyMessageVo.getPcms_reconciliation_id());

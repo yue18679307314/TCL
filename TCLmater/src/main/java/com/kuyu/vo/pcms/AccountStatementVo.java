@@ -45,6 +45,8 @@ public class AccountStatementVo {
 
     @ApiModelProperty("期初余额")
     private String Initial_balance;
+    @ApiModelProperty("状态")
+    private Integer state;
 
     public Integer getId() {
         return id;
@@ -180,5 +182,13 @@ public class AccountStatementVo {
 
     public void setInitial_balance(String initial_balance) {
         Initial_balance = initial_balance;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }
