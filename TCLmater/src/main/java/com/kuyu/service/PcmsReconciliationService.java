@@ -34,7 +34,7 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     //确定发起对账
     ResultVo sureReconciliation(List<PcmsReconciliationVo> list);
     //获取对账单对账函
-    ResultVo getAccountStatement(Integer id);
+    ResultVo getAccountStatement(Integer id,LoginUserInfo userInfo);
     //确定对账
     ResultVo confirmReconciliation(Integer id);
     //发送未结明细
@@ -42,11 +42,13 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     //根据供应商ID查询消息记录
     ResultVo selectByVendorId(String openid);
     //查看消息详情
-    ResultVo selectMessageDetail(Integer id);
+    ResultVo selectMessageDetail(Integer id,LoginUserInfo userInfo);
     //供应商消息回复
     ResultVo replyMessage(ReplyMessageVo replyMessageVo);
     //未结明细列表
     ResultVo selectDetailList(Integer id);
+    //查看物料信息
+    ResultVo selectPendingMaterial(Integer id);
     //有付款记录,但没有点击对账的,自动对账
     void automaticReconciliation();
     //自动统计表上上个月余额为0的

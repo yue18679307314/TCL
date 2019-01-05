@@ -73,7 +73,7 @@
 				pr.pcms_reconciliation_id = #{id}
 			</if>
 		</where>
-		ORDER BY 'pr.create_time'
+		ORDER BY pr.create_date
 	</select>
 
 	<select id="selectByFssc" resultType="com.kuyu.vo.pcms.PcmsPaymentDetailVo">
@@ -159,4 +159,48 @@
 		</where>
 	</select>
 
+	<select id="selectPendingMaterial" resultType="com.kuyu.vo.pcms.PendingMaterialDetailVo">
+		SELECT
+		ppm.category AS category,
+		ppm.specifications AS specifications,
+		ppm.itid AS itid,
+		ppm.all_price AS all_price,
+		ppm.number AS number,
+		ppm.comparison_price AS comparison_price,
+		ptm.request_id AS request_id
+		FROM pcms_pending_material ppm
+		LEFT JOIN pcms_settlement_item psi ON ppm.itid = psi.itid
+		LEFT JOIN pcms_settlement ps ON psi.settlement_number = ps.sett_number
+		LEFT JOIN pcms_payment pp ON ps.fccs_bill = pp.fssc_bill
+		LEFT JOIN pcms_reconciliation pr ON pp.vendor_id = pr.vendor_id
+		LEFT JOIN pcms_item ptm ON ptm.itid = ppm.itid
+		<where>
+			<if test="id !=null and id !=''">
+				and pr.id = #{id}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectPendingMaterialList" resultType="com.kuyu.vo.pcms.PendingMaterialDetailVo">
+		SELECT
+		ppm.category AS category,
+		ppm.specifications AS specifications,
+		ppm.itid AS itid,
+		ppm.all_price AS all_price,
+		ppm.number AS number,
+		ppm.comparison_price AS comparison_price,
+		ptm.request_id AS request_id
+		FROM pcms_pending_material ppm
+		LEFT JOIN pcms_settlement_item psi ON ppm.itid = psi.itid
+		LEFT JOIN pcms_settlement ps ON psi.settlement_number = ps.sett_number
+		LEFT JOIN pcms_payment pp ON ps.fccs_bill = pp.fssc_bill
+		LEFT JOIN pcms_reconciliation pr ON pp.vendor_id = pr.vendor_id
+		LEFT JOIN pcms_item ptm ON ptm.itid = ppm.itid
+		<where>
+			<if test="id !=null and id !=''">
+				and pr.id = #{id}
+			</if>
+		</where>
+		group by ptm.request_id
+	</select>
 </mapper>

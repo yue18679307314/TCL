@@ -97,11 +97,22 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(id);
             String month = pcmsReconciliationModel.getMonth()+"-01";
             //上个月最后一天
-            String endDate = getMonthDate(month);
+            String endDate = getMonthEndDay(month);
             //上个月第一天
-            String firstDate = getMonthFirst(month);
+            String firstDate = getMonthFirstDay(month);
             //查看上个月统计的期初期末余额
             PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+            BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getInitial_balance());
+            for(CurrentDetailModelVo currentDetailModelVo : list){
+                //本期增加金额
+                BigDecimal increase_amount = new BigDecimal(currentDetailModelVo.getIncrease_amount());
+                //本期已付金额
+                BigDecimal pay_amount = new BigDecimal(currentDetailModelVo.getPay_amount());
+
+                BigDecimal balance = initialBalance.add(pay_amount).subtract(increase_amount);
+                initialBalance = balance;
+                currentDetailModelVo.setBalance(balance.toString());
+            }
             currentDetailVo.setDate(firstDate+"~"+endDate);
             currentDetailVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
             currentDetailVo.setList(list);
@@ -162,19 +173,21 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                         currentDetailModelVo1.setBalance(initialBalance.add(payAmout).toString());
                         initialBalance = initialBalance.add(payAmout);
                     }
+                    currentDetailModelVo1.setBalance(initialBalance.toString());
                     list.add(currentDetailModelVo1);
                 }
             }
             for(CurrentDetailModelVo currentDetailModelVo:list){
                 PcmsCurrentDetailModel pcmsCurrentDetailModel = new PcmsCurrentDetailModel();
                 BeanUtils.copyProperties(currentDetailModelVo,pcmsCurrentDetailModel);
+                pcmsCurrentDetailModel.setBalance("0");
                 pcmsCurrentDetailMapper.insert(pcmsCurrentDetailModel);
             }
             String month = pcmsReconciliationModel.getMonth()+"-01";
             //上个月最后一天
-            String endDate = getMonthDate(month);
+            String endDate = getMonthEndDay(month);
             //上个月第一天
-            String firstDate = getMonthFirst(month);
+            String firstDate = getMonthFirstDay(month);
             currentDetailVo.setDate(firstDate+"~"+endDate);
             currentDetailVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
             currentDetailVo.setList(list);
@@ -273,7 +286,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
     @Override
-    public ResultVo getAccountStatement(Integer id) {
+    public ResultVo getAccountStatement(Integer id,LoginUserInfo userInfo) {
         AccountStatementVo accountStatementVo = new AccountStatementVo();
         PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(id);
         String month = pcmsReconciliationModel.getMonth()+"-01";
@@ -285,6 +298,9 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         PcmsPtatisticsModel pcmsPtatisticsModel = pcmsPtatisticsMapper.selectByReconciliationId(id);
         //获取统计数据信息
         PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByReconciliationId(id);
+        //查看上个月统计的期初期末余额
+        PcmsIinitializationModel pcmsIinitializationModel1 = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+
         //获取往来数据信息
         List<CurrentDetailModelVo> list = pcmsReconciliationMapper.selectCurrent(id);
         //获取供应商信息
@@ -312,7 +328,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         accountStatementVo.setStatisticsId(pcmsPtatisticsModel.getId());
         accountStatementVo.setReconciliation_id(pcmsReconciliationModel.getReconciliation_id());
         accountStatementVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
-        accountStatementVo.setInitial_balance(pcmsIinitializationModel.getBalance());
+        accountStatementVo.setInitial_balance(pcmsIinitializationModel1.getInitial_balance());
         accountStatementVo.setState(pcmsReconciliationModel.getState());
         return ResultVo.getDataWithSuccess(accountStatementVo);
     }
@@ -341,14 +357,14 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     }
 
     @Override
-    public ResultVo selectMessageDetail(Integer id) {
+    public ResultVo selectMessageDetail(Integer id,LoginUserInfo userInfo) {
         PcmsMessageModel pcmsMessageModel = pcmsMessageMapper.selectById(id);
         pcmsMessageModel.setState(1);
         pcmsMessageMapper.updateById(pcmsMessageModel);
         if(pcmsMessageModel.getType() == 1){
             return null;
         }else if(pcmsMessageModel.getType() == 2){
-            return getAccountStatement(Integer.valueOf(pcmsMessageModel.getOther_id()));
+            return getAccountStatement(Integer.valueOf(pcmsMessageModel.getOther_id()),userInfo);
         }
         return null;
     }
@@ -380,15 +396,30 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         List<DetailListVo> list = unspecifiedDetailsMapper.selectByAllAndId(id);
         String month = pcmsReconciliationModel.getMonth()+"-01";
         //上个月最后一天
-        String endDate = getMonthDate(month);
+        String endDate = getMonthEndDay(month);
         //上个月第一天
-        String firstDate = getMonthFirst(month);
+        String firstDate = getMonthFirstDay(month);
         DetailVo detailVo = new DetailVo();
         detailVo.setReconciliation_id(pcmsReconciliationModel.getReconciliation_id());
         detailVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
         detailVo.setDetailListVo(list);
         detailVo.setMonth(firstDate+"~"+endDate);
         return ResultVo.getDataWithSuccess(detailVo);
+    }
+
+    @Override
+    public ResultVo selectPendingMaterial(Integer id) {
+        RequestPendingMaterialDetailVo requestPendingMaterialDetailVo = new RequestPendingMaterialDetailVo();
+        List<PendingMaterialDetailVo> list = pcmsReconciliationMapper.selectPendingMaterial(id);
+        List<PendingMaterialDetailVo> list1 = pcmsReconciliationMapper.selectPendingMaterialList(id);
+        List<String> stringList = new ArrayList<>();
+        for(PendingMaterialDetailVo pendingMaterialDetailVo : list1){
+            String requestId = pendingMaterialDetailVo.getRequest_id();
+            stringList.add(requestId);
+        }
+        requestPendingMaterialDetailVo.setList(list);
+        requestPendingMaterialDetailVo.setStringList(stringList);
+        return ResultVo.getDataWithSuccess(requestPendingMaterialDetailVo);
     }
 
     @Override
@@ -588,5 +619,32 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         String firstDay = format.format(calendar.getTime());
         return firstDay;
+    }
+
+    public static String getMonthFirstDay(String month){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(format.parse(month));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.add(Calendar.MONTH, 0);
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        String first = format.format(calendar.getTime());
+        return first;
+    }
+
+    public static String getMonthEndDay(String month){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(format.parse(month));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String last = format.format(calendar.getTime());
+        return last;
     }
 }

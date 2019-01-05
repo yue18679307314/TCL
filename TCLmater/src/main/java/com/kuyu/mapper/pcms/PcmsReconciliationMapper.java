@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.kuyu.model.pcms.PcmsReconciliationModel;
 import com.kuyu.vo.ReconciliationVo;
-import com.kuyu.vo.pcms.CurrentDetailModelVo;
-import com.kuyu.vo.pcms.DetailListVo;
-import com.kuyu.vo.pcms.PcmsPaymentDetailVo;
-import com.kuyu.vo.pcms.PcmsReconciliationVo;
+import com.kuyu.vo.pcms.*;
 import com.kuyu.vo.query.ReconciliationQuery;
 import org.apache.ibatis.annotations.Param;
 
@@ -35,5 +32,9 @@ public interface PcmsReconciliationMapper extends BaseMapper<PcmsReconciliationM
     List<DetailListVo> selectDetailList(@Param("id") Integer id);
 
     List<ReconciliationVo> selectByMonth(@Param("month") String month);
+
+    List<PendingMaterialDetailVo> selectPendingMaterial(@Param("id") Integer id);
+
+    List<PendingMaterialDetailVo> selectPendingMaterialList(@Param("id") Integer id);
 
 }

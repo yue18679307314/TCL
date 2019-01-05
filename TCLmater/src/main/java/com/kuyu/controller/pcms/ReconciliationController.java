@@ -34,6 +34,18 @@ public class ReconciliationController extends BaseController {
     }
 
     /**
+     * 自动生成未结明细记录
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "自动生成未结明细记录")
+    @GetMapping("/automaticDetailList")
+    public void automaticDetailList() throws Exception {
+        pcmsReconciliationService.automaticDetailList();
+    }
+
+    /**
      * 对账分页列表
      * @param query
      * @return
@@ -117,7 +129,7 @@ public class ReconciliationController extends BaseController {
     @ApiOperation(value = "获取对账单对账函",response = AccountStatementVo.class)
     @GetMapping("/getAccountStatement")
     public ResultVo getAccountStatement(@RequestParam(value = "id") Integer id) throws Exception{
-        return pcmsReconciliationService.getAccountStatement(id);
+        return pcmsReconciliationService.getAccountStatement(id,getUserInfo());
     }
 
     /**
@@ -165,7 +177,7 @@ public class ReconciliationController extends BaseController {
     @ApiOperation(value = "查看消息详情",response = PcmsMessageModel.class)
     @GetMapping("/selectMessageDetail")
     public ResultVo selectMessageDetail(@RequestParam(value = "id") Integer id) throws Exception{
-        return pcmsReconciliationService.selectMessageDetail(id);
+        return pcmsReconciliationService.selectMessageDetail(id,getUserInfo());
     }
 
     /**
@@ -190,5 +202,11 @@ public class ReconciliationController extends BaseController {
     @GetMapping("/selectDetailList")
     public ResultVo selectDetailList(@RequestParam(value = "id") Integer id) throws Exception{
         return pcmsReconciliationService.selectDetailList(id);
+    }
+
+    @ApiOperation(value = "查看物料",response = DetailVo.class)
+    @GetMapping("/selectPendingMaterial")
+    public ResultVo selectPendingMaterial(@RequestParam(value = "id") Integer id) throws Exception{
+        return pcmsReconciliationService.selectPendingMaterial(id);
     }
 }
