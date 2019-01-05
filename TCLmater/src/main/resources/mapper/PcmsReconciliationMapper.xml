@@ -17,6 +17,7 @@
 		t.month,
 		t.state,
 		t.reconciliation_id,
+		t.type,
 		t.create_time
 		FROM
 		pcms_reconciliation t

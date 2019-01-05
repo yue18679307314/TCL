@@ -67,6 +67,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsReconciliationModel.setCreate_time(DateUtils.getPreviousMonthFirstDay());
             pcmsReconciliationModel.setMonth(getLastMonth());
             pcmsReconciliationModel.setCompany(pcmsSettlementVo.getCompany());
+            pcmsReconciliationModel.setType(0);
             //生成对账记录
             pcmsReconciliationMapper.insertReconciliation(pcmsReconciliationModel);
             /*for(PcmsSettlementVo pcmsSettlementVo1 : settlementVoList){
@@ -206,6 +207,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         //更新对账表
         PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(query.getPcms_reconciliation_id());
         pcmsReconciliationModel.setReconciliation_id(PcmsProjectUtil.creatReconciliationId());
+        pcmsReconciliationModel.setType(1);
         pcmsReconciliationMapper.updateById(pcmsReconciliationModel);
         //新增统计表数据
         query.setMonth(pcmsReconciliationModel.getMonth());

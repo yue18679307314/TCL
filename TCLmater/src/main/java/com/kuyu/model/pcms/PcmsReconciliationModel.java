@@ -40,8 +40,10 @@ public class PcmsReconciliationModel extends Model<PcmsReconciliationModel> {
 
     @ApiModelProperty("创建时间")
     private Date create_time;
-
+    @ApiModelProperty("公司ID")
     private String company;
+    @ApiModelProperty("类型")
+    private Integer type;
 
 
     public Integer getId() {
@@ -106,6 +108,14 @@ public class PcmsReconciliationModel extends Model<PcmsReconciliationModel> {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     @Override
