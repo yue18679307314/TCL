@@ -261,7 +261,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		}
 		
 		Integer status=result.getStatus();
-		if(status==5||status==6||status==7){
+		if(status==3||status==5){
 			List<SettlementResult> settList=pcmsSettlementItemMapper.selectByItid(itid);
 			result.setSettList(settList);
 		}
@@ -642,24 +642,27 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				String availableMoney=available.getAvailableMoney();
 				
 				PcmsItem item=pcmsItemMapper.selectByDetailId(detailId);
+				PcmsItemLog log=new PcmsItemLog();
+				log.setItid(item.getItid());
 				if(availableMoney.equals("0")){
 					item.setStatus(5);
-					
-					PcmsItemLog log=new PcmsItemLog();
-					log.setItid(item.getItid());
 					log.setStatus(5);
 					log.setNote("已完结");
-					log.setCreateTime(new Date());
-					pcmsItemLogMapper.insertSelective(log);
+				}else{
+					log.setStatus(3);
+					log.setNote("已结算，剩余可结算金额="+availableMoney);
 				}
-					item.setSubclass(availableMoney);
-					item.setUpdateTime(new Date());
-					pcmsItemMapper.updateByPrimaryKeySelective(item);
-				}
-				return 1;
+				log.setCreateTime(new Date());
+				pcmsItemLogMapper.insertSelective(log);
+				
+				item.setSubclass(availableMoney);
+				item.setUpdateTime(new Date());
+				pcmsItemMapper.updateByPrimaryKeySelective(item);
 			}
-			return 0;
+				return 1;
 		}
+			return 0;
+	}
 
 
 

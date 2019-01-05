@@ -308,7 +308,7 @@
  <!-- =========================================自定义SQL==================================================== --> 
  
  <select id="selectByItid" parameterType="int" resultType="com.kuyu.vo.pcms.SettlementResult">
- 	SELECT
+ 	<!--  SELECT
 	a.setid,
 	a.settlement_number AS settNumber,
 	b.item_number AS itemNumber,
@@ -321,7 +321,16 @@ FROM
 	pcms_settlement_item a
 LEFT JOIN pcms_item b ON a.itid = b.itid
 WHERE
-	a.itid = #{itid}
+	a.itid = #{itid}-->
+	b.fccs_bill AS fccsBill,
+	b.sum_money AS sumMoney,
+	b.`status` AS bxStatus,
+	b.update_time AS updateTime,
+	b.stop_reson AS stopReson
+FROM
+	pcms_settlement_item a
+LEFT JOIN pcms_settlement b ON a.settlement_number = b.sett_number
+WHERE a.itid=#{itid}
  </select>
  
   
