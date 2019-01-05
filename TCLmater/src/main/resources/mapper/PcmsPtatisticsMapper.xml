@@ -12,6 +12,7 @@
         pr.create_time,
         pr.person_name,
         pr.mobile,
+        pr.amount,
         pr.id
         FROM pcms_statistics pr
         <where>
