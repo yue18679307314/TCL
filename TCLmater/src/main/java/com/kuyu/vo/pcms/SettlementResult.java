@@ -20,7 +20,7 @@ public class SettlementResult {
 	
 	
 	//报销单
-	private String fsscBill;
+	private String fccsBill;
 	
 	private String sumMoney;
 	
@@ -54,12 +54,14 @@ public class SettlementResult {
 		this.bxStatus = bxStatus;
 	}
 
-	public String getFsscBill() {
-		return fsscBill;
+	
+
+	public String getFccsBill() {
+		return fccsBill;
 	}
 
-	public void setFsscBill(String fsscBill) {
-		this.fsscBill = fsscBill;
+	public void setFccsBill(String fccsBill) {
+		this.fccsBill = fccsBill;
 	}
 
 	public String getSumMoney() {

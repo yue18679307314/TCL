@@ -16,6 +16,7 @@ import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemEndRequest;
 import com.kuyu.vo.pcms.ItemResult;
+import com.kuyu.vo.pcms.PaymentDetail;
 import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.PaymentResult;
 import com.kuyu.vo.pcms.SettlementDetailResult;
@@ -48,7 +49,7 @@ public interface PcmsItemService  {
 
 	ResultVo queryPaymentDetail(String fsscBill) throws UnsupportedEncodingException, IOException;
 
-	SettlementDetailResult settlementDetail(String settNumber);
+//	SettlementDetailResult settlementDetail(String settNumber);
 
 	List<PaymentResult> paymentList();
 
@@ -63,5 +64,7 @@ public interface PcmsItemService  {
 	void checkPaymentDetail(String synDate, int i) throws ClientProtocolException, IOException;
 
 	List<PcmsPaymentCheck> payCheckList(String checkDate);
+
+	PaymentDetail getPaymentDetail(String fsscBill);
 
 }

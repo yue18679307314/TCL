@@ -563,11 +563,19 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				
 				pcmsPaymentMapper.insertSelective(info);
 			}
+			
+			
+			
 			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
-			//更新状态为付款中
-			sett.setStatus(2);
-			sett.setUpdateTime(new Date());
-			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+			
+			//余额单结算信息为空。
+			if(sett!=null){
+				//更新状态为付款中
+				sett.setStatus(2);
+				sett.setUpdateTime(new Date());
+				return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+			}
+			return 1;
 		}
 		
 		return 0;
@@ -749,13 +757,13 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	}
 
 
-
-	@Override
-	public SettlementDetailResult settlementDetail(String settNumber) {
-		
-		SettlementDetailResult result=pcmsSettlementMapper.getSettlementDetail(settNumber);
-		return  result;
-	}
+//
+//	@Override
+//	public SettlementDetailResult settlementDetail(String settNumber) {
+//		
+//		SettlementDetailResult result=pcmsSettlementMapper.getSettlementDetail(settNumber);
+//		return  result;
+//	}
 
 
 
@@ -913,12 +921,14 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			String reson=itemEnd.getReason();
 			
 			//更新状态
-//			sett.set
+			sett.setStopReson(reson);
 			sett.setStatus(-3);
+			sett.setUpdateTime(new Date());
 			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
 		}
 		if(status.equals("已唤醒")){
 			sett.setStatus(8);
+			sett.setUpdateTime(new Date());
 			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
 		}
 		return 0;
@@ -1009,6 +1019,23 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		}
 		
 		return pcmsPaymentCheckMapper.payCheckList(checkDate);
+	}
+
+
+	@Override
+	public PaymentDetail getPaymentDetail(String fsscBill) {
+		PaymentDetail result=new PaymentDetail();
+		
+		PcmsPaymentDetailExample example =new PcmsPaymentDetailExample();
+		example.createCriteria().andFsscBillEqualTo(fsscBill);
+		pcmsPaymentDetailMapper.selectByExample(example);
+		List<PcmsPaymentDetail> payDetailList=pcmsPaymentDetailMapper.selectByExample(example);
+		
+		result.setPaymentDetailList(payDetailList);
+		List<SettlementItemResult> itemList =pcmsSettlementMapper.getSettlementItemResult(fsscBill);
+		result.setItemList(itemList);
+		
+		return result;
 	}
 
 	

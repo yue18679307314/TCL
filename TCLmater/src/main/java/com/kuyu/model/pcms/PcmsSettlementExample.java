@@ -915,6 +915,76 @@ public class PcmsSettlementExample {
             return (Criteria) this;
         }
 
+        public Criteria andStopResonIsNull() {
+            addCriterion("stop_reson is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonIsNotNull() {
+            addCriterion("stop_reson is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonEqualTo(String value) {
+            addCriterion("stop_reson =", value, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonNotEqualTo(String value) {
+            addCriterion("stop_reson <>", value, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonGreaterThan(String value) {
+            addCriterion("stop_reson >", value, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonGreaterThanOrEqualTo(String value) {
+            addCriterion("stop_reson >=", value, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonLessThan(String value) {
+            addCriterion("stop_reson <", value, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonLessThanOrEqualTo(String value) {
+            addCriterion("stop_reson <=", value, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonLike(String value) {
+            addCriterion("stop_reson like", value, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonNotLike(String value) {
+            addCriterion("stop_reson not like", value, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonIn(List<String> values) {
+            addCriterion("stop_reson in", values, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonNotIn(List<String> values) {
+            addCriterion("stop_reson not in", values, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonBetween(String value1, String value2) {
+            addCriterion("stop_reson between", value1, value2, "stopReson");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopResonNotBetween(String value1, String value2) {
+            addCriterion("stop_reson not between", value1, value2, "stopReson");
+            return (Criteria) this;
+        }
+
         public Criteria andUpdateTimeIsNull() {
             addCriterion("update_time is null");
             return (Criteria) this;

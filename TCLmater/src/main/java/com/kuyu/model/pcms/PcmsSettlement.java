@@ -27,6 +27,8 @@ public class PcmsSettlement {
 
     private String fccsBill;
 
+    private String stopReson;
+
     private Date updateTime;
 
     private Date createTime;
@@ -125,6 +127,14 @@ public class PcmsSettlement {
 
     public void setFccsBill(String fccsBill) {
         this.fccsBill = fccsBill == null ? null : fccsBill.trim();
+    }
+
+    public String getStopReson() {
+        return stopReson;
+    }
+
+    public void setStopReson(String stopReson) {
+        this.stopReson = stopReson == null ? null : stopReson.trim();
     }
 
     public Date getUpdateTime() {

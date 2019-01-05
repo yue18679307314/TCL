@@ -3,7 +3,7 @@ package com.kuyu.mapper.pcms;
 import com.kuyu.model.pcms.PcmsSettlement;
 import com.kuyu.model.pcms.PcmsSettlementExample;
 import com.kuyu.vo.pcms.PcmsSettlementVo;
-import com.kuyu.vo.pcms.SettlementDetailResult;
+import com.kuyu.vo.pcms.SettlementItemResult;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -33,9 +33,7 @@ public interface PcmsSettlementMapper {
 
 	PcmsSettlement selectByFsscBill(String fsscBill);
 
-	SettlementDetailResult getSettlementDetail(String settNumber);
+	List<SettlementItemResult> getSettlementItemResult(String fsscBill);
 
 	List<PcmsSettlementVo> selectByTime();
-
-	PcmsSettlementVo selectByVendorId(String vendor_id);
 }

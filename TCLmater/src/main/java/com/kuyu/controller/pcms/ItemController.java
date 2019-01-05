@@ -16,6 +16,7 @@ import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ItemDetail;
 import com.kuyu.vo.pcms.ItemEndRequest;
 import com.kuyu.vo.pcms.ItemResult;
+import com.kuyu.vo.pcms.PaymentDetail;
 import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.PaymentResult;
 import com.kuyu.vo.pcms.SettlementDetailResult;
@@ -259,21 +260,21 @@ public class ItemController extends BaseController{
 	}
 	
 	
-	/**
-	 * 结算单详情
-	 * @param request
-	 * @return
-	 * @throws IOException 
-	 */
-	@ApiOperation("结算单详情")   
-	@RequestMapping(value = "/settlementDetail", produces = "application/json;charset=utf-8")
-	public @ResponseBody ResultVo settlementDetail(HttpServletRequest request,
-			@ApiParam(value = "结算单详情", required = true) String settNumber)    {
-		
-		SettlementDetailResult result=pcmsItemService.settlementDetail(settNumber);
-		
-		return ResultVo.getData(ResultVo.SUCCESS, result);
-	}
+//	/**
+//	 * 结算单详情
+//	 * @param request
+//	 * @return
+//	 * @throws IOException 
+//	 */
+//	@ApiOperation("结算单详情")   
+//	@RequestMapping(value = "/settlementDetail", produces = "application/json;charset=utf-8")
+//	public @ResponseBody ResultVo settlementDetail(HttpServletRequest request,
+//			@ApiParam(value = "结算单详情", required = true) String settNumber)    {
+//		
+//		SettlementDetailResult result=pcmsItemService.settlementDetail(settNumber);
+//		
+//		return ResultVo.getData(ResultVo.SUCCESS, result);
+//	}
 	
 	
 	/**
@@ -302,7 +303,8 @@ public class ItemController extends BaseController{
 	@RequestMapping(value = "/paymentDetail", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo paymentDetail(HttpServletRequest request,
 			@ApiParam(value = "付款单详情", required = true) String fsscBill)    {
-		List<PcmsPaymentDetail> result= pcmsItemService.paymentDetail(fsscBill);
+//		List<PcmsPaymentDetail> result= pcmsItemService.paymentDetail(fsscBill);
+		PaymentDetail result =pcmsItemService.getPaymentDetail(fsscBill);
 		return ResultVo.getData(ResultVo.SUCCESS, result);
 	}
 	

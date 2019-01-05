@@ -14,6 +14,7 @@
     <result column="sum_money" jdbcType="VARCHAR" property="sumMoney" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="fccs_bill" jdbcType="VARCHAR" property="fccsBill" />
+    <result column="stop_reson" jdbcType="VARCHAR" property="stopReson" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
@@ -77,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     seid, sett_number, application_title, company_code, request_user, dept, application_notes, 
-    pay_type, tax_number, sum_money, status, fccs_bill, update_time, create_time
+    pay_type, tax_number, sum_money, status, fccs_bill, stop_reson, update_time, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementExample" resultMap="BaseResultMap">
     select
@@ -114,12 +115,14 @@
       company_code, request_user, dept, 
       application_notes, pay_type, tax_number, 
       sum_money, status, fccs_bill, 
-      update_time, create_time)
+      stop_reson, update_time, create_time
+      )
     values (#{seid,jdbcType=INTEGER}, #{settNumber,jdbcType=VARCHAR}, #{applicationTitle,jdbcType=VARCHAR}, 
       #{companyCode,jdbcType=VARCHAR}, #{requestUser,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR}, 
       #{applicationNotes,jdbcType=VARCHAR}, #{payType,jdbcType=INTEGER}, #{taxNumber,jdbcType=VARCHAR}, 
       #{sumMoney,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{fccsBill,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+      #{stopReson,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsSettlement">
     insert into pcms_settlement
@@ -159,6 +162,9 @@
       </if>
       <if test="fccsBill != null">
         fccs_bill,
+      </if>
+      <if test="stopReson != null">
+        stop_reson,
       </if>
       <if test="updateTime != null">
         update_time,
@@ -203,6 +209,9 @@
       </if>
       <if test="fccsBill != null">
         #{fccsBill,jdbcType=VARCHAR},
+      </if>
+      <if test="stopReson != null">
+        #{stopReson,jdbcType=VARCHAR},
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
@@ -257,6 +266,9 @@
       <if test="record.fccsBill != null">
         fccs_bill = #{record.fccsBill,jdbcType=VARCHAR},
       </if>
+      <if test="record.stopReson != null">
+        stop_reson = #{record.stopReson,jdbcType=VARCHAR},
+      </if>
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
@@ -282,6 +294,7 @@
       sum_money = #{record.sumMoney,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       fccs_bill = #{record.fccsBill,jdbcType=VARCHAR},
+      stop_reson = #{record.stopReson,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -324,6 +337,9 @@
       <if test="fccsBill != null">
         fccs_bill = #{fccsBill,jdbcType=VARCHAR},
       </if>
+      <if test="stopReson != null">
+        stop_reson = #{stopReson,jdbcType=VARCHAR},
+      </if>
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
@@ -346,14 +362,16 @@
       sum_money = #{sumMoney,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       fccs_bill = #{fccsBill,jdbcType=VARCHAR},
+      stop_reson = #{stopReson,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where seid = #{seid,jdbcType=INTEGER}
   </update>
   
+  
  
  <!-- ==========================================自定义SQL===================================================== -->
-<resultMap id="SettlementDetailMap" type="com.kuyu.vo.pcms.SettlementDetailResult">
+<!--  <resultMap id="SettlementDetailMap" type="com.kuyu.vo.pcms.SettlementDetailResult">
  	<result column="seid" jdbcType="INTEGER" property="seid" />
  	<result column="sett_number" jdbcType="VARCHAR" property="settlementNumber" />
     <result column="application_title" jdbcType="VARCHAR" property="applyTitle" />
@@ -392,8 +410,27 @@ LEFT JOIN pcms_payment c ON c.fssc_bill=a.fccs_bill
 LEFT JOIN pcms_supplier d on c.vendor_id=d.vendor_id
 WHERE a.sett_number=#{settNumber}
  </select>
+ -->
  
  <select id="getSettlementItemResult" parameterType="string" resultType="com.kuyu.vo.pcms.SettlementItemResult">
+<!-- SELECT
+	a.setid,
+	a.itid,
+	b.item_number  AS itemNumber,
+	a.sedetail_memo AS sedetailMemo,
+	c.DETAIL_ACCOUNT AS detailAccount,
+	c.DETAIL_COST AS detailCost,
+	c.DETAIL_CHANNEL AS detailChannel,
+	a.tax_type AS taxType,
+	a.invoice_number AS invoiceNumber,
+	a.sedetail_money AS sedetailMoney,
+	a.is_last AS isLast
+FROM
+	pcms_settlement_item a
+LEFT JOIN pcms_item b ON a.itid=b.itid 
+LEFT JOIN pcms_project_deatil c ON b.detail_id=c.DETAIL_ID
+WHERE a.settlement_number=#{settNumber}-->
+
 SELECT
 	a.setid,
 	a.itid,
@@ -410,7 +447,9 @@ FROM
 	pcms_settlement_item a
 LEFT JOIN pcms_item b ON a.itid=b.itid 
 LEFT JOIN pcms_project_deatil c ON b.detail_id=c.DETAIL_ID
-WHERE a.settlement_number=#{settNumber}
+LEFT JOIN pcms_settlement d ON d.sett_number=a.settlement_number
+WHERE d.fccs_bill=#{fsscBill}
+
  </select>
 
   <!-- =========================================自定义SQL==================================================== -->
