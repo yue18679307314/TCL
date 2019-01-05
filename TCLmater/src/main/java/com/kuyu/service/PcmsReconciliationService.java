@@ -42,7 +42,7 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     //根据供应商ID查询消息记录
     ResultVo selectByVendorId(String openid);
     //查看消息详情
-    ResultVo selectMessageDetail(Integer id,LoginUserInfo userInfo);
+    ResultVo selectMessageDetail(Integer id,String company);
     //供应商消息回复
     ResultVo replyMessage(ReplyMessageVo replyMessageVo);
     //未结明细列表

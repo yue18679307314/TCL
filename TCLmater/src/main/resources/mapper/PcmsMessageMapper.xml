@@ -12,6 +12,7 @@
         pm.create_time,
         pm.type,
         pm.context,
+        pm.company,
         pm.other_id
         FROM pcms_supplier_user psu
         LEFT JOIN pcms_message pm ON psu.vendor_id = pm.vendor_id

@@ -176,8 +176,8 @@ public class ReconciliationController extends BaseController {
      */
     @ApiOperation(value = "查看消息详情",response = PcmsMessageModel.class)
     @GetMapping("/selectMessageDetail")
-    public ResultVo selectMessageDetail(@RequestParam(value = "id") Integer id) throws Exception{
-        return pcmsReconciliationService.selectMessageDetail(id,getUserInfo());
+    public ResultVo selectMessageDetail(@RequestParam(value = "id") Integer id,@RequestParam(value = "company") String company) throws Exception{
+        return pcmsReconciliationService.selectMessageDetail(id,company);
     }
 
     /**

@@ -278,6 +278,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsMessageModel.setState(0);
             pcmsMessageModel.setCreate_time(new Date());
             pcmsMessageModel.setContext(pcmsReconciliationModel.getMonth()+"对账单和对账函");
+            pcmsMessageModel.setCompany(pcmsReconciliationModel.getCompany());
             pcmsMessageMapper.insert(pcmsMessageModel);
             //修改对账单状态
             pcmsReconciliationModel.setState(1);
@@ -357,14 +358,18 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     }
 
     @Override
-    public ResultVo selectMessageDetail(Integer id,LoginUserInfo userInfo) {
+    public ResultVo selectMessageDetail(Integer id,String company) {
+        LoginUserInfo loginUserInfo = new LoginUserInfo();
+        TpmEmployeeModel tpmEmployeeModel = new TpmEmployeeModel();
+        tpmEmployeeModel.setCompany(company);
+        loginUserInfo.setEmployeeModel(tpmEmployeeModel);
         PcmsMessageModel pcmsMessageModel = pcmsMessageMapper.selectById(id);
         pcmsMessageModel.setState(1);
         pcmsMessageMapper.updateById(pcmsMessageModel);
         if(pcmsMessageModel.getType() == 1){
             return null;
         }else if(pcmsMessageModel.getType() == 2){
-            return getAccountStatement(Integer.valueOf(pcmsMessageModel.getOther_id()),userInfo);
+            return getAccountStatement(Integer.valueOf(pcmsMessageModel.getOther_id()),loginUserInfo);
         }
         return null;
     }

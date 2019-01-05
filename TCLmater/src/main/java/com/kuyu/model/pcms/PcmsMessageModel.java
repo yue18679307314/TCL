@@ -33,6 +33,8 @@ public class PcmsMessageModel extends Model<PcmsMessageModel> {
     private int state;
     @ApiModelProperty("类型1-未结明细 2-对账")
     private int type;
+    @ApiModelProperty("公司ID")
+    private String company;
 
     public Integer getId() {
         return id;
@@ -88,6 +90,14 @@ public class PcmsMessageModel extends Model<PcmsMessageModel> {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override
