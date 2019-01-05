@@ -204,7 +204,13 @@ public class ReconciliationController extends BaseController {
         return pcmsReconciliationService.selectDetailList(id);
     }
 
-    @ApiOperation(value = "查看物料",response = DetailVo.class)
+    /**
+     * 查看物料
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "查看物料",response = RequestPendingMaterialDetailVo.class)
     @GetMapping("/selectPendingMaterial")
     public ResultVo selectPendingMaterial(@RequestParam(value = "id") Integer id) throws Exception{
         return pcmsReconciliationService.selectPendingMaterial(id);
