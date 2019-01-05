@@ -82,6 +82,7 @@
 		pr.pay_amount as pay_amount,
 		pr.create_date as create_date,
 		pr.balance as balance,
+		pr.pcms_reconciliation_id as pcms_reconciliation_id,
 		pr.id
 		FROM pcms_current_detail pr
 		<where>

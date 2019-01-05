@@ -379,7 +379,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     @Override
     public ResultVo replyMessage(ReplyMessageVo replyMessageVo) {
         PcmsMessageModel pcmsMessageModel = pcmsMessageMapper.selectById(replyMessageVo.getStatisticsId());
-        PcmsPtatisticsModel pcmsPtatisticsModel = pcmsPtatisticsMapper.selectByReconciliationId(Integer.valueOf(pcmsMessageModel.getOther_id()));
+        PcmsPtatisticsModel pcmsPtatisticsModel = pcmsPtatisticsMapper.selectByReconciliationId(Integer.parseInt(pcmsMessageModel.getOther_id()));
         if(replyMessageVo.getType() == 1){
             pcmsPtatisticsModel.setType(1);
             pcmsPtatisticsModel.setUpdate_time(new Date());
