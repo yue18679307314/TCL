@@ -435,10 +435,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			pcmsSettlementItemMapper.insertSelective(settIt);
 			
 			
-			item.setStatus(5);
-			item.setUpdateTime(new Date());
-			pcmsItemMapper.updateByPrimaryKeySelective(item);
-			
+//			item.setStatus(5);
+//			item.setUpdateTime(new Date());
+//			pcmsItemMapper.updateByPrimaryKeySelective(item);
 			
 		}
 		

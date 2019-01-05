@@ -322,6 +322,7 @@ FROM
 LEFT JOIN pcms_item b ON a.itid = b.itid
 WHERE
 	a.itid = #{itid}-->
+	SELECT 
 	b.fccs_bill AS fccsBill,
 	b.sum_money AS sumMoney,
 	b.`status` AS bxStatus,
