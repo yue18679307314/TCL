@@ -31,6 +31,8 @@
         pr.balance,
         pr.company,
         pr.vendor_id,
+        pr.pay_amount,
+        pr.financial_money,
         pr.month,
         pr.id
         FROM pcms_initialization pr

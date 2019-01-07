@@ -303,7 +303,13 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByReconciliationId(id);
         //查看上个月统计的期初期末余额
         PcmsIinitializationModel pcmsIinitializationModel1 = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
-
+        //获取入账法人名称
+        TpmEmployeeModel employeeModel = null;
+        try {
+            employeeModel = tpmEmployeeService.getTpmEmployeeByTem(userInfo.getEmployeeModel());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //获取往来数据信息
         List<CurrentDetailModelVo> list = pcmsReconciliationMapper.selectCurrent(id);
         //获取供应商信息
@@ -320,6 +326,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             accountStatementVo.setAmount(pcmsPtatisticsModel.getAmount());
             accountStatementVo.setRemark(pcmsPtatisticsModel.getRemark());
         }
+        accountStatementVo.setIncorporated_person(employeeModel.getOrg_name());
         accountStatementVo.setAccountStatementDate(firstDate+"~"+endDate);
         accountStatementVo.setCompany_date(endDate);
         accountStatementVo.setCompany_mobile(pcmsPtatisticsModel.getMobile());
@@ -369,7 +376,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         pcmsMessageModel.setState(1);
         pcmsMessageMapper.updateById(pcmsMessageModel);
         if(pcmsMessageModel.getType() == 1){
-            return null;
+            return selectDetailList(id);
         }else if(pcmsMessageModel.getType() == 2){
             return getAccountStatement(Integer.valueOf(pcmsMessageModel.getOther_id()),loginUserInfo);
         }
@@ -394,6 +401,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(replyMessageVo.getPcms_reconciliation_id());
         pcmsReconciliationModel.setState(2);
         pcmsReconciliationMapper.updateById(pcmsReconciliationModel);
+        pcmsMessageModel.setState(2);
+        pcmsMessageMapper.updateById(pcmsMessageModel);
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 

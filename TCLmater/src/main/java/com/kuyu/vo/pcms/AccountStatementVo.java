@@ -47,6 +47,8 @@ public class AccountStatementVo {
     private String Initial_balance;
     @ApiModelProperty("状态")
     private Integer state;
+    @ApiModelProperty("入账法人名称")
+    private String incorporated_person;
 
     public Integer getId() {
         return id;
@@ -190,5 +192,13 @@ public class AccountStatementVo {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public String getIncorporated_person() {
+        return incorporated_person;
+    }
+
+    public void setIncorporated_person(String incorporated_person) {
+        this.incorporated_person = incorporated_person;
     }
 }
