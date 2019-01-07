@@ -19,6 +19,8 @@ public class ItemResult {
 	
 	private String itemNumber;
 	
+	private String availableMoney;
+	
 	private String detailAccount;
 	
 	private Double itemPrice;
@@ -37,7 +39,14 @@ public class ItemResult {
 
 	private String projectType;
 	
-	
+	public String getAvailableMoney() {
+		return availableMoney;
+	}
+
+	public void setAvailableMoney(String availableMoney) {
+		this.availableMoney = availableMoney;
+	}
+
 	public String getRequestUser() {
 		return requestUser;
 	}

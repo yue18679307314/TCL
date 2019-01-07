@@ -462,7 +462,7 @@
 			b.duty_paragrap AS taxNumber,
 			a.request_id AS requestId,
 			c.REQUEST_TITLE AS requestTitle,
-			l.settlement_number AS itemNumber,
+			IFNULL(a.subclass,item_price) AS availableMoney,
 			IFNULL(d.DETAIL_ACCOUNT,f.fee_detail_type) AS detailAccount,
 			a.item_price AS itemPrice,
 			c.REQUEST_USER AS requestUser,
@@ -479,8 +479,7 @@
 	  	LEFT JOIN pcms_project_deatil d ON a.detail_id=d.DETAIL_ID
 		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
 		LEFT JOIN tpm_activity_original f ON f.project_id=a.detail_id
-		LEFT JOIN tpm_dept k ON c.REQUEST_DEPT=k.org_code
-		LEFT JOIN pcms_settlement_item l ON l.itid=a.itid 
+		LEFT JOIN tpm_dept k ON c.REQUEST_DEPT=k.org_code 
 		WHERE 1=1 
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
@@ -518,7 +517,6 @@
 		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
 		LEFT JOIN tpm_activity_original f ON f.project_id=a.detail_id
 		LEFT JOIN tpm_dept k ON c.REQUEST_DEPT=k.org_code
-		LEFT JOIN pcms_settlement_item l ON l.itid=a.itid 
 		WHERE 1=1 
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
