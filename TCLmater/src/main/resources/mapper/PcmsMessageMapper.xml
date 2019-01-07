@@ -24,4 +24,26 @@
         order by pm.create_time
     </select>
 
+
+    <select id="selectByState" resultType="com.kuyu.model.pcms.PcmsMessageModel">
+        SELECT
+        pm.id,
+        pm.vendor_id,
+        pm.state,
+        pm.create_time,
+        pm.type,
+        pm.context,
+        pm.company,
+        pm.other_id
+        FROM pcms_supplier_user psu
+        LEFT JOIN pcms_message pm ON psu.vendor_id = pm.vendor_id
+        <where>
+            <if test="openid !=null and openid !=''">
+                and psu.openid = #{openid}
+            </if>
+            and pm.state=#{state}
+        </where>
+        order by pm.create_time
+    </select>
+
 </mapper>

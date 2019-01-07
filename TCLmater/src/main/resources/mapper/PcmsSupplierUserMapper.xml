@@ -16,4 +16,14 @@
         ORDER BY p.create_time DESC
     </select>
 
+
+    <select id="findByOpenid" resultType="com.kuyu.model.pcms.PcmsSupplierUserModel">
+        SELECT
+        t.vendor_id
+        FROM pcms_supplier_user t
+        <where>
+            t.openid = #{openid}
+        </where>
+    </select>
+
 </mapper>

@@ -140,10 +140,10 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         pcmsUserModel.setImg(weixinUserInfo.getHeadImgUrl());
         pcmsUserModel.setType(1);
         pcmsUserModel.setCreate_time(DateUtils.getLongDateStr());
-/*        PcmsUserModel pcmsUserModel1 =  pcmsUserService.selectPcmsUserModel(pcmsUserModel);
+        PcmsUserModel pcmsUserModel1 =  pcmsUserService.selectPcmsUserModel(pcmsUserModel);
         if(pcmsUserModel1 != null){
             throw new ParamException("该用户已绑定");
-        }*/
+        }
         pcmsUserService.insertPcmsUserModel(pcmsUserModel);
         PcmsSupplierUserModel pcmsSupplierUser = new PcmsSupplierUserModel();
         pcmsSupplierUser.setOpenid(pcmsUserModel.getOpenid());

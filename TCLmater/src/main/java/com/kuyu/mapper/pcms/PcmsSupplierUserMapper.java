@@ -33,4 +33,6 @@ public interface PcmsSupplierUserMapper extends BaseMapper<PcmsSupplierUserModel
     int updateByPrimaryKey(PcmsSupplierUser record);
 
     public List<PcmsSupplierUserVo> findBySupplier(String vendor_id);
+
+    PcmsSupplierUserModel findByOpenid(@Param("openid")String openid);
 }

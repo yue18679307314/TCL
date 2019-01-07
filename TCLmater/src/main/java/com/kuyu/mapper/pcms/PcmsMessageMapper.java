@@ -12,4 +12,6 @@ import java.util.List;
 public interface PcmsMessageMapper extends BaseMapper<PcmsMessageModel> {
 
     List<PcmsMessageModel> selectByVendorId(@Param("openid") String openid);
+
+    List<PcmsMessageModel> selectByState(@Param("openid") String openid,@Param("state") Integer state);
 }

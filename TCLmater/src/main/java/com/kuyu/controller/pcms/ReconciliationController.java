@@ -169,6 +169,31 @@ public class ReconciliationController extends BaseController {
     }
 
     /**
+     * 根据供应商ID查询历史消息记录
+     * @param openid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "根据供应商ID查询历史消息记录",response = PcmsMessageModel.class)
+    @GetMapping("/selectByState")
+    public ResultVo selectByState(@RequestParam(value = "openid") String openid,@RequestParam(value = "state") Integer state) throws Exception{
+        return pcmsReconciliationService.selectByState(openid,state);
+    }
+
+    /**
+     * 修改银行信息
+     * @param openid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "修改银行信息")
+    @GetMapping("/updateBank")
+    public ResultVo updateBank(@RequestParam(value = "openid") String openid,@RequestParam(value = "opening_bank") String opening_bank,@RequestParam(value = "opening_account") String opening_account) throws Exception{
+        return pcmsReconciliationService.updateBank(openid,opening_bank,opening_account);
+    }
+
+
+    /**
      * 查看消息详情
      * @param id
      * @return

@@ -2,7 +2,6 @@ package com.kuyu.service.impl;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
@@ -21,7 +20,6 @@ import com.kuyu.vo.query.ReconciliationQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -58,6 +56,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     private TpmEmployeeMapper tpmEmployeeMapper;
     @Resource
     private UnspecifiedDetailsMapper unspecifiedDetailsMapper;
+    @Resource
+    private PcmsSupplierUserMapper pcmsSupplierUserMapper;
     @Override
     public void selectByTime() {
         //查询上个月的付款记录
@@ -368,6 +368,24 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     public ResultVo selectByVendorId(String openid) {
         List<PcmsMessageModel> list = pcmsMessageMapper.selectByVendorId(openid);
         return ResultVo.getDataWithSuccess(list);
+    }
+
+    @Override
+    public ResultVo selectByState(String openid,Integer state) {
+        List<PcmsMessageModel> list = pcmsMessageMapper.selectByState(openid,state);
+        return ResultVo.getDataWithSuccess(list);
+    }
+
+    @Override
+    public ResultVo updateBank(String openid,String opening_bank,String opening_account)throws Exception {
+        PcmsSupplierUserModel pcmsUserModel =  pcmsSupplierUserMapper.findByOpenid(openid);
+        PcmsSupplierVo pcmsSupplierVo = new PcmsSupplierVo();
+        pcmsSupplierVo.setVendor_id(pcmsUserModel.getVendor_id());
+        PcmsSupplierModel pcmsSupplierModel = pcmsSupplierMapper.getPcmsSupplier(pcmsSupplierVo);
+        pcmsSupplierModel.setOpening_bank(opening_bank);
+        pcmsSupplierModel.setOpening_account(opening_account);
+        pcmsSupplierMapper.updatePcmsSupplierModel(pcmsSupplierModel);
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
 
     @Override
