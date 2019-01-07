@@ -50,11 +50,49 @@ public class UpdateSupplierToken {
         try {
             pcmsReconciliationService.selectByTime();
         } catch (Exception e) {
-            log.info("*****生成上个月的对账信息:{}*****", DateUtils.currentTime());
+            log.info("*****生成上个月的对账信息出错:{}*****", DateUtils.currentTime());
             e.printStackTrace();
         }
     }
 
+    /**
+     * 有付款记录,但没有点击对账的,自动对账
+     */
+    public void automaticReconciliation(){
+        Date date = DateUtils.subDays(1);
+        log.info("*****正在获取,执行时间:{}*****", date);
+        try {
+            pcmsReconciliationService.automaticReconciliation();
+        } catch (Exception e) {
+            log.info("*****自动对账出错*****", DateUtils.currentTime());
+            e.printStackTrace();
+        }
+    }
 
-
+    /**
+     * 自动统计表上上个月余额为0的
+     */
+    public void automaticStatistics(){
+        Date date = DateUtils.subDays(1);
+        log.info("*****正在获取,执行时间:{}*****", date);
+        try {
+            pcmsReconciliationService.automaticStatistics();
+        } catch (Exception e) {
+            log.info("*****自动统计出错*****", DateUtils.currentTime());
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 自动生成未结明细记录
+     */
+    public void automaticDetailList(){
+        Date date = DateUtils.subDays(1);
+        log.info("*****正在获取,执行时间:{}*****", date);
+        try {
+            pcmsReconciliationService.automaticDetailList();
+        } catch (Exception e) {
+            log.info("*****自动生成未结明细记录出错*****", DateUtils.currentTime());
+            e.printStackTrace();
+        }
+    }
 }

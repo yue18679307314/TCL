@@ -413,7 +413,18 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     @Override
     public ResultVo selectDetailList(Integer id) {
         PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(id);
-        List<DetailListVo> list = unspecifiedDetailsMapper.selectByAllAndId(id);
+        List<DetailListVo> list = new ArrayList<>();
+        list = unspecifiedDetailsMapper.selectByAllAndId(id);
+        if(list.size()==0){
+            List<DetailListVo> detailList = pcmsReconciliationMapper.selectDetailList(id);
+            for(DetailListVo detailListVo : detailList){
+                UnspecifiedDetailsModel unspecifiedDetailsModel = new UnspecifiedDetailsModel();
+                BeanUtils.copyProperties(detailListVo,unspecifiedDetailsModel);
+                unspecifiedDetailsModel.setCreate_time(new Date());
+                unspecifiedDetailsMapper.insert(unspecifiedDetailsModel);
+                list.add(detailListVo);
+            }
+        }
         String month = pcmsReconciliationModel.getMonth()+"-01";
         //上个月最后一天
         String endDate = getMonthEndDay(month);
@@ -490,7 +501,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                             currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
                             currentDetailModelVo1.setBalance(initialBalance.add(payAmout).subtract(amount).toString());
                             PcmsPaymentDetailVo pcmsPaymentDetail = pcmsReconciliationMapper.selectByFssc(currentDetailModelVo.getFssc_bill());
-                            currentDetailModelVo1.setCreate_date(pcmsPaymentDetail.getFinancialTime());
+                            currentDetailModelVo1.setCreate_date(pcmsPaymentDetail.getFinancialTime().substring(0,10));
                             initialBalance = initialBalance.add(payAmout).subtract(amount);
                         }
                         if(currentDetailModelVo.getCreate_date() != null && currentDetailModelVo.getPr_time() == null){
@@ -501,6 +512,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                             currentDetailModelVo1.setBalance(initialBalance.add(payAmout).toString());
                             initialBalance = initialBalance.add(payAmout);
                         }
+                        currentDetailModelVo1.setBalance(initialBalance.toString());
                         list.add(currentDetailModelVo1);
                     }
                 }
@@ -553,12 +565,15 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         List<ReconciliationVo> list = pcmsReconciliationMapper.selectByMonth(getLastMonth());
         if(list.size()>0){
             for(ReconciliationVo reconciliationVo : list){
-                List<DetailListVo> detailList = pcmsReconciliationMapper.selectDetailList(reconciliationVo.getId());
-                for(DetailListVo detailListVo : detailList){
-                    UnspecifiedDetailsModel unspecifiedDetailsModel = new UnspecifiedDetailsModel();
-                    BeanUtils.copyProperties(detailListVo,unspecifiedDetailsModel);
-                    unspecifiedDetailsModel.setCreate_time(new Date());
-                    unspecifiedDetailsMapper.insert(unspecifiedDetailsModel);
+                List<DetailListVo> list1 =  unspecifiedDetailsMapper.selectByAllAndId(reconciliationVo.getId());
+                if(list1.size() == 0 || null == list1){
+                    List<DetailListVo> detailList = pcmsReconciliationMapper.selectDetailList(reconciliationVo.getId());
+                    for(DetailListVo detailListVo : detailList){
+                        UnspecifiedDetailsModel unspecifiedDetailsModel = new UnspecifiedDetailsModel();
+                        BeanUtils.copyProperties(detailListVo,unspecifiedDetailsModel);
+                        unspecifiedDetailsModel.setCreate_time(new Date());
+                        unspecifiedDetailsMapper.insert(unspecifiedDetailsModel);
+                    }
                 }
             }
         }
