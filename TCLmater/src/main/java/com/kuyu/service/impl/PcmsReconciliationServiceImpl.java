@@ -3,6 +3,7 @@ package com.kuyu.service.impl;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.exception.ParamException;
+import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmEmployeeModel;
@@ -20,6 +21,7 @@ import com.kuyu.vo.query.ReconciliationQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -52,6 +54,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     private PcmsMessageMapper pcmsMessageMapper;
     @Resource
     private TpmEmployeeService tpmEmployeeService;
+    @Resource
+    private TpmEmployeeMapper tpmEmployeeMapper;
     @Resource
     private UnspecifiedDetailsMapper unspecifiedDetailsMapper;
     @Override
@@ -222,7 +226,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         pcmsPtatisticsModel.setType(0);
         TpmEmployeeModel employeeModel = new TpmEmployeeModel();
         try {
-            employeeModel = tpmEmployeeService.getTpmEmployeeByItcode(userInfo.getEmployeeModel().getItcode());
+            employeeModel = tpmEmployeeMapper.getTpmEmployeeByItcode(userInfo.getEmployeeModel().getItcode());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -445,7 +449,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         if(list1.size()>0){
             for(PcmsReconciliationModel pcmsReconciliationModel : list1){
                 //查看上个月统计的期初期末余额
-                PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(/*userInfo.getEmployeeModel().getCompany()*/"7601",pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+                PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(pcmsReconciliationModel.getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
                 //期初余额
                 BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getInitial_balance());
                 //余额
