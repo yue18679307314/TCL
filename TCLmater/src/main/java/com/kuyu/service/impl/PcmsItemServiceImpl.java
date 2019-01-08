@@ -463,6 +463,14 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			item.setUpdateTime(new Date());
 			pcmsItemMapper.updateByPrimaryKeySelective(item);
 			
+			//增加日志
+			PcmsItemLog log=new PcmsItemLog();
+			log.setItid(item.getItid());
+			log.setNote("立项单结算,可用余额减去:-"+settlement.getDetailMoney());
+			log.setStatus(3);
+			log.setCreateTime(new Date());
+			pcmsItemLogMapper.insertSelective(log);
+			
 		}
 		
 				
@@ -568,6 +576,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public int createPayment(PaymentRequest payment) {
 		String fsscBill=payment.getFsscBill();
+		
+		PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+		
 		List<Payment> paymentList=payment.getPaymentList();
 		PcmsPayment info=new PcmsPayment(); 
 		info.setFsscBill(fsscBill);
@@ -584,13 +595,16 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				info.setBillExpireDate(pay.getBillExpireDate());
 				info.setBankAccountNumber(pay.getBankAccountNumber());
 				info.setCreateTime(new Date());
+				info.setStatus(2);
+				if(sett!=null){
+					info.setType(0);
+				}else{
+					info.setType(1);
+				}
 				
 				pcmsPaymentMapper.insertSelective(info);
 			}
 			
-			
-			
-			PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
 			
 			//余额单结算信息为空。
 			if(sett!=null){
@@ -654,10 +668,12 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 					}
 				}
 				
-				//成功支付金额+终止支付金额=报销单金额,则此报销单完结   保留2位小数。
-				BigDecimal sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+				//成功支付金额+终止支付金额=报销单金额,则此报销单完结 。
+//				BigDecimal sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+				BigDecimal sumMoney=successMoney.add(failMoney);
 				PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
-				BigDecimal settMoney=new BigDecimal(sett.getSumMoney()).setScale(2,BigDecimal.ROUND_HALF_UP);
+//				BigDecimal settMoney=new BigDecimal(sett.getSumMoney()).setScale(2,BigDecimal.ROUND_HALF_UP);
+				BigDecimal settMoney=new BigDecimal(sett.getSumMoney());
 				if(sumMoney.compareTo(settMoney)==0){
 					//更新状态为已完结
 					sett.setStatus(3);
@@ -955,7 +971,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			List<PcmsSettlementItem> settItemList=pcmsSettlementItemMapper.selectByExample(example);
 			for (PcmsSettlementItem settItem : settItemList) {
 				PcmsItem item=pcmsItemMapper.selectByPrimaryKey(settItem.getItid());
-				item.setSubclass(PcmsProjectUtil.calculation(item.getItemPrice().toString(), settItem.getSedetailMoney(),1));
+				item.setSubclass(PcmsProjectUtil.calculation(item.getSubclass(), settItem.getSedetailMoney(),1));
 				pcmsItemMapper.updateByPrimaryKeySelective(item);
 				
 				//增加日志

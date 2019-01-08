@@ -5,7 +5,7 @@ import java.util.Date;
 public class PcmsPayment {
     private Integer pmid;
 
-    private Integer seid;
+    private Integer type;
 
     private String fsscBill;
 
@@ -29,6 +29,8 @@ public class PcmsPayment {
 
     private String bankAccountNumber;
 
+    private Integer status;
+
     private Date createTime;
 
     public Integer getPmid() {
@@ -39,12 +41,12 @@ public class PcmsPayment {
         this.pmid = pmid;
     }
 
-    public Integer getSeid() {
-        return seid;
+    public Integer getType() {
+        return type;
     }
 
-    public void setSeid(Integer seid) {
-        this.seid = seid;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getFsscBill() {
@@ -133,6 +135,14 @@ public class PcmsPayment {
 
     public void setBankAccountNumber(String bankAccountNumber) {
         this.bankAccountNumber = bankAccountNumber == null ? null : bankAccountNumber.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Date getCreateTime() {

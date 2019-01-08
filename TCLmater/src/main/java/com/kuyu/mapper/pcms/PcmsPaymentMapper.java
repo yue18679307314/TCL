@@ -1,7 +1,6 @@
 package com.kuyu.mapper.pcms;
 
 import com.kuyu.model.pcms.PcmsPayment;
-import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.model.pcms.PcmsPaymentExample;
 import com.kuyu.vo.pcms.PaymentResult;
 
@@ -31,9 +30,7 @@ public interface PcmsPaymentMapper {
 
     int updateByPrimaryKey(PcmsPayment record);
 
-	List<PaymentResult> getPaymentList();
-
 	PaymentResult getDetailMoney(String fsscBill);
 
-	
+	List<PaymentResult> getPaymentList();
 }

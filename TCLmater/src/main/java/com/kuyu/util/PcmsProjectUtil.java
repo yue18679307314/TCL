@@ -114,9 +114,9 @@ public class PcmsProjectUtil {
 		System.out.println(paymentRequest);
 		
 		
-		BigDecimal successMoney=new BigDecimal(5.44);
-		BigDecimal failMoney=new BigDecimal(1.12);
-		String aaa=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP).toString();
+		BigDecimal successMoney=new BigDecimal("5.44");
+		BigDecimal failMoney=new BigDecimal("1.12");
+		String aaa=successMoney.add(failMoney).toString();
 		System.out.println(aaa);
 		System.out.println(aaa.equals("6.56"));
 	}
@@ -138,9 +138,11 @@ public class PcmsProjectUtil {
 		BigDecimal sumMoney=new BigDecimal(0);
 		
 		if(addOrSub==1){
-			sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+//			sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+			sumMoney=successMoney.add(failMoney);
 		}else{
-			sumMoney=successMoney.subtract(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+//			sumMoney=successMoney.subtract(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+			sumMoney=successMoney.subtract(failMoney);
 		}
 		
 		return sumMoney.toString();
