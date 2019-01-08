@@ -93,6 +93,9 @@ public class ReceiptDetailVo {
     @ApiModelProperty("发票信息")
     private List<SettlementResult> settList;
 
+    @ApiModelProperty("供应商发票信息")
+    private SupplierInvoiceVo supplierInvoiceVo;
+
     public Integer getItid() {
         return itid;
     }
@@ -315,5 +318,13 @@ public class ReceiptDetailVo {
 
     public void setSettList(List<SettlementResult> settList) {
         this.settList = settList;
+    }
+
+    public SupplierInvoiceVo getSupplierInvoiceVo() {
+        return supplierInvoiceVo;
+    }
+
+    public void setSupplierInvoiceVo(SupplierInvoiceVo supplierInvoiceVo) {
+        this.supplierInvoiceVo = supplierInvoiceVo;
     }
 }

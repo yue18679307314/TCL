@@ -1,8 +1,12 @@
 package com.kuyu.controller.pcms;
 
 import com.kuyu.annotation.AOP_Controller_LOG;
+import com.kuyu.common.CommonConstants;
 import com.kuyu.controller.BaseController;
+import com.kuyu.exception.ParamException;
+import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
+import com.kuyu.service.PcmsItemService;
 import com.kuyu.service.PcmsSupplierMaterialService;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.util.StringUtil;
@@ -13,6 +17,7 @@ import com.kuyu.vo.query.SupplierMaterialQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +32,9 @@ public class PcmsSupplierMaterialController extends BaseController {
 
     @Resource
     private PcmsSupplierService pcmsSupplierService;
+
+    @Autowired
+    private PcmsItemService pcmsItemService;
 
     /**
      * 添加物料
@@ -100,7 +108,19 @@ public class PcmsSupplierMaterialController extends BaseController {
     @ApiOperation(value = "市场人员查询供应商物料信息",response = PcmsSupplierMaterialModel.class)
     @PostMapping("/queryBySupplierMaterialList")
     public ResultVo queryBySupplierMaterialList(@RequestBody SupplierMaterialResultVo supplierMaterialResultVo) throws Exception {
-        return pcmsSupplierMaterialService.queryBySupplierMaterialList(supplierMaterialResultVo/*,getUserInfo()*/);
+        LoginUserInfo user=null;
+        //app端获取用户登录信息
+        if(supplierMaterialResultVo.getEmployeenumber()!=null&&!supplierMaterialResultVo.getEmployeenumber().equals("")){
+            user=pcmsItemService.getUserInfo(supplierMaterialResultVo.getEmployeenumber());
+        }else{
+            //PC端获取用户登录信息
+            user=getUserInfo();
+        }
+        //如果获取不到用户登录信息
+        if(user.getEmployeeModel()==null){
+            throw new ParamException(ResultVo.getByEnumCode(CommonConstants.NOT_LOGIN_CODE));
+        }
+        return pcmsSupplierMaterialService.queryBySupplierMaterialList(supplierMaterialResultVo,user);
     }
 
     /**

@@ -83,6 +83,9 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
 
     @Resource
     private PcmsSettlementItemMapper pcmsSettlementItemMapper;
+
+    @Resource
+    private PcmsSupplierInvoiceMapper pcmsSupplierInvoiceMapper;
     @Override
     public ResultVo findReceiptList(ReceiptQuery query) throws Exception {
         if(null == query.getOpenid() || "".equals(query.getOpenid())){
@@ -564,12 +567,20 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
             List<SettlementResult> settList=pcmsSettlementItemMapper.selectByItid(itid);
             receiptDetailVo.setSettList(settList);
         }
+        /**获取供应商发票信息*/
+        SupplierInvoiceVo supplierInvoiceVo = pcmsSupplierInvoiceMapper.selectByItid(itid);
+        if(null != supplierInvoiceVo){
+            List<SupplierInvoiceImageVo> supplierInvoiceList = pcmsSupplierInvoiceMapper.selectByInvoiceId(supplierInvoiceVo.getId());
+            supplierInvoiceVo.setList(supplierInvoiceList);
+        }
+        receiptDetailVo.setSupplierInvoiceVo(supplierInvoiceVo);
+
 
         return ResultVo.getDataWithSuccess(receiptDetailVo);
     }
 
     @Override
-    public ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel/*, LoginUserInfo userInfo*/) throws Exception {
+    public ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel, LoginUserInfo userInfo) throws Exception {
         if(StringUtil.isEmpty(pcmsRejectLogModel.getContext())){
             throw new ParamException("驳回理由不能为空");
         }
@@ -580,7 +591,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         pcmsItem.setStatus(4);
         pcmsRejectLogModel.setCreate_time(new Date());
         pcmsRejectLogModel.setType(2);
-        pcmsRejectLogModel.setOperator(/*userInfo.getEmployeeModel().getPerson_name()*/"555");
+        pcmsRejectLogModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
         pcmsRejectLogModel.setContext(pcmsRejectLogModel.getContext());
         PcmsItemLog pcmsItemLog = new PcmsItemLog();
         pcmsItemLog.setItid(pcmsRejectLogModel.getItid());
@@ -594,14 +605,14 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
-    public ResultVo doRejectSuccess(Integer itid/*, LoginUserInfo userInfo*/) throws Exception {
+    public ResultVo doRejectSuccess(Integer itid, LoginUserInfo userInfo) throws Exception {
         PcmsItem pcmsItem = pcmsItemMapper.selectByPrimaryKey(itid);
         if(null == pcmsItem){
             throw new ParamException("立项单不存在");
         }
         PcmsRejectLogModel pcmsRejectLogModel = new PcmsRejectLogModel();
         pcmsRejectLogModel.setItid(itid);
-        pcmsRejectLogModel.setOperator(/*userInfo.getEmployeeModel().getPerson_name()*/"555");
+        pcmsRejectLogModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
         pcmsRejectLogModel.setCreate_time(new Date());
         pcmsRejectLogModel.setType(1);
         pcmsItem.setStatus(3);
@@ -724,8 +735,8 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
-    public ResultVo selectTransfer(TransferQuery query/*,LoginUserInfo userInfo*/) throws Exception {
-//        query.setPerson_name(userInfo.getEmployeeModel().getPerson_name());
+    public ResultVo selectTransfer(TransferQuery query,LoginUserInfo userInfo) throws Exception {
+        query.setPerson_name(userInfo.getEmployeeModel().getPerson_name());
         query = (TransferQuery) CheckParamUtils.trimWithObjectField(query);
         Page<TransferVo> page = new Page<>(query.getCurrent(),query.getSize());
         List<TransferVo> transferList = pcmsTransferMapper.selectByState(query,page);

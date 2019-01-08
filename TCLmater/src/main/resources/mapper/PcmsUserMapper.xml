@@ -24,5 +24,20 @@
         </where>
     </select>
 
-
+    <select id="selectUserByOpenId" resultType="com.kuyu.model.pcms.PcmsUserModel">
+        SELECT
+        ps.mobile AS create_time,
+        t.id,
+        t.img,
+        t.open_name,
+        t.openid
+        FROM pcms_user t
+        LEFT JOIN pcms_supplier_user psu ON psu.openid = t.openid
+        LEFT JOIN pcms_supplier ps ON ps.vendor_id = psu.vendor_id
+        <where>
+            <if test="openid != null and openid != ''">
+                t.openid = #{openid}
+            </if>
+        </where>
+    </select>
 </mapper>

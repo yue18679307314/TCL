@@ -26,4 +26,13 @@
         </where>
     </select>
 
+    <select id="selectByVendorId" resultType="com.kuyu.model.pcms.PcmsSupplierUserModel">
+        SELECT
+        t.vendor_id
+        FROM pcms_supplier_user t
+        <where>
+            t.vendor_id = #{vendor_id}
+        </where>
+    </select>
+
 </mapper>

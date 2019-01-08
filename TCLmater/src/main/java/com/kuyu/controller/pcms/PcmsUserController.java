@@ -3,6 +3,7 @@ package com.kuyu.controller.pcms;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.model.pcms.PcmsSupplierModel;
+import com.kuyu.model.pcms.PcmsUserModel;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.service.PcmsSupplierUserService;
 import com.kuyu.vo.ResultVo;
@@ -66,5 +67,18 @@ public class PcmsUserController extends BaseController {
     public ResultVo findBySupplier(@RequestParam(value = "vendor_id") String vendor_id) throws Exception{
         List<PcmsSupplierUserVo> list = pcmsSupplierUserService.findBySupplier(vendor_id);
         return ResultVo.getDataWithSuccess(list);
+    }
+
+    /**
+     * 用户
+     * @param openid
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/selectUserByOpenId", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultVo selectUserByOpenId(@RequestParam(value = "openid") String openid) throws Exception{
+        PcmsUserModel pcmsUserModel = pcmsSupplierUserService.selectUserByOpenId(openid);
+        return ResultVo.getDataWithSuccess(pcmsUserModel);
     }
 }
