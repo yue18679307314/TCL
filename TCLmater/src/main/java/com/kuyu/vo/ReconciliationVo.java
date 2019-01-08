@@ -29,6 +29,8 @@ public class ReconciliationVo {
     @ApiModelProperty("创建时间")
     private Date create_time;
 
+    private Integer type;
+
     public Integer getId() {
         return id;
     }
@@ -83,5 +85,13 @@ public class ReconciliationVo {
 
     public void setCreate_time(Date create_time) {
         this.create_time = create_time;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

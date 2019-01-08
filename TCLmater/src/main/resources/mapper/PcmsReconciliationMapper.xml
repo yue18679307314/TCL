@@ -4,9 +4,9 @@
 
     <insert id="insertReconciliation" parameterType="com.kuyu.model.pcms.PcmsReconciliationModel" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO
-		pcms_reconciliation(vendor_id,vendor_name,month,state,reconciliation_id,create_time,company)
+		pcms_reconciliation(vendor_id,vendor_name,month,state,reconciliation_id,create_time,company,type)
 		VALUES
-		(#{vendor_id},#{vendor_name},#{month},#{state},#{reconciliation_id},#{create_time},#{company})
+		(#{vendor_id},#{vendor_name},#{month},#{state},#{reconciliation_id},#{create_time},#{company},#{type})
 	</insert>
 
 	<select id="findListPage" resultType="com.kuyu.vo.ReconciliationVo">

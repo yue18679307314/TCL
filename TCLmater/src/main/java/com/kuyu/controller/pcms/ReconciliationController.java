@@ -192,6 +192,18 @@ public class ReconciliationController extends BaseController {
         return pcmsReconciliationService.updateBank(openid,opening_bank,opening_account);
     }
 
+    /**
+     * 查看银行信息
+     * @param openid
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "查看银行信息")
+    @GetMapping("/selectBankInfo")
+    public ResultVo selectBankInfo(@RequestParam(value = "openid") String openid) throws Exception{
+        return pcmsReconciliationService.selectBankInfo(openid);
+    }
+
 
     /**
      * 查看消息详情

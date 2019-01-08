@@ -390,6 +390,15 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     }
 
     @Override
+    public ResultVo selectBankInfo(String openid) {
+        PcmsSupplierUserModel pcmsUserModel =  pcmsSupplierUserMapper.findByOpenid(openid);
+        PcmsSupplierVo pcmsSupplierVo = new PcmsSupplierVo();
+        pcmsSupplierVo.setVendor_id(pcmsUserModel.getVendor_id());
+        PcmsSupplierModel pcmsSupplierModel = pcmsSupplierMapper.getPcmsSupplier(pcmsSupplierVo);
+        return ResultVo.getDataWithSuccess(pcmsSupplierModel);
+    }
+
+    @Override
     public ResultVo selectMessageDetail(Integer id,String company) {
         LoginUserInfo loginUserInfo = new LoginUserInfo();
         TpmEmployeeModel tpmEmployeeModel = new TpmEmployeeModel();

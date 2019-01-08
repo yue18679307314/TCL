@@ -45,6 +45,8 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     ResultVo selectByState(String openid,Integer state);
     //修改银行信息
     ResultVo updateBank(String openid,String opening_bank,String opening_account)throws Exception;
+    //查看银行信息
+    ResultVo selectBankInfo(String openid);
     //查看消息详情
     ResultVo selectMessageDetail(Integer id,String company);
     //供应商消息回复
