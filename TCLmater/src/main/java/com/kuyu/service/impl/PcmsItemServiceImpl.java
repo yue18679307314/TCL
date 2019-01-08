@@ -285,10 +285,17 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 //	public ResultVo changeItemStatus(Integer itid,Integer status,String reason) {
 	public ResultVo changeItemStatus(Integer itid, Integer status, LoginUserInfo userInfo,String context,LoginUserInfo user) {
-		//TODO
-		//检测是否有权限操作
-		String role=user.getUserRole();
 		
+		
+		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务; -1市场人员
+		String userRole=user.getUserRole();
+				
+		if(userRole==null||userRole.equals("")){
+			userRole="-1";
+		}
+		
+		PcmsItem item=pcmsItemMapper.selectByPrimaryKey(itid);
+		Integer queryStatus=item.getStatus();
 		
 		 //增加立项单日志
 	    PcmsItemLog log=new PcmsItemLog();
@@ -307,24 +314,39 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	    	log.setNote("物料已验收，费用待结算");
 	    }
 	    if(status==-1){
-	    	log.setNote("作废原因:"+context);
-			PcmsTovoidItemModel pcmsTovoidItemModel = new PcmsTovoidItemModel();
-			pcmsTovoidItemModel.setContext(context);
-			pcmsTovoidItemModel.setCreate_time(new Date());
-			pcmsTovoidItemModel.setItid(itid);
-			pcmsTovoidItemModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
-			pcmsTovoidItemMapper.insert(pcmsTovoidItemModel);
+	    	if(userRole.equals("1")||userRole.equals("0")||userRole.equals("6")){
+	    		log.setNote("作废原因:"+context);
+	    		PcmsTovoidItemModel pcmsTovoidItemModel = new PcmsTovoidItemModel();
+	    		pcmsTovoidItemModel.setContext(context);
+	    		pcmsTovoidItemModel.setCreate_time(new Date());
+	    		pcmsTovoidItemModel.setItid(itid);
+	    		pcmsTovoidItemModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+	    		pcmsTovoidItemMapper.insert(pcmsTovoidItemModel);
+	    	}else{
+	    		if(queryStatus==0){
+	    			log.setNote("作废原因:"+context);
+		    		PcmsTovoidItemModel pcmsTovoidItemModel = new PcmsTovoidItemModel();
+		    		pcmsTovoidItemModel.setContext(context);
+		    		pcmsTovoidItemModel.setCreate_time(new Date());
+		    		pcmsTovoidItemModel.setItid(itid);
+		    		pcmsTovoidItemModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+		    		pcmsTovoidItemMapper.insert(pcmsTovoidItemModel);
+	    		}else{
+	    			return new ResultVo("-1", "没有作废权限，请联系管理员");
+	    		}
+	    	}
 	    }
 	    log.setCreateTime(new Date());
 	    pcmsItemLogMapper.insertSelective(log);
 
 		//更新为对应状态
-		PcmsItemExample example=new PcmsItemExample();
-		example.createCriteria().andItidEqualTo(itid);
-		PcmsItem item=new PcmsItem();
+//		PcmsItemExample example=new PcmsItemExample();
+//		example.createCriteria().andItidEqualTo(itid);
+//		PcmsItem item=new PcmsItem();
 		item.setStatus(status);
 		item.setUpdateTime(new Date());
-		int i= pcmsItemMapper.updateByExampleSelective(item, example);
+//		int i= pcmsItemMapper.updateByExampleSelective(item, example);
+		int i= pcmsItemMapper.updateByPrimaryKeySelective(item);
 		if(i==1){
 			return ResultVo.get(ResultVo.SUCCESS);
 		}
@@ -435,9 +457,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			pcmsSettlementItemMapper.insertSelective(settIt);
 			
 			
+			
 //			item.setStatus(5);
-//			item.setUpdateTime(new Date());
-//			pcmsItemMapper.updateByPrimaryKeySelective(item);
+			item.setSubclass(PcmsProjectUtil.calculation(item.getItemPrice().toString(), settlement.getDetailMoney(), 2));
+			item.setUpdateTime(new Date());
+			pcmsItemMapper.updateByPrimaryKeySelective(item);
 			
 		}
 		
@@ -924,6 +948,25 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			sett.setStopReson(reson);
 			sett.setStatus(-3);
 			sett.setUpdateTime(new Date());
+			
+			//增加可用余额
+			PcmsSettlementItemExample example=new PcmsSettlementItemExample();
+			example.createCriteria().andSettlementNumberEqualTo(sett.getSettNumber());
+			List<PcmsSettlementItem> settItemList=pcmsSettlementItemMapper.selectByExample(example);
+			for (PcmsSettlementItem settItem : settItemList) {
+				PcmsItem item=pcmsItemMapper.selectByPrimaryKey(settItem.getItid());
+				item.setSubclass(PcmsProjectUtil.calculation(item.getItemPrice().toString(), settItem.getSedetailMoney(),1));
+				pcmsItemMapper.updateByPrimaryKeySelective(item);
+				
+				//增加日志
+				PcmsItemLog log=new PcmsItemLog();
+				log.setItid(item.getItid());
+				log.setNote("报销单驳回,可用余额增加:+"+settItem.getSedetailMoney());
+				log.setStatus(3);
+				log.setCreateTime(new Date());
+				pcmsItemLogMapper.insertSelective(log);
+			}
+			
 			return pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
 		}
 		if(status.equals("已唤醒")){

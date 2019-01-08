@@ -130,6 +130,23 @@ public class PcmsProjectUtil {
 	}
 	
 	
+	//计算剩余可结算金额
+	public static String calculation(String itemPrice,String apply,Integer addOrSub) {
+		//汇总信息
+		BigDecimal successMoney=new BigDecimal(itemPrice);
+		BigDecimal failMoney=new BigDecimal(apply);
+		BigDecimal sumMoney=new BigDecimal(0);
+		
+		if(addOrSub==1){
+			sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+		}else{
+			sumMoney=successMoney.subtract(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
+		}
+		
+		return sumMoney.toString();
+	}
+	
+	
 	//惠州TCL电器销售有限公司(7601)
 	
 	

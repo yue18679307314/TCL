@@ -675,46 +675,47 @@ WHERE
                     javaType="java.util.ArrayList" select="getList1"/>
    </resultMap>
   <select id="getDetailList" parameterType="string" resultMap="projectDetail">
-  	SELECT
-	a.DETAIL_CHANNEL AS detailChannel,
-	a.DETAIL_COST AS detailCost,
-	a.DETAIL_WBS AS detailWbs,
-	a.DETAIL_VENDOR AS detailVendor,
-	a.DETAIL_SUBJECT AS detailSubject,
-	a.DETAIL_ACCOUNT AS detailAccount,
-	a.DETAIL_ID AS detailId,
-	a.DETAIL_AMOUNT AS detailAmount,
-	a.DETAIL_STANDARD AS detailStandard,
-	a.DETAIL_TASK AS detailTask,
-	a.DETAIL_MEMO AS detailMemo
-FROM
-	pcms_project_deatil a
-WHERE
-	REQUEST_ID = #{requestId}
+		 SELECT 
+			a.DETAIL_CHANNEL AS detailChannel,
+			a.DETAIL_COST AS detailCost,
+			a.DETAIL_WBS AS detailWbs,
+			IFNULL(b.vendor_name,a.DETAIL_VENDOR) AS detailVendor,
+			a.DETAIL_SUBJECT AS detailSubject,
+			a.DETAIL_ACCOUNT AS detailAccount,
+			a.DETAIL_ID AS detailId,
+			a.DETAIL_AMOUNT AS detailAmount,
+			a.DETAIL_STANDARD AS detailStandard,
+			a.DETAIL_TASK AS detailTask,
+			a.DETAIL_MEMO AS detailMemo
+		FROM 
+			pcms_project_deatil a 
+		LEFT JOIN pcms_supplier b ON a.DETAIL_VENDOR=b.vendor_id 
+		WHERE 
+			REQUEST_ID = #{requestId}
   </select>
    <select id="getList3" parameterType="string" resultType="com.kuyu.model.pcms.PcmsOthertm">
-  	SELECT
-a.detail_id AS detailId,
-a.request_id AS requestId,
-a.vendor_id AS vendorId,
-a.mrname3,
-a.cost,
-a.unit,
-a.note,
-a.comparison_price AS comparisonPrice,
-a.specifications3,
-a.CHILDREN3_DETAIL AS children3Detail,
-a.CHILDREN3_VENDOR AS children3Vendor,
-a.CHILDREN3_BUILDTIME AS children3Buildtime,
-a.CHILDREN3_COUNT AS children3Count,
-a.CHILDREN3_PRICE AS children3Price,
-a.CHILDREN3_AMOUNT AS children3Amount,
-a.create_time AS createTime,
-a.otid
-FROM
-pcms_othertm_source AS a
-WHERE
-a.detail_id =#{detailId}
+	SELECT
+		a.detail_id AS detailId,
+		a.request_id AS requestId,
+		a.vendor_id AS vendorId,
+		a.mrname3,
+		a.cost,
+		a.unit,
+		a.note,
+		a.comparison_price AS comparisonPrice,
+		a.specifications3,
+		a.CHILDREN3_DETAIL AS children3Detail,
+		a.CHILDREN3_VENDOR AS children3Vendor,
+		a.CHILDREN3_BUILDTIME AS children3Buildtime,
+		a.CHILDREN3_COUNT AS children3Count,
+		a.CHILDREN3_PRICE AS children3Price,
+		a.CHILDREN3_AMOUNT AS children3Amount,
+		a.create_time AS createTime,
+		a.otid
+	FROM
+		pcms_othertm_source AS a
+	WHERE
+		a.detail_id =#{detailId}
   </select>
    
   <select id="getList1" parameterType="string" resultType="com.kuyu.model.pcms.PcmsShowcase">

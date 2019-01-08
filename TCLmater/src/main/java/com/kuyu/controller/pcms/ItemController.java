@@ -129,7 +129,7 @@ public class ItemController extends BaseController{
 	
 	/**
 	 * 更改立项单状态
-	 * //0:未接单 1:已接单制作中 2待验收 3待结算 4已驳回 5结算中 6结算失败 7已结算 -1已作废
+	 * //0:未接单 1:已接单制作中 2待验收  3已验收 4已驳回 5已完结 -1已作废 -2已过期
 	 * @param request
 	 * @return
 	 * @throws Exception 
