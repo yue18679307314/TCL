@@ -54,10 +54,10 @@ public interface ReceiptService extends IService<ReceiptModel> {
     ResultVo getDetail(Integer itid)throws Exception;
 
     /**市场人员驳回验收单*/
-    ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel/*, LoginUserInfo userInfo*/)throws Exception;
+    ResultVo doReject(PcmsRejectLogModel pcmsRejectLogModel, LoginUserInfo userInfo)throws Exception;
 
     /**市场人员验收成功*/
-    ResultVo doRejectSuccess(Integer itid/*, LoginUserInfo userInfo*/)throws Exception;
+    ResultVo doRejectSuccess(Integer itid, LoginUserInfo userInfo)throws Exception;
 
     /**市场人员查看立项物料清单*/
     ResultVo selectPendingMaterial(Integer itid)throws Exception;
@@ -84,7 +84,7 @@ public interface ReceiptService extends IService<ReceiptModel> {
     ResultVo addTransfer(PcmsTransferModel pcmsTransferModel)throws Exception;
 
     /**转办管理*/
-    ResultVo selectTransfer(TransferQuery query/*,LoginUserInfo userInfo*/)throws Exception;
+    ResultVo selectTransfer(TransferQuery query,LoginUserInfo userInfo)throws Exception;
 
     /**反馈*/
     ResultVo addFeedback(FeedbackQuery feedbackQuery)throws Exception;

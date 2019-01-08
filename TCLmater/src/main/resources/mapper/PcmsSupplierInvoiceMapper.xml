@@ -9,4 +9,29 @@
 		(#{itid},#{vendor_id},#{type},#{invoice_code},#{invoice_no},#{invoice_price},#{tax},SYSDATE())
 	</insert>
 
+
+	<select id="selectByItid" resultType="com.kuyu.vo.pcms.SupplierInvoiceVo">
+		SELECT
+		t.invoice_code,
+		t.invoice_no,
+		t.invoice_price,
+		t.id,
+		t.tax,
+		t.type
+		FROM pcms_supplier_invoice t
+		<where>
+			t.itid = #{itid}
+		</where>
+	</select>
+
+	<select id="selectByInvoiceId" resultType="com.kuyu.vo.pcms.SupplierInvoiceImageVo">
+		SELECT
+		t.id,
+		t.image,
+		t.invoice_id
+		FROM pcms_invoice_image t
+		<where>
+			t.invoice_id = #{invoice_id}
+		</where>
+	</select>
 </mapper>

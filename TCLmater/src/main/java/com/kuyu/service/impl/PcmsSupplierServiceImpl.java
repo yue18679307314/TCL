@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.itextpdf.text.DocumentException;
 import com.kuyu.exception.ParamException;
-import com.kuyu.mapper.pcms.PcmsInvoiceImageMapper;
-import com.kuyu.mapper.pcms.PcmsSettlementMapper;
-import com.kuyu.mapper.pcms.PcmsSupplierInvoiceMapper;
-import com.kuyu.mapper.pcms.PcmsSupplierMapper;
+import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.WeixinUserInfo;
 import com.kuyu.model.pcms.*;
@@ -88,6 +85,9 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     @Resource
     private PcmsSettlementMapper pcmsSettlementMapper;
 
+    @Resource
+    private PcmsSupplierUserMapper pcmsSupplierUserMapper;
+
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
         if (StringUtil.isNotNull(pcmsSupplierVo.getCreate_time())
@@ -124,14 +124,14 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         if(null == pcmsSupplierModel1){
             throw new ParamException("公司名称或法人或手机号码不正确");
         }
-/*        PcmsSettlementVo pcmsSettlementVo = pcmsSettlementMapper.selectByVendorId(pcmsSupplierModel1.getVendor_id());
-        if(pcmsSettlementVo != null){
-            throw new ParamException("该供应商已绑定");
-        }*/
-
-/*        PcmsUserModel pcmsUserModel1 = pcmsUserService.selectPcmsUserModel(pcmsUserModel);
-        if(null != pcmsUserModel1){
-            throw new ParamException("公司名称不能为空");
+        //检查用户和供应商是否绑定
+/*        PcmsSupplierUserModel supplierUserModel = pcmsSupplierUserMapper.findByOpenid(openid);
+        if(null != supplierUserModel){
+            throw new ParamException("该用户已绑定供应商");
+        }
+        PcmsSupplierUserModel supplierUserModel1 = pcmsSupplierUserMapper.selectByVendorId(pcmsSupplierModel1.getVendor_id());
+        if(null != supplierUserModel1){
+            throw new ParamException("该供应商已被绑定");
         }*/
         WeixinUserInfo weixinUserInfo = weixinUserInfoService.selectBykey(openid);
         PcmsUserModel pcmsUserModel = new PcmsUserModel();

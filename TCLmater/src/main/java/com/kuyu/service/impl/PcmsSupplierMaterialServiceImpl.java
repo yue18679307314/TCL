@@ -108,8 +108,8 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
     }
 
     @Override
-    public ResultVo queryBySupplierMaterialList(SupplierMaterialResultVo supplierMaterialResultVo/*,LoginUserInfo userInfo*/) throws Exception {
-//        supplierMaterialResultVo.setCompany(userInfo.getEmployeeModel().getCompany());
+    public ResultVo queryBySupplierMaterialList(SupplierMaterialResultVo supplierMaterialResultVo,LoginUserInfo userInfo) throws Exception {
+        supplierMaterialResultVo.setCompany(userInfo.getEmployeeModel().getCompany());
         List<PcmsSupplierMaterialModel> list = baseMapper.queryBySupplierMaterialList(supplierMaterialResultVo);
         return ResultVo.getDataWithSuccess(list);
     }

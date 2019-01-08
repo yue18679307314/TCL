@@ -22,6 +22,8 @@ public class SupplierMaterialResultVo implements Serializable {
     @JsonProperty("company")
     private String company;
 
+    private String employeenumber;
+
     public String getCategory() {
         return category;
     }
@@ -44,5 +46,13 @@ public class SupplierMaterialResultVo implements Serializable {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public String getEmployeenumber() {
+        return employeenumber;
+    }
+
+    public void setEmployeenumber(String employeenumber) {
+        this.employeenumber = employeenumber;
     }
 }

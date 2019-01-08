@@ -15,6 +15,8 @@ public class TransferQuery extends BasePageQuery {
 
     private String person_name;
 
+    private String employeenumber;
+
     public String getVendor_name() {
         return vendor_name;
     }
@@ -37,5 +39,13 @@ public class TransferQuery extends BasePageQuery {
 
     public void setPerson_name(String person_name) {
         this.person_name = person_name;
+    }
+
+    public String getEmployeenumber() {
+        return employeenumber;
+    }
+
+    public void setEmployeenumber(String employeenumber) {
+        this.employeenumber = employeenumber;
     }
 }
