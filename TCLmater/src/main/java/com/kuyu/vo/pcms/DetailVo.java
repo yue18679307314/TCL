@@ -16,6 +16,8 @@ public class DetailVo {
     private String month;
     @ApiModelProperty("供应商名称")
     private String vendor_name;
+    @ApiModelProperty("入账法人名称")
+    private String incorporated_person;
 
     public List<DetailListVo> getDetailListVo() {
         return detailListVo;
@@ -47,5 +49,13 @@ public class DetailVo {
 
     public void setVendor_name(String vendor_name) {
         this.vendor_name = vendor_name;
+    }
+
+    public String getIncorporated_person() {
+        return incorporated_person;
+    }
+
+    public void setIncorporated_person(String incorporated_person) {
+        this.incorporated_person = incorporated_person;
     }
 }

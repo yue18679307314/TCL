@@ -444,6 +444,14 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                 list.add(detailListVo);
             }
         }
+        //获取入账法人名称
+        TpmEmployeeModel employeeModel = null;
+        try {
+            List<TpmEmployeeModel> employeeList = tpmEmployeeMapper.getEmployeeListByCompany(pcmsReconciliationModel.getCompany());
+            employeeModel = employeeList.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String month = pcmsReconciliationModel.getMonth()+"-01";
         //上个月最后一天
         String endDate = getMonthEndDay(month);
@@ -454,6 +462,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         detailVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
         detailVo.setDetailListVo(list);
         detailVo.setMonth(firstDate+"~"+endDate);
+        detailVo.setIncorporated_person(employeeModel.getOrg_name());
         return ResultVo.getDataWithSuccess(detailVo);
     }
 
