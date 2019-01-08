@@ -27,4 +27,6 @@ public interface TpmEmployeeMapper extends BaseMapper<TpmEmployeeModel>{
 	public TpmEmployeeModel getTpmEmployeebyPersonCode(String person_code);
 
 	public List<RequestUserVo> getRequestNameList(@Param("orgCode") String orgCode,@Param("searchKey") String searchKey);
+
+	List<TpmEmployeeModel> getEmployeeListByCompany(@Param("company") String company);
 }

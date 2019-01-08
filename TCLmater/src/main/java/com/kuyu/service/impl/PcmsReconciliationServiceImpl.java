@@ -310,7 +310,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         //获取入账法人名称
         TpmEmployeeModel employeeModel = null;
         try {
-            employeeModel = tpmEmployeeService.getTpmEmployeeByTem(userInfo.getEmployeeModel());
+            List<TpmEmployeeModel> employeeList = tpmEmployeeMapper.getEmployeeListByCompany(userInfo.getEmployeeModel().getCompany());
+            employeeModel = employeeList.get(0);
         } catch (Exception e) {
             e.printStackTrace();
         }

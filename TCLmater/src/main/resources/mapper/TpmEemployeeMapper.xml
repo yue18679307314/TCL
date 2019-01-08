@@ -155,5 +155,16 @@
 		
 		</if>
 	</select>
+
+	<select id="getEmployeeListByCompany" resultType="com.kuyu.model.TpmEmployeeModel">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tpm_employee
+		<where>
+			<if test="company != null and company != ''">
+				AND company = #{company}
+			</if>
+		</where>
+	</select>
 	
 </mapper>
