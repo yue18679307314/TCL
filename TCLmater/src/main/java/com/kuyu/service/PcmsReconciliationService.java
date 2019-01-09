@@ -24,7 +24,7 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     //分页
     ResultVo findReconciliationList(LoginUserInfo userInfo,ReconciliationQuery query)throws Exception;
     //往来数据列表
-    ResultVo selectCurrentDetail(Integer id,LoginUserInfo userInfo);
+    ResultVo selectCurrentDetail(Integer id,LoginUserInfo userInfo)throws Exception;
     //新增往来数据
     ResultVo addCurrentDetail(PcmsCurrentDetailModel pcmsCurrentDetailModel);
     //确定生成

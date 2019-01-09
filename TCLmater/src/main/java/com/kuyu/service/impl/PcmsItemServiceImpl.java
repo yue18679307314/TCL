@@ -469,6 +469,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			log.setNote("立项单结算,可用余额减去:-"+settlement.getDetailMoney());
 			log.setStatus(3);
 			log.setCreateTime(new Date());
+
 			pcmsItemLogMapper.insertSelective(log);
 			
 		}

@@ -616,6 +616,7 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
         pcmsRejectLogModel.setCreate_time(new Date());
         pcmsRejectLogModel.setType(1);
         pcmsItem.setStatus(3);
+        pcmsRejectLogModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
         pcmsItemMapper.updateByPrimaryKey(pcmsItem);
         pcmsRejectLogMapper.insert(pcmsRejectLogModel);
         return ResultVo.get(ResultVo.SUCCESS);
@@ -634,15 +635,15 @@ public class ReceiptServiceImpl extends ServiceImpl<ReceiptMapper, ReceiptModel>
     }
 
     @Override
-    public ResultVo updatePendingMaterialFor(List<PcmsPendingMaterialModel> list) throws Exception {
+    public ResultVo updatePendingMaterialFor(List<PcmsPendingMaterialVo> list) throws Exception {
         if(list != null || list.size()>0){
-            for(PcmsPendingMaterialModel pcmsPendingMaterialModel : list){
+            for(PcmsPendingMaterialVo pcmsPendingMaterialModel : list){
                 PcmsPendingMaterialModel pcmsPendingMaterialModel1 = pcmsPendingMaterialMapper.selectId(pcmsPendingMaterialModel.getId());
                 pcmsPendingMaterialModel1.setCategory(pcmsPendingMaterialModel.getCategory());
                 pcmsPendingMaterialModel1.setSpecifications(pcmsPendingMaterialModel.getSpecifications());
                 pcmsPendingMaterialModel1.setRanges(pcmsPendingMaterialModel.getRanges());
                 pcmsPendingMaterialModel1.setNumber(pcmsPendingMaterialModel.getNumber());
-                pcmsPendingMaterialModel1.setAll_price(pcmsPendingMaterialModel.getAll_price());
+                pcmsPendingMaterialModel1.setAll_price(Double.valueOf(pcmsPendingMaterialModel.getAll_price()));
                 pcmsPendingMaterialMapper.updateById(pcmsPendingMaterialModel1);
             }
         }

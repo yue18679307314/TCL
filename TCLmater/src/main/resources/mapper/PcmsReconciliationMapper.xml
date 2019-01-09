@@ -41,18 +41,7 @@
 
 
 	<select id="selectCurrentDetail" resultType="com.kuyu.vo.pcms.CurrentDetailModelVo">
-/*		SELECT
-		pp.fssc_bill,
-		pp.pay_amount AS increase_amount,
-		pr.id AS pcms_reconciliation_id,
-		ppd1.financial_time AS create_date,
-		(SELECT SUM(ppd.`financial_money`) FROM pcms_payment_detail ppd WHERE ppd.fssc_bill = pp.fssc_bill AND
-		(ppd.financial_status = 8 AND DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m'))) AS pay_amount,
-		pp.`recomment_date` AS pr_time
-		FROM pcms_reconciliation pr
-		LEFT JOIN pcms_payment pp ON pp.vendor_id = pr.vendor_id
-		LEFT JOIN pcms_payment_detail ppd1 ON ppd1.fssc_bill = pp.fssc_bill*/
-		SELECT
+		<!-- SELECT
 		pp.fssc_bill,
 		pp.pay_amount AS increase_amount,
 		pr.id AS pcms_reconciliation_id,
@@ -65,6 +54,22 @@
 		,0)AS pay_amount,
 		pp.`recomment_date` AS pr_time FROM
 		pcms_reconciliation pr
+		LEFT JOIN pcms_payment pp ON pp.vendor_id = pr.vendor_id
+		LEFT JOIN pcms_payment_detail ppd1 ON ppd1.fssc_bill = pp.fssc_bill -->
+		SELECT
+		pp.fssc_bill,
+		pp.pay_amount AS increase_amount,
+		pr.id AS pcms_reconciliation_id,
+		(SELECT ppd2.`financial_time`
+		FROM pcms_payment_detail ppd2
+		WHERE ppd2.fssc_bill = pp.fssc_bill
+		AND (ppd2.financial_status = 8 AND DATE_FORMAT(ppd2.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')) GROUP BY pp.fssc_bill ) AS  create_date,
+		IFNULL( (SELECT SUM(ppd.`financial_money`)
+		FROM pcms_payment_detail ppd
+		WHERE ppd.fssc_bill = pp.fssc_bill
+		AND (ppd.financial_status = 8 AND DATE_FORMAT(ppd.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m'))) ,0)AS pay_amount,
+		pp.`recomment_date` AS pr_time
+		FROM pcms_reconciliation pr
 		LEFT JOIN pcms_payment pp ON pp.vendor_id = pr.vendor_id
 		LEFT JOIN pcms_payment_detail ppd1 ON ppd1.fssc_bill = pp.fssc_bill
 		<where>

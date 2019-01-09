@@ -122,8 +122,10 @@ public class PcmsMarketController extends BaseController {
     @GetMapping("/updatePendingMaterialFor")
     public ResultVo updatePendingMaterialFor(@RequestParam(value = "vendor_id") String vendor_id)throws Exception{
         String s = vendor_id.replace("&quot;","\"");
+        String str = s.replace("&lt;","<");
+        System.out.println(str);
         ObjectMapper mapper = new ObjectMapper();
-        List<PcmsPendingMaterialModel> list = mapper.readValue(s, new TypeReference<List<PcmsPendingMaterialModel>>() {});
+        List<PcmsPendingMaterialVo> list = mapper.readValue(str, new TypeReference<List<PcmsPendingMaterialVo>>() {});
         return receiptService.updatePendingMaterialFor(list);
     }
 

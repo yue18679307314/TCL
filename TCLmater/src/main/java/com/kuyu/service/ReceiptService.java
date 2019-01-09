@@ -7,6 +7,7 @@ import com.kuyu.model.pcms.PcmsRejectLogModel;
 import com.kuyu.model.pcms.PcmsTransferModel;
 import com.kuyu.model.pcms.ReceiptModel;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.PcmsPendingMaterialVo;
 import com.kuyu.vo.pcms.PcmsShowcaseVo;
 import com.kuyu.vo.query.FeedbackQuery;
 import com.kuyu.vo.query.ReceiptQuery;
@@ -63,7 +64,7 @@ public interface ReceiptService extends IService<ReceiptModel> {
     ResultVo selectPendingMaterial(Integer itid)throws Exception;
 
     /**市场人员修改立项物料清单*/
-    ResultVo updatePendingMaterialFor(List<PcmsPendingMaterialModel> list)throws Exception;
+    ResultVo updatePendingMaterialFor(List<PcmsPendingMaterialVo> list)throws Exception;
 
     /**根据ITID查询可转办的物料清单*/
     ResultVo selectPendingMaterialByItid(Integer itid)throws Exception;

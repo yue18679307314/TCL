@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
+import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.vo.ReconciliationVo;
@@ -45,6 +47,16 @@ public class ReconciliationController extends BaseController {
         pcmsReconciliationService.automaticDetailList();
     }
 
+
+    @ApiOperation(value = "自动生成未结明细记录")
+    @GetMapping("/bbb")
+    public ResultVo bbb() throws Exception {
+        LoginUserInfo loginUserInfo = new LoginUserInfo();
+        TpmEmployeeModel tpmEmployeeModel = new TpmEmployeeModel();
+        tpmEmployeeModel.setCompany("7601");
+        loginUserInfo.setEmployeeModel(tpmEmployeeModel);
+        return pcmsReconciliationService.selectCurrentDetail(15,loginUserInfo);
+    }
     /**
      * 对账分页列表
      * @param query
