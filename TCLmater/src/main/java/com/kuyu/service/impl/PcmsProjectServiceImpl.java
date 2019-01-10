@@ -400,9 +400,9 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			
 		}
 		//申请总金额和可用总金额
-		Map<String,String> money=pcmsProjectMapper.getSumMoney(requestId);
-		result.setSumMoney(money.get("sumMoney"));
-		result.setSumSubclass(money.get("sumSubclass"));
+		Map<String,Double> money=pcmsProjectMapper.getSumMoney(requestId);
+		result.setSumMoney(money.get("sumMoney").toString());
+		result.setSumSubclass(money.get("sumSubclass").toString());
 		return result;
 	}
 

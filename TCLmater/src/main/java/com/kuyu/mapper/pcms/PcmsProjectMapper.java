@@ -53,5 +53,5 @@ public interface PcmsProjectMapper {
 
 	List<PcmsProject> selectByEndTime(String synDate);
 
-	Map<String, String> getSumMoney(String requestId);
+	Map<String,Double> getSumMoney(String requestId);
 }
