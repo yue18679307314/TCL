@@ -762,7 +762,7 @@ a.detail_id =#{detailId}
         <result property="projectedSalesMoney" column="projected_sales_money"/>
         <result property="estimatedCostRate" column="estimated_cost_rate"/>
         <result property="note" column="note"/>
-        <collection  property="maList" column="projectId" ofType="com.kuyu.vo.pcms.MaterialResult"
+        <collection  property="maList" column="project_id" ofType="com.kuyu.vo.pcms.MaterialResult"
                     javaType="java.util.ArrayList" select="getMaList"/>
    </resultMap>
   
@@ -808,7 +808,7 @@ a.detail_id =#{detailId}
 		a.note
 		FROM
 		pcms_material_source AS a
-		WHERE activity_id=#{projectId}
+		WHERE activity_id=#{project_id}
   </select>
   
   <select id="getShopList" parameterType="string" resultType="com.kuyu.model.pcms.PcmsShop">
