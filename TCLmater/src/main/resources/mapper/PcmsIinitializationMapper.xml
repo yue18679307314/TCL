@@ -44,7 +44,7 @@
     </select>
 
     <select id="selectByMonth" resultType="com.kuyu.model.pcms.PcmsIinitializationModel">
-        SELECT
+ <!--       SELECT
         pr.initial_balance,
         pr.balance,
         pr.company,
@@ -54,9 +54,39 @@
         FROM pcms_initialization pr
         <where>
             <if test="month !=null and month !=''">
-                pr.month = month AND pr.balance = 0
+                pr.month = month
+            </if>
+        </where>-->
+
+        SELECT
+        a.initial_balance,
+        a.balance,
+        a.company,
+        a.vendor_id,
+        a.month,
+        a.type,
+        a.pay_amount,
+        a.financial_money,
+        a.pcms_reconciliation_id,
+        a.create_time,
+        a.id FROM
+        (SELECT * FROM `pcms_initialization` t
+        <where>
+            <if test="twoMonth !=null and twoMonth !=''">
+                t.`month` = #{twoMonth}
             </if>
         </where>
+        )
+        a
+        WHERE
+        NOT EXISTS
+        (SELECT 1 FROM (SELECT * FROM `pcms_initialization` f
+        <where>
+            <if test="month !=null and month !=''">
+                f.`month` = #{month}
+            </if>
+        </where>
+        ) d WHERE a.`vendor_id` = d.`vendor_id`)
     </select>
 
 

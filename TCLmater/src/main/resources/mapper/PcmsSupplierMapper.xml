@@ -156,6 +156,9 @@
 				AND te.person_code =
 				#{params.person_code,jdbcType=VARCHAR}
 			</if>
+			<if test="params.city !=null and params.city !=''">
+				and t.city LIKE '%${params.city}%'
+			</if>
 			and t.del_flag = 'n' and t.del_comp='n'
 		</where>
 		ORDER BY t.create_time DESC
