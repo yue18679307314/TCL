@@ -15,5 +15,5 @@ public interface PcmsIinitializationMapper extends BaseMapper<PcmsIinitializatio
 
     PcmsIinitializationModel selectByReconciliationId(@Param("reconciliationId") Integer reconciliationId);
 
-    List<PcmsIinitializationModel> selectByMonth(@Param("month") String month);
+    List<PcmsIinitializationModel> selectByMonth(@Param("month") String month,@Param("twoMonth") String twoMonth);
 }

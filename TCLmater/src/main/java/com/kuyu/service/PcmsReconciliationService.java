@@ -11,6 +11,7 @@ import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsReconciliationVo;
 import com.kuyu.vo.pcms.ReplyMessageVo;
 import com.kuyu.vo.query.ReconciliationQuery;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -55,6 +56,8 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     ResultVo selectDetailList(Integer id);
     //查看物料信息
     ResultVo selectPendingMaterial(Integer id);
+    //同步期初余额
+    public ResultVo synchronousBalance(MultipartFile file,LoginUserInfo userInfo) throws Exception;
     //有付款记录,但没有点击对账的,自动对账
     void automaticReconciliation();
     //自动统计表上上个月余额为0的

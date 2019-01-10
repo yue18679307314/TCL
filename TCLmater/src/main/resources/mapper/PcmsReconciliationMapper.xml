@@ -138,10 +138,16 @@
 		FROM
 		pcms_reconciliation t
 		LEFT JOIN pcms_supplier_company psc ON psc.vendor_id = t.vendor_id
+<!--		<where>
+			DATE_FORMAT(t.create_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH),'%Y-%m')
+
+		</where>-->
 		<where>
-			DATE_FORMAT(pr.create_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 MONTH),'%Y-%m')
-			AND pr.state=0
+			<if test="month !=null and month !=''">
+				t.month = #{month}
+			</if>
 		</where>
+		AND t.state=0 and t.type=0
 	</select>
 
 	<select id="selectDetailList" resultType="com.kuyu.vo.pcms.DetailListVo">

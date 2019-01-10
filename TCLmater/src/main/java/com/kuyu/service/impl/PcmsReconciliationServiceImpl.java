@@ -2,26 +2,42 @@ package com.kuyu.service.impl;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsReconciliationService;
+import com.kuyu.service.PcmsSupplierCompanyService;
 import com.kuyu.service.TpmEmployeeService;
 import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.PcmsProjectUtil;
+import com.kuyu.util.StringUtil;
 import com.kuyu.vo.PcmsSupplierVo;
 import com.kuyu.vo.ReconciliationVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.*;
 import com.kuyu.vo.query.ReconciliationQuery;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -59,6 +75,15 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     private UnspecifiedDetailsMapper unspecifiedDetailsMapper;
     @Resource
     private PcmsSupplierUserMapper pcmsSupplierUserMapper;
+    @Resource
+    private PcmsInitializationLogMapper pcmsInitializationLogMapper;
+    @Resource
+    private PcmsSupplierCompanyService pcmsSupplierCompanyService;
+
+    @Value("${excel.path}")
+    private String filePath;
+    @Value("${excel.url}")
+    private String fileUrl;
     @Override
     public void selectByTime() {
         //查询上个月的付款记录
@@ -110,7 +135,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             String firstDate = getMonthFirstDay(month);
             //查看上个月统计的期初期末余额
             PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
-            BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getInitial_balance());
+            BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getBalance());
             for(CurrentDetailModelVo currentDetailModelVo : list){
                 //本期增加金额
                 BigDecimal increase_amount = new BigDecimal(currentDetailModelVo.getIncrease_amount());
@@ -124,7 +149,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             currentDetailVo.setDate(firstDate+"~"+endDate);
             currentDetailVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
             currentDetailVo.setList(list);
-            currentDetailVo.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
+            currentDetailVo.setInitial_balance(pcmsIinitializationModel.getBalance());
             return ResultVo.getDataWithSuccess(currentDetailVo);
         }else{
             PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(id);
@@ -137,7 +162,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
 
             //查看上个月统计的期初期末余额
             PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
-            BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getInitial_balance());
+            BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getBalance());
 
             //组装往来数据
             List<CurrentDetailModelVo> currentDetailModelVoList = pcmsReconciliationMapper.selectCurrentDetail(id);
@@ -147,8 +172,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                     BeanUtils.copyProperties(currentDetailModelVo,currentDetailModelVo1);
                     currentDetailModelVo1.setType(0);
                     if(currentDetailModelVo.getCreate_date() == null && currentDetailModelVo.getPr_time() == null){
-                        currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
-                        currentDetailModelVo1.setBalance(pcmsIinitializationModel.getInitial_balance());
+                        currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getBalance());
+                        currentDetailModelVo1.setBalance(pcmsIinitializationModel.getBalance());
                         currentDetailModelVo1.setIncrease_amount("0");
                         currentDetailModelVo1.setPay_amount("0");
                         currentDetailModelVo1.setCreate_date("--");
@@ -158,7 +183,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                         currentDetailModelVo1.setBalance(initialBalance.subtract(amount).toString());
                         currentDetailModelVo1.setCreate_date(currentDetailModelVo.getPr_time());
                         currentDetailModelVo1.setIncrease_amount(amount.toString());
-                        currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
+                        currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getBalance());
                         currentDetailModelVo1.setPay_amount("0");
                         initialBalance = initialBalance.subtract(amount);
                     }
@@ -175,7 +200,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                         }
                         currentDetailModelVo1.setIncrease_amount(amount.toString());
                         currentDetailModelVo1.setPay_amount(payAmout.toString());
-                        currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
+                        currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getBalance());
                         currentDetailModelVo1.setBalance(initialBalance.add(payAmout).subtract(amount).toString());
                         PcmsPaymentDetailVo pcmsPaymentDetail = pcmsReconciliationMapper.selectByFssc(currentDetailModelVo.getFssc_bill());
                         currentDetailModelVo1.setCreate_date(pcmsPaymentDetail.getFinancialTime().substring(0,10));
@@ -184,7 +209,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                     if(currentDetailModelVo.getCreate_date() != null && currentDetailModelVo.getPr_time() == null){
                         BigDecimal payAmout = new BigDecimal(currentDetailModelVo.getPay_amount());
                         currentDetailModelVo1.setIncrease_amount("0");
-                        currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
+                        currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getBalance());
                         currentDetailModelVo1.setPay_amount(payAmout.toString());
                         currentDetailModelVo1.setBalance(initialBalance.add(payAmout).toString());
                         initialBalance = initialBalance.add(payAmout);
@@ -200,7 +225,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                 pcmsCurrentDetailMapper.insert(pcmsCurrentDetailModel);
             }
             list.sort((CurrentDetailModelVo h1, CurrentDetailModelVo h2) -> h1.getCreate_date().compareTo(h2.getCreate_date()));
-            BigDecimal initialBalance1 = new BigDecimal(pcmsIinitializationModel.getInitial_balance());
+            BigDecimal initialBalance1 = new BigDecimal(pcmsIinitializationModel.getBalance());
             for(CurrentDetailModelVo currentDetailModelVo : list){
                 //本期增加金额
                 BigDecimal increase_amount = new BigDecimal(currentDetailModelVo.getIncrease_amount());
@@ -218,7 +243,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             currentDetailVo.setDate(firstDate+"~"+endDate);
             currentDetailVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
             currentDetailVo.setList(list);
-            currentDetailVo.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
+            currentDetailVo.setInitial_balance(pcmsIinitializationModel.getBalance());
             return ResultVo.getData(ResultVo.SUCCESS,currentDetailVo);
         }
     }
@@ -340,7 +365,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         }
         //获取往来数据信息
         List<CurrentDetailModelVo> list = pcmsReconciliationMapper.selectCurrent(id);
-        BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getInitial_balance());
+        BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getBalance());
         for(CurrentDetailModelVo currentDetailModelVo : list){
             //本期增加金额
             BigDecimal increase_amount = new BigDecimal(currentDetailModelVo.getIncrease_amount());
@@ -528,15 +553,194 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     }
 
     @Override
+    public ResultVo synchronousBalance(MultipartFile file, LoginUserInfo userInfo) throws Exception {
+        String xls = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")).toLowerCase();
+        String paths = StringUtil.getUUID();
+        String nameXls = paths+xls;
+        String finalPath = filePath+ "/"+nameXls;
+        String suffix = file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
+        File tempfile = new File(filePath);
+        if(!tempfile.exists()){
+            tempfile.mkdirs();
+        }
+        File newFile = new File(finalPath);
+        file.transferTo(newFile);
+        Map<String, String> map  = readExcel(finalPath);
+        if(map.size() == 0 || null == map){
+            newFile.delete();
+            throw new ParamException("数据为空");
+        }
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String value = entry.getValue();
+            PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
+            String[] psm = value.split(",");
+            for (int i = 0; i < psm.length; i++) {
+                if(psm[i].equals("NULL")) {
+                    psm[i] = null;
+                }
+            }
+            PcmsInitializationLogModel pcmsInitializationLog = new PcmsInitializationLogModel();
+            pcmsInitializationLog.setOrg_code(psm[0]);
+            pcmsInitializationLog.setAccounting_company(psm[1]);
+            pcmsInitializationLog.setCompany(psm[2]);
+            pcmsInitializationLog.setCompany_name(psm[3]);
+            pcmsInitializationLog.setSubject(psm[4]);
+            pcmsInitializationLog.setSubject_name(psm[5]);
+            pcmsInitializationLog.setInitial_balance(psm[6]);
+            pcmsInitializationLog.setVendor_id(psm[7]);
+            pcmsInitializationLog.setVendor_name(psm[8]);
+            pcmsInitializationLog.setCreate_time(new Date());
+
+
+            PcmsIinitializationModel pcmsIinitialization = new PcmsIinitializationModel();
+            pcmsIinitialization.setVendor_id(psm[7]);
+            pcmsIinitialization.setCompany(psm[0]);
+            pcmsIinitialization.setBalance(psm[6]);
+//            pcmsIinitialization.setInitial_balance(psm[6]);
+            pcmsIinitialization.setCreate_time(new Date());
+            pcmsIinitialization.setFinancial_money("0");
+            pcmsIinitialization.setPay_amount("0");
+            pcmsIinitialization.setBalance("0");
+            pcmsIinitialization.setMonth(getLastMonth());
+
+
+            PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
+            pcmsSupplierCompanyModel.setCompany(psm[0]);
+            pcmsSupplierCompanyModel.setVendor_id(psm[7]);
+            pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
+
+
+            PcmsSupplierVo pcmsSupplier = new PcmsSupplierVo();
+            pcmsSupplier.setVendor_id(psm[7]);
+            pcmsSupplier.setVendor_name(psm[8]);
+
+            if(null != psm[7]){
+                pcmsInitializationLogMapper.insert(pcmsInitializationLog);
+                pcmsIinitializationMapper.insert(pcmsIinitialization);
+                pcmsSupplierCompanyService.insertPcmsSupplierCompany(pcmsSupplierCompanyModel);
+                pcmsSupplierMapper.insertPcmsSupplier(pcmsSupplier);
+            }
+        }
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+    public static Map<String, String> readExcel(String filePath) {
+        Map<String, String> map = new HashMap<String, String>();
+        Workbook workbook = null;
+        // 创建对Excel工作簿文件的引用
+        try {
+            // filePath是文件地址。
+            boolean isExcel2003 = filePath.toLowerCase().endsWith("xls") ? true : false;
+            if (isExcel2003) {
+                workbook = new HSSFWorkbook(new FileInputStream(new File(filePath)));
+            } else {
+                // workbook = new XSSFWorkbook(new FileInputStream(new File(filePath)));
+                FileInputStream input = new FileInputStream(new File(filePath)); // 读取的文件路径
+                workbook = new XSSFWorkbook(new BufferedInputStream(input));
+            }
+
+            Sheet sheet = workbook.getSheetAt(0); // 创建对工作表的引用
+
+            // 获取到Excel文件中的所有行数
+            int rows = sheet.getPhysicalNumberOfRows();
+            int max_cells = 0;
+            // 获取最长的列，在实践中发现如果列中间有空值的话，那么读到空值的地方就停止了。所以我们需要取得最长的列。
+            //如果每个列正好都有一个空值得话，通过这种方式获得的列长会比真实的列要少一列。所以我自己会在将要倒入数据库中的EXCEL表加一个表头
+            // //防止列少了，而插入数据库中报错。
+            for (int i = 0; i < rows; i++) {
+                Row row = sheet.getRow(i);
+                if (row != null) {
+                    int cells = row.getPhysicalNumberOfCells();
+                    if (max_cells < cells) {
+                        max_cells = cells;
+                    }
+
+                }
+            }
+            // 遍历行
+            for (int i = 1; i < rows; i++) {//从1开始循环，去掉表头
+                // 读取左上端单元格
+                Row row = sheet.getRow(i);
+                // 行不为空
+                if (row != null) {
+                    String value = "";
+                    // 遍历列
+                    String b_id = null;
+                    for (int j = 0; j < max_cells; j++) {
+                        // 获取到列的值
+                        Cell cell = row.getCell(j);// 把所有是空值的都换成NULL
+                        if (cell == null) {
+                            value += "NULL,";
+                        } else {
+                            switch (cell.getCellType()) {// 如果是公式的话，就读取得出的值
+                                case HSSFCell.CELL_TYPE_FORMULA:
+                                    try {
+                                        value += "'" + String.valueOf(cell.getNumericCellValue()).replaceAll("'", "")
+                                                + "',";
+                                    } catch (IllegalStateException e) {
+                                        value += "'" + String.valueOf(cell.getRichStringCellValue()).replaceAll("'", "")
+                                                + "',";
+                                    }
+                                    break;
+                                case HSSFCell.CELL_TYPE_NUMERIC:
+                                    // 如果有日期的话，那么就读出日期格式
+                                    // 如果是数字的话，就写出数字格式
+                                    if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                                        SimpleDateFormat dff = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        Date date2 = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
+                                        String date1 = dff.format(date2);
+                                        value += "'" + date1.replaceAll("'", "") + "',";
+
+                                    } else {
+                                        value += "'" + cell.getNumericCellValue() + "',";
+                                    }
+                                    break;
+                                case HSSFCell.CELL_TYPE_STRING:
+                                    String ss = cell.getStringCellValue().replaceAll("'", "");// 如果文本有空值的话，就把它写成null
+                                    if (ss == null || "".equals(ss)) {
+                                        value += "NULL,";
+                                    } else {
+                                        value += "'" + cell.getStringCellValue().replaceAll("'", "") + "',";
+                                    }
+
+                                    break;
+                                default:
+                                    value += "NULL,";
+                                    break;
+                            }
+                        }
+
+                        if (j == 0) {
+
+                            b_id = value.substring(1, value.length() - 2);
+                        }
+
+                    }
+
+                    String valueresult = value.substring(0, value.length() - 1);
+                    valueresult = valueresult.replaceAll("'", "");
+                    map.put(StringUtil.getUUID(), valueresult);
+                }
+            }
+        } catch (Exception e) {
+            File newFile = new File(filePath);
+            newFile.delete();
+            e.printStackTrace();
+        }
+        return map;
+    }
+    @Override
     public void automaticReconciliation() {
         List<CurrentDetailModelVo> list = new ArrayList<CurrentDetailModelVo>();
-        List<PcmsReconciliationModel> list1 = pcmsReconciliationMapper.selectByState();
+        List<PcmsReconciliationModel> list1 = pcmsReconciliationMapper.selectByState(getLastMonth());
         if(list1.size()>0){
             for(PcmsReconciliationModel pcmsReconciliationModel : list1){
                 //查看上个月统计的期初期末余额
                 PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(pcmsReconciliationModel.getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+                if(null == pcmsIinitializationModel){
+                    throw new ParamException("初期余额不存在");
+                }
                 //期初余额
-                BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getInitial_balance());
+                BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getBalance());
                 //余额
                 BigDecimal balance = BigDecimal.ZERO;
                 //本期金额
@@ -552,8 +756,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                         BeanUtils.copyProperties(currentDetailModelVo,currentDetailModelVo1);
                         currentDetailModelVo1.setType(0);
                         if(currentDetailModelVo.getCreate_date() == null && currentDetailModelVo.getPr_time() == null){
-                            currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
-                            currentDetailModelVo1.setBalance(pcmsIinitializationModel.getInitial_balance());
+                            currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getBalance());
+                            currentDetailModelVo1.setBalance(pcmsIinitializationModel.getBalance());
                             currentDetailModelVo1.setIncrease_amount("0");
                             currentDetailModelVo1.setPay_amount("0");
                             currentDetailModelVo1.setCreate_date("--");
@@ -563,7 +767,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                             currentDetailModelVo1.setBalance(initialBalance.subtract(amount).toString());
                             currentDetailModelVo1.setCreate_date(currentDetailModelVo.getPr_time());
                             currentDetailModelVo1.setIncrease_amount(amount.toString());
-                            currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
+                            currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getBalance());
                             currentDetailModelVo1.setPay_amount("0");
                             initialBalance = initialBalance.subtract(amount);
                         }
@@ -572,7 +776,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                             BigDecimal payAmout = new BigDecimal(currentDetailModelVo.getPay_amount());
                             currentDetailModelVo1.setIncrease_amount(amount.toString());
                             currentDetailModelVo1.setPay_amount(payAmout.toString());
-                            currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
+                            currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getBalance());
                             currentDetailModelVo1.setBalance(initialBalance.add(payAmout).subtract(amount).toString());
                             PcmsPaymentDetailVo pcmsPaymentDetail = pcmsReconciliationMapper.selectByFssc(currentDetailModelVo.getFssc_bill());
                             currentDetailModelVo1.setCreate_date(pcmsPaymentDetail.getFinancialTime().substring(0,10));
@@ -581,7 +785,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                         if(currentDetailModelVo.getCreate_date() != null && currentDetailModelVo.getPr_time() == null){
                             BigDecimal payAmout = new BigDecimal(currentDetailModelVo.getPay_amount());
                             currentDetailModelVo1.setIncrease_amount("0");
-                            currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getInitial_balance());
+                            currentDetailModelVo1.setInitial_balance(pcmsIinitializationModel.getBalance());
                             currentDetailModelVo1.setPay_amount(payAmout.toString());
                             currentDetailModelVo1.setBalance(initialBalance.add(payAmout).toString());
                             initialBalance = initialBalance.add(payAmout);
@@ -602,32 +806,35 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                     pcmsCurrentDetailMapper.insert(pcmsCurrentDetailModel);
                 }
                 PcmsIinitializationModel pcmsIinitializationModel1 = new PcmsIinitializationModel();
-                pcmsIinitializationModel1.setMonth(getLastTwoMonth());
+                pcmsIinitializationModel1.setMonth(getLastMonth());
                 pcmsIinitializationModel1.setVendor_id(pcmsReconciliationModel.getVendor_id());
-                pcmsIinitializationModel1.setInitial_balance(initialBalance.toString());
-                pcmsIinitializationModel1.setBalance(balance.toString());
+                pcmsIinitializationModel1.setInitial_balance(pcmsIinitializationModel.getBalance());
+                pcmsIinitializationModel1.setBalance(initialBalance.toString());
                 pcmsIinitializationModel1.setPay_amount(pay_amount.toString());
                 pcmsIinitializationModel1.setFinancial_money(financial_money.toString());
                 pcmsIinitializationModel1.setCreate_time(new Date());
                 pcmsIinitializationModel1.setPcms_reconciliation_id(pcmsReconciliationModel.getId());
                 pcmsIinitializationModel1.setCompany(pcmsReconciliationModel.getCompany());
                 pcmsIinitializationMapper.insert(pcmsIinitializationModel1);
+                pcmsReconciliationModel.setType(1);
+                pcmsReconciliationMapper.updateById(pcmsReconciliationModel);
             }
         }
     }
 
     @Override
     public void automaticStatistics() {
-        String month = getMonthDate(getLastTwoMonth()+"-01").substring(0,7);
-        List<PcmsIinitializationModel> list = pcmsIinitializationMapper.selectByMonth(month);
+//        String month = getMonthDate(getLastTwoMonth()+"-01").substring(0,7);
+        List<PcmsIinitializationModel> list = pcmsIinitializationMapper.selectByMonth(getLastMonth(),getLastTwoMonth());
         for(PcmsIinitializationModel pcmsIinitializationModel : list){
             PcmsIinitializationModel pcmsIinitializationModel1 = new PcmsIinitializationModel();
-            pcmsIinitializationModel1.setCompany(pcmsIinitializationModel.getCompany());
+            BeanUtils.copyProperties(pcmsIinitializationModel,pcmsIinitializationModel1);
+            /*cmsIinitializationModel1.setCompany(pcmsIinitializationModel.getCompany());
             pcmsIinitializationModel1.setVendor_id(pcmsIinitializationModel.getVendor_id());
             pcmsIinitializationModel1.setBalance("0");
             pcmsIinitializationModel1.setFinancial_money("0");
             pcmsIinitializationModel1.setPay_amount("0");
-            pcmsIinitializationModel1.setInitial_balance("0");
+            pcmsIinitializationModel1.setInitial_balance("0");*/
             pcmsIinitializationModel1.setMonth(getLastMonth());
             pcmsIinitializationMapper.insert(pcmsIinitializationModel1);
         }

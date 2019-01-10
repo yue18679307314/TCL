@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
+import com.kuyu.exception.ParamException;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsReconciliationService;
+import com.kuyu.util.ResultVoUtils;
 import com.kuyu.vo.ReconciliationVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.*;
@@ -15,6 +17,7 @@ import com.kuyu.vo.query.ReconciliationQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -47,15 +50,24 @@ public class ReconciliationController extends BaseController {
         pcmsReconciliationService.automaticDetailList();
     }
 
+    /**
+     * 有付款记录,但没有点击对账的,自动对账
+     * @throws Exception
+     */
+    @ApiOperation(value = "有付款记录,但没有点击对账的,自动对账")
+    @GetMapping("/automaticReconciliation")
+    public void automaticReconciliation() throws Exception {
+        pcmsReconciliationService.automaticReconciliation();
+    }
 
-    @ApiOperation(value = "自动生成未结明细记录")
-    @GetMapping("/bbb")
-    public ResultVo bbb() throws Exception {
-        LoginUserInfo loginUserInfo = new LoginUserInfo();
-        TpmEmployeeModel tpmEmployeeModel = new TpmEmployeeModel();
-        tpmEmployeeModel.setCompany("7601");
-        loginUserInfo.setEmployeeModel(tpmEmployeeModel);
-        return pcmsReconciliationService.selectCurrentDetail(15,loginUserInfo);
+    /**
+     * 自动统计表上上个月余额为0的
+     * @throws Exception
+     */
+    @ApiOperation(value = "自动统计表上上个月余额为0的")
+    @GetMapping("/automaticStatistics")
+    public void automaticStatistics() throws Exception {
+        pcmsReconciliationService.automaticStatistics();
     }
     /**
      * 对账分页列表
@@ -263,5 +275,23 @@ public class ReconciliationController extends BaseController {
     @GetMapping("/selectPendingMaterial")
     public ResultVo selectPendingMaterial(@RequestParam(value = "id") Integer id) throws Exception{
         return pcmsReconciliationService.selectPendingMaterial(id);
+    }
+
+    /**
+     * 同步期初余额
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "同步期初余额")
+    @PostMapping("/synchronousBalance")
+    public ResultVo synchronousBalance(@RequestParam(value="file", required=false) MultipartFile file) throws Exception {
+        if(file.isEmpty()) {
+            throw new ParamException(ResultVoUtils.fail("文件路径及完整文件名为空:"+file));
+        }
+        if(!file.getOriginalFilename().toLowerCase().endsWith(".xls") && !file.getOriginalFilename().toLowerCase().endsWith(".xlsx")) {
+            throw new ParamException(ResultVoUtils.fail("文件不是Excel:"+file));
+        }
+        return pcmsReconciliationService.synchronousBalance(file,getLoginUserInfo());
     }
 }

@@ -27,7 +27,7 @@ public interface PcmsReconciliationMapper extends BaseMapper<PcmsReconciliationM
 
     PcmsReconciliationVo selectByReconciliationId(@Param("id") Integer id);
 
-    List<PcmsReconciliationModel> selectByState();
+    List<PcmsReconciliationModel> selectByState(@Param("month") String month);
 
     List<DetailListVo> selectDetailList(@Param("id") Integer id);
 
