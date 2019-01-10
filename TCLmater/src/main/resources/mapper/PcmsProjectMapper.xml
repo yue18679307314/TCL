@@ -844,4 +844,15 @@ WHERE
 	) = #{synDate}
   </select>
   
+  
+  <select id="getSumMoney" parameterType="string" resultType="map">
+  	SELECT
+SUM(item_price) AS sumMoney,
+	IFNULL(SUM(subclass),0) AS sumSubclass
+FROM
+	pcms_item
+WHERE
+	request_id = #{requestId}
+  </select>
+  
 </mapper>

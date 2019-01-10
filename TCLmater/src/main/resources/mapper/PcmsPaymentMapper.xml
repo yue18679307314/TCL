@@ -383,7 +383,7 @@
 	a.account_number AS accountNumber,
 	a.payee_name AS payeeName,
 	IFNULL(c.`status`,a.`status`) AS payStatus,
-	c.update_time AS updateTime
+	IFNULL(c.update_time,a.create_time) AS updateTime
 FROM
 	pcms_payment a 
 LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
@@ -420,5 +420,15 @@ FROM
 pcms_payment_detail a WHERE a.fssc_bill=#{fsscBill}
    
    </select>
+  
+  
+  <select id="selectByFsscBill" parameterType="string" resultMap="BaseResultMap">
+	SELECT
+		*
+	FROM
+		pcms_payment
+	WHERE
+		fssc_bill =#{fsscBill}
+  </select>
   
 </mapper>

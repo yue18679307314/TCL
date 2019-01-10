@@ -56,6 +56,10 @@ public class ItemDetail {
 
 	private String context; //作废原因
 	
+	private String confirmTime; //验收时间
+	
+	private String statementTime; //账期
+	
 	private List<PcmsItemLog> itemLog; //日志
 	
 	private List<MaterialResult> mrList;
@@ -65,8 +69,22 @@ public class ItemDetail {
 	private List<ShowcaseResult> scList;
 	
 	private List<SettlementResult> settList; //结算信息
-	
-	
+
+	public String getConfirmTime() {
+		return confirmTime;
+	}
+
+	public void setConfirmTime(String confirmTime) {
+		this.confirmTime = confirmTime;
+	}
+
+	public String getStatementTime() {
+		return statementTime;
+	}
+
+	public void setStatementTime(String statementTime) {
+		this.statementTime = statementTime;
+	}
 
 	public List<SettlementResult> getSettList() {
 		return settList;

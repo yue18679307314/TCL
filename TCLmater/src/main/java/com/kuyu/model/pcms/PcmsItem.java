@@ -17,7 +17,7 @@ public class PcmsItem {
 
     private String requestId;
 
-    private Double itemPrice;
+    private String itemPrice;
 
     private String title;
 
@@ -97,12 +97,12 @@ public class PcmsItem {
         this.requestId = requestId == null ? null : requestId.trim();
     }
 
-    public Double getItemPrice() {
+    public String getItemPrice() {
         return itemPrice;
     }
 
-    public void setItemPrice(Double itemPrice) {
-        this.itemPrice = itemPrice;
+    public void setItemPrice(String itemPrice) {
+        this.itemPrice = itemPrice == null ? null : itemPrice.trim();
     }
 
     public String getTitle() {

@@ -636,6 +636,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			//写入传入的付款子单信息
 			List<Financial> financialList=payment.getFinancialList();
 			if(CollectionUtils.isNotEmpty(financialList)){
+				
 				for (Financial fin : financialList) {
 					
 					PcmsPaymentDetail payDetail=new PcmsPaymentDetail();
@@ -647,7 +648,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 					
 					pcmsPaymentDetailMapper.insertSelective(payDetail);
 				}
-				
+				  
 				//汇总信息
 				BigDecimal successMoney=new BigDecimal(0);
 				BigDecimal failMoney=new BigDecimal(0);
@@ -669,18 +670,31 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 					}
 				}
 				
-				//成功支付金额+终止支付金额=报销单金额,则此报销单完结 。
-//				BigDecimal sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
-				BigDecimal sumMoney=successMoney.add(failMoney);
+				//查询结算单，如果没有对应结算信息，则此单为余额单。
 				PcmsSettlement sett=pcmsSettlementMapper.selectByFsscBill(fsscBill);
+				//成功支付金额+终止支付金额=报销单金额,则此报销单完结 。
+				BigDecimal sumMoney=successMoney.add(failMoney);
+				
+				if(sett!=null){
+//				BigDecimal sumMoney=successMoney.add(failMoney).setScale(2,BigDecimal.ROUND_HALF_UP);
 //				BigDecimal settMoney=new BigDecimal(sett.getSumMoney()).setScale(2,BigDecimal.ROUND_HALF_UP);
-				BigDecimal settMoney=new BigDecimal(sett.getSumMoney());
-				if(sumMoney.compareTo(settMoney)==0){
-					//更新状态为已完结
-					sett.setStatus(3);
-					sett.setUpdateTime(new Date());
-					pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+					BigDecimal settMoney=new BigDecimal(sett.getSumMoney());
+					if(sumMoney.compareTo(settMoney)==0){
+						//更新状态为已完结
+						sett.setStatus(3);
+						sett.setUpdateTime(new Date());
+						pcmsSettlementMapper.updateByPrimaryKeySelective(sett);
+					}
+				}else{
+					//根据单号查询报销单
+					PcmsPayment queryPayment=pcmsPaymentMapper.selectByFsscBill(fsscBill);
+					BigDecimal paymentMoney=new BigDecimal(queryPayment.getPayAmount());
+					if(sumMoney.compareTo(paymentMoney)==0){
+						queryPayment.setStatus(3);
+						pcmsPaymentMapper.updateByPrimaryKeySelective(queryPayment);
+					}
 				}
+				
 				
 			}
 			List<BillAvailable> availableList=payment.getAvailableList();
@@ -809,7 +823,24 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 	@Override
-	public List<PaymentResult> paymentList() {
+	public List<PaymentResult> paymentList(String searchKey, Integer current, Integer size, String approvalStatrTime, String approvalEndTime) {
+		
+		Integer linimt=(current-1)*size;  
+		
+		
+		//组装参数
+		HashMap<String, Object> param=new HashMap<>();
+		if(searchKey!=null&&!searchKey.equals("")){
+			param.put("searchKey", searchKey);
+		}
+		param.put("linimt", linimt);
+		param.put("size", size);
+		if(approvalStatrTime!=null&&approvalEndTime!=null){
+			param.put("approvalStatrTime", approvalStatrTime);
+			param.put("approvalEndTime", approvalEndTime);
+		}
+				
+		
 		List<PaymentResult> payList=pcmsPaymentMapper.getPaymentList();
 		
 		//统计已付金额、终止金额、失败金额

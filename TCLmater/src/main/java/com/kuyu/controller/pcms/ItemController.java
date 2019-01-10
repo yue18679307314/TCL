@@ -286,9 +286,21 @@ public class ItemController extends BaseController{
 	@ApiOperation("付款单列表")   
 	@RequestMapping(value = "/paymentList", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo paymentList(HttpServletRequest request,
-			@ApiParam(value = "付款单列表", required = true) String settNumber){
+			@RequestParam(value = "searchKey",required=false)String searchKey,
+			@RequestParam(value = "current",required=false)Integer current,
+			@RequestParam(value = "size",required=false)Integer size,
+			@RequestParam(value = "approvalStatrTime",required=false)String approvalStatrTime,
+			@RequestParam(value = "approvalEndTime",required=false)String approvalEndTime){
 		
-		List<PaymentResult> payList=pcmsItemService.paymentList();
+		if(current==null||current<=0){
+			current=1;
+		} 
+		if(size==null||size<=0){
+			 size=10;
+		}
+		
+		
+		List<PaymentResult> payList=pcmsItemService.paymentList(searchKey,current,size,approvalStatrTime,approvalEndTime);
 	return ResultVo.getData(ResultVo.SUCCESS, payList);
 	}
 	

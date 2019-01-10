@@ -9,7 +9,7 @@
     <result column="item_number" jdbcType="VARCHAR" property="itemNumber" />
     <result column="vendor_id" jdbcType="VARCHAR" property="vendorId" />
     <result column="request_id" jdbcType="VARCHAR" property="requestId" />
-    <result column="item_price" jdbcType="DOUBLE" property="itemPrice" />
+    <result column="item_price" jdbcType="VARCHAR" property="itemPrice" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="it_type" jdbcType="INTEGER" property="itType" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -125,7 +125,7 @@
       update_time)
     values (#{itid,jdbcType=INTEGER}, #{detailId,jdbcType=VARCHAR}, #{requestCompanyCode,jdbcType=VARCHAR}, 
       #{deptCode,jdbcType=VARCHAR}, #{itemNumber,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
-      #{requestId,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DOUBLE}, #{title,jdbcType=VARCHAR}, 
+      #{requestId,jdbcType=VARCHAR}, #{itemPrice,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{itType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{operatorId,jdbcType=VARCHAR}, 
       #{operatorName,jdbcType=VARCHAR}, #{subclass,jdbcType=VARCHAR}, #{dispatch,jdbcType=VARCHAR}, 
       #{dispatchTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
@@ -215,7 +215,7 @@
         #{requestId,jdbcType=VARCHAR},
       </if>
       <if test="itemPrice != null">
-        #{itemPrice,jdbcType=DOUBLE},
+        #{itemPrice,jdbcType=VARCHAR},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
@@ -283,7 +283,7 @@
         request_id = #{record.requestId,jdbcType=VARCHAR},
       </if>
       <if test="record.itemPrice != null">
-        item_price = #{record.itemPrice,jdbcType=DOUBLE},
+        item_price = #{record.itemPrice,jdbcType=VARCHAR},
       </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
@@ -332,7 +332,7 @@
       item_number = #{record.itemNumber,jdbcType=VARCHAR},
       vendor_id = #{record.vendorId,jdbcType=VARCHAR},
       request_id = #{record.requestId,jdbcType=VARCHAR},
-      item_price = #{record.itemPrice,jdbcType=DOUBLE},
+      item_price = #{record.itemPrice,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
       it_type = #{record.itType,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
@@ -370,7 +370,7 @@
         request_id = #{requestId,jdbcType=VARCHAR},
       </if>
       <if test="itemPrice != null">
-        item_price = #{itemPrice,jdbcType=DOUBLE},
+        item_price = #{itemPrice,jdbcType=VARCHAR},
       </if>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
@@ -416,7 +416,7 @@
       item_number = #{itemNumber,jdbcType=VARCHAR},
       vendor_id = #{vendorId,jdbcType=VARCHAR},
       request_id = #{requestId,jdbcType=VARCHAR},
-      item_price = #{itemPrice,jdbcType=DOUBLE},
+      item_price = #{itemPrice,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       it_type = #{itType,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
@@ -430,7 +430,6 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where itid = #{itid,jdbcType=INTEGER}
   </update>
-  
   
   
   <!--==============================以上为生成的sql部分=====================================-->
@@ -596,7 +595,9 @@
 			CONCAT(e.SHOP_PROVINCE,e.SHOP_CITY,e.SHOP_COUNTY) AS SHOP_ADDRESS,
 			e.SHOP_BRANCH,
 			e.SHOP_LEVEL,
-			e.DETAIL_TASK
+			e.DETAIL_TASK,
+			b.statement_date AS statementTime,
+			m.create_time AS confirmTime
 		FROM
 			pcms_item a
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
@@ -608,6 +609,7 @@
 		LEFT JOIN tpm_activity_original h ON a.detail_id=h.project_id
 		LEFT JOIN tpm_dept k ON h.dept=k.org_code
 		LEFT JOIN tpm_employee l ON l.person_code=c.CREATE_USER
+		LEFT JOIN pcms_item_log m ON m.itid=a.itid AND m.`status`=3
 		WHERE a.itid=#{itid}
   </select>
   

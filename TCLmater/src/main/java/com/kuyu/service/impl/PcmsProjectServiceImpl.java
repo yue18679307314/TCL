@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -392,11 +393,16 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			List<PcmsShop> shopList=pcmsProjectMapper.getShopList(requestId);
 			result.setDetailList(detailList);
 			result.setShopList(shopList);
+			
 		}else if(itemType.equals("2")){
 			List<ActivityOriginalVo> activitylList=pcmsProjectMapper.getActivitylList(requestId);
 			result.setActivityList(activitylList);
+			
 		}
-		
+		//申请总金额和可用总金额
+		Map<String,String> money=pcmsProjectMapper.getSumMoney(requestId);
+		result.setSumMoney(money.get("sumMoney"));
+		result.setSumSubclass(money.get("sumSubclass"));
 		return result;
 	}
 
@@ -552,7 +558,8 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 			item.setVendorId(vendorId);
 			item.setRequestId(requestId);
-			item.setItemPrice(Double.valueOf(allList.getTotalFee()));
+			item.setItemPrice(allList.getTotalFee().toString());
+			item.setSubclass(allList.getTotalFee().toString());
 			item.setTitle(projectvo.getRequestTitle());
 			item.setItType(3);
 			item.setStatus(0);
@@ -670,10 +677,19 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 				item.setVendorId(vendorId);
 				item.setRequestId(requestId);
-				item.setItemPrice(Double.valueOf(detail.getDetailAmount()));
+				item.setItemPrice(detail.getDetailAmount());
+				//可用余额
+				item.setSubclass(detail.getDetailAmount());
 				item.setTitle(projectvo.getRequestTitle());
-				item.setItType(itemType);
-				item.setStatus(0);
+				if(vendorId.contains("ZX")){
+					//淘宝单
+					item.setItType(4);
+					item.setStatus(3);
+				}else{
+					item.setItType(itemType);
+					item.setStatus(0);
+				}
+				
 				item.setCreateTime(createTime);
 				
 				pcmsItemMapper.insertSelective(item);

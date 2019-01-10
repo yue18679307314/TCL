@@ -84,6 +84,28 @@ public class PcmsProjectVo2 implements Serializable{
 	
 	//立项单类型 1门头展台  2物料
 	private String type;
+	
+	//合计费用
+	private String sumMoney;
+		
+	//合计剩余可结算金额
+	private String sumSubclass;
+
+	public String getSumMoney() {
+		return sumMoney;
+	}
+
+	public void setSumMoney(String sumMoney) {
+		this.sumMoney = sumMoney;
+	}
+
+	public String getSumSubclass() {
+		return sumSubclass;
+	}
+
+	public void setSumSubclass(String sumSubclass) {
+		this.sumSubclass = sumSubclass;
+	}
 
 	public String getRequestId() {
 		return requestId;

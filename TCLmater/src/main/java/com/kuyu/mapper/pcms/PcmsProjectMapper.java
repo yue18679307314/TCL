@@ -10,6 +10,8 @@ import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.ProjectDetailVo;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface PcmsProjectMapper {
@@ -50,4 +52,6 @@ public interface PcmsProjectMapper {
 	List<PcmsShop> getShopList(String requestId);
 
 	List<PcmsProject> selectByEndTime(String synDate);
+
+	Map<String, String> getSumMoney(String requestId);
 }
