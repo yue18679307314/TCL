@@ -371,7 +371,7 @@
   
   
   <!-- ==============================自定义SQL=================================== -->
-  <select id="getPaymentList" resultType="com.kuyu.vo.pcms.PaymentResult">
+  <select id="getPaymentList" resultType="com.kuyu.vo.pcms.PaymentResult" parameterType="map">
   SELECT
 	a.pmid,
 	a.fssc_bill AS fsscBill,
@@ -383,12 +383,44 @@
 	a.account_number AS accountNumber,
 	a.payee_name AS payeeName,
 	IFNULL(c.`status`,a.`status`) AS payStatus,
-	IFNULL(c.update_time,a.create_time) AS updateTime
+	IFNULL(c.create_time,a.create_time) AS updateTime
 FROM
 	pcms_payment a 
 LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 LEFT JOIN pcms_settlement c ON a.fssc_bill=c.fccs_bill
+WHERE 1=1 
+<if test="searchKey != null">
+  	AND (
+		b.vendor_name LIKE #{searchKey}
+		OR a.fssc_bill LIKE #{searchKey}
+		)
+</if>
+<if test="approvalStatrTime != null">
+  		AND DATE_FORMAT(c.create_time,'%Y-%m-%d') BETWEEN #{approvalStatrTime} AND #{approvalEndTime}
+</if>	
+ ORDER BY a.create_time DESC 
+  limit #{linimt}, #{size}
   </select>
+  
+   <select id="getPaymentListCount" resultType="int" parameterType="map">
+	 SELECT
+		COUNT(*)
+	FROM
+		pcms_payment a 
+	LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
+	LEFT JOIN pcms_settlement c ON a.fssc_bill=c.fccs_bill
+	WHERE 1=1 
+<if test="searchKey != null">
+  	AND (
+		b.vendor_name LIKE #{searchKey}
+		OR a.fssc_bill LIKE #{searchKey}
+		)
+</if>
+<if test="approvalStatrTime != null">
+  		AND DATE_FORMAT(c.create_time,'%Y-%m-%d') BETWEEN #{approvalStatrTime} AND #{approvalEndTime}
+</if>	
+  </select> 
+  
   
    <select id="getDetailMoney" parameterType="string" resultType="com.kuyu.vo.pcms.PaymentResult">
    	SELECT

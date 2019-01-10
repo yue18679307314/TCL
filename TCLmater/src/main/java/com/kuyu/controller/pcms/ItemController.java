@@ -300,7 +300,7 @@ public class ItemController extends BaseController{
 		}
 		
 		
-		List<PaymentResult> payList=pcmsItemService.paymentList(searchKey,current,size,approvalStatrTime,approvalEndTime);
+		Page<PaymentResult> payList=pcmsItemService.paymentList(searchKey,current,size,approvalStatrTime,approvalEndTime);
 	return ResultVo.getData(ResultVo.SUCCESS, payList);
 	}
 	

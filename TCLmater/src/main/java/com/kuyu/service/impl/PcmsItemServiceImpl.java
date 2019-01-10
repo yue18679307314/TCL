@@ -459,7 +459,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			
 			
 //			item.setStatus(5);
-			item.setSubclass(PcmsProjectUtil.calculation(item.getItemPrice().toString(), settlement.getDetailMoney(), 2));
+			item.setSubclass(PcmsProjectUtil.calculation(item.getSubclass().toString(), settlement.getDetailMoney(), 2));
 			item.setUpdateTime(new Date());
 			pcmsItemMapper.updateByPrimaryKeySelective(item);
 			
@@ -823,7 +823,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 	@Override
-	public List<PaymentResult> paymentList(String searchKey, Integer current, Integer size, String approvalStatrTime, String approvalEndTime) {
+	public Page<PaymentResult> paymentList(String searchKey, Integer current, Integer size, String approvalStatrTime, String approvalEndTime) {
 		
 		Integer linimt=(current-1)*size;  
 		
@@ -831,7 +831,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		//组装参数
 		HashMap<String, Object> param=new HashMap<>();
 		if(searchKey!=null&&!searchKey.equals("")){
-			param.put("searchKey", searchKey);
+			param.put("searchKey", "%"+searchKey+"%");
 		}
 		param.put("linimt", linimt);
 		param.put("size", size);
@@ -840,8 +840,12 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			param.put("approvalEndTime", approvalEndTime);
 		}
 				
-		
-		List<PaymentResult> payList=pcmsPaymentMapper.getPaymentList();
+		//分页查询
+		Page<PaymentResult> page=new Page<>(current, size);
+		List<PaymentResult> payList=pcmsPaymentMapper.getPaymentList(param);
+		Integer count=pcmsPaymentMapper.getPaymentListCount(param);
+		page.setRecords(payList);
+		page.setTotal(count);
 		
 		//统计已付金额、终止金额、失败金额
 		for (PaymentResult a : payList) {
@@ -858,7 +862,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			}
 		}
 		
-		return payList;
+		
+		return page;
 	}
 
 

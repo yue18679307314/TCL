@@ -51,7 +51,7 @@ public interface PcmsItemService  {
 
 //	SettlementDetailResult settlementDetail(String settNumber);
 
-	List<PaymentResult> paymentList(String searchKey, Integer current, Integer size, String approvalStatrTime, String approvalEndTime);
+	Page<PaymentResult> paymentList(String searchKey, Integer current, Integer size, String approvalStatrTime, String approvalEndTime);
 
 	List<PcmsPaymentDetail> paymentDetail(String fsscBill);
 

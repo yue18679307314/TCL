@@ -4,6 +4,7 @@ import com.kuyu.model.pcms.PcmsPayment;
 import com.kuyu.model.pcms.PcmsPaymentExample;
 import com.kuyu.vo.pcms.PaymentResult;
 
+import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,7 +33,9 @@ public interface PcmsPaymentMapper {
 
 	PaymentResult getDetailMoney(String fsscBill);
 
-	List<PaymentResult> getPaymentList();
+	List<PaymentResult> getPaymentList(HashMap<String, Object> param);
 
 	PcmsPayment selectByFsscBill(String fsscBill);
+
+	Integer getPaymentListCount(HashMap<String, Object> param);
 }

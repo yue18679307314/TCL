@@ -561,8 +561,14 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			item.setItemPrice(allList.getTotalFee().toString());
 			item.setSubclass(allList.getTotalFee().toString());
 			item.setTitle(projectvo.getRequestTitle());
-			item.setItType(3);
-			item.setStatus(0);
+			if(vendorId.contains("ZX")){
+				//淘宝单
+				item.setItType(4);
+				item.setStatus(3);
+			}else{
+				item.setItType(3);
+				item.setStatus(0);
+			}
 			item.setCreateTime(createTime);
 			
 			pcmsItemMapper.insertSelective(item);

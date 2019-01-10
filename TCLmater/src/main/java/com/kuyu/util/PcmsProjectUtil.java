@@ -119,6 +119,11 @@ public class PcmsProjectUtil {
 		String aaa=successMoney.add(failMoney).toString();
 		System.out.println(aaa);
 		System.out.println(aaa.equals("6.56"));
+		String vendorId="ZX003772";
+		if(vendorId.contains("ZX")){
+		System.out.println("asfdsahjksdhg");
+		}
+		
 	}
 
 	//获取本月
