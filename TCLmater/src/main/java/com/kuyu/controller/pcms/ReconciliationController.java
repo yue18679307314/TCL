@@ -293,4 +293,22 @@ public class ReconciliationController extends BaseController {
         }
         return pcmsReconciliationService.synchronousBalance(file,getLoginUserInfo());
     }
+
+    /**
+     * 导入利润中心数据
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "导入利润中心数据")
+    @PostMapping("/importProfitCenter")
+    public ResultVo importProfitCenter(@RequestParam(value="file", required=false) MultipartFile file) throws Exception {
+        if(file.isEmpty()) {
+            throw new ParamException(ResultVoUtils.fail("文件路径及完整文件名为空:"+file));
+        }
+        if(!file.getOriginalFilename().toLowerCase().endsWith(".xls") && !file.getOriginalFilename().toLowerCase().endsWith(".xlsx")) {
+            throw new ParamException(ResultVoUtils.fail("文件不是Excel:"+file));
+        }
+        return pcmsReconciliationService.importProfitCenter(file);
+    }
 }
