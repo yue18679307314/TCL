@@ -79,6 +79,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     private PcmsInitializationLogMapper pcmsInitializationLogMapper;
     @Resource
     private PcmsSupplierCompanyService pcmsSupplierCompanyService;
+    @Resource
+    private PcmsProfitCenterMapper pcmsProfitCenterMapper;
 
     @Value("${excel.path}")
     private String filePath;
@@ -94,7 +96,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsReconciliationModel.setVendor_id(pcmsSettlementVo.getVendor_id());
             pcmsReconciliationModel.setVendor_name(pcmsSettlementVo.getVendor_name());
             pcmsReconciliationModel.setState(0);
-//            pcmsReconciliationModel.setCreate_time(DateUtils.getPreviousMonthFirstDay());
+            pcmsReconciliationModel.setCreate_time(new Date());
             pcmsReconciliationModel.setMonth(getLastMonth());
             pcmsReconciliationModel.setCompany(pcmsSettlementVo.getCompany());
             pcmsReconciliationModel.setType(0);
@@ -135,6 +137,9 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             String firstDate = getMonthFirstDay(month);
             //查看上个月统计的期初期末余额
             PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+            if(null == pcmsIinitializationModel){
+                throw new ParamException("该供应商未初始化期初余额");
+            }
             BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getBalance());
             for(CurrentDetailModelVo currentDetailModelVo : list){
                 //本期增加金额
@@ -162,6 +167,9 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
 
             //查看上个月统计的期初期末余额
             PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+            if(null == pcmsIinitializationModel){
+                throw new ParamException("该供应商未初始化期初余额");
+            }
             BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getBalance());
 
             //组装往来数据
@@ -355,6 +363,9 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByReconciliationId(id);
         //查看上个月统计的期初期末余额
         PcmsIinitializationModel pcmsIinitializationModel1 = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+        if(null == pcmsIinitializationModel){
+            throw new ParamException("该供应商未初始化期初余额");
+        }
         //获取入账法人名称
         TpmEmployeeModel employeeModel = null;
         try {
@@ -558,7 +569,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         String paths = StringUtil.getUUID();
         String nameXls = paths+xls;
         String finalPath = filePath+ "/"+nameXls;
-        String suffix = file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
+//        String suffix = file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
         File tempfile = new File(filePath);
         if(!tempfile.exists()){
             tempfile.mkdirs();
@@ -582,37 +593,38 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             PcmsInitializationLogModel pcmsInitializationLog = new PcmsInitializationLogModel();
             pcmsInitializationLog.setOrg_code(psm[0]);
             pcmsInitializationLog.setAccounting_company(psm[1]);
-            pcmsInitializationLog.setCompany(psm[2]);
-            pcmsInitializationLog.setCompany_name(psm[3]);
-            pcmsInitializationLog.setSubject(psm[4]);
-            pcmsInitializationLog.setSubject_name(psm[5]);
-            pcmsInitializationLog.setInitial_balance(psm[6]);
-            pcmsInitializationLog.setVendor_id(psm[7]);
-            pcmsInitializationLog.setVendor_name(psm[8]);
+            pcmsInitializationLog.setCompany(psm[3]);
+            pcmsInitializationLog.setCompany_name(psm[4]);
+            pcmsInitializationLog.setSubject(psm[6]);
+            pcmsInitializationLog.setSubject_name(psm[7]);
+            pcmsInitializationLog.setInitial_balance(psm[8]);
+            pcmsInitializationLog.setVendor_id(psm[9]);
+            pcmsInitializationLog.setVendor_name(psm[10]);
             pcmsInitializationLog.setCreate_time(new Date());
+            pcmsInitializationLog.setProfit_center(psm[5]);
+            pcmsInitializationLog.setCompanyId(psm[2]);
 
 
             PcmsIinitializationModel pcmsIinitialization = new PcmsIinitializationModel();
-            pcmsIinitialization.setVendor_id(psm[7]);
+            pcmsIinitialization.setVendor_id(psm[9]);
             pcmsIinitialization.setCompany(psm[0]);
-            pcmsIinitialization.setBalance(psm[6]);
-//            pcmsIinitialization.setInitial_balance(psm[6]);
+            pcmsIinitialization.setBalance(psm[8]);
+            pcmsIinitialization.setInitial_balance("0");
             pcmsIinitialization.setCreate_time(new Date());
             pcmsIinitialization.setFinancial_money("0");
             pcmsIinitialization.setPay_amount("0");
-            pcmsIinitialization.setBalance("0");
             pcmsIinitialization.setMonth(getLastMonth());
 
 
             PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
             pcmsSupplierCompanyModel.setCompany(psm[0]);
-            pcmsSupplierCompanyModel.setVendor_id(psm[7]);
+            pcmsSupplierCompanyModel.setVendor_id(psm[9]);
             pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
 
 
             PcmsSupplierVo pcmsSupplier = new PcmsSupplierVo();
-            pcmsSupplier.setVendor_id(psm[7]);
-            pcmsSupplier.setVendor_name(psm[8]);
+            pcmsSupplier.setVendor_id(psm[9]);
+            pcmsSupplier.setVendor_name(psm[10]);
 
             if(null != psm[7]){
                 pcmsInitializationLogMapper.insert(pcmsInitializationLog);
@@ -623,6 +635,49 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         }
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
     }
+
+    @Override
+    public ResultVo importProfitCenter(MultipartFile file) throws Exception {
+        String xls = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")).toLowerCase();
+        String paths = StringUtil.getUUID();
+        String nameXls = paths+xls;
+        String finalPath = filePath+ "/"+nameXls;
+//        String suffix = file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf("."));
+        File tempfile = new File(filePath);
+        if(!tempfile.exists()){
+            tempfile.mkdirs();
+        }
+        File newFile = new File(finalPath);
+        file.transferTo(newFile);
+        Map<String, String> map  = readExcel(finalPath);
+        if(map.size() == 0 || null == map){
+            newFile.delete();
+            throw new ParamException("数据为空");
+        }
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String value = entry.getValue();
+            PcmsSupplierMaterialModel tdm = new PcmsSupplierMaterialModel();
+            String[] psm = value.split(",");
+            for (int i = 0; i < psm.length; i++) {
+                if (psm[i].equals("NULL")) {
+                    psm[i] = null;
+                }
+            }
+
+            PcmsProfitCenterModel pcmsProfitCenterModel = new PcmsProfitCenterModel();
+            pcmsProfitCenterModel.setCompany(psm[0]);
+            pcmsProfitCenterModel.setCompany_name(psm[7]);
+            pcmsProfitCenterModel.setCompanyId(psm[5]);
+            pcmsProfitCenterModel.setLong_name(psm[2]);
+            pcmsProfitCenterModel.setName(psm[3]);
+            pcmsProfitCenterModel.setOrg_code(psm[6]);
+            pcmsProfitCenterModel.setProfit_center_code(psm[1]);
+            pcmsProfitCenterModel.setRematk(psm[4]);
+            pcmsProfitCenterMapper.insert(pcmsProfitCenterModel);
+        }
+        return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+
     public static Map<String, String> readExcel(String filePath) {
         Map<String, String> map = new HashMap<String, String>();
         Workbook workbook = null;
@@ -737,7 +792,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                 //查看上个月统计的期初期末余额
                 PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(pcmsReconciliationModel.getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
                 if(null == pcmsIinitializationModel){
-                    throw new ParamException("初期余额不存在");
+                    throw new ParamException("该供应商未初始化期初余额");
                 }
                 //期初余额
                 BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getBalance());

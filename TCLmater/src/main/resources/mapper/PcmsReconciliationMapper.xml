@@ -77,6 +77,10 @@
 				pr.id = #{id}
 			</if>
 		</where>
+		AND(
+		DATE_FORMAT(pp.create_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+		OR DATE_FORMAT(ppd1.financial_time,'%Y-%m')=DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),'%Y-%m')
+		)
 		GROUP BY pp.fssc_bill
 	</select>
 

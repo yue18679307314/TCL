@@ -6,7 +6,6 @@ import com.kuyu.model.pcms.PcmsCurrentDetailModel;
 import com.kuyu.model.pcms.PcmsIinitializationModel;
 import com.kuyu.model.pcms.PcmsMessageModel;
 import com.kuyu.model.pcms.PcmsReconciliationModel;
-import com.kuyu.vo.ReconciliationVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.PcmsReconciliationVo;
 import com.kuyu.vo.pcms.ReplyMessageVo;
@@ -58,6 +57,8 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     ResultVo selectPendingMaterial(Integer id);
     //同步期初余额
     public ResultVo synchronousBalance(MultipartFile file,LoginUserInfo userInfo) throws Exception;
+    //导入利润中心数据
+    ResultVo importProfitCenter(MultipartFile file)throws Exception;
     //有付款记录,但没有点击对账的,自动对账
     void automaticReconciliation();
     //自动统计表上上个月余额为0的

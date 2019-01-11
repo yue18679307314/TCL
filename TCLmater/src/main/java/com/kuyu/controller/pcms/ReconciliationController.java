@@ -5,12 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.controller.BaseController;
 import com.kuyu.exception.ParamException;
-import com.kuyu.model.LoginUserInfo;
-import com.kuyu.model.TpmEmployeeModel;
-import com.kuyu.model.pcms.*;
+import com.kuyu.model.pcms.PcmsCurrentDetailModel;
+import com.kuyu.model.pcms.PcmsIinitializationModel;
+import com.kuyu.model.pcms.PcmsMessageModel;
 import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.util.ResultVoUtils;
-import com.kuyu.vo.ReconciliationVo;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.*;
 import com.kuyu.vo.query.ReconciliationQuery;
@@ -293,5 +292,23 @@ public class ReconciliationController extends BaseController {
             throw new ParamException(ResultVoUtils.fail("文件不是Excel:"+file));
         }
         return pcmsReconciliationService.synchronousBalance(file,getLoginUserInfo());
+    }
+
+    /**
+     * 导入利润中心数据
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "导入利润中心数据")
+    @PostMapping("/importProfitCenter")
+    public ResultVo importProfitCenter(@RequestParam(value="file", required=false) MultipartFile file) throws Exception {
+        if(file.isEmpty()) {
+            throw new ParamException(ResultVoUtils.fail("文件路径及完整文件名为空:"+file));
+        }
+        if(!file.getOriginalFilename().toLowerCase().endsWith(".xls") && !file.getOriginalFilename().toLowerCase().endsWith(".xlsx")) {
+            throw new ParamException(ResultVoUtils.fail("文件不是Excel:"+file));
+        }
+        return pcmsReconciliationService.importProfitCenter(file);
     }
 }
