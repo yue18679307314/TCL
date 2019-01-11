@@ -33,6 +33,9 @@ public class Payment {
 	
 	@JsonProperty("BANK_ACCOUNT_NUMBER")
 	private String bankAccountNumber;
+	
+	@JsonProperty("PROFIT_CENTER")
+	private String profitCenter;
 
 	public String getVendorId() {
 		return vendorId;
@@ -112,6 +115,14 @@ public class Payment {
 
 	public void setBankAccountNumber(String bankAccountNumber) {
 		this.bankAccountNumber = bankAccountNumber;
+	}
+
+	public String getProfitCenter() {
+		return profitCenter;
+	}
+
+	public void setProfitCenter(String profitCenter) {
+		this.profitCenter = profitCenter;
 	}
 	
 	

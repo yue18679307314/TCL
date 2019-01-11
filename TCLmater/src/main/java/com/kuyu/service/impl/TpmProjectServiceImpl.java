@@ -191,7 +191,7 @@ public class TpmProjectServiceImpl extends ServiceImpl<TpmProjectMapper, TpmProj
 
 		
 		//处理临促物料  2018-11-10
-		pcmsProjectService.importProjectMaterialDetail(vo);//导入临促物料信息
+		pcmsProjectService.importProjectMaterialDetail(vo,0);//导入临促物料信息
 		
 		
 		log.info("成功导入立项单,单号为:{}", vo.getRequestId());

@@ -13,6 +13,7 @@ import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ActivityOriginalVo;
+import com.kuyu.vo.pcms.InitItemRequest;
 import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.ProjectDetailVo;
 import com.kuyu.vo.pcms.RequestUserVo;
@@ -489,8 +490,9 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 //		this.importProjectDetail(projectvo);
 //	}
 
+	//type -1 初始化数据    type 0  正常数据
 	@Override
-	public void importProjectMaterialDetail(ProjectDetialModelVo vo) {
+	public void importProjectMaterialDetail(ProjectDetialModelVo vo,int type) {
 		
 		Date createTime=new Date();
 		
@@ -539,8 +541,16 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				info.setCost(allList.getFeeDetailType());
 				info.setSpecifications(material.getSpecifications());
 				info.setUnit(material.getUnit());
-				info.setNumber(material.getAmount().intValue());
-				info.setUnitPrice(material.getUnitPrice());
+				if(material.getAmount()==null){
+					info.setNumber(0);
+				}else{
+					info.setNumber(material.getAmount().intValue());
+				}
+				if(material.getUnitPrice()==null){
+					info.setUnitPrice(0d);
+				}else{
+					info.setUnitPrice(material.getUnitPrice());
+				}
 				info.setActivityId(activityId);
 				pcmsMaterialMapper.insertSelective(info);
 				
@@ -551,6 +561,12 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
             	pcmsMaterialSourceMapper.insertSelective(soure);
 			}
 			
+			//已经完结的单，可能会出现总金额为0的情况。
+			String itemPrice="0";
+			if(allList.getTotalFee()!=null){
+				itemPrice=allList.getTotalFee().toString();
+			}
+			
 			PcmsItem item=new PcmsItem();
 			item.setDetailId(activityId);
 			item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
@@ -558,8 +574,8 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 			item.setVendorId(vendorId);
 			item.setRequestId(requestId);
-			item.setItemPrice(allList.getTotalFee().toString());
-			item.setSubclass(allList.getTotalFee().toString());
+			item.setItemPrice(itemPrice);
+			item.setSubclass(itemPrice);
 			item.setTitle(projectvo.getRequestTitle());
 			if(vendorId.contains("ZX")){
 				//淘宝单
@@ -569,6 +585,10 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				item.setItType(3);
 				item.setStatus(0);
 			}
+			if(type==-1){
+				item.setStatus(5);
+			}
+			
 			item.setCreateTime(createTime);
 			
 			pcmsItemMapper.insertSelective(item);
@@ -579,9 +599,9 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 	}
 
 
-
+	//type -1 初始化数据    type 0  正常数据
 	@Override
-	public String importProjectDetail2(PcmsProjectVo2 projectvo) {
+	public String importProjectDetail2(PcmsProjectVo2 projectvo,int type) {
 		//获取申请单ID
 		String requestId=projectvo.getRequestId();
 		
@@ -695,6 +715,9 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 					item.setItType(itemType);
 					item.setStatus(0);
 				}
+				if(type==-1){
+					item.setStatus(5);
+				}
 				
 				item.setCreateTime(createTime);
 				
@@ -702,6 +725,29 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			}
 			
 		}
+		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
+	}
+
+
+
+
+	@Override
+	public String initItem(InitItemRequest initItem) {
+		
+		List<ProjectDetialModelVo> m41e=initItem.getM41e();
+		for (ProjectDetialModelVo a : m41e) {
+			System.out.println("导入立项单号："+a.getRequestId());
+			this.importProjectMaterialDetail(a,-1);
+		}
+		
+		
+		List<PcmsProjectVo2> m41f=initItem.getM41f();
+		for (PcmsProjectVo2 b : m41f) {
+			System.out.println("导入立项单号："+b.getRequestId());
+			this.importProjectDetail2(b,-1);
+		}
+		
+		
 		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
 	}
 	

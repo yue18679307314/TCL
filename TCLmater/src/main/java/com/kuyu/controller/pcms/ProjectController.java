@@ -16,6 +16,7 @@ import com.kuyu.annotation.AOP_Controller_LOG;
 import com.kuyu.service.PcmsProjectService;
 import com.kuyu.service.TpmProjectService;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.InitItemRequest;
 import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.RequestUserVo;
@@ -64,7 +65,7 @@ public class ProjectController {
     	
     	System.out.println(JSON.toJSONString(projectvo));
     	
-        return pcmsProjectService.importProjectDetail2(projectvo);
+        return pcmsProjectService.importProjectDetail2(projectvo,0);
     }
     
     
@@ -83,31 +84,48 @@ public class ProjectController {
     }
 	
     
+//    /**
+//     * 负责人列表
+//     * @param
+//     * @return
+//     * @throws Exception
+//     */
+//    @ApiOperation(value = "负责人列表")
+//    @RequestMapping(value = "/requestNameList",produces = "application/json;charset=UTF-8")
+//    public ResultVo requestNameList(HttpServletRequest request,String orgCode,String searchKey)throws Exception{
+//    	List<RequestUserVo> result=pcmsProjectService.getRequestNameList(orgCode,searchKey);
+//    		
+//    		return ResultVo.getData(ResultVo.SUCCESS, result);
+//    }
+//    
+//    
+//    /**
+//     * 改变负责人
+//     * @param
+//     * @return
+//     * @throws Exception
+//     */
+//    @ApiOperation(value = "改变负责人")
+//    @RequestMapping(value = "/changeRequestName",produces = "application/json;charset=UTF-8")
+//    public ResultVo changeRequestName(String requestId,String personCode,String personName,String userId)throws Exception{
+//    	ResultVo result= pcmsProjectService.changeRequestName(requestId,personCode,personName,userId);
+//    	return result;
+//    }
+    
+    
     /**
-     * 负责人列表
+     * 初始化立项单
      * @param
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "负责人列表")
-    @RequestMapping(value = "/requestNameList",produces = "application/json;charset=UTF-8")
-    public ResultVo requestNameList(HttpServletRequest request,String orgCode,String searchKey)throws Exception{
-    	List<RequestUserVo> result=pcmsProjectService.getRequestNameList(orgCode,searchKey);
-    		
-    		return ResultVo.getData(ResultVo.SUCCESS, result);
+    @ApiOperation(value = "初始化立项单")//00
+    @PostMapping(value = "/initItem",produces = "application/json;charset=UTF-8")
+    public String initItem(@ApiParam(value = "初始化立项单", required = true)
+    @RequestBody InitItemRequest initItem)throws Exception{
+    	
+    	
+        return pcmsProjectService.initItem(initItem);
     }
     
-    
-    /**
-     * 改变负责人
-     * @param
-     * @return
-     * @throws Exception
-     */
-    @ApiOperation(value = "改变负责人")
-    @RequestMapping(value = "/changeRequestName",produces = "application/json;charset=UTF-8")
-    public ResultVo changeRequestName(String requestId,String personCode,String personName,String userId)throws Exception{
-    	ResultVo result= pcmsProjectService.changeRequestName(requestId,personCode,personName,userId);
-    	return result;
-    }
 }

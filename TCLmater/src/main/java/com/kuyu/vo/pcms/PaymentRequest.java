@@ -9,6 +9,9 @@ public class PaymentRequest {
 	@JsonProperty("FSSC_BILL")
 	private String fsscBill;
 	
+	@JsonProperty("REQUEST_DEPT")
+	private String requestDept;
+	
 	@JsonProperty("PAYMENT_LIST")
 	private List<Payment> paymentList;
 	
@@ -48,6 +51,14 @@ public class PaymentRequest {
 
 	public void setAvailableList(List<BillAvailable> availableList) {
 		this.availableList = availableList;
+	}
+
+	public String getRequestDept() {
+		return requestDept;
+	}
+
+	public void setRequestDept(String requestDept) {
+		this.requestDept = requestDept;
 	}
 
 	
