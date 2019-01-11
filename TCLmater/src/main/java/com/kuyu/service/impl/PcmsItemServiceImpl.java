@@ -881,7 +881,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 	@Override
 	public int itemEnd(ItemEndRequest itemEnd) {
-		if(itemEnd.getStatus().equals("已完结")){
+		if(itemEnd.getStatus().equals("完结")){
 			
 			//剩余可结算金额
 			String availableMoney=itemEnd.getAvailableMoney();
