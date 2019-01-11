@@ -598,11 +598,10 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsIinitialization.setVendor_id(psm[9]);
             pcmsIinitialization.setCompany(psm[0]);
             pcmsIinitialization.setBalance(psm[8]);
-//            pcmsIinitialization.setInitial_balance(psm[6]);
+            pcmsIinitialization.setInitial_balance("0");
             pcmsIinitialization.setCreate_time(new Date());
             pcmsIinitialization.setFinancial_money("0");
             pcmsIinitialization.setPay_amount("0");
-            pcmsIinitialization.setBalance("0");
             pcmsIinitialization.setMonth(getLastMonth());
 
 
