@@ -881,7 +881,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 	@Override
 	public int itemEnd(ItemEndRequest itemEnd) {
-		if(itemEnd.getStatus().equals("已完结")){
+		if(itemEnd.getStatus().equals("完结")){
 			
 			//剩余可结算金额
 			String availableMoney=itemEnd.getAvailableMoney();
@@ -895,9 +895,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			itlog.setCreateTime(new Date());
 			itlog.setItid(item.getItid());
 			if(availableMoney.equals("0")){
-				item.setStatus(6);
-				itlog.setStatus(6);
-				itlog.setNote("已完结");
+				item.setStatus(5);
+				itlog.setStatus(5);
+				itlog.setNote("已过期（完结），可用余额清空");
 			}else{
 				itlog.setStatus(7);
 				itlog.setNote("余额变动,剩余可用金额:"+availableMoney+",可再次发起结算");
