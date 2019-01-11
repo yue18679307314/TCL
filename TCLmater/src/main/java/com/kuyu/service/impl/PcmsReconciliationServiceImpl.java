@@ -363,7 +363,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByReconciliationId(id);
         //查看上个月统计的期初期末余额
         PcmsIinitializationModel pcmsIinitializationModel1 = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
-        if(null == pcmsIinitializationModel){
+        if(null == pcmsIinitializationModel1){
             throw new ParamException("该供应商未初始化期初余额");
         }
         //获取入账法人名称
@@ -376,7 +376,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         }
         //获取往来数据信息
         List<CurrentDetailModelVo> list = pcmsReconciliationMapper.selectCurrent(id);
-        BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel.getBalance());
+        BigDecimal initialBalance = new BigDecimal(pcmsIinitializationModel1.getBalance());
         for(CurrentDetailModelVo currentDetailModelVo : list){
             //本期增加金额
             BigDecimal increase_amount = new BigDecimal(currentDetailModelVo.getIncrease_amount());

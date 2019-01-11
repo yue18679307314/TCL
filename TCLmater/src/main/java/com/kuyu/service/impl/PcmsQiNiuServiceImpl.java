@@ -46,7 +46,7 @@ public class PcmsQiNiuServiceImpl implements PcmsQiNiuService {
 
     public PcmsQiNiuServiceImpl() {
         //构造一个带指定Zone对象的配置类
-        Configuration cfg = new Configuration(Zone.zone2());
+        Configuration cfg = new Configuration(Zone.zone0());
         //...其他参数参考类注释
         uploadManager = new UploadManager(cfg);
     }
