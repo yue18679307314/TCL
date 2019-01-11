@@ -94,7 +94,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsReconciliationModel.setVendor_id(pcmsSettlementVo.getVendor_id());
             pcmsReconciliationModel.setVendor_name(pcmsSettlementVo.getVendor_name());
             pcmsReconciliationModel.setState(0);
-//            pcmsReconciliationModel.setCreate_time(DateUtils.getPreviousMonthFirstDay());
+            pcmsReconciliationModel.setCreate_time(new Date());
             pcmsReconciliationModel.setMonth(getLastMonth());
             pcmsReconciliationModel.setCompany(pcmsSettlementVo.getCompany());
             pcmsReconciliationModel.setType(0);
@@ -582,20 +582,22 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             PcmsInitializationLogModel pcmsInitializationLog = new PcmsInitializationLogModel();
             pcmsInitializationLog.setOrg_code(psm[0]);
             pcmsInitializationLog.setAccounting_company(psm[1]);
-            pcmsInitializationLog.setCompany(psm[2]);
-            pcmsInitializationLog.setCompany_name(psm[3]);
-            pcmsInitializationLog.setSubject(psm[4]);
-            pcmsInitializationLog.setSubject_name(psm[5]);
-            pcmsInitializationLog.setInitial_balance(psm[6]);
-            pcmsInitializationLog.setVendor_id(psm[7]);
-            pcmsInitializationLog.setVendor_name(psm[8]);
+            pcmsInitializationLog.setCompany(psm[3]);
+            pcmsInitializationLog.setCompany_name(psm[4]);
+            pcmsInitializationLog.setSubject(psm[6]);
+            pcmsInitializationLog.setSubject_name(psm[7]);
+            pcmsInitializationLog.setInitial_balance(psm[8]);
+            pcmsInitializationLog.setVendor_id(psm[9]);
+            pcmsInitializationLog.setVendor_name(psm[10]);
             pcmsInitializationLog.setCreate_time(new Date());
+            pcmsInitializationLog.setProfit_center(psm[5]);
+            pcmsInitializationLog.setCompanyId(psm[2]);
 
 
             PcmsIinitializationModel pcmsIinitialization = new PcmsIinitializationModel();
-            pcmsIinitialization.setVendor_id(psm[7]);
+            pcmsIinitialization.setVendor_id(psm[9]);
             pcmsIinitialization.setCompany(psm[0]);
-            pcmsIinitialization.setBalance(psm[6]);
+            pcmsIinitialization.setBalance(psm[8]);
 //            pcmsIinitialization.setInitial_balance(psm[6]);
             pcmsIinitialization.setCreate_time(new Date());
             pcmsIinitialization.setFinancial_money("0");
@@ -606,13 +608,13 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
 
             PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
             pcmsSupplierCompanyModel.setCompany(psm[0]);
-            pcmsSupplierCompanyModel.setVendor_id(psm[7]);
+            pcmsSupplierCompanyModel.setVendor_id(psm[9]);
             pcmsSupplierCompanyModel.setCreate_time(DateUtils.getLongDateStr());
 
 
             PcmsSupplierVo pcmsSupplier = new PcmsSupplierVo();
-            pcmsSupplier.setVendor_id(psm[7]);
-            pcmsSupplier.setVendor_name(psm[8]);
+            pcmsSupplier.setVendor_id(psm[9]);
+            pcmsSupplier.setVendor_name(psm[10]);
 
             if(null != psm[7]){
                 pcmsInitializationLogMapper.insert(pcmsInitializationLog);

@@ -54,6 +54,12 @@ public class PcmsInitializationLogModel extends Model<PcmsInitializationLogModel
     @ApiModelProperty("共享系统公司组织编码:")
     private String org_code;
 
+    @ApiModelProperty("利润中心")
+    private String profit_center;
+
+    @ApiModelProperty("挂账所属分公司代码")
+    private String companyId;
+
     public Integer getId() {
         return id;
     }
@@ -140,6 +146,22 @@ public class PcmsInitializationLogModel extends Model<PcmsInitializationLogModel
 
     public void setOrg_code(String org_code) {
         this.org_code = org_code;
+    }
+
+    public String getProfit_center() {
+        return profit_center;
+    }
+
+    public void setProfit_center(String profit_center) {
+        this.profit_center = profit_center;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
     }
 
     @Override
