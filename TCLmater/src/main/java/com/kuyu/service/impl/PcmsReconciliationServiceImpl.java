@@ -115,7 +115,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     }
     @Override
     public ResultVo findReconciliationList(LoginUserInfo userInfo, ReconciliationQuery query) throws Exception {
-        query.setCompany(userInfo.getEmployeeModel().getCompany());
+        TpmDeptModel tpmDeptModel = selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        query.setCompany(tpmDeptModel.getOrg_code());
         if(query.getMonth() == null){
             query.setMonth(getLastMonth());
         }
@@ -127,6 +128,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     }
     @Override
     public ResultVo selectCurrentDetail(Integer id, LoginUserInfo userInfo)throws Exception {
+        TpmDeptModel tpmDeptModel = selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
         CurrentDetailVo currentDetailVo = new CurrentDetailVo();
         List<CurrentDetailModelVo> list = new ArrayList<CurrentDetailModelVo>();
         list = pcmsReconciliationMapper.selectCurrent(id);
@@ -138,7 +140,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             //上个月第一天
             String firstDate = getMonthFirstDay(month);
             //查看上个月统计的期初期末余额
-            PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+            PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(tpmDeptModel.getOrg_code(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
             if(null == pcmsIinitializationModel){
                 throw new ParamException("该供应商未初始化期初余额");
             }
@@ -168,7 +170,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             }*/
 
             //查看上个月统计的期初期末余额
-            PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+            PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByCompany(tpmDeptModel.getOrg_code(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
             if(null == pcmsIinitializationModel){
                 throw new ParamException("该供应商未初始化期初余额");
             }
@@ -264,7 +266,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     }
     @Override
     public ResultVo addIinitialization(PcmsIinitializationModel query, LoginUserInfo userInfo){
-        query.setCompany(userInfo.getEmployeeModel().getCompany());
+        TpmDeptModel tpmDeptModel = selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        query.setCompany(tpmDeptModel.getOrg_code());
         //更新对账表
         PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(query.getPcms_reconciliation_id());
         pcmsReconciliationModel.setReconciliation_id(PcmsProjectUtil.creatReconciliationId());
@@ -352,6 +355,13 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     }
     @Override
     public ResultVo getAccountStatement(Integer id,LoginUserInfo userInfo) {
+        TpmDeptModel tpmDeptModel = null;
+        if(null != userInfo.getEmployeeModel().getOrg_code()){
+            tpmDeptModel = selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        }else{
+            tpmDeptModel = selectTpmDept(userInfo.getEmployeeModel().getCompany());
+        }
+
         AccountStatementVo accountStatementVo = new AccountStatementVo();
         PcmsReconciliationModel pcmsReconciliationModel = pcmsReconciliationMapper.selectById(id);
         String month = pcmsReconciliationModel.getMonth()+"-01";
@@ -364,14 +374,18 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         //获取统计数据信息
         PcmsIinitializationModel pcmsIinitializationModel = pcmsIinitializationMapper.selectByReconciliationId(id);
         //查看上个月统计的期初期末余额
-        PcmsIinitializationModel pcmsIinitializationModel1 = pcmsIinitializationMapper.selectByCompany(userInfo.getEmployeeModel().getCompany(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
+        PcmsIinitializationModel pcmsIinitializationModel1 = pcmsIinitializationMapper.selectByCompany(tpmDeptModel.getOrg_code(),pcmsReconciliationModel.getVendor_id(),getLastTwoMonth());
         if(null == pcmsIinitializationModel1){
             throw new ParamException("该供应商未初始化期初余额");
         }
         //获取入账法人名称
         TpmEmployeeModel employeeModel = null;
         try {
-            List<TpmEmployeeModel> employeeList = tpmEmployeeMapper.getEmployeeListByCompany(userInfo.getEmployeeModel().getCompany());
+            PcmsInitializationLogModel pcmsInitializationLogModel = new PcmsInitializationLogModel();
+            pcmsInitializationLogModel.setVendor_id(pcmsReconciliationModel.getVendor_id());
+            pcmsInitializationLogModel.setOrg_code(pcmsReconciliationModel.getCompany());
+            PcmsInitializationLogModel pcmsInitializationLogModel1 = pcmsInitializationLogMapper.selectOne(pcmsInitializationLogModel);
+            List<TpmEmployeeModel> employeeList = tpmEmployeeMapper.getEmployeeListByCompany(pcmsInitializationLogModel1.getCompany());
             employeeModel = employeeList.get(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -415,7 +429,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         accountStatementVo.setStatisticsId(pcmsPtatisticsModel.getId());
         accountStatementVo.setReconciliation_id(pcmsReconciliationModel.getReconciliation_id());
         accountStatementVo.setVendor_name(pcmsReconciliationModel.getVendor_name());
-        accountStatementVo.setInitial_balance(pcmsIinitializationModel1.getInitial_balance());
+        accountStatementVo.setInitial_balance(pcmsIinitializationModel1.getBalance());
         accountStatementVo.setState(pcmsReconciliationModel.getState());
         return ResultVo.getDataWithSuccess(accountStatementVo);
     }
@@ -531,7 +545,11 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         //获取入账法人名称
         TpmEmployeeModel employeeModel = null;
         try {
-            List<TpmEmployeeModel> employeeList = tpmEmployeeMapper.getEmployeeListByCompany(pcmsReconciliationModel.getCompany());
+            PcmsInitializationLogModel pcmsInitializationLogModel = new PcmsInitializationLogModel();
+            pcmsInitializationLogModel.setVendor_id(pcmsReconciliationModel.getVendor_id());
+            pcmsInitializationLogModel.setOrg_code(pcmsReconciliationModel.getCompany());
+            PcmsInitializationLogModel pcmsInitializationLogModel1 = pcmsInitializationLogMapper.selectOne(pcmsInitializationLogModel);
+            List<TpmEmployeeModel> employeeList = tpmEmployeeMapper.getEmployeeListByCompany(pcmsInitializationLogModel1.getCompany());
             employeeModel = employeeList.get(0);
         } catch (Exception e) {
             e.printStackTrace();
