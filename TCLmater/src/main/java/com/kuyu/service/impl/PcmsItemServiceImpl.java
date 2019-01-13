@@ -688,15 +688,19 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				}else{
 					//根据单号查询报销单
 					PcmsPayment queryPayment=pcmsPaymentMapper.selectByFsscBill(fsscBill);
-					BigDecimal paymentMoney=new BigDecimal(queryPayment.getPayAmount());
-					if(sumMoney.compareTo(paymentMoney)==0){
-						queryPayment.setStatus(3);
-						pcmsPaymentMapper.updateByPrimaryKeySelective(queryPayment);
+					if(queryPayment!=null){
+						BigDecimal paymentMoney=new BigDecimal(queryPayment.getPayAmount());
+						if(sumMoney.compareTo(paymentMoney)==0){
+							queryPayment.setStatus(3);
+							pcmsPaymentMapper.updateByPrimaryKeySelective(queryPayment);
+						}
 					}
 				}
 				
 				
 			}
+			
+			//可结算余额信息
 			List<BillAvailable> availableList=payment.getAvailableList();
 			for (BillAvailable available : availableList) {
 				String detailId=available.getBillDetailId();
@@ -704,23 +708,49 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				String availableMoney=available.getAvailableMoney();
 				
 				PcmsItem item=pcmsItemMapper.selectByDetailId(detailId);
-				PcmsItemLog log=new PcmsItemLog();
-				log.setItid(item.getItid());
-				if(availableMoney.equals("0")){
-					item.setStatus(5);
-					log.setStatus(5);
-					log.setNote("已完结");
-				}else{
-					log.setStatus(3);
-					log.setNote("已结算，剩余可结算金额="+availableMoney);
+				if(item!=null){
+					PcmsItemLog log=new PcmsItemLog();
+					log.setItid(item.getItid());
+					if(availableMoney.equals("0")){
+						item.setStatus(5);
+						log.setStatus(5);
+						log.setNote("已完结");
+					}else{
+						log.setStatus(3);
+						log.setNote("已结算，剩余可结算金额="+availableMoney);
+					}
+					log.setCreateTime(new Date());
+					pcmsItemLogMapper.insertSelective(log);
+					
+					item.setSubclass(availableMoney);
+					item.setUpdateTime(new Date());
+					pcmsItemMapper.updateByPrimaryKeySelective(item);
 				}
-				log.setCreateTime(new Date());
-				pcmsItemLogMapper.insertSelective(log);
-				
-				item.setSubclass(availableMoney);
-				item.setUpdateTime(new Date());
-				pcmsItemMapper.updateByPrimaryKeySelective(item);
 			}
+			
+//			//付款单信息
+//			List<Payment> paymentList=payment.getPaymentList();
+//			for (Payment pay : paymentList) {
+//				PcmsPayment info=new PcmsPayment(); 
+//				info.setFsscBill(fsscBill);
+//				info.setVendorId(pay.getVendorId());
+//				info.setAccountNumber(pay.getAccountNumber());
+//				info.setAccountName(pay.getAccountName());
+//				info.setPayeeName(pay.getPayeeName());
+//				info.setPaymentType(pay.getPaymentType());
+//				info.setRecommentDate(pay.getRecommentDate());
+//				info.setPayAmount(pay.getPayAmount());
+//				info.setPayStandard(pay.getPayStandard());
+//				info.setBillExpireDate(pay.getBillExpireDate());
+//				info.setBankAccountNumber(pay.getBankAccountNumber());
+//				info.setCreateTime(new Date());
+//				info.setStatus(2);
+//				//初始化数据设置为3
+//				info.setType(3);
+//				
+//				pcmsPaymentMapper.insertSelective(info);
+//			}
+			
 				return 1;
 		}
 			return 0;

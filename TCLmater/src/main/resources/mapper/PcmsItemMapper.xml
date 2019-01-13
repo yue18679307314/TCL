@@ -455,7 +455,8 @@
 		WHERE 1=1 -->
 	SELECT
 			a.itid,
-			a.request_company_code AS companyCode,
+			a.request_company_code AS orgCode,
+			a.dispatch AS companyCode,
 			a.vendor_id AS vendorId,
 			b.vendor_name AS vendorName,
 			b.duty_paragrap AS taxNumber,

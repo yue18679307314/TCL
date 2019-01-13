@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.InitItemRequest;
+import com.kuyu.vo.pcms.InitPayMentRequest;
+import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.RequestUserVo;
@@ -24,6 +26,8 @@ public interface PcmsProjectService {
 	void importProjectMaterialDetail(ProjectDetialModelVo vo,int type);
 
 	String initItem(InitItemRequest initItem);
+
+	String initPayMent(List<PaymentRequest> initPayMent);
 
 
 }

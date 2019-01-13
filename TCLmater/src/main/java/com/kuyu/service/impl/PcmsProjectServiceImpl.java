@@ -5,15 +5,20 @@ import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.*;
+import com.kuyu.service.PcmsItemService;
 import com.kuyu.service.PcmsProjectService;
+import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.util.PcmsProjectUtil;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.ActivityOriginalVo;
 import com.kuyu.vo.pcms.InitItemRequest;
+import com.kuyu.vo.pcms.InitPayMentRequest;
+import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.ProjectDetailVo;
 import com.kuyu.vo.pcms.RequestUserVo;
@@ -69,6 +74,12 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 	@Autowired
 	private PcmsOutdoorsMapper pcmsOutdoorsMapper;
 
+	@Autowired
+	private PcmsItemService pcmsItemService;
+	
+	@Autowired
+	private PcmsReconciliationService pcmsReconciliationService;
+	
 //	@Override
 //	public String importProjectDetail(PcmsProjectVo projectvo) {
 //		
@@ -569,7 +580,11 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			
 			PcmsItem item=new PcmsItem();
 			item.setDetailId(activityId);
-			item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
+//			item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
+			TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(requestDept);
+			String companyCode=tpmmodel.getOrg_code();
+			item.setRequestCompanyCode(companyCode);
+			item.setDispatch(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 			item.setDeptCode(requestDept);
 			item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 			item.setVendorId(vendorId);
@@ -698,7 +713,11 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			if(itemType!=4){
 				PcmsItem item=new PcmsItem();
 				item.setDetailId(detailId);
-				item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
+//				item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
+				TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(requestDept);
+				String companyCode=tpmmodel.getOrg_code();
+				item.setRequestCompanyCode(companyCode);
+				item.setDispatch(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 				item.setDeptCode(requestDept);
 				item.setItemNumber(PcmsProjectUtil.creatItemNumber());
 				item.setVendorId(vendorId);
@@ -750,6 +769,29 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		
 		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
 	}
+
+
+
+
+	@Override
+	public String initPayMent(List<PaymentRequest> initPayMent) {
+//		List<PaymentRequest> initPayList=initPayMent.getInitPayList();
+		for (PaymentRequest payment : initPayMent) {
+			System.out.println("导入付款单:"+payment.getFsscBill());
+			pcmsItemService.createPaymentDetail(payment);
+		}
+		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
+	}
+
+
+
+
+	
+
+
+
+
+	
 	
 	
 	

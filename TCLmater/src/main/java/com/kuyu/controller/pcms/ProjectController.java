@@ -17,6 +17,8 @@ import com.kuyu.service.PcmsProjectService;
 import com.kuyu.service.TpmProjectService;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.InitItemRequest;
+import com.kuyu.vo.pcms.InitPayMentRequest;
+import com.kuyu.vo.pcms.PaymentRequest;
 import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.RequestUserVo;
@@ -128,4 +130,19 @@ public class ProjectController {
         return pcmsProjectService.initItem(initItem);
     }
     
+    
+    /**
+     * 初始化付款数据
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "初始化付款数据")
+    @PostMapping(value = "/initPayMent",produces = "application/json;charset=UTF-8")
+    public String initPayMent(@ApiParam(value = "初始化付款数据", required = true)
+    @RequestBody List<PaymentRequest> initPayMent)throws Exception{
+    	
+    	
+        return pcmsProjectService.initPayMent(initPayMent);
+    }
 }

@@ -6,10 +6,12 @@ import com.kuyu.common.CommonConstants;
 import com.kuyu.controller.BaseController;
 import com.kuyu.exception.ParamException;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.PcmsPaymentCheck;
 import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.service.PcmsItemService;
+import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
@@ -46,6 +48,9 @@ public class ItemController extends BaseController{
 
 	@Autowired
 	private PcmsItemService pcmsItemService;
+	
+	@Autowired
+	private  PcmsReconciliationService pcmsReconciliationService;;
 	
 	
 	/**
@@ -96,10 +101,14 @@ public class ItemController extends BaseController{
 			userRole="-1";
 		}
 		
+		
+		
 		//分公司代码和部门代码
 		TpmEmployeeModel emp=user.getEmployeeModel();
-		String companyCode=emp.getCompany();
+//		String companyCode=emp.getCompany();
 		String deptCode=emp.getOrg_code();
+		TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(deptCode);
+		String companyCode=tpmmodel.getOrg_code();
 		String personCode=emp.getPerson_code();
 		
 		Page<ItemResult> result =pcmsItemService.getItemListByParam(searchKey,current,size,
