@@ -6,9 +6,11 @@ import com.itextpdf.text.DocumentException;
 import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.PcmsSupplierMaterialMapper;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.TpmOptLogsModel;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.model.pcms.PcmsSupplierModel;
+import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.service.PcmsSupplierMaterialService;
 import com.kuyu.service.PcmsSupplierService;
 import com.kuyu.service.TpmOptLogsService;
@@ -26,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
@@ -47,6 +50,9 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
 
     @Autowired
     private TpmOptLogsService tpmOptLogsService;
+
+    @Resource
+    private PcmsReconciliationService pcmsReconciliationService;
 
     @Override
     public void insertPcmsSupplierMaterial(PcmsSupplierMaterialModel pcmsSupplierMaterialModel, LoginUserInfo userInfo) throws Exception {
@@ -82,7 +88,8 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
 
     @Override
     public ResultVo findSupplierMaterialByPage(LoginUserInfo userInfo, SupplierMaterialQuery query) throws Exception {
-        query.setCompany(userInfo.getEmployeeModel().getCompany());
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        query.setCompany(tpmDeptModel.getOrg_code());
         query = (SupplierMaterialQuery) CheckParamUtils.trimWithObjectField(query);
         Page<SupplierMaterialQuery> page = new Page<>(query.getCurrent(),query.getSize());
         List<SupplierMaterialQuery> list = baseMapper.findSupplierMaterialByPage(query,page);
