@@ -5,9 +5,11 @@ import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.PcmsMaterialVersionMapper;
 import com.kuyu.mapper.pcms.PcmsSupplierMaterialMapper;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.pcms.PcmsMaterialVersionModel;
 import com.kuyu.model.pcms.PcmsSupplierMaterialModel;
 import com.kuyu.service.PcmsMaterialVersionService;
+import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.service.PcmsSupplierMaterialService;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
@@ -45,6 +47,9 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
     @Resource
     private PcmsSupplierMaterialMapper pcmsSupplierMaterialMapper;
 
+    @Resource
+    private PcmsReconciliationService pcmsReconciliationService;
+
     @Value("${excel.path}")
     private String filePath;
     @Value("${excel.url}")
@@ -68,8 +73,9 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             newFile.delete();
             throw new ParamException("数据为空");
         }
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
 //        List<PcmsSupplierMaterialModel> list = new ArrayList<>();
-        List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(vendor_id,userInfo.getEmployeeModel().getCompany());
+        List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(vendor_id,tpmDeptModel.getOrg_code());
         PcmsMaterialVersionModel pcmsMaterialVersionModel = new PcmsMaterialVersionModel();
         if(null != psmm && psmm.size()>0){
             List<PcmsSupplierMaterialModel> list = new ArrayList<>();
@@ -93,7 +99,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
                 tdm.setNote(psm[6]);
                 tdm.setVendor_id(vendor_id);
                 tdm.setCreate_time(new Date());
-                tdm.setCompany(userInfo.getEmployeeModel().getCompany());
+                tdm.setCompany(tpmDeptModel.getOrg_code());
                 tdm.setVersion(psmm.get(0).getVersion()+1);
                 tdm.setUrl(finalPath);
                 tdm.setState(0);
@@ -106,7 +112,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
             }
             pcmsSupplierMaterialService.deleteBatchIds(listId);*/
 //            pcmsSupplierMaterialService.insertBatch(list);
-            pcmsMaterialVersionModel.setCompany(userInfo.getEmployeeModel().getCompany());
+            pcmsMaterialVersionModel.setCompany(tpmDeptModel.getOrg_code());
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
@@ -137,14 +143,14 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
                 tdm.setNote(psm[6]);
                 tdm.setVendor_id(vendor_id);
                 tdm.setCreate_time(new Date());
-                tdm.setCompany(userInfo.getEmployeeModel().getCompany());
+                tdm.setCompany(tpmDeptModel.getOrg_code());
                 tdm.setVersion(10000);
                 tdm.setUrl(finalPath);
                 tdm.setState(0);
                 list.add(tdm);
             }
 //            pcmsSupplierMaterialService.insertBatch(list);
-            pcmsMaterialVersionModel.setCompany(userInfo.getEmployeeModel().getCompany());
+            pcmsMaterialVersionModel.setCompany(tpmDeptModel.getOrg_code());
             pcmsMaterialVersionModel.setCreate_time(new Date());
             pcmsMaterialVersionModel.setName(suffix);
             pcmsMaterialVersionModel.setVendor_id(vendor_id);
@@ -278,8 +284,9 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
 
     @Override
     public ResultVo confirmSupplierMaterial(List<PcmsSupplierMaterialModel> list, LoginUserInfo userInfo) throws Exception {
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
         if(list.size()>0||null != list){
-            List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(list.get(0).getVendor_id(),userInfo.getEmployeeModel().getCompany());
+            List<PcmsSupplierMaterialModel> psmm = pcmsSupplierMaterialMapper.findSupplierMaterialByVendorAndCompany(list.get(0).getVendor_id(),tpmDeptModel.getOrg_code());
             if(null != psmm && psmm.size()>0){
                 List<Integer> listId = new ArrayList<>();
                 for (PcmsSupplierMaterialModel id : psmm){
@@ -296,7 +303,7 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
                         return pcmsSupplierMaterialModel;
                     }).collect(Collectors.toList());*/
             pcmsSupplierMaterialService.insertBatch(list);
-            List<PcmsMaterialVersionModel> list1 = baseMapper.selectMaterialVersion(list.get(0).getVendor_id(),userInfo.getEmployeeModel().getCompany());
+            List<PcmsMaterialVersionModel> list1 = baseMapper.selectMaterialVersion(list.get(0).getVendor_id(),tpmDeptModel.getOrg_code());
             if(list1.size() ==1){
                 PcmsMaterialVersionModel pcmsMaterialVersionModel = baseMapper.selectById(list1.get(0).getId());
                 pcmsMaterialVersionModel.setState(0);
