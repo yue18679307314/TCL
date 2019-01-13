@@ -2,6 +2,7 @@ package com.kuyu.mapper.pcms;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.pcms.PcmsReconciliationModel;
 import com.kuyu.vo.ReconciliationVo;
 import com.kuyu.vo.pcms.*;
@@ -36,5 +37,7 @@ public interface PcmsReconciliationMapper extends BaseMapper<PcmsReconciliationM
     List<PendingMaterialDetailVo> selectPendingMaterial(@Param("id") Integer id);
 
     List<PendingMaterialDetailVo> selectPendingMaterialList(@Param("id") Integer id);
+
+    TpmDeptModel selectTpmDept(@Param("org_code") String org_code);
 
 }

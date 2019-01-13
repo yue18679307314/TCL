@@ -235,4 +235,28 @@
 		</where>
 		group by ptm.request_id
 	</select>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		uuid,
+		org_code,
+		org_name,
+		org_code_parent,
+		org_name_parent,
+		org_type,
+		update_flag,
+		update_time
+	</sql>
+
+	<!-- 根据部门编码查询部门信息 -->
+	<select id="selectTpmDept" resultType="com.kuyu.model.TpmDeptModel">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM tpm_dept
+		<where>
+			<if test="org_code != null and org_code != ''">
+				org_code = #{org_code}
+			</if>
+		</where>
+	</select>
 </mapper>

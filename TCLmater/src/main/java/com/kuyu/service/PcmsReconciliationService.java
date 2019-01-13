@@ -2,6 +2,7 @@ package com.kuyu.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.pcms.PcmsCurrentDetailModel;
 import com.kuyu.model.pcms.PcmsIinitializationModel;
 import com.kuyu.model.pcms.PcmsMessageModel;
@@ -65,6 +66,9 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     void automaticStatistics();
     //自动生成未结明细记录
     void automaticDetailList();
+
+    //递归查找分公司代码和名称
+    TpmDeptModel selectTpmDept(String org_code);
 
 
 }

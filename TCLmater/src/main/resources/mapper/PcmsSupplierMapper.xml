@@ -142,9 +142,11 @@
 		t.statement_date as statement_date,
 		tm.org_name_parent as request_company
 		FROM pcms_supplier_company f
-		LEFT JOIN  tpm_employee te ON te.company= f.company
-		LEFT JOIN tpm_dept tm ON te.org_code = tm.org_code
+		LEFT JOIN tpm_dept tm ON f.company = tm.org_code
 		LEFT JOIN pcms_supplier t ON t.vendor_id = f.vendor_id
+		<!-- LEFT JOIN  tpm_employee te ON te.company= f.company
+		LEFT JOIN tpm_dept tm ON te.org_code = tm.org_code
+		LEFT JOIN pcms_supplier t ON t.vendor_id = f.vendor_id -->
 		<where>
 			<!--<if test="params.request_company !=null and params.request_company !=''">
 				AND tm.org_name_parent LIKE '%${params.request_company}%'
@@ -152,8 +154,12 @@
 			<if test="params.vendor_name !=null and params.vendor_name !=''">
 			    t.vendor_name LIKE '%${params.vendor_name}%'
 			</if>
-			<if test="params.person_code !=null and params.person_code !=''">
+<!--			<if test="params.person_code !=null and params.person_code !=''">
 				AND te.person_code =
+				#{params.person_code,jdbcType=VARCHAR}
+			</if>-->
+			<if test="params.person_code !=null and params.person_code !=''">
+				AND f.company =
 				#{params.person_code,jdbcType=VARCHAR}
 			</if>
 			<if test="params.city !=null and params.city !=''">

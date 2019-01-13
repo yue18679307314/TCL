@@ -3,9 +3,11 @@ package com.kuyu.service.impl;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.exception.ParamException;
+import com.kuyu.mapper.TpmDeptMapper;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsReconciliationService;
@@ -625,6 +627,8 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             PcmsSupplierVo pcmsSupplier = new PcmsSupplierVo();
             pcmsSupplier.setVendor_id(psm[9]);
             pcmsSupplier.setVendor_name(psm[10]);
+            pcmsSupplier.setDel_comp("n");
+            pcmsSupplier.setDel_flag("n");
 
             if(null != psm[7]){
                 pcmsInitializationLogMapper.insert(pcmsInitializationLog);
@@ -912,6 +916,16 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public TpmDeptModel selectTpmDept(String org_code) {
+        TpmDeptModel tpmDeptModel = pcmsReconciliationMapper.selectTpmDept(org_code);
+        if(tpmDeptModel.getOrg_code_parent().equals("90003975")){
+            return tpmDeptModel;
+        }else{
+            return selectTpmDept(tpmDeptModel.getOrg_code_parent());
         }
     }
 

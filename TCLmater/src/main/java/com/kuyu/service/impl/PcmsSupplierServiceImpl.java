@@ -7,6 +7,7 @@ import com.itextpdf.text.DocumentException;
 import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.WeixinUserInfo;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.*;
@@ -87,6 +88,9 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
     @Resource
     private PcmsSupplierUserMapper pcmsSupplierUserMapper;
+
+    @Resource
+    private PcmsReconciliationService pcmsReconciliationService;
 
     @Override
     public void insertPcmsSupplier(PcmsSupplierVo pcmsSupplierVo) throws Exception {
@@ -189,7 +193,8 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
 
     @Override
     public ResultVo findPcmsSupplierListByPage(LoginUserInfo userInfo, PcmsSupplierQuery query) throws Exception {
-        query.setPerson_code(userInfo.getEmployeeModel().getPerson_code());
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        query.setPerson_code(tpmDeptModel.getOrg_code());
         query.setRequest_company(query.getVendor_name());
         query = (PcmsSupplierQuery) CheckParamUtils.trimWithObjectField(query);
         Page<PcmsSupplierListVo> page = new Page<>(query.getCurrent(),query.getSize());
