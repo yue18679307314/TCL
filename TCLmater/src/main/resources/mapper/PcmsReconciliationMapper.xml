@@ -26,7 +26,7 @@
 			<if test="params.vendor_name !=null and params.vendor_name !=''">
 				and t.vendor_name LIKE '%${params.vendor_name}%'
 			</if>
-			<if test="params.state !=null and params.state !=''">
+			<if test="params.state != null">
 				and t.state = #{params.state}
 			</if>
 <!--			<if test="params.start_time !=null and params.start_time !=''">
