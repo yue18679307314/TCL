@@ -27,7 +27,9 @@ public interface PcmsProjectService {
 
 	String initItem(InitItemRequest initItem);
 
-	String initPayMent(List<PaymentRequest> initPayMent);
+	ResultVo initPayMent(List<PaymentRequest> initPayMent);
+
+	ResultVo initPayMentDetail(List<PaymentRequest> initPayMent);
 
 
 }

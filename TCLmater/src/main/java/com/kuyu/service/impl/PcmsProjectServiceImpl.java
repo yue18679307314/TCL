@@ -759,13 +759,11 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			this.importProjectMaterialDetail(a,-1);
 		}
 		
-		
 		List<PcmsProjectVo2> m41f=initItem.getM41f();
 		for (PcmsProjectVo2 b : m41f) {
 			System.out.println("导入立项单号："+b.getRequestId());
 			this.importProjectDetail2(b,-1);
 		}
-		
 		
 		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
 	}
@@ -774,26 +772,21 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 
 
 	@Override
-	public String initPayMent(List<PaymentRequest> initPayMent) {
-//		List<PaymentRequest> initPayList=initPayMent.getInitPayList();
-		for (PaymentRequest payment : initPayMent) {
-			System.out.println("导入付款单:"+payment.getFsscBill());
-			pcmsItemService.createPaymentDetail(payment);
-		}
-		return StringUtil.toJsonResultVo(ResultVoUtils.toSharePlatform(CommonConstants.SHARE_PLATFORM_FINISH_CODE, ""));
+	public ResultVo initPayMent(List<PaymentRequest> initPayMent) {
+		List<String> error=	pcmsItemService.initPayMent(initPayMent);
+
+		 return ResultVo.getData(ResultVo.SUCCESS, error);
 	}
 
 
 
 
-	
+	@Override
+	public ResultVo initPayMentDetail(List<PaymentRequest> initPayMent) {
+		List<String> error=	pcmsItemService.initPayMentDetail(initPayMent);
 
+		 return ResultVo.getData(ResultVo.SUCCESS, error);
+	}
 
-
-
-	
-	
-	
-	
 	
 }

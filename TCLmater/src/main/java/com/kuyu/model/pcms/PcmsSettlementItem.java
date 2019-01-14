@@ -23,6 +23,8 @@ public class PcmsSettlementItem {
 
     private String settlementNumber;
 
+    private String fsscBill;
+
     private Date createTime;
 
     public Integer getSetid() {
@@ -103,6 +105,14 @@ public class PcmsSettlementItem {
 
     public void setSettlementNumber(String settlementNumber) {
         this.settlementNumber = settlementNumber == null ? null : settlementNumber.trim();
+    }
+
+    public String getFsscBill() {
+        return fsscBill;
+    }
+
+    public void setFsscBill(String fsscBill) {
+        this.fsscBill = fsscBill == null ? null : fsscBill.trim();
     }
 
     public Date getCreateTime() {

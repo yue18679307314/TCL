@@ -20,6 +20,9 @@ public class PaymentRequest {
 	
 	@JsonProperty("REQUEST_BILL_AVAILABLE")
 	private List<BillAvailable> availableList;
+	
+	@JsonProperty("DETAIL_LIST")
+	private List<ProjectDetailVo> detailList;
 
 	public String getFsscBill() {
 		return fsscBill;
@@ -61,7 +64,12 @@ public class PaymentRequest {
 		this.requestDept = requestDept;
 	}
 
-	
-	
-	
+	public List<ProjectDetailVo> getDetailList() {
+		return detailList;
+	}
+
+	public void setDetailList(List<ProjectDetailVo> detailList) {
+		this.detailList = detailList;
+	}
+
 }

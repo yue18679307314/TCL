@@ -132,14 +132,30 @@ public class ProjectController {
     
     
     /**
-     * 初始化付款数据
+     * 初始资金付款中的数据
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "初始资金付款中的数据")
+    @PostMapping(value = "/initPayMentDetail",produces = "application/json;charset=UTF-8")
+    public ResultVo initPayMentDetail(@ApiParam(value = "初始资金付款中的数据", required = true)
+    @RequestBody List<PaymentRequest> initPayMent)throws Exception{
+    	
+    	
+        return pcmsProjectService.initPayMentDetail(initPayMent);
+    }
+    
+    
+    /**
+     * 初始报销单\余额单审批中的数据
      * @param
      * @return
      * @throws Exception
      */
     @ApiOperation(value = "初始化付款数据")
     @PostMapping(value = "/initPayMent",produces = "application/json;charset=UTF-8")
-    public String initPayMent(@ApiParam(value = "初始化付款数据", required = true)
+    public ResultVo initPayMent(@ApiParam(value = "初始化付款数据", required = true)
     @RequestBody List<PaymentRequest> initPayMent)throws Exception{
     	
     	

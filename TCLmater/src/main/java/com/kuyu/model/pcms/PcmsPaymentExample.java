@@ -165,6 +165,76 @@ public class PcmsPaymentExample {
             return (Criteria) this;
         }
 
+        public Criteria andRequestDeptIsNull() {
+            addCriterion("request_dept is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptIsNotNull() {
+            addCriterion("request_dept is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptEqualTo(String value) {
+            addCriterion("request_dept =", value, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNotEqualTo(String value) {
+            addCriterion("request_dept <>", value, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptGreaterThan(String value) {
+            addCriterion("request_dept >", value, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptGreaterThanOrEqualTo(String value) {
+            addCriterion("request_dept >=", value, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptLessThan(String value) {
+            addCriterion("request_dept <", value, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptLessThanOrEqualTo(String value) {
+            addCriterion("request_dept <=", value, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptLike(String value) {
+            addCriterion("request_dept like", value, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNotLike(String value) {
+            addCriterion("request_dept not like", value, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptIn(List<String> values) {
+            addCriterion("request_dept in", values, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNotIn(List<String> values) {
+            addCriterion("request_dept not in", values, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptBetween(String value1, String value2) {
+            addCriterion("request_dept between", value1, value2, "requestDept");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNotBetween(String value1, String value2) {
+            addCriterion("request_dept not between", value1, value2, "requestDept");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -1055,6 +1125,76 @@ public class PcmsPaymentExample {
             return (Criteria) this;
         }
 
+        public Criteria andStopReasonIsNull() {
+            addCriterion("stop_reason is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonIsNotNull() {
+            addCriterion("stop_reason is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonEqualTo(String value) {
+            addCriterion("stop_reason =", value, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonNotEqualTo(String value) {
+            addCriterion("stop_reason <>", value, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonGreaterThan(String value) {
+            addCriterion("stop_reason >", value, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonGreaterThanOrEqualTo(String value) {
+            addCriterion("stop_reason >=", value, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonLessThan(String value) {
+            addCriterion("stop_reason <", value, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonLessThanOrEqualTo(String value) {
+            addCriterion("stop_reason <=", value, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonLike(String value) {
+            addCriterion("stop_reason like", value, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonNotLike(String value) {
+            addCriterion("stop_reason not like", value, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonIn(List<String> values) {
+            addCriterion("stop_reason in", values, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonNotIn(List<String> values) {
+            addCriterion("stop_reason not in", values, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonBetween(String value1, String value2) {
+            addCriterion("stop_reason between", value1, value2, "stopReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andStopReasonNotBetween(String value1, String value2) {
+            addCriterion("stop_reason not between", value1, value2, "stopReason");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -1112,6 +1252,66 @@ public class PcmsPaymentExample {
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
             addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIsNull() {
+            addCriterion("update_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIsNotNull() {
+            addCriterion("update_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeEqualTo(Date value) {
+            addCriterion("update_time =", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotEqualTo(Date value) {
+            addCriterion("update_time <>", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThan(Date value) {
+            addCriterion("update_time >", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("update_time >=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThan(Date value) {
+            addCriterion("update_time <", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("update_time <=", value, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeIn(List<Date> values) {
+            addCriterion("update_time in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotIn(List<Date> values) {
+            addCriterion("update_time not in", values, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("update_time between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
     }
