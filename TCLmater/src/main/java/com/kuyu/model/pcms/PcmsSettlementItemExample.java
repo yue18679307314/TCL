@@ -775,6 +775,76 @@ public class PcmsSettlementItemExample {
             return (Criteria) this;
         }
 
+        public Criteria andFsscBillIsNull() {
+            addCriterion("fssc_bill is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillIsNotNull() {
+            addCriterion("fssc_bill is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillEqualTo(String value) {
+            addCriterion("fssc_bill =", value, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillNotEqualTo(String value) {
+            addCriterion("fssc_bill <>", value, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillGreaterThan(String value) {
+            addCriterion("fssc_bill >", value, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillGreaterThanOrEqualTo(String value) {
+            addCriterion("fssc_bill >=", value, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillLessThan(String value) {
+            addCriterion("fssc_bill <", value, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillLessThanOrEqualTo(String value) {
+            addCriterion("fssc_bill <=", value, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillLike(String value) {
+            addCriterion("fssc_bill like", value, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillNotLike(String value) {
+            addCriterion("fssc_bill not like", value, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillIn(List<String> values) {
+            addCriterion("fssc_bill in", values, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillNotIn(List<String> values) {
+            addCriterion("fssc_bill not in", values, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillBetween(String value1, String value2) {
+            addCriterion("fssc_bill between", value1, value2, "fsscBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andFsscBillNotBetween(String value1, String value2) {
+            addCriterion("fssc_bill not between", value1, value2, "fsscBill");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

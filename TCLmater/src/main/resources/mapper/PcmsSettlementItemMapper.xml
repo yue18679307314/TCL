@@ -12,6 +12,7 @@
     <result column="tax_rate" jdbcType="VARCHAR" property="taxRate" />
     <result column="is_last" jdbcType="INTEGER" property="isLast" />
     <result column="settlement_number" jdbcType="VARCHAR" property="settlementNumber" />
+    <result column="fssc_bill" jdbcType="VARCHAR" property="fsscBill" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     setid, itid, sedetail_id, sedetail_money, sedetail_memo, tax_type, invoice_number, 
-    tax_rate, is_last, settlement_number, create_time
+    tax_rate, is_last, settlement_number, fssc_bill, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsSettlementItemExample" resultMap="BaseResultMap">
     select
@@ -110,11 +111,13 @@
     insert into pcms_settlement_item (setid, itid, sedetail_id, 
       sedetail_money, sedetail_memo, tax_type, 
       invoice_number, tax_rate, is_last, 
-      settlement_number, create_time)
+      settlement_number, fssc_bill, create_time
+      )
     values (#{setid,jdbcType=INTEGER}, #{itid,jdbcType=INTEGER}, #{sedetailId,jdbcType=VARCHAR}, 
       #{sedetailMoney,jdbcType=VARCHAR}, #{sedetailMemo,jdbcType=VARCHAR}, #{taxType,jdbcType=VARCHAR}, 
       #{invoiceNumber,jdbcType=VARCHAR}, #{taxRate,jdbcType=VARCHAR}, #{isLast,jdbcType=INTEGER}, 
-      #{settlementNumber,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+      #{settlementNumber,jdbcType=VARCHAR}, #{fsscBill,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsSettlementItem">
     insert into pcms_settlement_item
@@ -148,6 +151,9 @@
       </if>
       <if test="settlementNumber != null">
         settlement_number,
+      </if>
+      <if test="fsscBill != null">
+        fssc_bill,
       </if>
       <if test="createTime != null">
         create_time,
@@ -183,6 +189,9 @@
       </if>
       <if test="settlementNumber != null">
         #{settlementNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="fsscBill != null">
+        #{fsscBill,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -228,6 +237,9 @@
       <if test="record.settlementNumber != null">
         settlement_number = #{record.settlementNumber,jdbcType=VARCHAR},
       </if>
+      <if test="record.fsscBill != null">
+        fssc_bill = #{record.fsscBill,jdbcType=VARCHAR},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -248,6 +260,7 @@
       tax_rate = #{record.taxRate,jdbcType=VARCHAR},
       is_last = #{record.isLast,jdbcType=INTEGER},
       settlement_number = #{record.settlementNumber,jdbcType=VARCHAR},
+      fssc_bill = #{record.fsscBill,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -283,6 +296,9 @@
       <if test="settlementNumber != null">
         settlement_number = #{settlementNumber,jdbcType=VARCHAR},
       </if>
+      <if test="fsscBill != null">
+        fssc_bill = #{fsscBill,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -300,6 +316,7 @@
       tax_rate = #{taxRate,jdbcType=VARCHAR},
       is_last = #{isLast,jdbcType=INTEGER},
       settlement_number = #{settlementNumber,jdbcType=VARCHAR},
+      fssc_bill = #{fsscBill,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where setid = #{setid,jdbcType=INTEGER}
   </update>

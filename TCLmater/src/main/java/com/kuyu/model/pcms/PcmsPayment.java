@@ -5,6 +5,8 @@ import java.util.Date;
 public class PcmsPayment {
     private Integer pmid;
 
+    private String requestDept;
+
     private Integer type;
 
     private String fsscBill;
@@ -31,7 +33,11 @@ public class PcmsPayment {
 
     private Integer status;
 
+    private String stopReason;
+
     private Date createTime;
+
+    private Date updateTime;
 
     public Integer getPmid() {
         return pmid;
@@ -39,6 +45,14 @@ public class PcmsPayment {
 
     public void setPmid(Integer pmid) {
         this.pmid = pmid;
+    }
+
+    public String getRequestDept() {
+        return requestDept;
+    }
+
+    public void setRequestDept(String requestDept) {
+        this.requestDept = requestDept == null ? null : requestDept.trim();
     }
 
     public Integer getType() {
@@ -145,11 +159,27 @@ public class PcmsPayment {
         this.status = status;
     }
 
+    public String getStopReason() {
+        return stopReason;
+    }
+
+    public void setStopReason(String stopReason) {
+        this.stopReason = stopReason == null ? null : stopReason.trim();
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

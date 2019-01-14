@@ -107,8 +107,11 @@ public class ItemController extends BaseController{
 		TpmEmployeeModel emp=user.getEmployeeModel();
 //		String companyCode=emp.getCompany();
 		String deptCode=emp.getOrg_code();
-		TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(deptCode);
-		String companyCode=tpmmodel.getOrg_code();
+		String companyCode=null;
+		if(userRole.equals("2")||userRole.equals("0")||userRole.equals("6")){
+			TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(deptCode);
+			companyCode=tpmmodel.getOrg_code();
+		}
 		String personCode=emp.getPerson_code();
 		
 		Page<ItemResult> result =pcmsItemService.getItemListByParam(searchKey,current,size,
@@ -166,8 +169,6 @@ public class ItemController extends BaseController{
 			throw new ParamException(ResultVo.getByEnumCode(CommonConstants.NOT_LOGIN_CODE));
 		}
 		
-											  
-//		return pcmsItemService.changeItemStatus(itid,status,reason);
 		return pcmsItemService.changeItemStatus(itid,status,getLoginUserInfo(),reason,user);
 	}
 	
@@ -214,16 +215,16 @@ public class ItemController extends BaseController{
 	
 	
 	/**
-	 * 生成付款单
+	 * 更新付款单
 	 * @param request
 	 * @return
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
 	 */
-	@ApiOperation("生成付款单")   
+	@ApiOperation("更新付款单")   
 	@PostMapping(value = "/createPayment", produces = "application/json;charset=utf-8")
 	public @ResponseBody String createPayment(HttpServletRequest request,
-			@ApiParam(value = "生成付款单", required = true) @RequestBody PaymentRequest payment)  {
+			@ApiParam(value = "更新付款单", required = true) @RequestBody PaymentRequest payment)  {
 		
 		int i=pcmsItemService.createPayment(payment);
 		if(i==1){
@@ -298,6 +299,7 @@ public class ItemController extends BaseController{
 			@RequestParam(value = "searchKey",required=false)String searchKey,
 			@RequestParam(value = "current",required=false)Integer current,
 			@RequestParam(value = "size",required=false)Integer size,
+			@RequestParam(value = "status",required=false)Integer status,
 			@RequestParam(value = "approvalStatrTime",required=false)String approvalStatrTime,
 			@RequestParam(value = "approvalEndTime",required=false)String approvalEndTime){
 		
@@ -309,7 +311,7 @@ public class ItemController extends BaseController{
 		}
 		
 		
-		Page<PaymentResult> payList=pcmsItemService.paymentList(searchKey,current,size,approvalStatrTime,approvalEndTime);
+		Page<PaymentResult> payList=pcmsItemService.paymentList(searchKey,current,size,approvalStatrTime,approvalEndTime,status);
 	return ResultVo.getData(ResultVo.SUCCESS, payList);
 	}
 	
