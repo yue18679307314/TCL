@@ -140,7 +140,7 @@
 		t.legal_person as legal_person,
 		t.mobile as mobile,
 		t.statement_date as statement_date,
-		tm.org_name_parent as request_company
+		tm.org_name as request_company
 		FROM pcms_supplier_company f
 		LEFT JOIN tpm_dept tm ON f.company = tm.org_code
 		LEFT JOIN pcms_supplier t ON t.vendor_id = f.vendor_id
