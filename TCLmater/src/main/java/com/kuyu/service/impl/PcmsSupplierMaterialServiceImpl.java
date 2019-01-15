@@ -116,7 +116,8 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
 
     @Override
     public ResultVo queryBySupplierMaterialList(SupplierMaterialResultVo supplierMaterialResultVo,LoginUserInfo userInfo) throws Exception {
-        supplierMaterialResultVo.setCompany(userInfo.getEmployeeModel().getCompany());
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        supplierMaterialResultVo.setCompany(tpmDeptModel.getOrg_code());
         List<PcmsSupplierMaterialModel> list = baseMapper.queryBySupplierMaterialList(supplierMaterialResultVo);
         return ResultVo.getDataWithSuccess(list);
     }
