@@ -633,7 +633,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsIinitialization.setCreate_time(new Date());
             pcmsIinitialization.setFinancial_money("0");
             pcmsIinitialization.setPay_amount("0");
-            pcmsIinitialization.setMonth(getLastMonth());
+            pcmsIinitialization.setMonth(getLastTwoMonth());
 
 
             PcmsSupplierCompanyModel pcmsSupplierCompanyModel = new PcmsSupplierCompanyModel();
