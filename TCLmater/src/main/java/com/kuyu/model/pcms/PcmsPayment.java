@@ -5,6 +5,8 @@ import java.util.Date;
 public class PcmsPayment {
     private Integer pmid;
 
+    private String companyCode;
+
     private String requestDept;
 
     private Integer type;
@@ -45,6 +47,14 @@ public class PcmsPayment {
 
     public void setPmid(Integer pmid) {
         this.pmid = pmid;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode == null ? null : companyCode.trim();
     }
 
     public String getRequestDept() {

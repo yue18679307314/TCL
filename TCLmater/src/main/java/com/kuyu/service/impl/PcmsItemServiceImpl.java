@@ -10,9 +10,11 @@ import com.kuyu.exception.ParamException;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
 import com.kuyu.model.TpmBranchAdminModel;
+import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.UserRoleInfoModel;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.PcmsItemService;
+import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.service.TpmBranchAdminService;
 import com.kuyu.service.TpmEmployeeService;
 import com.kuyu.service.UserRoleInfoService;
@@ -121,6 +123,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Autowired
 	private PcmsPaymentCheckMapper pcmsPaymentCheckMapper;
 	
+	@Autowired
+	private  PcmsReconciliationService pcmsReconciliationService;
 	
 	@Override
 	public LoginUserInfo getUserInfo(String employeenumber) {
@@ -589,6 +593,16 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public int createPayment(PaymentRequest payment) {
 		String fsscBill=payment.getFsscBill();
+		String dept=payment.getRequestDept();
+		String companyCode="none";
+		if(dept!=null){
+			//公司代码
+			TpmDeptModel deptModel=pcmsReconciliationService.selectTpmDept(dept);
+			 companyCode=deptModel.getOrg_code();
+		}
+		
+		
+		
 		List<Payment> paymentList=payment.getPaymentList();
 		
 		//查询付款单信息，如果有则更新，代表此单为付款单，没有则为余额单
@@ -598,6 +612,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				if(info==null){
 					PcmsPayment balance=new PcmsPayment();
 					balance.setFsscBill(fsscBill);
+					balance.setCompanyCode(companyCode);
+					balance.setRequestDept(dept);
 					balance.setVendorId(pay.getVendorId());
 					balance.setType(1);//余额单
 					balance.setAccountNumber(pay.getAccountNumber());
@@ -613,6 +629,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 					balance.setCreateTime(new Date());
 					pcmsPaymentMapper.insertSelective(balance);
 				}else{
+					info.setCompanyCode(companyCode);
+					info.setRequestDept(dept);
 					info.setAccountNumber(pay.getAccountNumber());
 					info.setAccountName(pay.getAccountName());
 					info.setPayeeName(pay.getPayeeName());
@@ -875,8 +893,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			param.put("status", status);
 		}
 		
-		//TODO
-//		if(userRole)
+		if(!userRole.equals("1")){
+			param.put("companyCode", companyCode);
+		}
 		
 				
 		//分页查询
@@ -1184,6 +1203,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 			String fsscBill = payment.getFsscBill();
 			String dept = payment.getRequestDept();
+			
+			//公司代码
+			TpmDeptModel deptModel=pcmsReconciliationService.selectTpmDept(dept);
+			String companyCode=deptModel.getOrg_code();
+			
 			System.out.println("初始化审批中的报销单:" + fsscBill);
 
 			List<Payment> paymentList = payment.getPaymentList();
@@ -1196,6 +1220,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 					}else{
 						balance.setFsscBill(fsscBill+"("+i+")");
 					}
+					balance.setCompanyCode(companyCode);
 					balance.setRequestDept(dept);
 					balance.setVendorId(paymentList.get(i).getVendorId());
 					balance.setAccountNumber(paymentList.get(i).getAccountNumber());
@@ -1247,6 +1272,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			
 			String fsscBill = payment.getFsscBill();
 			String dept = payment.getRequestDept();
+			
+			//公司代码
+			TpmDeptModel deptModel=pcmsReconciliationService.selectTpmDept(dept);
+			String companyCode=deptModel.getOrg_code();
+			
 			System.out.println("初始化审批中的报销单:" + fsscBill);
 			
 			List<Payment> paymentList = payment.getPaymentList();
@@ -1264,6 +1294,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				}else{
 					balance.setFsscBill(fsscBill+"("+i+")");
 				}
+				balance.setCompanyCode(companyCode);
 				balance.setRequestDept(dept);
 				balance.setVendorId(paymentList.get(i).getVendorId());
 				balance.setAccountNumber(paymentList.get(i).getAccountNumber());

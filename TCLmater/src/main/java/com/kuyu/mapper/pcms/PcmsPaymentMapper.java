@@ -35,7 +35,7 @@ public interface PcmsPaymentMapper {
 
 	Integer getPaymentListCount(HashMap<String, Object> param);
 
-	PcmsPayment selectByFsscBill(String fsscBill);
-
 	PaymentResult getDetailMoney(String fsscBill);
+
+	PcmsPayment selectByFsscBill(String fsscBill);
 }
