@@ -1279,7 +1279,10 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		for (PaymentRequest payment : initPayMent) {
 			
 			String fsscBill = payment.getFsscBill();
+			
 			String dept = payment.getRequestDept();
+			
+			System.out.println("初始化审批中的报销单:" + fsscBill);
 			
 			//公司代码
 			TpmDeptModel deptModel=pcmsReconciliationService.selectTpmDept(dept);
@@ -1289,7 +1292,6 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			}
 			
 			
-			System.out.println("初始化审批中的报销单:" + fsscBill);
 			
 			List<Payment> paymentList = payment.getPaymentList();
 			List<ProjectDetailVo> detailList = payment.getDetailList();
