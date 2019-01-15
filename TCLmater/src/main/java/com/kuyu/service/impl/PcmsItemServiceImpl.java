@@ -908,7 +908,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		//统计已付金额、终止金额、失败金额
 		for (PaymentResult a : payList) {
 			String fsscBill=a.getFsscBill();
-			PaymentResult moneyInfo=pcmsPaymentMapper.getDetailMoney(fsscBill);
+			String checkFsscBill=PcmsProjectUtil.subFsscBill(fsscBill);
+			PaymentResult moneyInfo=pcmsPaymentMapper.getDetailMoney(checkFsscBill);
 			if(moneyInfo!=null){
 				a.setAlreadyAmount(moneyInfo.getAlreadyAmount());
 				a.setStopAmount(moneyInfo.getStopAmount());
