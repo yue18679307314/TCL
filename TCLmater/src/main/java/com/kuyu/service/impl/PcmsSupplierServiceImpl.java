@@ -11,6 +11,7 @@ import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.WeixinUserInfo;
 import com.kuyu.model.pcms.*;
 import com.kuyu.service.*;
+import com.kuyu.task.pcms.UpdateSupplierToken;
 import com.kuyu.util.CheckParamUtils;
 import com.kuyu.util.DateUtils;
 import com.kuyu.util.StringUtil;
@@ -31,6 +32,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.CellRangeAddress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,7 +52,7 @@ import java.util.*;
 @Transactional
 public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, PcmsSupplierModel>
         implements PcmsSupplierService {
-
+    private static final Logger log = LoggerFactory.getLogger(PcmsSupplierServiceImpl.class);
     @Value("${pcmsSupplierPath}")
     private String pcmsSupplierPath;
 
