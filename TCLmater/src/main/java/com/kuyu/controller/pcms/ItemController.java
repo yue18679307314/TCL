@@ -291,6 +291,7 @@ public class ItemController extends BaseController{
 	 * 付款单列表
 	 * @param request
 	 * @return
+	 * @throws Exception 
 	 * @throws IOException 
 	 */
 	@ApiOperation("付款单列表")   
@@ -301,8 +302,10 @@ public class ItemController extends BaseController{
 			@RequestParam(value = "size",required=false)Integer size,
 			@RequestParam(value = "status",required=false)Integer status,
 			@RequestParam(value = "approvalStatrTime",required=false)String approvalStatrTime,
-			@RequestParam(value = "approvalEndTime",required=false)String approvalEndTime){
+			@RequestParam(value = "approvalEndTime",required=false)String approvalEndTime,
+			@RequestParam(value = "employeenumber",required=false)String employeenumber) throws Exception{
 		
+		//分页信息
 		if(current==null||current<=0){
 			current=1;
 		} 
@@ -310,8 +313,45 @@ public class ItemController extends BaseController{
 			 size=10;
 		}
 		
+		LoginUserInfo user=null;
 		
-		Page<PaymentResult> payList=pcmsItemService.paymentList(searchKey,current,size,approvalStatrTime,approvalEndTime,status);
+		//app端获取用户登录信息
+		if(employeenumber!=null&&!employeenumber.equals("")){
+			 user=pcmsItemService.getUserInfo(employeenumber);
+		}else{
+		//PC端获取用户登录信息	
+			 user=getUserInfo();
+		}
+		
+		//如果获取不到用户登录信息
+		if(user==null){
+			throw new ParamException(ResultVo.getByEnumCode(CommonConstants.NOT_LOGIN_CODE));
+		}
+		
+		
+		
+		//1 admin; 2  分公司财务负责人; 0  分公司管理员 ; 6 既是分公司管理员，也是分公司财务; -1市场人员
+		String userRole=user.getUserRole();
+		
+		if(userRole==null||userRole.equals("")){
+			userRole="-1";
+		}
+		
+		
+		//分公司代码和部门代码
+		TpmEmployeeModel emp=user.getEmployeeModel();
+		String deptCode=emp.getOrg_code();
+		String companyCode=null;
+		if(userRole.equals("2")||userRole.equals("0")||userRole.equals("6")){
+			TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(deptCode);
+			companyCode=tpmmodel.getOrg_code();
+		}
+		String personCode=emp.getPerson_code();
+		
+		
+		Page<PaymentResult> payList=pcmsItemService.paymentList(searchKey,current,size,approvalStatrTime,approvalEndTime,status,
+				companyCode,deptCode,personCode,userRole);
+		
 	return ResultVo.getData(ResultVo.SUCCESS, payList);
 	}
 	

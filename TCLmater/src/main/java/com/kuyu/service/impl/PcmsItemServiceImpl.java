@@ -853,7 +853,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 
 	@Override
-	public Page<PaymentResult> paymentList(String searchKey, Integer current, Integer size, String approvalStatrTime, String approvalEndTime,Integer status) {
+	public Page<PaymentResult> paymentList(String searchKey, Integer current, Integer size, 
+			String approvalStatrTime, String approvalEndTime,Integer status,String companyCode,
+			String deptCode, String personCode,String userRole) {
 		
 		Integer linimt=(current-1)*size;  
 		
@@ -872,6 +874,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		if(status!=null){
 			param.put("status", status);
 		}
+		
+		//TODO
+//		if(userRole)
 		
 				
 		//分页查询
@@ -1173,75 +1178,63 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public Set<String> initPayMent(List<PaymentRequest> initPayMent) {
 
-		//TODO
-		
-//		Set<String> error = new HashSet<>();
-//
-//		for (PaymentRequest payment : initPayMent) {
-//
-//			String fsscBill = payment.getFsscBill();
-//			System.out.println("初始化审批中的报销单:" + fsscBill);
-//
-//			List<Payment> paymentList = payment.getPaymentList();
-//			List<ProjectDetailVo> detailList = payment.getDetailList();
-//			Integer paymentListSize=paymentList.size();
-//				for (int i = 0; i < paymentListSize; i++) {
-//					if(paymentListSize==1){
-//						
-//					}else{
-//						
-//					}
-//				}
-//				for (Payment pay : paymentList) {
-//					PcmsPayment balance = new PcmsPayment();
-//					balance.setFsscBill(fsscBill);
-//					balance.setVendorId(pay.getVendorId());
-//					balance.setAccountNumber(pay.getAccountNumber());
-//					balance.setAccountName(pay.getAccountName());
-//					balance.setPayeeName(pay.getPayeeName());
-//					balance.setPaymentType(pay.getPaymentType());
-//					balance.setRecommentDate(pay.getRecommentDate());
-//					balance.setPayAmount(pay.getPayAmount());
-//					balance.setPayStandard(pay.getPayStandard());
-//					balance.setBillExpireDate(pay.getBillExpireDate());
-//					balance.setBankAccountNumber(pay.getBankAccountNumber());
-//					balance.setStatus(1);
-//					balance.setCreateTime(new Date());
-//					if (detailList == null || detailList.size() == 0) {
-//						balance.setType(1);// 余额单
-//					} else {
-//						balance.setType(0);// 付款单
-//					}
-//					pcmsPaymentMapper.insertSelective(balance);
-//				}
-//				for (ProjectDetailVo detailVo : detailList) {
-//					
-//					PcmsItem item = pcmsItemMapper.selectByDetailId(detailVo.getDetailId());
-//					if (item != null) {
-//						PcmsSettlementItem record = new PcmsSettlementItem();
-//						record.setFsscBill(fsscBill);
-//						record.setItid(item.getItid());
-//						record.setCreateTime(new Date());
-//						pcmsSettlementItemMapper.insertSelective(record);
-//					}
-//				}
-//
-//			} else {
-//				for (ProjectDetailVo detailVo : detailList) {
-//					
-//					String DETAIL_ACCOUNT=PcmsProjectUtil.subCompanyCode(detailVo.getDetailAccount());
-//					if(DETAIL_ACCOUNT.equals("00140005")||DETAIL_ACCOUNT.equals("00140001")){
-//						continue;
-//					}else{
-//						error.add(fsscBill);
-//					}
-//					
-//				}
-//			}
-//		}
-//
-//		return error;
-		return null;
+		Set<String> error = new HashSet<>();
+
+		for (PaymentRequest payment : initPayMent) {
+
+			String fsscBill = payment.getFsscBill();
+			String dept = payment.getRequestDept();
+			System.out.println("初始化审批中的报销单:" + fsscBill);
+
+			List<Payment> paymentList = payment.getPaymentList();
+			List<ProjectDetailVo> detailList = payment.getDetailList();
+			Integer paymentListSize=paymentList.size();
+				for (int i = 0; i < paymentListSize; i++) {
+					PcmsPayment balance = new PcmsPayment();
+					if(paymentListSize==1){
+						balance.setFsscBill(fsscBill);
+					}else{
+						balance.setFsscBill(fsscBill+"("+i+")");
+					}
+					balance.setRequestDept(dept);
+					balance.setVendorId(paymentList.get(i).getVendorId());
+					balance.setAccountNumber(paymentList.get(i).getAccountNumber());
+					balance.setAccountName(paymentList.get(i).getAccountName());
+					balance.setPayeeName(paymentList.get(i).getPayeeName());
+					balance.setPaymentType(paymentList.get(i).getPaymentType());
+					balance.setRecommentDate(paymentList.get(i).getRecommentDate());
+					balance.setPayAmount(paymentList.get(i).getPayAmount());
+					balance.setPayStandard(paymentList.get(i).getPayStandard());
+					balance.setBillExpireDate(paymentList.get(i).getBillExpireDate());
+					balance.setBankAccountNumber(paymentList.get(i).getBankAccountNumber());
+					balance.setStatus(1);
+					balance.setCreateTime(new Date());
+					if (detailList == null || detailList.size() == 0) {
+						balance.setType(1);// 余额单
+					} else {
+						balance.setType(0);// 付款单
+					}
+					pcmsPaymentMapper.insertSelective(balance);
+					
+				}
+				
+				for (ProjectDetailVo detailVo : detailList) {
+					
+					PcmsItem item = pcmsItemMapper.selectByDetailId(detailVo.getDetailId());
+					if (item != null) {
+						PcmsSettlementItem record = new PcmsSettlementItem();
+						record.setFsscBill(fsscBill);
+						record.setItid(item.getItid());
+						record.setCreateTime(new Date());
+						pcmsSettlementItemMapper.insertSelective(record);
+					}else{
+						error.add(fsscBill);
+					}
+				}
+
+			
+		}
+		return error;
 	}
 
 
@@ -1253,36 +1246,47 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		for (PaymentRequest payment : initPayMent) {
 			
 			String fsscBill = payment.getFsscBill();
+			String dept = payment.getRequestDept();
 			System.out.println("初始化审批中的报销单:" + fsscBill);
 			
 			List<Payment> paymentList = payment.getPaymentList();
 			List<ProjectDetailVo> detailList = payment.getDetailList();
 			List<BillAvailable> availableList =payment.getAvailableList();
 			List<Financial> financialList =payment.getFinancialList();
-			
-			if (CollectionUtils.isNotEmpty(paymentList) && paymentList.size() == 1) {
-				for (Payment pay : paymentList) {
-					PcmsPayment balance = new PcmsPayment();
+			Integer paymentListSize=0;
+			if(CollectionUtils.isNotEmpty(detailList)){
+				 paymentListSize=paymentList.size();
+			}
+			for (int i = 0; i < paymentListSize; i++) {
+				PcmsPayment balance = new PcmsPayment();
+				if(paymentListSize==1){
 					balance.setFsscBill(fsscBill);
-					balance.setVendorId(pay.getVendorId());
-					balance.setAccountNumber(pay.getAccountNumber());
-					balance.setAccountName(pay.getAccountName());
-					balance.setPayeeName(pay.getPayeeName());
-					balance.setPaymentType(pay.getPaymentType());
-					balance.setRecommentDate(pay.getRecommentDate());
-					balance.setPayAmount(pay.getPayAmount());
-					balance.setPayStandard(pay.getPayStandard());
-					balance.setBillExpireDate(pay.getBillExpireDate());
-					balance.setBankAccountNumber(pay.getBankAccountNumber());
-					balance.setStatus(1);
-					balance.setCreateTime(new Date());
-					if (detailList == null || detailList.size() == 0) {
-						balance.setType(1);// 余额单
-					} else {
-						balance.setType(0);// 付款单
-					}
-					pcmsPaymentMapper.insertSelective(balance);
+				}else{
+					balance.setFsscBill(fsscBill+"("+i+")");
 				}
+				balance.setRequestDept(dept);
+				balance.setVendorId(paymentList.get(i).getVendorId());
+				balance.setAccountNumber(paymentList.get(i).getAccountNumber());
+				balance.setAccountName(paymentList.get(i).getAccountName());
+				balance.setPayeeName(paymentList.get(i).getPayeeName());
+				balance.setPaymentType(paymentList.get(i).getPaymentType());
+				balance.setRecommentDate(paymentList.get(i).getRecommentDate());
+				balance.setPayAmount(paymentList.get(i).getPayAmount());
+				balance.setPayStandard(paymentList.get(i).getPayStandard());
+				balance.setBillExpireDate(paymentList.get(i).getBillExpireDate());
+				balance.setBankAccountNumber(paymentList.get(i).getBankAccountNumber());
+				balance.setStatus(2);
+				balance.setCreateTime(new Date());
+				if (detailList == null || detailList.size() == 0) {
+					balance.setType(1);// 余额单
+				} else {
+					balance.setType(0);// 付款单
+				}
+				pcmsPaymentMapper.insertSelective(balance);
+				
+			}
+			
+			if(CollectionUtils.isNotEmpty(detailList)){
 				for (ProjectDetailVo detailVo : detailList) {
 					PcmsItem item = pcmsItemMapper.selectByDetailId(detailVo.getDetailId());
 					if (item != null) {
@@ -1293,10 +1297,10 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 						pcmsSettlementItemMapper.insertSelective(record);
 					}
 				}
-
-			}else{
-				error.add(fsscBill);
 			}
+			
+
+			
 			
 			if (CollectionUtils.isNotEmpty(financialList)) {
 				for (Financial fin : financialList) {
