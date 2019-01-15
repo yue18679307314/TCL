@@ -436,18 +436,20 @@ SELECT
 	a.itid,
 	b.item_number  AS itemNumber,
 	a.sedetail_memo AS sedetailMemo,
-	c.DETAIL_ACCOUNT AS detailAccount,
-	c.DETAIL_COST AS detailCost,
-	c.DETAIL_CHANNEL AS detailChannel,
+	IFNULL(c.DETAIL_ACCOUNT,f.fee_detail_type) AS detailAccount,
+	IFNULL(c.DETAIL_COST,f.cost_center) AS detailCost,
+	IFNULL(c.DETAIL_CHANNEL,f.order_no) AS detailChannel,
 	a.tax_type AS taxType,
 	a.invoice_number AS invoiceNumber,
 	a.sedetail_money AS sedetailMoney,
-	a.is_last AS isLast
+	a.is_last AS isLast,	
+	b.detail_id
 FROM
 	pcms_settlement_item a
 LEFT JOIN pcms_item b ON a.itid=b.itid 
 LEFT JOIN pcms_project_deatil c ON b.detail_id=c.DETAIL_ID
 LEFT JOIN pcms_settlement d ON d.sett_number=a.settlement_number
+LEFT JOIN tpm_activity_original f ON b.detail_id=f.project_id
 WHERE d.fccs_bill=#{fsscBill}
 
  </select>

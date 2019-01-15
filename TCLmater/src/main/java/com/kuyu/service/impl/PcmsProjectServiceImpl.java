@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -773,7 +774,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 
 	@Override
 	public ResultVo initPayMent(List<PaymentRequest> initPayMent) {
-		List<String> error=	pcmsItemService.initPayMent(initPayMent);
+		Set<String> error=	pcmsItemService.initPayMent(initPayMent);
 
 		 return ResultVo.getData(ResultVo.SUCCESS, error);
 	}

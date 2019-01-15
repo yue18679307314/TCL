@@ -4,6 +4,7 @@ package com.kuyu.service;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -67,7 +68,7 @@ public interface PcmsItemService  {
 
 	PaymentDetail getPaymentDetail(String fsscBill);
 
-	List<String> initPayMent(List<PaymentRequest> initPayMent);
+	Set<String> initPayMent(List<PaymentRequest> initPayMent);
 
 	List<String> initPayMentDetail(List<PaymentRequest> initPayMent);
 
