@@ -59,6 +59,9 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
     @Value("${image.path}")
     private String filePath;
 
+    @Value("${synch.url}")
+    private String url;
+
     @Autowired
     private TpmOptLogsService tpmOptLogsService;
 
@@ -266,7 +269,7 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         // 获取默认的请求客户端
         CloseableHttpClient client = HttpClients.createDefault();
         // 通过HttpPost来发送post请求
-        HttpPost httpPost = new HttpPost("http://10.126.124.28:7001/promotionFee/synVendor.do");
+        HttpPost httpPost = new HttpPost(url);
         /*
          * post带参数开始
          */
