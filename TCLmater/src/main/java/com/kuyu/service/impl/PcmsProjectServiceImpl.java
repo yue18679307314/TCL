@@ -583,7 +583,11 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			item.setDetailId(activityId);
 //			item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 			TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(requestDept);
-			String companyCode=tpmmodel.getOrg_code();
+			String companyCode="none";
+			if(tpmmodel!=null){
+				companyCode=tpmmodel.getOrg_code();
+			}
+			
 			item.setRequestCompanyCode(companyCode);
 			item.setDispatch(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 			item.setDeptCode(requestDept);
@@ -716,7 +720,10 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				item.setDetailId(detailId);
 //				item.setRequestCompanyCode(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 				TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(requestDept);
-				String companyCode=tpmmodel.getOrg_code();
+				String companyCode="none";
+				if(tpmmodel!=null){
+					companyCode=tpmmodel.getOrg_code();
+				}
 				item.setRequestCompanyCode(companyCode);
 				item.setDispatch(PcmsProjectUtil.subCompanyCode(projectvo.getRequestCompanyCode()));
 				item.setDeptCode(requestDept);

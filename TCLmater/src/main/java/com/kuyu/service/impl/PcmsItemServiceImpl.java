@@ -1210,7 +1210,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			
 			//公司代码
 			TpmDeptModel deptModel=pcmsReconciliationService.selectTpmDept(dept);
-			String companyCode=deptModel.getOrg_code();
+			String companyCode="none";
+			if(deptModel!=null){
+				companyCode=deptModel.getOrg_code();
+			}
+			
 			
 			System.out.println("初始化审批中的报销单:" + fsscBill);
 
@@ -1279,7 +1283,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			
 			//公司代码
 			TpmDeptModel deptModel=pcmsReconciliationService.selectTpmDept(dept);
-			String companyCode=deptModel.getOrg_code();
+			String companyCode="none";
+			if(deptModel!=null){
+				companyCode=deptModel.getOrg_code();
+			}
+			
 			
 			System.out.println("初始化审批中的报销单:" + fsscBill);
 			
