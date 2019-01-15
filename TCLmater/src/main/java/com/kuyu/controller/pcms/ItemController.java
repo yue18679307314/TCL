@@ -169,7 +169,7 @@ public class ItemController extends BaseController{
 			throw new ParamException(ResultVo.getByEnumCode(CommonConstants.NOT_LOGIN_CODE));
 		}
 		
-		return pcmsItemService.changeItemStatus(itid,status,getLoginUserInfo(),reason,user);
+		return pcmsItemService.changeItemStatus(itid,status,user,reason,user);
 	}
 	
 

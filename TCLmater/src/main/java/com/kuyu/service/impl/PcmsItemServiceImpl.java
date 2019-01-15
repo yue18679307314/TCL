@@ -333,7 +333,11 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		    		pcmsTovoidItemModel.setContext(context);
 		    		pcmsTovoidItemModel.setCreate_time(new Date());
 		    		pcmsTovoidItemModel.setItid(itid);
-		    		pcmsTovoidItemModel.setOperator(userInfo.getEmployeeModel().getPerson_name());
+		    		String operator="none";
+		    		if(userInfo.getEmployeeModel()!=null&&userInfo.getEmployeeModel().getPerson_name()!=null){
+		    			operator=userInfo.getEmployeeModel().getPerson_name();
+		    		}
+		    		pcmsTovoidItemModel.setOperator(operator);
 		    		pcmsTovoidItemMapper.insert(pcmsTovoidItemModel);
 	    		}else{
 	    			return new ResultVo("-1", "没有作废权限，请联系管理员");
@@ -1284,13 +1288,14 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 			
 			System.out.println("初始化审批中的报销单:" + fsscBill);
 			
-			//公司代码
-			TpmDeptModel deptModel=pcmsReconciliationService.selectTpmDept(dept);
 			String companyCode="none";
-			if(deptModel!=null){
-				companyCode=deptModel.getOrg_code();
+			if(dept!=null){
+				//公司代码
+				TpmDeptModel deptModel=pcmsReconciliationService.selectTpmDept(dept);
+				if(deptModel!=null){
+					companyCode=deptModel.getOrg_code();
+				}
 			}
-			
 			
 			
 			List<Payment> paymentList = payment.getPaymentList();

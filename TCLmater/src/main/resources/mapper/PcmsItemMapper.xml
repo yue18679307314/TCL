@@ -473,7 +473,7 @@
 			a.`status`,
 			c.type AS projectType
 		FROM
-			pcms_item a
+			 pcms_item  a
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 	  	LEFT JOIN pcms_project_deatil d ON a.detail_id=d.DETAIL_ID
@@ -503,7 +503,7 @@
 		)
   </if>
   ORDER BY c.creat_time DESC 
-  limit #{linimt}, #{size}
+  
   </select> 
   
   <select id="getItemListCountByParam" parameterType="map" resultType="int">
