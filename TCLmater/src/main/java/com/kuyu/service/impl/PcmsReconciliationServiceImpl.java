@@ -940,11 +940,14 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
     @Override
     public TpmDeptModel selectTpmDept(String org_code) {
         TpmDeptModel tpmDeptModel = pcmsReconciliationMapper.selectTpmDept(org_code);
-        if(tpmDeptModel.getOrg_code_parent().equals("90003975")){
-            return tpmDeptModel;
-        }else{
-            return selectTpmDept(tpmDeptModel.getOrg_code_parent());
+        if(tpmDeptModel!=null){
+        	if(tpmDeptModel.getOrg_code_parent().equals("90003975")){
+        		return tpmDeptModel;
+        	}else{
+        		return selectTpmDept(tpmDeptModel.getOrg_code_parent());
+        	}
         }
+        return null;
     }
 
     /**
