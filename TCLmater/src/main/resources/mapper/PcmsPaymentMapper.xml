@@ -3,6 +3,7 @@
 <mapper namespace="com.kuyu.mapper.pcms.PcmsPaymentMapper">
   <resultMap id="BaseResultMap" type="com.kuyu.model.pcms.PcmsPayment">
     <id column="pmid" jdbcType="INTEGER" property="pmid" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
     <result column="request_dept" jdbcType="VARCHAR" property="requestDept" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="fssc_bill" jdbcType="VARCHAR" property="fsscBill" />
@@ -80,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    pmid, request_dept, type, fssc_bill, vendor_id, account_number, account_name, payee_name, 
-    payment_type, recomment_date, pay_amount, pay_standard, bill_expire_date, bank_account_number, 
-    status, stop_reason, create_time, update_time
+    pmid, company_code, request_dept, type, fssc_bill, vendor_id, account_number, account_name, 
+    payee_name, payment_type, recomment_date, pay_amount, pay_standard, bill_expire_date, 
+    bank_account_number, status, stop_reason, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.kuyu.model.pcms.PcmsPaymentExample" resultMap="BaseResultMap">
     select
@@ -115,26 +116,29 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kuyu.model.pcms.PcmsPayment">
-    insert into pcms_payment (pmid, request_dept, type, 
-      fssc_bill, vendor_id, account_number, 
-      account_name, payee_name, payment_type, 
-      recomment_date, pay_amount, pay_standard, 
-      bill_expire_date, bank_account_number, status, 
-      stop_reason, create_time, update_time
-      )
-    values (#{pmid,jdbcType=INTEGER}, #{requestDept,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
-      #{fsscBill,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, #{accountNumber,jdbcType=VARCHAR}, 
-      #{accountName,jdbcType=VARCHAR}, #{payeeName,jdbcType=VARCHAR}, #{paymentType,jdbcType=VARCHAR}, 
-      #{recommentDate,jdbcType=VARCHAR}, #{payAmount,jdbcType=VARCHAR}, #{payStandard,jdbcType=VARCHAR}, 
-      #{billExpireDate,jdbcType=VARCHAR}, #{bankAccountNumber,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{stopReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into pcms_payment (pmid, company_code, request_dept, 
+      type, fssc_bill, vendor_id, 
+      account_number, account_name, payee_name, 
+      payment_type, recomment_date, pay_amount, 
+      pay_standard, bill_expire_date, bank_account_number, 
+      status, stop_reason, create_time, 
+      update_time)
+    values (#{pmid,jdbcType=INTEGER}, #{companyCode,jdbcType=VARCHAR}, #{requestDept,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{fsscBill,jdbcType=VARCHAR}, #{vendorId,jdbcType=VARCHAR}, 
+      #{accountNumber,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, #{payeeName,jdbcType=VARCHAR}, 
+      #{paymentType,jdbcType=VARCHAR}, #{recommentDate,jdbcType=VARCHAR}, #{payAmount,jdbcType=VARCHAR}, 
+      #{payStandard,jdbcType=VARCHAR}, #{billExpireDate,jdbcType=VARCHAR}, #{bankAccountNumber,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{stopReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsPayment">
     insert into pcms_payment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="pmid != null">
         pmid,
+      </if>
+      <if test="companyCode != null">
+        company_code,
       </if>
       <if test="requestDept != null">
         request_dept,
@@ -191,6 +195,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="pmid != null">
         #{pmid,jdbcType=INTEGER},
+      </if>
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
       </if>
       <if test="requestDept != null">
         #{requestDept,jdbcType=VARCHAR},
@@ -257,6 +264,9 @@
       <if test="record.pmid != null">
         pmid = #{record.pmid,jdbcType=INTEGER},
       </if>
+      <if test="record.companyCode != null">
+        company_code = #{record.companyCode,jdbcType=VARCHAR},
+      </if>
       <if test="record.requestDept != null">
         request_dept = #{record.requestDept,jdbcType=VARCHAR},
       </if>
@@ -316,6 +326,7 @@
   <update id="updateByExample" parameterType="map">
     update pcms_payment
     set pmid = #{record.pmid,jdbcType=INTEGER},
+      company_code = #{record.companyCode,jdbcType=VARCHAR},
       request_dept = #{record.requestDept,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=INTEGER},
       fssc_bill = #{record.fsscBill,jdbcType=VARCHAR},
@@ -340,6 +351,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kuyu.model.pcms.PcmsPayment">
     update pcms_payment
     <set>
+      <if test="companyCode != null">
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
       <if test="requestDept != null">
         request_dept = #{requestDept,jdbcType=VARCHAR},
       </if>
@@ -396,7 +410,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kuyu.model.pcms.PcmsPayment">
     update pcms_payment
-    set request_dept = #{requestDept,jdbcType=VARCHAR},
+    set company_code = #{companyCode,jdbcType=VARCHAR},
+      request_dept = #{requestDept,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},
       fssc_bill = #{fsscBill,jdbcType=VARCHAR},
       vendor_id = #{vendorId,jdbcType=VARCHAR},
@@ -417,6 +432,8 @@
   </update>
   
   
+  
+  
   <!-- ==============================自定义SQL=================================== -->
   <select id="getPaymentList" parameterType="map" resultType="com.kuyu.vo.pcms.PaymentResult">
   SELECT
@@ -435,6 +452,9 @@ FROM
 	pcms_payment a 
 LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 WHERE 1=1 
+<if test="companyCode != null">
+        AND a.company_code=#{companyCode}
+</if>
 <if test="searchKey != null">
   	AND (
 		b.vendor_name LIKE #{searchKey}
@@ -458,6 +478,9 @@ WHERE 1=1
 		pcms_payment a 
 	LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 	WHERE 1=1 
+<if test="companyCode != null">
+        AND a.company_code=#{companyCode}
+</if>
 <if test="searchKey != null">
   	AND (
 		b.vendor_name LIKE #{searchKey}

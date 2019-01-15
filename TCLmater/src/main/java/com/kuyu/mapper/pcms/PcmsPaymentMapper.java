@@ -31,11 +31,11 @@ public interface PcmsPaymentMapper {
 
     int updateByPrimaryKey(PcmsPayment record);
 
-	List<PaymentResult> getPaymentList(HashMap<String, Object> param);
-
-	Integer getPaymentListCount(HashMap<String, Object> param);
-
 	PcmsPayment selectByFsscBill(String fsscBill);
 
 	PaymentResult getDetailMoney(String fsscBill);
+
+	Integer getPaymentListCount(HashMap<String, Object> param);
+
+	List<PaymentResult> getPaymentList(HashMap<String, Object> param);
 }

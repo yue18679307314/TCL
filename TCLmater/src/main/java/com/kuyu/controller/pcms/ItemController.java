@@ -50,7 +50,7 @@ public class ItemController extends BaseController{
 	private PcmsItemService pcmsItemService;
 	
 	@Autowired
-	private  PcmsReconciliationService pcmsReconciliationService;;
+	private  PcmsReconciliationService pcmsReconciliationService;
 	
 	
 	/**
