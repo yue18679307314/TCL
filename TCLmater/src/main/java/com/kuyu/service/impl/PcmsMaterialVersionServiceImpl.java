@@ -278,7 +278,8 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
 
     @Override
     public ResultVo selectMaterialVersion(String vendor_id, LoginUserInfo userInfo) throws Exception {
-        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,tpmDeptModel.getOrg_code());
         return ResultVo.getDataWithSuccess(list);
     }
 
