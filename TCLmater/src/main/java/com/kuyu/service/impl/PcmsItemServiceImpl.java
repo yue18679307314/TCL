@@ -1179,15 +1179,18 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 	@Override
 	public PaymentDetail getPaymentDetail(String fsscBill) {
+		
+		String checkFsscBill=PcmsProjectUtil.subFsscBill(fsscBill);
+		
 		PaymentDetail result=new PaymentDetail();
 		
 		PcmsPaymentDetailExample example =new PcmsPaymentDetailExample();
-		example.createCriteria().andFsscBillEqualTo(fsscBill);
+		example.createCriteria().andFsscBillEqualTo(checkFsscBill);
 		pcmsPaymentDetailMapper.selectByExample(example);
 		List<PcmsPaymentDetail> payDetailList=pcmsPaymentDetailMapper.selectByExample(example);
 		
 		result.setPaymentDetailList(payDetailList);
-		List<SettlementItemResult> itemList =pcmsSettlementMapper.getSettlementItemResult(fsscBill);
+		List<SettlementItemResult> itemList =pcmsSettlementMapper.getSettlementItemResult(checkFsscBill);
 		result.setItemList(itemList);
 		
 		return result;

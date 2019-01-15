@@ -89,41 +89,9 @@ public class PcmsProjectUtil {
 	
 	
 	public static void main(String[] args) {
-//		System.out.println(PcmsProjectUtil.creatItemNumber());
-		
-//		String test="惠州TCL电器(uytw)销售有限公司(7601)";
-//		int i="惠州TCL电器(uytw)销售有限公司(7601)".lastIndexOf("(");
-//		System.out.println(i);
-//		String aaa=test.substring(i+1,test.lastIndexOf(")"));
-//		
-//		System.out.println(aaa);
-		
-//		String text="{\"RET_CODE\":\"9999\",\"RET_MSG\":\"\"}";
-//		JSONObject aaa=JSON.parseObject(text);
-////		aaa.get("RET_CODE");
-//		System.out.println(aaa.get("RET_CODE"));
-		
-		String json="[{\"FSSC_BILL\":\"M4301812270107\",\"FINANCIAL_LIST\":[{\"FINANCIAL_NUM\":\"1\",\"FINANCIAL_MONEY\":\"1000\",\"FINANCIAL_TIME\":\"2018-12-27 15:40:27\",\"FINANCIAL_STATUS\":\"8\"}]},{\"FSSC_BILL\":\"M4301812270041\",\"FINANCIAL_LIST\":[{\"FINANCIAL_NUM\":\"1\",\"FINANCIAL_MONEY\":\"500\",\"FINANCIAL_TIME\":\"2018-12-27 11:28:03\",\"FINANCIAL_STATUS\":\"8\"}]}]";
-		
-		
-		
-		List<PaymentRequest> paymentRequest=JSON.parseArray(json, PaymentRequest.class);
-		
-//		PaymentRequest paymentRequest=JSONObject.parseObject(json, PaymentRequest.class);
-		
-		System.out.println(paymentRequest);
-		
-		
-		BigDecimal successMoney=new BigDecimal("5.44");
-		BigDecimal failMoney=new BigDecimal("1.12");
-		String aaa=successMoney.add(failMoney).toString();
-		System.out.println(aaa);
-		System.out.println(aaa.equals("6.56"));
-		String vendorId="ZX003772";
-		if(vendorId.contains("ZX")){
-		System.out.println("asfdsahjksdhg");
-		}
-		
+
+		System.out.println(subFsscBill("M4301812041570(1)"));
+	
 	}
 
 	//获取本月
@@ -151,6 +119,17 @@ public class PcmsProjectUtil {
 		}
 		
 		return sumMoney.toString();
+	}
+
+	//去除括号及其括号内容
+	public static String subFsscBill(String fsscBill) {
+		
+		if(fsscBill.contains("(")){
+			int i=fsscBill.lastIndexOf("(");
+			return fsscBill.substring(0,i);
+		}else{
+			return fsscBill;
+		}
 	}
 	
 	
