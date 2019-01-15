@@ -58,6 +58,7 @@ public class UpdateSupplierToken {
     /**
      * 有付款记录,但没有点击对账的,自动对账
      */
+    @Scheduled(cron = "${cron.automaticReconciliation}")//每月凌晨03:00执行一次
     public void automaticReconciliation(){
         Date date = DateUtils.subDays(1);
         log.info("*****正在获取,执行时间:{}*****", date);
@@ -72,6 +73,7 @@ public class UpdateSupplierToken {
     /**
      * 自动统计表上上个月余额为0的
      */
+    @Scheduled(cron = "${cron.automaticStatistics}")//每月凌晨05:00执行一次
     public void automaticStatistics(){
         Date date = DateUtils.subDays(1);
         log.info("*****正在获取,执行时间:{}*****", date);
