@@ -26,7 +26,7 @@ public class PcmsPendingMaterialVo {
     private String unit;
 
     @ApiModelProperty("参考价")
-    private String comparison_price;
+    private String comparisonPrice;
 
     /**单价数量范围*/
     @ApiModelProperty("单价数量范围")
@@ -50,7 +50,7 @@ public class PcmsPendingMaterialVo {
 
     private Integer state;
 
-    private List<PcmsMaterialImgVo> pcmsMaterialImgVoList;
+    private List<PcmsMaterialImgVo> imgList;
 
     public Integer getId() {
         return id;
@@ -84,12 +84,12 @@ public class PcmsPendingMaterialVo {
         this.unit = unit;
     }
 
-    public String getComparison_price() {
-        return comparison_price;
+    public String getComparisonPrice() {
+        return comparisonPrice;
     }
 
-    public void setComparison_price(String comparison_price) {
-        this.comparison_price = comparison_price;
+    public void setComparisonPrice(String comparisonPrice) {
+        this.comparisonPrice = comparisonPrice;
     }
 
     public String getRanges() {
@@ -148,11 +148,11 @@ public class PcmsPendingMaterialVo {
         this.state = state;
     }
 
-    public List<PcmsMaterialImgVo> getPcmsMaterialImgVoList() {
-        return pcmsMaterialImgVoList;
+    public List<PcmsMaterialImgVo> getImgList() {
+        return imgList;
     }
 
-    public void setPcmsMaterialImgVoList(List<PcmsMaterialImgVo> pcmsMaterialImgVoList) {
-        this.pcmsMaterialImgVoList = pcmsMaterialImgVoList;
+    public void setImgList(List<PcmsMaterialImgVo> imgList) {
+        this.imgList = imgList;
     }
 }
