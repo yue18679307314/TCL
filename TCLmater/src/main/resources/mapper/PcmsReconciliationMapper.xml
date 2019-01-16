@@ -169,7 +169,7 @@
 		<where>
 			AND pr.id = #{id}
 		</where>
-		 and ptm.status = 3 OR ps.status = 1 GROUP BY ptm.itid
+		 and (ptm.status = 3 OR ps.status = 1) GROUP BY ptm.itid
 	</select>
 
 
