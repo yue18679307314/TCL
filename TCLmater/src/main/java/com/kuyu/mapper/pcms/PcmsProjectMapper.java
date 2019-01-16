@@ -1,11 +1,9 @@
 package com.kuyu.mapper.pcms;
 
-import com.kuyu.model.TpmActivityOriginalModel;
 import com.kuyu.model.pcms.PcmsProject;
 import com.kuyu.model.pcms.PcmsProjectExample;
 import com.kuyu.model.pcms.PcmsShop;
 import com.kuyu.vo.pcms.ActivityOriginalVo;
-import com.kuyu.vo.pcms.PcmsProjectVo;
 import com.kuyu.vo.pcms.PcmsProjectVo2;
 import com.kuyu.vo.pcms.ProjectDetailVo;
 
@@ -43,15 +41,19 @@ public interface PcmsProjectMapper {
 
     int updateByPrimaryKey(PcmsProject record);
 
-	PcmsProjectVo2 getProjectDeatil(String requestId);
+	List<PcmsProject> selectByEndTime(String synDate);
 
-	List<ProjectDetailVo> getDetailList(String requestId);
+	Map<String, Double> getSumMoney(String requestId);
 
 	List<ActivityOriginalVo> getActivitylList(String requestId);
 
+	List<ProjectDetailVo> getDetailList(String requestId);
+
+	PcmsProjectVo2 getProjectDeatil(String requestId);
+
 	List<PcmsShop> getShopList(String requestId);
 
-	List<PcmsProject> selectByEndTime(String synDate);
+	String queryDeptName(String requestDept);
 
-	Map<String,Double> getSumMoney(String requestId);
+	String queryUserName(String requestUser);
 }

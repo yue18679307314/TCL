@@ -203,7 +203,7 @@
 		WHERE
 			a.check_date LIKE #{checkDate}
 		ORDER BY
-			a.check_date DESC
+			a.check_date 
   </select>
 
   <select id="selectForMonthSum" resultType="java.lang.Integer">

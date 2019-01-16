@@ -23,6 +23,10 @@ public class SettlementRequest {
 	
 	private String applyMoney; //付款金额
 	
+	private String vendorName; //收款人姓名(淘宝单才使用此字段)
+	
+	private String openingAccount; //付款人卡号(淘宝单才使用此字段)
+	
 	private List<SettlementDetailRequest> itemList; //结算详细
 	
 	public String getApplyMoney() {
@@ -103,6 +107,22 @@ public class SettlementRequest {
 
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
+	}
+
+	public String getVendorName() {
+		return vendorName;
+	}
+
+	public void setVendorName(String vendorName) {
+		this.vendorName = vendorName;
+	}
+
+	public String getOpeningAccount() {
+		return openingAccount;
+	}
+
+	public void setOpeningAccount(String openingAccount) {
+		this.openingAccount = openingAccount;
 	}
 	
 	

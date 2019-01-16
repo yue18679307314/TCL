@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.kuyu.common.CommonConstants;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
+import com.kuyu.model.TpmActivityOriginalModel;
 import com.kuyu.model.TpmDeptModel;
 import com.kuyu.model.TpmEmployeeModel;
 import com.kuyu.model.pcms.*;
@@ -528,6 +529,20 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		PcmsProject project=new PcmsProject();
 		BeanUtils.copyProperties(projectvo, project);
 		String requestDept=projectvo.getRequestDept();
+		String requestUser=projectvo.getRequestUser();
+		
+		//根据部门编码查询名称
+		String requestDeptName=pcmsProjectMapper.queryDeptName(requestDept);
+		if(requestDeptName!=null){
+			project.setRequestDeptName(requestDeptName);
+		}
+		
+		//根据申请人编码查询申请人
+		String requestUserName=pcmsProjectMapper.queryUserName(requestUser);
+		if(requestUserName!=null){
+			project.setRequestUserName(requestUserName);
+		}
+		
 		
 		//写入外层数据
 		project.setRequestJson(JSON.toJSONString(projectvo));
@@ -545,6 +560,21 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 			if (!CollectionUtils.isNotEmpty(meList)) {
 				continue ;
 			}
+			
+			//初始化数据写入物料的原始信息
+			if(type==-1){
+				TpmActivityOriginalModel tpmActivityOriginalModel = new TpmActivityOriginalModel();
+				BeanUtils.copyProperties(allList, tpmActivityOriginalModel);
+				tpmActivityOriginalModel.setRequest_id(requestId);
+				// 查询立项单活动是否存在
+				Integer activityCount = tpmActivityOriginalModel.selectCount("project_id={0}",
+						tpmActivityOriginalModel.getProjectId());
+				if (activityCount > 0) {
+					throw new RuntimeException(CommonConstants.ACTIVITY_DATA_EXISTS);
+				}
+				tpmActivityOriginalModel.insert();
+			}
+			
 			for (OtherFeeOriginalModelVo material : meList) {
 				PcmsMaterial info=new PcmsMaterial();
 				info.setResuestId(requestId);
@@ -634,6 +664,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		
 		Date createTime=new Date();
 		String requestDept=projectvo.getRequestDept();
+		String requestUser=projectvo.getRequestUser();
 		Integer itemType=0;
 		
 		//获取门店信息列表
@@ -645,6 +676,20 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 		//获取外层数据
 		PcmsProject project=new PcmsProject();
 		BeanUtils.copyProperties(projectvo, project);
+		
+		
+		// 根据部门编码查询名称
+		String requestDeptName = pcmsProjectMapper.queryDeptName(requestDept);
+		if (requestDeptName != null) {
+			project.setRequestDeptName(requestDeptName);
+		}
+
+		// 根据申请人编码查询申请人
+		String requestUserName = pcmsProjectMapper.queryUserName(requestUser);
+		if (requestUserName != null) {
+			project.setRequestUserName(requestUserName);
+		}
+		
 		
 		//写入外层数据
 		project.setRequestJson(JSON.toJSONString(projectvo));

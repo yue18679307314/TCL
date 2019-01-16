@@ -12,6 +12,7 @@
     <result column="REQUEST_TELPHONE" jdbcType="VARCHAR" property="requestTelphone" />
     <result column="REQUEST_EMAIL" jdbcType="VARCHAR" property="requestEmail" />
     <result column="REQUEST_INFO" jdbcType="VARCHAR" property="requestInfo" />
+    <result column="request_dept_name" jdbcType="VARCHAR" property="requestDeptName" />
     <result column="request_user_name" jdbcType="VARCHAR" property="requestUserName" />
     <result column="request_user_name_copy" jdbcType="VARCHAR" property="requestUserNameCopy" />
     <result column="finance_user" jdbcType="VARCHAR" property="financeUser" />
@@ -90,9 +91,10 @@
   </sql>
   <sql id="Base_Column_List">
     REQUEST_ID, REQUEST_TITLE, DETAIL_ACCOUNT, REQUEST_COMPANY_CODE, DETAIL_SUBJECT, 
-    REQUEST_DEPT, REQUEST_USER, REQUEST_TELPHONE, REQUEST_EMAIL, REQUEST_INFO, request_user_name, 
-    request_user_name_copy, finance_user, finance_user_name, REQUEST_CREATE_TIME, REQUEST_END_TIME, 
-    TYPE, CREATE_USER, CREATE_TIME, CURRENCY, EXCHANGE, balance, status, creat_time
+    REQUEST_DEPT, REQUEST_USER, REQUEST_TELPHONE, REQUEST_EMAIL, REQUEST_INFO, request_dept_name, 
+    request_user_name, request_user_name_copy, finance_user, finance_user_name, REQUEST_CREATE_TIME, 
+    REQUEST_END_TIME, TYPE, CREATE_USER, CREATE_TIME, CURRENCY, EXCHANGE, balance, status, 
+    creat_time
   </sql>
   <sql id="Blob_Column_List">
     request_json
@@ -149,21 +151,21 @@
     insert into pcms_project (REQUEST_ID, REQUEST_TITLE, DETAIL_ACCOUNT, 
       REQUEST_COMPANY_CODE, DETAIL_SUBJECT, REQUEST_DEPT, 
       REQUEST_USER, REQUEST_TELPHONE, REQUEST_EMAIL, 
-      REQUEST_INFO, request_user_name, request_user_name_copy, 
-      finance_user, finance_user_name, REQUEST_CREATE_TIME, 
-      REQUEST_END_TIME, TYPE, CREATE_USER, 
-      CREATE_TIME, CURRENCY, EXCHANGE, 
-      balance, status, creat_time, 
-      request_json)
+      REQUEST_INFO, request_dept_name, request_user_name, 
+      request_user_name_copy, finance_user, finance_user_name, 
+      REQUEST_CREATE_TIME, REQUEST_END_TIME, TYPE, 
+      CREATE_USER, CREATE_TIME, CURRENCY, 
+      EXCHANGE, balance, status, 
+      creat_time, request_json)
     values (#{requestId,jdbcType=VARCHAR}, #{requestTitle,jdbcType=VARCHAR}, #{detailAccount,jdbcType=VARCHAR}, 
       #{requestCompanyCode,jdbcType=VARCHAR}, #{detailSubject,jdbcType=VARCHAR}, #{requestDept,jdbcType=VARCHAR}, 
       #{requestUser,jdbcType=VARCHAR}, #{requestTelphone,jdbcType=VARCHAR}, #{requestEmail,jdbcType=VARCHAR}, 
-      #{requestInfo,jdbcType=VARCHAR}, #{requestUserName,jdbcType=VARCHAR}, #{requestUserNameCopy,jdbcType=VARCHAR}, 
-      #{financeUser,jdbcType=VARCHAR}, #{financeUserName,jdbcType=VARCHAR}, #{requestCreateTime,jdbcType=VARCHAR}, 
-      #{requestEndTime,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{currency,jdbcType=VARCHAR}, #{exchange,jdbcType=VARCHAR}, 
-      #{balance,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{creatTime,jdbcType=TIMESTAMP}, 
-      #{requestJson,jdbcType=LONGVARCHAR})
+      #{requestInfo,jdbcType=VARCHAR}, #{requestDeptName,jdbcType=VARCHAR}, #{requestUserName,jdbcType=VARCHAR}, 
+      #{requestUserNameCopy,jdbcType=VARCHAR}, #{financeUser,jdbcType=VARCHAR}, #{financeUserName,jdbcType=VARCHAR}, 
+      #{requestCreateTime,jdbcType=VARCHAR}, #{requestEndTime,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{currency,jdbcType=VARCHAR}, 
+      #{exchange,jdbcType=VARCHAR}, #{balance,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{creatTime,jdbcType=TIMESTAMP}, #{requestJson,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.kuyu.model.pcms.PcmsProject">
     insert into pcms_project
@@ -197,6 +199,9 @@
       </if>
       <if test="requestInfo != null">
         REQUEST_INFO,
+      </if>
+      <if test="requestDeptName != null">
+        request_dept_name,
       </if>
       <if test="requestUserName != null">
         request_user_name,
@@ -274,6 +279,9 @@
       </if>
       <if test="requestInfo != null">
         #{requestInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="requestDeptName != null">
+        #{requestDeptName,jdbcType=VARCHAR},
       </if>
       <if test="requestUserName != null">
         #{requestUserName,jdbcType=VARCHAR},
@@ -361,6 +369,9 @@
       <if test="record.requestInfo != null">
         REQUEST_INFO = #{record.requestInfo,jdbcType=VARCHAR},
       </if>
+      <if test="record.requestDeptName != null">
+        request_dept_name = #{record.requestDeptName,jdbcType=VARCHAR},
+      </if>
       <if test="record.requestUserName != null">
         request_user_name = #{record.requestUserName,jdbcType=VARCHAR},
       </if>
@@ -423,6 +434,7 @@
       REQUEST_TELPHONE = #{record.requestTelphone,jdbcType=VARCHAR},
       REQUEST_EMAIL = #{record.requestEmail,jdbcType=VARCHAR},
       REQUEST_INFO = #{record.requestInfo,jdbcType=VARCHAR},
+      request_dept_name = #{record.requestDeptName,jdbcType=VARCHAR},
       request_user_name = #{record.requestUserName,jdbcType=VARCHAR},
       request_user_name_copy = #{record.requestUserNameCopy,jdbcType=VARCHAR},
       finance_user = #{record.financeUser,jdbcType=VARCHAR},
@@ -454,6 +466,7 @@
       REQUEST_TELPHONE = #{record.requestTelphone,jdbcType=VARCHAR},
       REQUEST_EMAIL = #{record.requestEmail,jdbcType=VARCHAR},
       REQUEST_INFO = #{record.requestInfo,jdbcType=VARCHAR},
+      request_dept_name = #{record.requestDeptName,jdbcType=VARCHAR},
       request_user_name = #{record.requestUserName,jdbcType=VARCHAR},
       request_user_name_copy = #{record.requestUserNameCopy,jdbcType=VARCHAR},
       finance_user = #{record.financeUser,jdbcType=VARCHAR},
@@ -501,6 +514,9 @@
       </if>
       <if test="requestInfo != null">
         REQUEST_INFO = #{requestInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="requestDeptName != null">
+        request_dept_name = #{requestDeptName,jdbcType=VARCHAR},
       </if>
       <if test="requestUserName != null">
         request_user_name = #{requestUserName,jdbcType=VARCHAR},
@@ -561,6 +577,7 @@
       REQUEST_TELPHONE = #{requestTelphone,jdbcType=VARCHAR},
       REQUEST_EMAIL = #{requestEmail,jdbcType=VARCHAR},
       REQUEST_INFO = #{requestInfo,jdbcType=VARCHAR},
+      request_dept_name = #{requestDeptName,jdbcType=VARCHAR},
       request_user_name = #{requestUserName,jdbcType=VARCHAR},
       request_user_name_copy = #{requestUserNameCopy,jdbcType=VARCHAR},
       finance_user = #{financeUser,jdbcType=VARCHAR},
@@ -589,6 +606,7 @@
       REQUEST_TELPHONE = #{requestTelphone,jdbcType=VARCHAR},
       REQUEST_EMAIL = #{requestEmail,jdbcType=VARCHAR},
       REQUEST_INFO = #{requestInfo,jdbcType=VARCHAR},
+      request_dept_name = #{requestDeptName,jdbcType=VARCHAR},
       request_user_name = #{requestUserName,jdbcType=VARCHAR},
       request_user_name_copy = #{requestUserNameCopy,jdbcType=VARCHAR},
       finance_user = #{financeUser,jdbcType=VARCHAR},
@@ -658,21 +676,19 @@ WHERE
   
   
    <resultMap id="projectDetail" type="com.kuyu.vo.pcms.ProjectDetailVo">
-        <result property="detailChannel" column="detailChannel"/>
-        <result property="detailCost" column="detailCost"/>
-        <result property="detailWbs" column="detailWbs"/>
-        <result property="detailVendor" column="detailVendor"/>
-        <result property="detailSubject" column="detailSubject"/>
-        <result property="detailAccount" column="detailAccount"/>
-        <result property="detailId" column="detailId"/>
-        <result property="detailAmount" column="detailAmount"/>
-        <result property="detailStandard" column="detailStandard"/>
-        <result property="detailTask" column="detailTask"/>
-        <result property="detailMemo" column="detailMemo"/>
-        <collection  property="CHILDREN3_LIST" column="detailId" ofType="com.kuyu.model.pcms.PcmsOthertm"
-                    javaType="java.util.ArrayList" select="getList3"/>
-        <collection  property="CHILDREN1_LIST" column="detailId" ofType="com.kuyu.model.pcms.PcmsShowcase"
-                    javaType="java.util.ArrayList" select="getList1"/>
+        <result column="detailChannel" property="detailChannel" />
+        <result column="detailCost" property="detailCost" />
+        <result column="detailWbs" property="detailWbs" />
+        <result column="detailVendor" property="detailVendor" />
+        <result column="detailSubject" property="detailSubject" />
+        <result column="detailAccount" property="detailAccount" />
+        <result column="detailId" property="detailId" />
+        <result column="detailAmount" property="detailAmount" />
+        <result column="detailStandard" property="detailStandard" />
+        <result column="detailTask" property="detailTask" />
+        <result column="detailMemo" property="detailMemo" />
+        <collection column="detailId" javaType="java.util.ArrayList" ofType="com.kuyu.model.pcms.PcmsOthertm" property="CHILDREN3_LIST" select="getList3" />
+        <collection column="detailId" javaType="java.util.ArrayList" ofType="com.kuyu.model.pcms.PcmsShowcase" property="CHILDREN1_LIST" select="getList1" />
    </resultMap>
   <select id="getDetailList" parameterType="string" resultMap="projectDetail">
 		 SELECT 
@@ -745,25 +761,24 @@ a.detail_id =#{detailId}
   
   
   <resultMap id="projectActivity" type="com.kuyu.vo.pcms.ActivityOriginalVo">
-        <result property="projectId" column="project_id"/>
-        <result property="requestId" column="request_id"/>
-        <result property="vendorId" column="vendor_id"/>
-         <result property="vendorName" column="vendor_name"/>
-        <result property="projectName" column="project_name"/>
-        <result property="feeDetailType" column="fee_detail_type"/>
-        <result property="dept" column="dept"/>
-        <result property="deptName" column="deptName"/>
-        <result property="city" column="city"/>
-        <result property="costCenter" column="cost_center"/>
-        <result property="wbs" column="wbs"/>
-        <result property="orderNo" column="order_no"/>
-        <result property="totalFee" column="total_fee"/>
-        <result property="projectedSalesNo" column="projected_sales_no"/>
-        <result property="projectedSalesMoney" column="projected_sales_money"/>
-        <result property="estimatedCostRate" column="estimated_cost_rate"/>
-        <result property="note" column="note"/>
-        <collection  property="maList" column="project_id" ofType="com.kuyu.vo.pcms.MaterialResult"
-                    javaType="java.util.ArrayList" select="getMaList"/>
+        <result column="project_id" property="projectId" />
+        <result column="request_id" property="requestId" />
+        <result column="vendor_id" property="vendorId" />
+         <result column="vendor_name" property="vendorName" />
+        <result column="project_name" property="projectName" />
+        <result column="fee_detail_type" property="feeDetailType" />
+        <result column="dept" property="dept" />
+        <result column="deptName" property="deptName" />
+        <result column="city" property="city" />
+        <result column="cost_center" property="costCenter" />
+        <result column="wbs" property="wbs" />
+        <result column="order_no" property="orderNo" />
+        <result column="total_fee" property="totalFee" />
+        <result column="projected_sales_no" property="projectedSalesNo" />
+        <result column="projected_sales_money" property="projectedSalesMoney" />
+        <result column="estimated_cost_rate" property="estimatedCostRate" />
+        <result column="note" property="note" />
+        <collection column="project_id" javaType="java.util.ArrayList" ofType="com.kuyu.vo.pcms.MaterialResult" property="maList" select="getMaList" />
    </resultMap>
   
   <select id="getActivitylList" parameterType="string" resultMap="projectActivity">
@@ -853,6 +868,14 @@ FROM
 	pcms_item
 WHERE
 	request_id = #{requestId}
+  </select>
+  
+  <select id="queryDeptName" parameterType="string" resultType="string">
+ 	 SELECT org_name FROM tpm_dept WHERE org_code=#{requestDept}
+  </select>
+  
+  <select id="queryUserName" parameterType="string" resultType="string">
+	SELECT person_name FROM tpm_employee WHERE person_code =#{requestUser}
   </select>
   
 </mapper>

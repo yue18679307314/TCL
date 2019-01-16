@@ -23,6 +23,8 @@ public class PcmsProject {
 
     private String requestInfo;
 
+    private String requestDeptName;
+
     private String requestUserName;
 
     private String requestUserNameCopy;
@@ -131,6 +133,14 @@ public class PcmsProject {
 
     public void setRequestInfo(String requestInfo) {
         this.requestInfo = requestInfo == null ? null : requestInfo.trim();
+    }
+
+    public String getRequestDeptName() {
+        return requestDeptName;
+    }
+
+    public void setRequestDeptName(String requestDeptName) {
+        this.requestDeptName = requestDeptName == null ? null : requestDeptName.trim();
     }
 
     public String getRequestUserName() {

@@ -805,6 +805,76 @@ public class PcmsProjectExample {
             return (Criteria) this;
         }
 
+        public Criteria andRequestDeptNameIsNull() {
+            addCriterion("request_dept_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameIsNotNull() {
+            addCriterion("request_dept_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameEqualTo(String value) {
+            addCriterion("request_dept_name =", value, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameNotEqualTo(String value) {
+            addCriterion("request_dept_name <>", value, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameGreaterThan(String value) {
+            addCriterion("request_dept_name >", value, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameGreaterThanOrEqualTo(String value) {
+            addCriterion("request_dept_name >=", value, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameLessThan(String value) {
+            addCriterion("request_dept_name <", value, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameLessThanOrEqualTo(String value) {
+            addCriterion("request_dept_name <=", value, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameLike(String value) {
+            addCriterion("request_dept_name like", value, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameNotLike(String value) {
+            addCriterion("request_dept_name not like", value, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameIn(List<String> values) {
+            addCriterion("request_dept_name in", values, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameNotIn(List<String> values) {
+            addCriterion("request_dept_name not in", values, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameBetween(String value1, String value2) {
+            addCriterion("request_dept_name between", value1, value2, "requestDeptName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRequestDeptNameNotBetween(String value1, String value2) {
+            addCriterion("request_dept_name not between", value1, value2, "requestDeptName");
+            return (Criteria) this;
+        }
+
         public Criteria andRequestUserNameIsNull() {
             addCriterion("request_user_name is null");
             return (Criteria) this;

@@ -371,7 +371,14 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		
 		//获取供应商信息
 		String vendorId=settVo.getVendorId();
-		PcmsSupplierModel supp=pcmsSupplierMapper.selectById(vendorId);
+		PcmsSupplierModel supp=new PcmsSupplierModel();
+		//如果是淘宝单，接收前端传过来的参数，如果不是，查询供应商收款信息。
+		if(vendorId.contains("ZX")){
+			supp.setVendor_name(settVo.getVendorName());
+			supp.setOpening_account(settVo.getOpeningAccount());
+		}else{
+			supp=pcmsSupplierMapper.selectById(vendorId);
+		}
 		String dept=settVo.getDept();
 		
 		//获取详细结算信息

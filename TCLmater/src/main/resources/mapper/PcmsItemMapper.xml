@@ -435,24 +435,6 @@
   <!--==============================以上为生成的sql部分=====================================-->
   
   <select id="getItemListByParam" parameterType="java.util.Map" resultType="com.kuyu.vo.pcms.ItemResult">
-		  	<!--  SELECT
-			a.itid,
-			b.vendor_name AS vendorName,
-			a.request_id AS requestId,
-			c.REQUEST_TITLE AS requestTitle,
-			a.item_number AS itemNumber,
-			c.DETAIL_ACCOUNT AS detailAccount,
-			a.item_price AS itemPrice,
-			c.request_user_name AS requestUserName,
-			c.REQUEST_DEPT AS deptName,
-			c.REQUEST_CREATE_TIME AS applyTime,
-			a.`status`,
-			c.type AS projectType
-		FROM
-			pcms_item a
-		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
-		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
-		WHERE 1=1 -->
 	SELECT
 			a.itid,
 			a.request_company_code AS orgCode,
@@ -466,9 +448,9 @@
 			IFNULL(d.DETAIL_ACCOUNT,f.fee_detail_type) AS detailAccount,
 			a.item_price AS itemPrice,
 			c.REQUEST_USER AS requestUser,
-			e.person_name AS requestUserName,
+			c.request_user_name AS requestUserName,
 			c.REQUEST_DEPT AS dept,
-			k.org_name AS deptName,
+			c.request_dept_name AS deptName,
 			c.REQUEST_CREATE_TIME AS applyTime,
 			a.`status`,
 			c.type AS projectType
@@ -477,9 +459,7 @@
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
 		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
 	  	LEFT JOIN pcms_project_deatil d ON a.detail_id=d.DETAIL_ID
-		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
 		LEFT JOIN tpm_activity_original f ON f.project_id=a.detail_id
-		LEFT JOIN tpm_dept k ON c.REQUEST_DEPT=k.org_code 
 		WHERE 1=1 
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
@@ -497,26 +477,21 @@
   	AND (
 		b.vendor_name LIKE #{searchKey}
 		OR a.request_id LIKE #{searchKey}
-		OR e.person_name LIKE #{searchKey}
-		OR c.REQUEST_DEPT LIKE #{searchKey}
-        OR b.vendor_id LIKE #{searchKey}
+		OR c.request_user_name LIKE #{searchKey}
+		OR c.REQUEST_DEPT LIKE #{searchKey} 
 		)
   </if>
   ORDER BY c.creat_time DESC 
-  
+  LIMIT #{linimt},#{size}
   </select> 
   
   <select id="getItemListCountByParam" parameterType="map" resultType="int">
 		SELECT
 			count(1)
 		FROM
-			pcms_item a
-		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
-		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID
-	  	LEFT JOIN pcms_project_deatil d ON a.detail_id=d.DETAIL_ID
-		LEFT JOIN tpm_employee e ON e.person_code=c.REQUEST_USER
-		LEFT JOIN tpm_activity_original f ON f.project_id=a.detail_id
-		LEFT JOIN tpm_dept k ON c.REQUEST_DEPT=k.org_code
+			pcms_item a 
+		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id 
+		LEFT JOIN pcms_project c ON a.request_id=c.REQUEST_ID 
 		WHERE 1=1 
   <if test="companyCode != null">
         AND a.request_company_code=#{companyCode}
@@ -534,8 +509,8 @@
   	AND (
 		b.vendor_name LIKE #{searchKey}
 		OR a.request_id LIKE #{searchKey}
-		OR e.person_name LIKE #{searchKey}
-		OR c.REQUEST_DEPT LIKE #{searchKey}
+		OR c.request_user_name LIKE #{searchKey}
+		OR c.REQUEST_DEPT LIKE #{searchKey} 
 		)
   </if>
   </select> 
