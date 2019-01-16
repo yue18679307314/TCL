@@ -628,7 +628,7 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             PcmsIinitializationModel pcmsIinitialization = new PcmsIinitializationModel();
             pcmsIinitialization.setVendor_id(psm[9]);
             pcmsIinitialization.setCompany(psm[0]);
-            pcmsIinitialization.setBalance(psm[8]);
+            pcmsIinitialization.setBalance("-"+psm[8]);
             pcmsIinitialization.setInitial_balance("0");
             pcmsIinitialization.setCreate_time(new Date());
             pcmsIinitialization.setFinancial_money("0");
