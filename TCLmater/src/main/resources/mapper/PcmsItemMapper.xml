@@ -571,7 +571,7 @@
 			CONCAT(e.SHOP_PROVINCE,e.SHOP_CITY,e.SHOP_COUNTY) AS SHOP_ADDRESS,
 			e.SHOP_BRANCH,
 			e.SHOP_LEVEL,
-			e.DETAIL_TASK,
+			f.DETAIL_TASK,
 			b.statement_date AS statementTime,
 			m.create_time AS confirmTime
 		FROM
