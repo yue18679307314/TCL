@@ -731,32 +731,33 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 
 			// 可结算余额信息
 			List<BillAvailable> availableList = payment.getAvailableList();
-			for (BillAvailable available : availableList) {
-				String detailId = available.getBillDetailId();
-				// 剩余可结算金额
-				String availableMoney = available.getAvailableMoney();
+			if (CollectionUtils.isNotEmpty(availableList)) {
+				for (BillAvailable available : availableList) {
+					String detailId = available.getBillDetailId();
+					// 剩余可结算金额
+					String availableMoney = available.getAvailableMoney();
 
-				PcmsItem item = pcmsItemMapper.selectByDetailId(detailId);
-				if (item != null) {
-					PcmsItemLog log = new PcmsItemLog();
-					log.setItid(item.getItid());
-					if (availableMoney.equals("0")) {
-						item.setStatus(5);
-						log.setStatus(5);
-						log.setNote("已完结");
-					} else {
-						log.setStatus(3);
-						log.setNote("已结算，剩余可结算金额=" + availableMoney);
+					PcmsItem item = pcmsItemMapper.selectByDetailId(detailId);
+					if (item != null) {
+						PcmsItemLog log = new PcmsItemLog();
+						log.setItid(item.getItid());
+						if (availableMoney.equals("0")) {
+							item.setStatus(5);
+							log.setStatus(5);
+							log.setNote("已完结");
+						} else {
+							log.setStatus(3);
+							log.setNote("已结算，剩余可结算金额=" + availableMoney);
+						}
+						log.setCreateTime(new Date());
+						pcmsItemLogMapper.insertSelective(log);
+
+						item.setSubclass(availableMoney);
+						item.setUpdateTime(new Date());
+						pcmsItemMapper.updateByPrimaryKeySelective(item);
 					}
-					log.setCreateTime(new Date());
-					pcmsItemLogMapper.insertSelective(log);
-
-					item.setSubclass(availableMoney);
-					item.setUpdateTime(new Date());
-					pcmsItemMapper.updateByPrimaryKeySelective(item);
 				}
 			}
-
 			// //付款单信息
 			// List<Payment> paymentList=payment.getPaymentList();
 			// for (Payment pay : paymentList) {

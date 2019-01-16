@@ -44,6 +44,7 @@ public class PcmsShop implements Serializable{
     @JsonProperty("SHOP_COUNTY")
     private String shopCounty;
 
+    @JsonProperty("DETAIL_TASK")
     private String detailTask;
 
     @JsonProperty("SHOP_SALES_AMOUNT")
