@@ -65,6 +65,9 @@ public class ReceiptDetailVo {
 
     @ApiModelProperty("状态")
     private Integer status;
+    
+    @ApiModelProperty("该门店销售任务")
+    private String detailTask;
 
     @ApiModelProperty("作废信息")
     private PcmsTovoidItemVo pcmsTovoidItemVo;
@@ -327,4 +330,14 @@ public class ReceiptDetailVo {
     public void setSupplierInvoiceVo(SupplierInvoiceVo supplierInvoiceVo) {
         this.supplierInvoiceVo = supplierInvoiceVo;
     }
+
+	public String getDetailTask() {
+		return detailTask;
+	}
+
+	public void setDetailTask(String detailTask) {
+		this.detailTask = detailTask;
+	}
+    
+    
 }

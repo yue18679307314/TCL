@@ -480,6 +480,7 @@
 		OR a.request_id LIKE #{searchKey}
 		OR c.request_user_name LIKE #{searchKey}
 		OR c.REQUEST_DEPT LIKE #{searchKey} 
+		OR a.vendor_id LIKE #{searchKey} 
 		)
   </if>
   ORDER BY c.creat_time DESC 
@@ -512,6 +513,7 @@
 		OR a.request_id LIKE #{searchKey}
 		OR c.request_user_name LIKE #{searchKey}
 		OR c.REQUEST_DEPT LIKE #{searchKey} 
+		OR a.vendor_id LIKE #{searchKey} 
 		)
   </if>
   </select> 

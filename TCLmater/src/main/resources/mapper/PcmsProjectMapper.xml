@@ -655,22 +655,23 @@ LEFT JOIN pcms_shop b ON a.SHOP_CRM_CODE=b.SHOP_CRM_CODE
 WHERE
 	a.REQUEST_ID = #{requestId}-->
 	SELECT
-	a.REQUEST_ID AS requestId,
-	a.REQUEST_TITLE AS requestTitle,
-	a.REQUEST_COMPANY_CODE AS requestCompanyCode,
-	a.REQUEST_DEPT AS requestDept,
-	a.REQUEST_USER AS requestUser,
-	a.CREATE_USER  AS createUser,
-	a.REQUEST_TELPHONE AS requestTelphone,
-	a.REQUEST_EMAIL AS requestEmail,
-	a.REQUEST_INFO AS requestInfo,
-	a.REQUEST_CREATE_TIME AS requestCreateTime,
-	a.REQUEST_END_TIME AS requestEndTime,
-	a.TYPE AS type
-FROM
-	pcms_project a
-WHERE
-	a.REQUEST_ID = #{requestId}
+		a.REQUEST_ID AS requestId,
+		a.REQUEST_TITLE AS requestTitle,
+		a.REQUEST_COMPANY_CODE AS requestCompanyCode,
+		a.REQUEST_DEPT AS requestDept,
+		a.request_user_name AS requestUser,
+		b.person_name  AS createUser,
+		a.REQUEST_TELPHONE AS requestTelphone,
+		a.REQUEST_EMAIL AS requestEmail,
+		a.REQUEST_INFO AS requestInfo,
+		a.REQUEST_CREATE_TIME AS requestCreateTime,
+		a.REQUEST_END_TIME AS requestEndTime,
+		a.TYPE AS type 
+	FROM 
+		pcms_project a 
+	LEFT JOIN tpm_employee b ON a.CREATE_USER=b.person_code 
+	WHERE
+		a.REQUEST_ID = #{requestId} 
   </select>
   
   
