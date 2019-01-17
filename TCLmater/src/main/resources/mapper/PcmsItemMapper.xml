@@ -453,7 +453,8 @@
 			c.request_dept_name AS deptName,
 			c.REQUEST_CREATE_TIME AS applyTime,
 			a.`status`,
-			c.type AS projectType
+			/*c.type AS projectType*/
+            a.it_type AS projectType
 		FROM
 			 pcms_item  a
 		LEFT JOIN pcms_supplier b ON a.vendor_id=b.vendor_id
