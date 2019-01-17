@@ -326,7 +326,8 @@ public class PcmsMaterialVersionServiceImpl extends ServiceImpl<PcmsMaterialVers
     public ResultVo giveUpSupplierMaterial(String vendor_id, String url, LoginUserInfo userInfo) throws Exception {
         File newFile = new File(url);
         newFile.delete();
-        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,userInfo.getEmployeeModel().getCompany());
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        List<PcmsMaterialVersionModel> list = baseMapper.selectMaterialVersion(vendor_id,tpmDeptModel.getOrg_code());
         baseMapper.deleteById(list.get(0).getId());
         return ResultVo.get(ResultVo.SUCCESS);
     }
