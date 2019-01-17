@@ -12,6 +12,7 @@ import com.kuyu.model.pcms.PcmsPaymentCheck;
 import com.kuyu.model.pcms.PcmsPaymentDetail;
 import com.kuyu.service.PcmsItemService;
 import com.kuyu.service.PcmsReconciliationService;
+import com.kuyu.util.DateUtils;
 import com.kuyu.util.ResultVoUtils;
 import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
@@ -36,8 +37,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static com.kuyu.util.DateUtils.DATE_FORMAT_DATEONLY;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -263,10 +268,12 @@ public class ItemController extends BaseController{
 	@RequestMapping(value = "/queryPaymentDetail", produces = "application/json;charset=utf-8")
 	public @ResponseBody ResultVo queryPaymentDetail(HttpServletRequest request,
 			@ApiParam(value = "向共享查询付款子单", required = true) String queryDate) throws IOException  {
-//		fsscBill
-		pcmsItemService.checkPaymentDetail(queryDate,1);
-		
-		return ResultVo.get(ResultVo.SUCCESS);
+		String synDate = DateUtils.toString(new Date(),DATE_FORMAT_DATEONLY);
+		if(!queryDate.equals(synDate)){
+			pcmsItemService.checkPaymentDetail(queryDate,1);
+			return  ResultVo.get(ResultVo.SUCCESS);
+		}
+		return new ResultVo(ResultVo.FAIL, "不能同步当天的数据");
 	}
 	
 	
@@ -303,7 +310,8 @@ public class ItemController extends BaseController{
 			@RequestParam(value = "status",required=false)Integer status,
 			@RequestParam(value = "approvalStatrTime",required=false)String approvalStatrTime,
 			@RequestParam(value = "approvalEndTime",required=false)String approvalEndTime,
-			@RequestParam(value = "employeenumber",required=false)String employeenumber) throws Exception{
+			@RequestParam(value = "employeenumber",required=false)String employeenumber,
+			@RequestParam(value = "paymentType",required=false)String paymentType) throws Exception{
 		
 		//分页信息
 		if(current==null||current<=0){
@@ -350,7 +358,7 @@ public class ItemController extends BaseController{
 		
 		
 		Page<PaymentResult> payList=pcmsItemService.paymentList(searchKey,current,size,approvalStatrTime,approvalEndTime,status,
-				companyCode,deptCode,personCode,userRole);
+				companyCode,deptCode,personCode,userRole,paymentType);
 		
 	return ResultVo.getData(ResultVo.SUCCESS, payList);
 	}

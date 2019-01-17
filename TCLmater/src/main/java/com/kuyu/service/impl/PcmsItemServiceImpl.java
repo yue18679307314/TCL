@@ -885,7 +885,7 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 	@Override
 	public Page<PaymentResult> paymentList(String searchKey, Integer current, Integer size, 
 			String approvalStatrTime, String approvalEndTime,Integer status,String companyCode,
-			String deptCode, String personCode,String userRole) {
+			String deptCode, String personCode,String userRole,String paymentType) {
 		
 		Integer linimt=(current-1)*size;  
 		
@@ -908,7 +908,9 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		if(!userRole.equals("1")){
 			param.put("companyCode", companyCode);
 		}
-		
+		if(paymentType!=null&&!paymentType.equals("")){
+			param.put("paymentType", paymentType);
+		}
 				
 		//分页查询
 		Page<PaymentResult> page=new Page<>(current, size);

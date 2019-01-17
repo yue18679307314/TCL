@@ -2,6 +2,7 @@ package com.kuyu.task.pcms;
 
 import static com.kuyu.util.DateUtils.DATE_FORMAT_DATEONLY;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -24,9 +25,12 @@ public class CheckPaymentDetail {
 	
 	@Scheduled(cron = "${cron.checkPaymentDetail}")//凌晨01:00执行一次
     public void updateItemStatus() {
-        Date date = new Date();
+		//获取昨天的日期
+		Calendar cal=Calendar.getInstance();
+		cal.add(Calendar.DATE,-1);
+        Date date = cal.getTime();
         String synDate = DateUtils.toString(date,DATE_FORMAT_DATEONLY);
-        log.info("校验当天的付款信息", synDate);
+        log.info("校验昨天的付款信息", synDate);
         try {
         	pcmsItemService.checkPaymentDetail(synDate,0);
         } catch (Exception e) {

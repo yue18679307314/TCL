@@ -207,7 +207,8 @@
         ps.vendor_name AS vendor_name, ps.vendor_id AS vendor_id,
         pt.REQUEST_END_TIME AS end_time,
         te.person_name AS create_user,
-        pt.REQUEST_ID AS request_id
+        pt.REQUEST_ID AS request_id,
+        d.DETAIL_TASK AS detailTask
         FROM pcms_item p
         LEFT JOIN pcms_project pt ON p.request_id = pt.REQUEST_ID
         LEFT JOIN pcms_supplier ps ON p.vendor_id = ps.vendor_id
