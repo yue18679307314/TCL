@@ -494,12 +494,12 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 				
 		JSONArray paymentList=new JSONArray();
 		JSONObject payment=new JSONObject();
-				
+		String paymentType=settVo.getType()==1?"电汇":"挂账不付款";		
 		payment.put("PAYMENT_VENDORCODE", vendorId);
 		payment.put("ACCOUNT_NAME", supp.getVendor_name());
 		payment.put("ACCOUNT_VALUE", supp.getOpening_account());
 		payment.put("PAYMENT_CURRENCY", settVo.getApplyMoney());
-		payment.put("PAYMENT_METHOD", settVo.getType()==1?"电汇":"挂账不付款");
+		payment.put("PAYMENT_METHOD", paymentType);
 		paymentList.add(payment);
 		param.put("PAYMENT_LIST", paymentList);
 				
@@ -541,6 +541,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 					info.setType(0);
 					info.setVendorId(vendorId);
 					info.setStatus(1);//结算中
+					info.setPaymentType(paymentType);
+					info.setPayAmount(settVo.getApplyMoney());
 					info.setCreateTime(new Date());
 					pcmsPaymentMapper.insertSelective(info);
 					

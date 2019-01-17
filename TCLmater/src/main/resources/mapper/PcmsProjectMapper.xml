@@ -658,7 +658,7 @@ WHERE
 		a.REQUEST_ID AS requestId,
 		a.REQUEST_TITLE AS requestTitle,
 		a.REQUEST_COMPANY_CODE AS requestCompanyCode,
-		a.REQUEST_DEPT AS requestDept,
+		a.request_dept_name AS requestDept,
 		a.request_user_name AS requestUser,
 		b.person_name  AS createUser,
 		a.REQUEST_TELPHONE AS requestTelphone,
