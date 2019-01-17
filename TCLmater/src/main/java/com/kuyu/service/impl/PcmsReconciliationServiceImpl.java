@@ -494,10 +494,12 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
         tpmEmployeeModel.setCompany(company);
         loginUserInfo.setEmployeeModel(tpmEmployeeModel);
         PcmsMessageModel pcmsMessageModel = pcmsMessageMapper.selectById(id);
-        pcmsMessageModel.setState(1);
-        pcmsMessageMapper.updateById(pcmsMessageModel);
+        if(pcmsMessageModel.getState() == 0){
+            pcmsMessageModel.setState(1);
+            pcmsMessageMapper.updateById(pcmsMessageModel);
+        }
         if(pcmsMessageModel.getType() == 1){
-            return selectDetailList(id);
+            return selectDetailList(Integer.valueOf(pcmsMessageModel.getOther_id()));
         }else if(pcmsMessageModel.getType() == 2){
             return getAccountStatement(Integer.valueOf(pcmsMessageModel.getOther_id()),loginUserInfo);
         }
