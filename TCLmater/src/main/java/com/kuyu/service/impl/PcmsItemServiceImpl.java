@@ -180,7 +180,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		}
 		param.put("linimt", linimt);
 		param.put("size", size);
-		if(approvalStatrTime!=null&&approvalEndTime!=null){
+		if(approvalStatrTime!=null&&approvalEndTime!=null
+				&&!approvalStatrTime.equals("")&&!approvalEndTime.equals("")){
 			param.put("approvalStatrTime", approvalStatrTime);
 			param.put("approvalEndTime", approvalEndTime);
 		}
@@ -758,29 +759,31 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 					}
 				}
 			}
-			// //付款单信息
-			// List<Payment> paymentList=payment.getPaymentList();
-			// for (Payment pay : paymentList) {
-			// PcmsPayment info=new PcmsPayment();
-			// info.setFsscBill(fsscBill);
-			// info.setVendorId(pay.getVendorId());
-			// info.setAccountNumber(pay.getAccountNumber());
-			// info.setAccountName(pay.getAccountName());
-			// info.setPayeeName(pay.getPayeeName());
-			// info.setPaymentType(pay.getPaymentType());
-			// info.setRecommentDate(pay.getRecommentDate());
-			// info.setPayAmount(pay.getPayAmount());
-			// info.setPayStandard(pay.getPayStandard());
-			// info.setBillExpireDate(pay.getBillExpireDate());
-			// info.setBankAccountNumber(pay.getBankAccountNumber());
-			// info.setCreateTime(new Date());
-			// info.setStatus(2);
-			// //初始化数据设置为3
-			// info.setType(3);
-			//
-			// pcmsPaymentMapper.insertSelective(info);
-			// }
-
+			 //付款单信息
+			 List<Payment> paymentList=payment.getPaymentList();
+			 if (CollectionUtils.isNotEmpty(paymentList)) {
+				 for (Payment pay : paymentList) {
+					 PcmsPayment query=pcmsPaymentMapper.selectByFsscBill(fsscBill);
+					 if(query==null){
+						 PcmsPayment info=new PcmsPayment();
+						 info.setFsscBill(fsscBill);
+						 info.setVendorId(pay.getVendorId());
+						 info.setAccountNumber(pay.getAccountNumber());
+						 info.setAccountName(pay.getAccountName());
+						 info.setPayeeName(pay.getPayeeName());
+						 info.setPaymentType(pay.getPaymentType());
+						 info.setRecommentDate(pay.getRecommentDate());
+						 info.setPayAmount(pay.getPayAmount());
+						 info.setPayStandard(pay.getPayStandard());
+						 info.setBillExpireDate(pay.getBillExpireDate());
+						 info.setBankAccountNumber(pay.getBankAccountNumber());
+						 info.setCreateTime(new Date());
+						 info.setStatus(2);
+						 info.setType(3);
+						 pcmsPaymentMapper.insertSelective(info);
+					 }
+				 }
+			 }
 			return 1;
 		}
 		return 0;
@@ -897,7 +900,8 @@ public class PcmsItemServiceImpl implements PcmsItemService{
 		}
 		param.put("linimt", linimt);
 		param.put("size", size);
-		if(approvalStatrTime!=null&&approvalEndTime!=null){
+		if(approvalStatrTime!=null&&approvalEndTime!=null
+			&&!approvalStatrTime.equals("")&&!approvalEndTime.equals("")){
 			param.put("approvalStatrTime", approvalStatrTime);
 			param.put("approvalEndTime", approvalEndTime);
 		}
