@@ -218,7 +218,8 @@ public class PcmsSupplierServiceImpl extends ServiceImpl<PcmsSupplierMapper, Pcm
         }
         String path = StringUtil.getUUID();
         String file = pcmsSupplierPath + "/"+ path;
-        List<PcmsSupplierModelVo> supplierList = baseMapper.getPcmsSupplierForIds(userInfo.getEmployeeModel().getCompany());
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        List<PcmsSupplierModelVo> supplierList = baseMapper.getPcmsSupplierForIds(tpmDeptModel.getOrg_code());
         if(supplierList != null && supplierList.size() > 0) {
             /*String personName = userInfo.getEmployeeModel().getPerson_name();
             String personCode = userInfo.getEmployeeModel().getPerson_code();
