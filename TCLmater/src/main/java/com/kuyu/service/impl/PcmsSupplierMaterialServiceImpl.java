@@ -62,16 +62,17 @@ public class PcmsSupplierMaterialServiceImpl extends ServiceImpl<PcmsSupplierMat
         if(null == pcmsSupplierModel){
             throw new ParamException("供应商不存在");
         }
-        List<PcmsSupplierMaterialModel> psm = baseMapper.findSupplierMaterialByVendorAndCompany(pcmsSupplierMaterialModel.getVendor_id(),userInfo.getEmployeeModel().getCompany());
+        TpmDeptModel tpmDeptModel = pcmsReconciliationService.selectTpmDept(userInfo.getEmployeeModel().getOrg_code());
+        List<PcmsSupplierMaterialModel> psm = baseMapper.findSupplierMaterialByVendorAndCompany(pcmsSupplierMaterialModel.getVendor_id(),tpmDeptModel.getOrg_code());
         if(null == psm && psm.size()>0){
             pcmsSupplierMaterialModel.setCreate_time(new Date());
             pcmsSupplierMaterialModel.setVersion(10000);
-            pcmsSupplierMaterialModel.setCompany(userInfo.getEmployeeModel().getCompany());
+            pcmsSupplierMaterialModel.setCompany(tpmDeptModel.getOrg_code());
             baseMapper.insert(pcmsSupplierMaterialModel);
         }else{
             pcmsSupplierMaterialModel.setCreate_time(new Date());
             pcmsSupplierMaterialModel.setVersion(psm.get(0).getVersion()+1);
-            pcmsSupplierMaterialModel.setCompany(userInfo.getEmployeeModel().getCompany());
+            pcmsSupplierMaterialModel.setCompany(tpmDeptModel.getOrg_code());
             baseMapper.insert(pcmsSupplierMaterialModel);
         }
 
