@@ -350,7 +350,8 @@ public class ItemController extends BaseController{
 		TpmEmployeeModel emp=user.getEmployeeModel();
 		String deptCode=emp.getOrg_code();
 		String companyCode=null;
-		if(userRole.equals("2")||userRole.equals("0")||userRole.equals("6")){
+		if(userRole.equals("2")||userRole.equals("0")
+				||userRole.equals("6")||userRole.equals("-1")){
 			TpmDeptModel tpmmodel=pcmsReconciliationService.selectTpmDept(deptCode);
 			companyCode=tpmmodel.getOrg_code();
 		}

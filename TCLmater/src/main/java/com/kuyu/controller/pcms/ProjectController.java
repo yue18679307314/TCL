@@ -86,33 +86,33 @@ public class ProjectController {
     }
 	
     
-//    /**
-//     * 负责人列表
-//     * @param
-//     * @return
-//     * @throws Exception
-//     */
-//    @ApiOperation(value = "负责人列表")
-//    @RequestMapping(value = "/requestNameList",produces = "application/json;charset=UTF-8")
-//    public ResultVo requestNameList(HttpServletRequest request,String orgCode,String searchKey)throws Exception{
-//    	List<RequestUserVo> result=pcmsProjectService.getRequestNameList(orgCode,searchKey);
-//    		
-//    		return ResultVo.getData(ResultVo.SUCCESS, result);
-//    }
-//    
-//    
-//    /**
-//     * 改变负责人
-//     * @param
-//     * @return
-//     * @throws Exception
-//     */
-//    @ApiOperation(value = "改变负责人")
-//    @RequestMapping(value = "/changeRequestName",produces = "application/json;charset=UTF-8")
-//    public ResultVo changeRequestName(String requestId,String personCode,String personName,String userId)throws Exception{
-//    	ResultVo result= pcmsProjectService.changeRequestName(requestId,personCode,personName,userId);
-//    	return result;
-//    }
+    /**
+     * 负责人列表
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "负责人列表")
+    @RequestMapping(value = "/requestNameList",produces = "application/json;charset=UTF-8")
+    public ResultVo requestNameList(HttpServletRequest request,String orgCode,String searchKey)throws Exception{
+    	List<RequestUserVo> result=pcmsProjectService.getRequestNameList(orgCode,searchKey);
+    		
+    		return ResultVo.getData(ResultVo.SUCCESS, result);
+    }
+    
+    
+    /**
+     * 改变负责人
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "改变负责人")
+    @RequestMapping(value = "/changeRequestName",produces = "application/json;charset=UTF-8")
+    public ResultVo changeRequestName(String requestId,String personCode,String personName,String userId)throws Exception{
+    	ResultVo result= pcmsProjectService.changeRequestName(requestId,personCode,personName,userId);
+    	return result;
+    }
     
     
     /**
