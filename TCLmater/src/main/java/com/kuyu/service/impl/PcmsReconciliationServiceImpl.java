@@ -3,7 +3,6 @@ package com.kuyu.service.impl;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.kuyu.exception.ParamException;
-import com.kuyu.mapper.TpmDeptMapper;
 import com.kuyu.mapper.TpmEmployeeMapper;
 import com.kuyu.mapper.pcms.*;
 import com.kuyu.model.LoginUserInfo;
@@ -30,6 +29,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jxls.area.Area;
+import org.jxls.builder.AreaBuilder;
+import org.jxls.builder.xls.XlsCommentAreaBuilder;
+import org.jxls.common.CellRef;
+import org.jxls.common.Context;
+import org.jxls.transform.Transformer;
+import org.jxls.util.TransformerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -37,9 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -700,6 +704,138 @@ public class PcmsReconciliationServiceImpl extends ServiceImpl<PcmsReconciliatio
             pcmsProfitCenterMapper.insert(pcmsProfitCenterModel);
         }
         return ResultVo.getDataWithSuccess(ResultVo.SUCCESS);
+    }
+
+    @Override
+    public void exportAccountStatement(ExportAccountStatementVo exportAccountStatementVo,FileOutputStream outputStream) throws IOException {
+        String template = "/templates/model.xls";
+        InputStream is = PcmsReconciliationServiceImpl.class.getResourceAsStream(template);
+        OutputStream os = outputStream;
+        Transformer transformer = TransformerFactory.createTransformer(is, os);
+        AreaBuilder areaBuilder = new XlsCommentAreaBuilder(transformer);
+        List<Area> xlsAreaList = areaBuilder.build();
+        Area xlsArea = xlsAreaList.get(0);
+        Context context = new Context();
+        context.putVar("customer",exportAccountStatementVo.getVendor_name());
+        context.putVar("date",exportAccountStatementVo.getAccountStatementDate());
+        context.putVar("code_dz",exportAccountStatementVo.getReconciliation_id());
+        //期初余额
+        if(null == exportAccountStatementVo.getInitial_balance()){
+            context.putVar("initial_balance","0");
+        }else{
+            context.putVar("initial_balance",exportAccountStatementVo.getInitial_balance());
+        }
+        //本期增加
+        if(null == exportAccountStatementVo.getPay_amount()){
+            context.putVar("pay_amount","0");
+        }else{
+            context.putVar("pay_amount",exportAccountStatementVo.getPay_amount());
+        }
+        //本月已付
+        if(null == exportAccountStatementVo.getFinancial_money()){
+            context.putVar("financial_money","0");
+        }else{
+            context.putVar("financial_money",exportAccountStatementVo.getFinancial_money());
+        }
+        //余额
+        if(null == exportAccountStatementVo.getBalance()){
+            context.putVar("balance","0");
+        }else{
+            context.putVar("balance",exportAccountStatementVo.getBalance());
+        }
+        //广告商回执：
+        if(1 == exportAccountStatementVo.getType()){
+            context.putVar("type","无异议");
+        }else if(2 == exportAccountStatementVo.getType()){
+            context.putVar("type","有异议");
+        }else{
+            context.putVar("type","");
+        }
+        //经办人：
+        context.putVar("name",exportAccountStatementVo.getPerson_name());
+        //联系电话：
+        context.putVar("mobile",exportAccountStatementVo.getVendor_mobile());
+        //日期：
+        context.putVar("vendor_time",exportAccountStatementVo.getVendor_time());
+        //经办人
+        context.putVar("pc_name",exportAccountStatementVo.getCompany_name());
+        //联系电话
+        context.putVar("phone",exportAccountStatementVo.getCompany_mobile());
+        //日期：
+        context.putVar("company_date",exportAccountStatementVo.getCompany_date());
+        //入账法人名称
+        context.putVar("incorporated_person",exportAccountStatementVo.getIncorporated_person());
+
+        xlsArea.applyAt(new CellRef("往来对账函!A1"), context);
+
+        //往来对账单
+        Context context1 = new Context();
+        context1.putVar("customer",exportAccountStatementVo.getVendor_name());
+        context1.putVar("date",exportAccountStatementVo.getVendor_time());
+        context1.putVar("code_dz",exportAccountStatementVo.getReconciliation_id());
+        //期初余额
+        if(null == exportAccountStatementVo.getInitial_balance()){
+            context1.putVar("initial_balance","0");
+        }else{
+            context1.putVar("initial_balance",exportAccountStatementVo.getInitial_balance());
+        }
+        //本期增加
+        if(null == exportAccountStatementVo.getPay_amount()){
+            context1.putVar("pay_amount","0");
+        }else{
+            context1.putVar("pay_amount",exportAccountStatementVo.getPay_amount());
+        }
+        //本月已付
+        if(null == exportAccountStatementVo.getFinancial_money()){
+            context1.putVar("financial_money","0");
+        }else{
+            context1.putVar("financial_money",exportAccountStatementVo.getFinancial_money());
+        }
+        //余额
+        if(null == exportAccountStatementVo.getBalance()){
+            context1.putVar("balance","0");
+        }else{
+            context1.putVar("balance",exportAccountStatementVo.getBalance());
+        }
+        //广告商回执：
+        if(1 == exportAccountStatementVo.getType()){
+            context1.putVar("type","无异议");
+        }else if(2 == exportAccountStatementVo.getType()){
+            context1.putVar("type","有异议");
+        }else{
+            context1.putVar("type","");
+        }
+        //经办人：
+        context1.putVar("name",exportAccountStatementVo.getPerson_name());
+        //联系电话：
+        context1.putVar("mobile",exportAccountStatementVo.getVendor_mobile());
+        //日期：
+        context1.putVar("vendor_time",exportAccountStatementVo.getVendor_time());
+        //经办人
+        context1.putVar("pc_name",exportAccountStatementVo.getCompany_name());
+        //联系电话
+        context1.putVar("phone",exportAccountStatementVo.getCompany_mobile());
+        //日期：
+        context1.putVar("company_date",exportAccountStatementVo.getCompany_date());
+        //入账法人名称
+        context1.putVar("incorporated_person",exportAccountStatementVo.getIncorporated_person());
+        //账面金额
+        if(null == exportAccountStatementVo.getAmount()){
+            context1.putVar("amount","0");
+        }else{
+            context1.putVar("amount",exportAccountStatementVo.getAmount());
+        }
+        //差异
+        if(null == exportAccountStatementVo.getRemark()){
+            context1.putVar("remark","");
+        }else{
+            context1.putVar("remark",exportAccountStatementVo.getRemark());
+        }
+        context1.putVar("persons", exportAccountStatementVo.getList());
+        Area xlsArea2 = xlsAreaList.get(1);
+        xlsArea2.applyAt(new CellRef("往来对账单!A1"), context1);
+        transformer.write();
+        is.close();
     }
 
     public static Map<String, String> readExcel(String filePath) {

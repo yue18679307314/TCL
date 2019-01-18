@@ -10,15 +10,22 @@ import com.kuyu.model.pcms.PcmsIinitializationModel;
 import com.kuyu.model.pcms.PcmsMessageModel;
 import com.kuyu.service.PcmsReconciliationService;
 import com.kuyu.util.ResultVoUtils;
+import com.kuyu.util.StringUtil;
 import com.kuyu.vo.ResultVo;
 import com.kuyu.vo.pcms.*;
 import com.kuyu.vo.query.ReconciliationQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +35,11 @@ import java.util.List;
 @Api(tags = "对账接口")
 @RequestMapping("/reconciliation")
 public class ReconciliationController extends BaseController {
+    @Value("${excel.path}")
+    private String exportAccountStatementPath;
+
+    @Value("${excel.url}")
+    private String exportAccountStatementUrl;
     @Resource
     private PcmsReconciliationService pcmsReconciliationService;
 
@@ -310,5 +322,65 @@ public class ReconciliationController extends BaseController {
             throw new ParamException(ResultVoUtils.fail("文件不是Excel:"+file));
         }
         return pcmsReconciliationService.importProfitCenter(file);
+    }
+
+    /**
+     * 导出对账单/对账函
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation(value = "导出对账单/对账函")
+    @GetMapping("/exportAccountStatement")
+    public ResultVo exportAccountStatement(@RequestParam(value = "accountStatement") String accountStatement)throws Exception{
+        String accountStatements = accountStatement.replace("&quot;","\"");
+        System.out.println(accountStatements);
+        ObjectMapper mapper = new ObjectMapper();
+        ExportAccountStatementVo exportAccountStatementVo = mapper.readValue(accountStatements, ExportAccountStatementVo.class);
+        File tempfile = new File(exportAccountStatementPath);
+        if(!tempfile.exists()){
+            tempfile.mkdirs();
+        }
+        String path = StringUtil.getUUID();
+        String file = exportAccountStatementPath + "/"+ path+".xls";
+        pcmsReconciliationService.exportAccountStatement(exportAccountStatementVo,new FileOutputStream(new File(file)));
+        List<String> list = new ArrayList<>();
+        list.add("sheet1");
+        list.add("sheet2");
+        deleteSheet(file,list);
+        String url = exportAccountStatementUrl + "/"+ path+".xls";
+        return ResultVo.getDataWithSuccess(url);
+    }
+
+    /**
+     * 删除指定的Sheet
+     * @param targetFile  目标文件
+     * @param list   Sheet名称
+     */
+    public static void deleteSheet(String targetFile,List<String> list) {
+        try {
+            FileInputStream fis = new FileInputStream(targetFile);
+            HSSFWorkbook wb = new HSSFWorkbook(fis);
+            fileWrite(targetFile, wb);
+            //删除Sheet
+            for(String sheetName : list){
+                wb.removeSheetAt(wb.getSheetIndex(sheetName));
+                fileWrite(targetFile, wb);
+                fis.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 写隐藏/删除后的Excel文件
+     * @param targetFile  目标文件
+     * @param wb          Excel对象
+     * @throws Exception
+     */
+    public static void fileWrite(String targetFile,HSSFWorkbook wb) throws Exception{
+        FileOutputStream fileOut = new FileOutputStream(targetFile);
+        wb.write(fileOut);
+        fileOut.flush();
+        fileOut.close();
     }
 }
