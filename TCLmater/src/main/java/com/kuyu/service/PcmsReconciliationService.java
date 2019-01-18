@@ -8,11 +8,14 @@ import com.kuyu.model.pcms.PcmsIinitializationModel;
 import com.kuyu.model.pcms.PcmsMessageModel;
 import com.kuyu.model.pcms.PcmsReconciliationModel;
 import com.kuyu.vo.ResultVo;
+import com.kuyu.vo.pcms.ExportAccountStatementVo;
 import com.kuyu.vo.pcms.PcmsReconciliationVo;
 import com.kuyu.vo.pcms.ReplyMessageVo;
 import com.kuyu.vo.query.ReconciliationQuery;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -60,6 +63,8 @@ public interface PcmsReconciliationService extends IService<PcmsReconciliationMo
     public ResultVo synchronousBalance(MultipartFile file,LoginUserInfo userInfo) throws Exception;
     //导入利润中心数据
     ResultVo importProfitCenter(MultipartFile file)throws Exception;
+    //导出对账单/对账函
+    void exportAccountStatement(ExportAccountStatementVo exportAccountStatementVo, FileOutputStream outputStream)throws IOException;
     //有付款记录,但没有点击对账的,自动对账
     void automaticReconciliation();
     //自动统计表上上个月余额为0的
