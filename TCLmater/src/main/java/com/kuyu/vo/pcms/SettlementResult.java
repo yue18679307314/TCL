@@ -20,57 +20,57 @@ public class SettlementResult {
 	
 	
 	//报销单
-	private String fccsBill;
+//	private String fccsBill;
+//	
+//	private String sumMoney;
+//	
+//	private String bxStatus;
+//	
+//	private String updateTime;
+//	
+//	private String stopReson;
 	
-	private String sumMoney;
-	
-	private String bxStatus;
-	
-	private String updateTime;
-	
-	private String stopReson;
-	
-	public String getStopReson() {
-		return stopReson;
-	}
-
-	public void setStopReson(String stopReson) {
-		this.stopReson = stopReson;
-	}
-
-	public String getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(String updateTime) {
-		this.updateTime = updateTime;
-	}
-	
-	public String getBxStatus() {
-		return bxStatus;
-	}
-
-	public void setBxStatus(String bxStatus) {
-		this.bxStatus = bxStatus;
-	}
+//	public String getStopReson() {
+//		return stopReson;
+//	}
+//
+//	public void setStopReson(String stopReson) {
+//		this.stopReson = stopReson;
+//	}
+//
+//	public String getUpdateTime() {
+//		return updateTime;
+//	}
+//
+//	public void setUpdateTime(String updateTime) {
+//		this.updateTime = updateTime;
+//	}
+//	
+//	public String getBxStatus() {
+//		return bxStatus;
+//	}
+//
+//	public void setBxStatus(String bxStatus) {
+//		this.bxStatus = bxStatus;
+//	}
 
 	
 
-	public String getFccsBill() {
-		return fccsBill;
-	}
-
-	public void setFccsBill(String fccsBill) {
-		this.fccsBill = fccsBill;
-	}
-
-	public String getSumMoney() {
-		return sumMoney;
-	}
-
-	public void setSumMoney(String sumMoney) {
-		this.sumMoney = sumMoney;
-	}
+//	public String getFccsBill() {
+//		return fccsBill;
+//	}
+//
+//	public void setFccsBill(String fccsBill) {
+//		this.fccsBill = fccsBill;
+//	}
+//
+//	public String getSumMoney() {
+//		return sumMoney;
+//	}
+//
+//	public void setSumMoney(String sumMoney) {
+//		this.sumMoney = sumMoney;
+//	}
 
 	public Integer getSetid() {
 		return setid;

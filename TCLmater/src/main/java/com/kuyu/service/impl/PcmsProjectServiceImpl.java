@@ -583,6 +583,7 @@ public class PcmsProjectServiceImpl implements PcmsProjectService{
 				info.setCost(allList.getFeeDetailType());
 				info.setSpecifications(material.getSpecifications());
 				info.setUnit(material.getUnit());
+				info.setNote(material.getOtherTotalFee().toString());
 				if(material.getAmount()==null){
 					info.setNumber(0);
 				}else{
